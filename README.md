@@ -1,6 +1,6 @@
 # CsharpToColouredHTML
 
-Converting C# source code into coloured HTML or just printing it into the console.
+Converting C# source code into coloured HTML(todo) or just printing it into the console.
 
 Example:
 
