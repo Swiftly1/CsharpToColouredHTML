@@ -5,10 +5,20 @@ using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace Core;
+
 public class CsharpColourer
 {
-    public void ProcessSourceCode(string code, IEmitter emitter)
+    public string ProcessSourceCode(string code, IEmitter emitter)
     {
+        var nodes = GenerateInternalRepresentation(code);
+        emitter.Emit(nodes);
+
+        return emitter.Text;
+    }
+
+    private List<Node> GenerateInternalRepresentation(string code)
+    {
+        var nodes = new List<Node>();
         var result = GetClassifiedSpans(code);
         var srcText = result.SourceText;
 
@@ -21,11 +31,13 @@ public class CsharpColourer
             var triviaTextSpan = new TextSpan(index, length);
             var trivia = srcText.GetSubText(triviaTextSpan);
 
-            emitter.EmitText(trivia.ToString());
-            emitter.EmitNode(current, srcText);
+            var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
+            nodes.Add(node);
 
             previous = current.TextSpan;
         }
+
+        return nodes;
     }
 
     private (List<ClassifiedSpan> ClassifiedSpans, SourceText SourceText) GetClassifiedSpans(string code)

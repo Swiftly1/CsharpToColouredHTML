@@ -26,4 +26,8 @@ public class HomeController : Controller
     }
 }";
 
+var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
+
+Console.WriteLine(html);
+
 new CsharpColourer().ProcessSourceCode(code, new ConsoleEmitter());

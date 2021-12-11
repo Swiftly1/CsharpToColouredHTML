@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.Classification;
 
 namespace Core;
 
-public class ConsoleEmitter : IEmitter
+public class HTMLEmitter : IEmitter
 {
     private readonly StringBuilder _sb = new StringBuilder();
 
@@ -14,63 +14,114 @@ public class ConsoleEmitter : IEmitter
         Text = "";
         _sb.Clear();
 
+        AddCSS();
+        _sb.AppendLine(@"<pre class=""background"">");
         foreach (var node in nodes)
         {
             EmitNode(node);
         }
+        _sb.AppendLine("<pre>");
 
         Text = _sb.ToString();
     }
 
     public void EmitNode(Node node)
     {
+        var colour = "";
         if (node.ClassificationType == ClassificationTypeNames.ClassName)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
+            colour = "class";
         }
         else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            colour = "white";
         }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
+            colour = "variableName";
         }
         else if (node.ClassificationType == ClassificationTypeNames.Keyword)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            colour = "modifier";
         }
         else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
         {
-            Console.ForegroundColor = ConsoleColor.Cyan;
+            colour = "string";
         }
         else if (node.ClassificationType == ClassificationTypeNames.LocalName)
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
+            colour = "variableName";
         }
         else if (node.ClassificationType == ClassificationTypeNames.MethodName)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
+            colour = "method";
         }
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
         {
-            Console.ForegroundColor = ConsoleColor.White;
+            colour = "white";
         }
         else if (node.ClassificationType == ClassificationTypeNames.Operator)
         {
-            Console.ForegroundColor = ConsoleColor.White;
+            colour = "white";
         }
         else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
         {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-        }
-        else
-        {
-            Console.ResetColor();
+            colour = "control";
         }
 
-        _sb.Append(node.TextWithTrivia);
-        Console.Write(node.TextWithTrivia);
-        Console.ResetColor();
+        var span = @$"<span class=""{colour}"">{node.TextWithTrivia}</span>";
+        _sb.Append(span);
+    }
+
+    private void AddCSS()
+    {
+        _sb.AppendLine("<style>");
+        _sb.AppendLine(
+        @"
+        .background
+        {
+            background-color: #1E1E1E;
+        }
+
+        .numeric
+        {
+            color: #b5cea8;
+        }
+
+        .method
+        {
+            color: #DCDCAA;
+        }
+  
+        .class
+        {
+            color: #4EC9B0;
+        }
+  
+        .modifier
+        {
+            color: #569cd6;
+        }
+  
+        .variableName
+        {
+            color: #9CDCFE;
+        }  
+
+        .white
+        {
+            color: #D4D4D4;
+        }
+
+        .string
+        {
+            color: #ce9178;
+        }
+
+        .control
+        {
+            color: #C586C0;
+        }");
+        _sb.AppendLine("</style>");
     }
 }
