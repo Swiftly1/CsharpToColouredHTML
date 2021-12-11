@@ -75,10 +75,8 @@ public class HTMLEmitter : IEmitter
 
     private void AddCSS()
     {
-        _sb.AppendLine("<style>");
-        _sb.AppendLine(
-        @"
-        .background
+        var css = 
+      @".background
         {
             background-color: #1E1E1E;
         }
@@ -121,7 +119,10 @@ public class HTMLEmitter : IEmitter
         .control
         {
             color: #C586C0;
-        }");
+        }";
+
+        _sb.AppendLine("<style>");
+        _sb.AppendLine(new string(css.Where(c => !char.IsWhiteSpace(c)).ToArray()));
         _sb.AppendLine("</style>");
     }
 }
