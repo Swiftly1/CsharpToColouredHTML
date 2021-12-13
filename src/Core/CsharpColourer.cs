@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Classification;
 
-namespace Core;
+namespace CsharpToColouredHTML.Core;
 
 public class CsharpColourer
 {
@@ -12,7 +12,6 @@ public class CsharpColourer
     {
         var nodes = GenerateInternalRepresentation(code);
         emitter.Emit(nodes);
-
         return emitter.Text;
     }
 

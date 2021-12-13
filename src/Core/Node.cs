@@ -1,4 +1,4 @@
-﻿namespace Core;
+﻿namespace CsharpToColouredHTML.Core;
 
 public class Node
 {

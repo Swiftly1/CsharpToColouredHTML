@@ -1,4 +1,4 @@
-﻿using Core;
+﻿using CsharpToColouredHTML.Core;
 
 var code =
 @"using MarkdownSharp;
@@ -30,4 +30,4 @@ var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
 
 Console.WriteLine(html);
 
-new CsharpColourer().ProcessSourceCode(code, new ConsoleEmitter());
+new CsharpColourer().ProcessSourceCode(code, new ConsoleEmitter(false));
