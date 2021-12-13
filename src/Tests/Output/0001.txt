@@ -25,4 +25,4 @@ public</span><span class="modifier"> class</span><span class="class"> HomeContro
         var</span><span class="blue"> html</span><span class="white"> =</span><span class="blue"> test</span><span class="white">.</span><span class="method">Transform</span><span class="white">(</span><span class="blue">contents</span><span class="white">)</span><span class="white">;</span><span class="control">
         return</span><span class="method"> View</span><span class="white">(</span><span class="string">&quot;Index&quot;</span><span class="white">,</span><span class="class"> JsonConvert</span><span class="white">.</span><span class="method">SerializeObject</span><span class="white">(</span><span class="blue">html</span><span class="white">)</span><span class="white">)</span><span class="white">;</span><span class="white">
     }</span><span class="white">
-}</span><pre>
+}</span></pre>

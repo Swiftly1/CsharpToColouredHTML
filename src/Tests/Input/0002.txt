@@ -1,0 +1,33 @@
+﻿using System.Text;
+using System.Web;
+using Microsoft.CodeAnalysis.Classification;
+
+namespace CsharpToColouredHTML.Core;
+
+public class HTMLEmitter : IEmitter
+{
+    private readonly StringBuilder _sb = new StringBuilder();
+
+    public List<string> BuiltInTypes { get; } = new List<string>
+    {
+        "bool",
+        "byte",
+        "sbyte",
+        "char",
+        "decimal",
+        "double",
+        "float",
+        "int",
+        "uint",
+        "nint",
+        "nuint",
+        "long",
+        "ulong",
+        "short",
+        "ushort",
+        "object",
+        "string",
+        "dynamic",
+    };
+
+}

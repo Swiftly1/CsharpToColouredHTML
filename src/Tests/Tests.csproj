@@ -35,5 +35,14 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Remove="Input\0002.txt" />
+	  <None Remove="Input\0003.txt" />
+	  <None Remove="Input\0004.txt" />
+	  <None Remove="Output\0002.txt" />
+	  <None Remove="Output\0003.txt" />
+	  <None Remove="Output\0004.txt" />
+	</ItemGroup>
 
 </Project>

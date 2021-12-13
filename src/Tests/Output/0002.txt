@@ -1,0 +1,37 @@
+﻿<style>
+.background{font-family:monaco,Consolas,LucidaConsole,monospace;background-color:#1E1E1E;}.numeric{color:#b5cea8;}.method{color:#DCDCAA;}.class{color:#4EC9B0;}.modifier{color:#569cd6;}.blue{color:#9CDCFE;}.white{color:#D4D4D4;}.string{color:#ce9178;}.interface{color:#b8d7a3;}.control{color:#C586C0;}.internal_error{color:#FF0D0D;}
+</style>
+<pre class="background">
+<span class="modifier">using</span><span class="white"> System</span><span class="white">.</span><span class="white">Text</span><span class="white">;</span><span class="modifier">
+using</span><span class="white"> System</span><span class="white">.</span><span class="white">Web</span><span class="white">;</span><span class="modifier">
+using</span><span class="white"> Microsoft</span><span class="white">.</span><span class="white">CodeAnalysis</span><span class="white">.</span><span class="white">Classification</span><span class="white">;</span><span class="modifier">
+
+namespace</span><span class="white"> CsharpToColouredHTML</span><span class="white">.</span><span class="white">Core</span><span class="white">;</span><span class="modifier">
+
+public</span><span class="modifier"> class</span><span class="class"> HTMLEmitter</span><span class="white"> :</span><span class="interface"> IEmitter</span><span class="white">
+{</span><span class="modifier">
+    private</span><span class="modifier"> readonly</span><span class="class"> StringBuilder</span><span class="white"> _sb</span><span class="white"> =</span><span class="modifier"> new</span><span class="class"> StringBuilder</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="modifier">
+
+    public</span><span class="class"> List</span><span class="white">&lt;</span><span class="blue">string</span><span class="white">&gt;</span><span class="white"> BuiltInTypes</span><span class="white"> {</span><span class="modifier"> get</span><span class="white">;</span><span class="white"> }</span><span class="white"> =</span><span class="modifier"> new</span><span class="class"> List</span><span class="white">&lt;</span><span class="blue">string</span><span class="white">&gt;</span><span class="white">
+    {</span><span class="string">
+        &quot;bool&quot;</span><span class="white">,</span><span class="string">
+        &quot;byte&quot;</span><span class="white">,</span><span class="string">
+        &quot;sbyte&quot;</span><span class="white">,</span><span class="string">
+        &quot;char&quot;</span><span class="white">,</span><span class="string">
+        &quot;decimal&quot;</span><span class="white">,</span><span class="string">
+        &quot;double&quot;</span><span class="white">,</span><span class="string">
+        &quot;float&quot;</span><span class="white">,</span><span class="string">
+        &quot;int&quot;</span><span class="white">,</span><span class="string">
+        &quot;uint&quot;</span><span class="white">,</span><span class="string">
+        &quot;nint&quot;</span><span class="white">,</span><span class="string">
+        &quot;nuint&quot;</span><span class="white">,</span><span class="string">
+        &quot;long&quot;</span><span class="white">,</span><span class="string">
+        &quot;ulong&quot;</span><span class="white">,</span><span class="string">
+        &quot;short&quot;</span><span class="white">,</span><span class="string">
+        &quot;ushort&quot;</span><span class="white">,</span><span class="string">
+        &quot;object&quot;</span><span class="white">,</span><span class="string">
+        &quot;string&quot;</span><span class="white">,</span><span class="string">
+        &quot;dynamic&quot;</span><span class="white">,</span><span class="white">
+    }</span><span class="white">;</span><span class="white">
+
+}</span></pre>
