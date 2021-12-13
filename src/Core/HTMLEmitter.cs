@@ -89,7 +89,7 @@ public class HTMLEmitter : IEmitter
         }
         else if (BuiltInTypes.Contains(node.Text))
         {
-            colour = InternalHtmlColors.Blue;
+            colour = InternalHtmlColors.Keyword;
         }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
         {
@@ -342,7 +342,7 @@ public class HTMLEmitter : IEmitter
 
         public const string Class = "class";
 
-        public const string Keyword = "modifier";
+        public const string Keyword = "keyword";
 
         public const string Blue = "blue";
 
