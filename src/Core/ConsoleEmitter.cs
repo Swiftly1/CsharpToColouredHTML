@@ -79,7 +79,7 @@ public class ConsoleEmitter : IEmitter
         else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
         {
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-        }      
+        }
         else if (node.ClassificationType == ClassificationTypeNames.ParameterName)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
