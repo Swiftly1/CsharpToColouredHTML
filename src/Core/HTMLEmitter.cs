@@ -51,6 +51,8 @@ public class HTMLEmitter : IEmitter
 
     private bool _IsUsing = false;
 
+    private int _ParenthesisCounter = 0;
+
     public void EmitNode(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
@@ -123,6 +125,17 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
         {
+            if (node.Text == "(")
+                _ParenthesisCounter++;
+
+            if (node.Text == ")")
+            {
+                _ParenthesisCounter--;
+
+                if (_ParenthesisCounter <= 0 && _IsUsing)
+                    _IsUsing = false;
+            }
+
             if (node.Text == ";" && _IsUsing)
                 _IsUsing = false;
 
