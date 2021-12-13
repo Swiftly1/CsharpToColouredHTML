@@ -153,6 +153,9 @@ public class HTMLEmitter : IEmitter
 
                 if (_ParenthesisCounter <= 0 && _IsUsing)
                     _IsUsing = false;
+
+                if (_ParenthesisCounter <= 0 && _IsNew)
+                    _IsNew = false;
             }
 
             if (node.Text == ";")
