@@ -14,6 +14,8 @@ namespace Tests
         [InlineData("0002.txt")]
         [InlineData("0003.txt")]
         [InlineData("0004.txt")]
+        [InlineData("0005.txt")]
+        [InlineData("0006.txt")]
         public void Test1(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);

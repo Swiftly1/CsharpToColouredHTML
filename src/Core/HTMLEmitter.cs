@@ -44,6 +44,7 @@ public class HTMLEmitter : IEmitter
     {
         "List",
         "Dictionary",
+        "Console"
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
@@ -127,10 +128,21 @@ public class HTMLEmitter : IEmitter
                 }
                 else
                 {
-                    colour = InternalHtmlColors.Method;
+                    if (canGoAhead && nodes[currentIndex + 1].Text == "(")
+                    {
+                        colour = InternalHtmlColors.Method;
+                    }
+                    else
+                    {
+                        colour = InternalHtmlColors.White;
+                    }
                 }
             }
             else if (ThereIsMethodCallAhead(currentIndex, nodes))
+            {
+                colour = InternalHtmlColors.Class;
+            }
+            else if (SeemsLikePropertyUsage(currentIndex, nodes))
             {
                 colour = InternalHtmlColors.Class;
             }
@@ -220,6 +232,29 @@ public class HTMLEmitter : IEmitter
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
         _sb.Append(span);
+    }
+
+    private bool SeemsLikePropertyUsage(int currentIndex, List<Node> nodes)
+    {
+        if (_IsUsing)
+            return false;
+
+        if (currentIndex + 3 >= nodes.Count - 1)
+            return false;
+
+        var next = nodes[currentIndex + 1];
+
+        if (next.ClassificationType != ClassificationTypeNames.Operator)
+            return false;
+
+        next = nodes[currentIndex + 2];
+
+        if (next.ClassificationType != ClassificationTypeNames.Identifier)
+            return false;
+
+        next = nodes[currentIndex + 3];
+
+        return new string[] { ")", "(", "=", ";" }.Contains(next.Text);
     }
 
     private bool IsPopularClass(string text)

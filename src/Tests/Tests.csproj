@@ -40,9 +40,13 @@
 	  <None Remove="Input\0002.txt" />
 	  <None Remove="Input\0003.txt" />
 	  <None Remove="Input\0004.txt" />
+	  <None Remove="Input\0005.txt" />
+	  <None Remove="Input\0006.txt" />
 	  <None Remove="Output\0002.txt" />
 	  <None Remove="Output\0003.txt" />
 	  <None Remove="Output\0004.txt" />
+	  <None Remove="Output\0005.txt" />
+	  <None Remove="Output\0006.txt" />
 	</ItemGroup>
 
 </Project>
