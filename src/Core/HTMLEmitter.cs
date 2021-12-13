@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Web;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core;
@@ -58,7 +59,7 @@ public class HTMLEmitter : IEmitter
     public void EmitNode(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
-        var colour = "";
+        var colour = InternalHtmlColors.InternalError;
 
         if (node.ClassificationType == ClassificationTypeNames.ClassName)
         {
@@ -68,6 +69,10 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.White;
         }
+        else if (BuiltInTypes.Contains(node.Text))
+        {
+            colour = InternalHtmlColors.Blue;
+        }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
         {
             var canGoAhead = nodes.Count > currentIndex + 1;
@@ -76,10 +81,6 @@ public class HTMLEmitter : IEmitter
             if (node.Text.StartsWith("I"))
             {
                 colour = InternalHtmlColors.Interface;
-            }
-            else if (BuiltInTypes.Contains(node.Text))
-            {
-                colour = InternalHtmlColors.Blue;
             }
             else if (canGoBehind && nodes[currentIndex - 1].Text == ":")
             {
@@ -128,15 +129,19 @@ public class HTMLEmitter : IEmitter
             if (node.Text == "new")
                 _IsNew = true;
 
-            colour = InternalHtmlColors.Modifier;
+            colour = InternalHtmlColors.Keyword;
         }
         else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
         {
             colour = InternalHtmlColors.String;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.VerbatimStringLiteral)
+        {
+            colour = InternalHtmlColors.String;
+        }
         else if (node.ClassificationType == ClassificationTypeNames.LocalName)
         {
-            colour = InternalHtmlColors.VariableName;
+            colour = InternalHtmlColors.Blue;
         }
         else if (node.ClassificationType == ClassificationTypeNames.MethodName)
         {
@@ -170,13 +175,35 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.White;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.PropertyName)
+        {
+            colour = InternalHtmlColors.White;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.ParameterName)
+        {
+            colour = InternalHtmlColors.Blue;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.FieldName)
+        {
+            colour = InternalHtmlColors.White;
+        }   
+        else if (node.ClassificationType == ClassificationTypeNames.NumericLiteral)
+        {
+            colour = InternalHtmlColors.Interface;
+        }
         else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
         {
             colour = InternalHtmlColors.Control;
         }
 
-        var span = @$"<span class=""{colour}"">{node.TextWithTrivia}</span>";
+        var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
         _sb.Append(span);
+    }
+
+    private string Escape(string textWithTrivia)
+    {
+        var escaped = HttpUtility.HtmlEncode(textWithTrivia);
+        return escaped;
     }
 
     private bool ThereIsMethodCallAhead(int currentIndex, List<Node> nodes)
@@ -240,12 +267,12 @@ public class HTMLEmitter : IEmitter
         color: #4EC9B0;
     }}
   
-    .{InternalHtmlColors.Modifier}
+    .{InternalHtmlColors.Keyword}
     {{
         color: #569cd6;
     }}
   
-    .{InternalHtmlColors.VariableName}
+    .{InternalHtmlColors.Blue}
     {{
         color: #9CDCFE;
     }}  
@@ -269,6 +296,11 @@ public class HTMLEmitter : IEmitter
     {{
         color: #C586C0;
     }}
+
+    .{InternalHtmlColors.InternalError}
+    {{
+        color: #FF0D0D;
+    }}
     ";
 
     private static class InternalHtmlColors
@@ -281,18 +313,18 @@ public class HTMLEmitter : IEmitter
 
         public const string Class = "class";
 
-        public const string Modifier = "modifier";
+        public const string Keyword = "modifier";
 
-        public const string VariableName = "variableName";
+        public const string Blue = "blue";
 
         public const string White = "white";
 
         public const string String = "string";
 
-        public const string Blue = "blue";
-
         public const string Control = "control";
 
         public const string Interface = "interface";
+
+        public const string InternalError = "internal_error";
     }
 }

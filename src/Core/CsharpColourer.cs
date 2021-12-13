@@ -18,22 +18,44 @@ public class CsharpColourer
     private List<Node> GenerateInternalRepresentation(string code)
     {
         var nodes = new List<Node>();
-        var result = GetClassifiedSpans(code);
-        var srcText = result.SourceText;
+        var (Spans, srcText) = GetClassifiedSpans(code);
 
         TextSpan? previous = null;
+        var skippedClassifications = new List<string> { ClassificationTypeNames.StringEscapeCharacter };
 
-        foreach (var current in result.ClassifiedSpans)
+        for (int i = 0; i < Spans.Count; i++)
         {
-            var index = previous?.End ?? 0;
-            var length = current.TextSpan.Start - index;
-            var triviaTextSpan = new TextSpan(index, length);
-            var trivia = srcText.GetSubText(triviaTextSpan);
+            ClassifiedSpan current = Spans[i];
+            try
+            {
+                if (skippedClassifications.Contains(current.ClassificationType))
+                    continue;
 
-            var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
-            nodes.Add(node);
+                if (current.ClassificationType == ClassificationTypeNames.StaticSymbol)
+                {
+                    var nextIndex = i - 1;
+                    if (nextIndex > 0 && Spans[nextIndex].ClassificationType == ClassificationTypeNames.ConstantName)
+                    {
+                        previous = Spans[nextIndex].TextSpan;
+                        continue;
+                    }
+                }
 
-            previous = current.TextSpan;
+                var index = previous?.End ?? 0;
+                var length = current.TextSpan.Start - index;
+                var triviaTextSpan = new TextSpan(index, length);
+                var trivia = srcText.GetSubText(triviaTextSpan);
+
+                var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
+                nodes.Add(node);
+
+                previous = current.TextSpan;
+            }
+            catch
+            {
+                var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), "");
+                nodes.Add(node);
+            }
         }
 
         return nodes;
