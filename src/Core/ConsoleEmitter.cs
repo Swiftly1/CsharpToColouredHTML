@@ -1,11 +1,18 @@
 ﻿using System.Text;
 using Microsoft.CodeAnalysis.Classification;
 
-namespace Core;
+namespace CsharpToColouredHTML.Core;
 
 public class ConsoleEmitter : IEmitter
 {
+    public ConsoleEmitter(bool addDiagnosticInfo = false)
+    {
+        this.addDiagnosticInfo = addDiagnosticInfo;
+    }
+
     private readonly StringBuilder _sb = new StringBuilder();
+
+    private readonly bool addDiagnosticInfo;
 
     public string Text { get; private set; }
 
@@ -70,7 +77,14 @@ public class ConsoleEmitter : IEmitter
         }
 
         _sb.Append(node.TextWithTrivia);
-        Console.Write(node.TextWithTrivia);
+        Console.Write($"{node.TextWithTrivia}");
+
+        if (addDiagnosticInfo)
+        {
+            _sb.Append($"({node.ClassificationType})");
+            Console.Write($"({node.ClassificationType})");
+        }
+
         Console.ResetColor();
     }
 }
