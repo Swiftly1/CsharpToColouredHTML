@@ -17,4 +17,9 @@ public class Node
     public string Text { get; }
 
     public string Trivia { get; }
+
+    public override string ToString()
+    {
+        return $"{ClassificationType} {Text}";
+    }
 }

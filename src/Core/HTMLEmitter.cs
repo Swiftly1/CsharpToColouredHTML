@@ -51,6 +51,8 @@ public class HTMLEmitter : IEmitter
 
     private bool _IsUsing = false;
 
+    private bool _IsNew = false;
+
     private int _ParenthesisCounter = 0;
 
     public void EmitNode(int currentIndex, List<Node> nodes)
@@ -68,6 +70,9 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
         {
+            var canGoAhead = nodes.Count > currentIndex + 1;
+            var canGoBehind = currentIndex > 0;
+
             if (node.Text.StartsWith("I"))
             {
                 colour = InternalHtmlColors.Interface;
@@ -76,15 +81,26 @@ public class HTMLEmitter : IEmitter
             {
                 colour = InternalHtmlColors.Blue;
             }
-            else if (nodes.Count < currentIndex + 1 && nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.Punctuation)
+            else if (canGoBehind && nodes[currentIndex - 1].Text == ":")
             {
                 colour = InternalHtmlColors.Class;
             }
-            else if (currentIndex > 0 && nodes[currentIndex - 1].Text == ":")
+            else if (canGoAhead && nodes[currentIndex + 1].Text == "(")
+            {
+                if (_IsNew)
+                {
+                    colour = InternalHtmlColors.Class;
+                }
+                else
+                {
+                    colour = InternalHtmlColors.Method;
+                }
+            }
+            else if (canGoAhead && nodes[currentIndex + 1].Text == "{")
             {
                 colour = InternalHtmlColors.Class;
             }
-            else if (currentIndex > 0 && nodes[currentIndex - 1].Text == ".")
+            else if (canGoBehind && nodes[currentIndex - 1].Text == ".")
             {
                 if (_IsUsing)
                 {
@@ -95,7 +111,7 @@ public class HTMLEmitter : IEmitter
                     colour = InternalHtmlColors.Method;
                 }
             }
-            else if (currentIndex > 0 && nodes[currentIndex - 1].Text == "new")
+            else if (ThereIsMethodCallAhead(currentIndex, nodes))
             {
                 colour = InternalHtmlColors.Class;
             }
@@ -108,6 +124,9 @@ public class HTMLEmitter : IEmitter
         {
             if (node.Text == "using")
                 _IsUsing = true;
+
+            if (node.Text == "new")
+                _IsNew = true;
 
             colour = InternalHtmlColors.Modifier;
         }
@@ -136,8 +155,11 @@ public class HTMLEmitter : IEmitter
                     _IsUsing = false;
             }
 
-            if (node.Text == ";" && _IsUsing)
+            if (node.Text == ";")
+            {
                 _IsUsing = false;
+                _IsNew = false;
+            }
 
             colour = InternalHtmlColors.White;
         }
@@ -152,6 +174,38 @@ public class HTMLEmitter : IEmitter
 
         var span = @$"<span class=""{colour}"">{node.TextWithTrivia}</span>";
         _sb.Append(span);
+    }
+
+    private bool ThereIsMethodCallAhead(int currentIndex, List<Node> nodes)
+    {
+        // there's method call ahead so I guess that's an class, orrr namespace :(
+
+        var i = currentIndex;
+        var state = 0;
+
+        while (++i < nodes.Count)
+        {
+            var current = nodes[i];
+
+            if (state == 0 && current.ClassificationType == ClassificationTypeNames.Operator)
+            {
+                state = 1;
+            }
+            else if (state == 1 && current.ClassificationType == ClassificationTypeNames.Identifier)
+            {
+                state = 0;
+            }
+            else if (current.Text == "(")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     private void AddCSS()
