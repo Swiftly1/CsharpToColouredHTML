@@ -6,7 +6,17 @@ namespace CsharpToColouredHTML.Core;
 
 public class HTMLEmitter : IEmitter
 {
+    public string Text { get; private set; }
+
+    // Internal Stuff:
+
     private readonly StringBuilder _sb = new StringBuilder();
+
+    private bool _IsUsing = false;
+
+    private bool _IsNew = false;
+
+    private int _ParenthesisCounter = 0;
 
     public List<string> BuiltInTypes { get; } = new List<string>
     {
@@ -30,7 +40,21 @@ public class HTMLEmitter : IEmitter
         "dynamic",
     };
 
-    public string Text { get; private set; }
+    public List<string> ReallyPopularClasses { get; } = new List<string>
+    {
+        "List",
+        "Dictionary",
+    };
+
+    public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
+    {
+        "Controller",
+        "DTO",
+        "User",
+        "Manager",
+        "Handler",
+        "Node",
+    };
 
     public void Emit(List<Node> nodes)
     {
@@ -45,16 +69,10 @@ public class HTMLEmitter : IEmitter
             EmitNode(i, nodes);
         }
 
-        _sb.AppendLine("<pre>");
+        _sb.AppendLine("</pre>");
 
         Text = _sb.ToString();
     }
-
-    private bool _IsUsing = false;
-
-    private bool _IsNew = false;
-
-    private int _ParenthesisCounter = 0;
 
     public void EmitNode(int currentIndex, List<Node> nodes)
     {
@@ -113,6 +131,10 @@ public class HTMLEmitter : IEmitter
                 }
             }
             else if (ThereIsMethodCallAhead(currentIndex, nodes))
+            {
+                colour = InternalHtmlColors.Class;
+            }
+            else if (IsPopularClass(node.Text))
             {
                 colour = InternalHtmlColors.Class;
             }
@@ -198,6 +220,13 @@ public class HTMLEmitter : IEmitter
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
         _sb.Append(span);
+    }
+
+    private bool IsPopularClass(string text)
+    {
+        return ReallyPopularClasses.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase))
+            ||
+            ReallyPopularClassSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }
 
     private string Escape(string textWithTrivia)
