@@ -25,20 +25,16 @@ public class CsharpColourer
 
         for (int i = 0; i < Spans.Count; i++)
         {
-            ClassifiedSpan current = Spans[i];
+            var current = Spans[i];
             try
             {
                 if (skippedClassifications.Contains(current.ClassificationType))
                     continue;
 
-                if (current.ClassificationType == ClassificationTypeNames.StaticSymbol)
+                if (i > 0 && current.ClassificationType == ClassificationTypeNames.StaticSymbol)
                 {
-                    var nextIndex = i - 1;
-                    if (nextIndex > 0 && Spans[nextIndex].ClassificationType == ClassificationTypeNames.ConstantName)
-                    {
-                        previous = Spans[nextIndex].TextSpan;
-                        continue;
-                    }
+                    previous = Spans[i - 1].TextSpan;
+                    continue;
                 }
 
                 var index = previous?.End ?? 0;
