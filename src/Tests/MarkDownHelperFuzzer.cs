@@ -16,7 +16,7 @@ namespace Tests
         {
             var opening = "```csharp";
 
-            for (int i = 0; i < 10_000; i++)
+            for (int i = 0; i < 100_000; i++)
             {
                 var length = rnd.Next(0, 400);
                 var str = RandomString(length);
@@ -79,7 +79,7 @@ namespace Tests
 
         public string RandomString(int length)
         {
-            const string chars = "ABC뉴스가 전세계 매체로부터종합한 최신 뉴스 헤이뉴스-스토리커뮤니티DEFGHIJKLMNOPQRS@#$#^$%&^*&)(*_)(!@#!@TUVWXYZ0123456789";
+            const string chars = "ABC🐉🐒🐉뉴스가 전🧔🎄🎂세계 매체로부터종합한🟫⬛최신 뉴스 헤이뉴스-스토리커뮤니티DE🐒FGHIJKLMNOPQRS@#$#^$%&^*&)(*_)(!@#!@TUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[rnd.Next(s.Length)]).ToArray());
         }
