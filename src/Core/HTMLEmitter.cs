@@ -94,61 +94,17 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
         {
-            var canGoAhead = nodes.Count > currentIndex + 1;
-            var canGoBehind = currentIndex > 0;
-
-            if (node.Text.StartsWith("I"))
+            if (IsClass(currentIndex, nodes))
+            {
+                colour = InternalHtmlColors.Class;
+            }
+            else if (IsMethod(currentIndex, nodes))
+            {
+                colour = InternalHtmlColors.Method;
+            }
+            else if (IsInterface(currentIndex, nodes))
             {
                 colour = InternalHtmlColors.Interface;
-            }
-            else if (canGoBehind && nodes[currentIndex - 1].Text == ":")
-            {
-                colour = InternalHtmlColors.Class;
-            }
-            else if (canGoAhead && nodes[currentIndex + 1].Text == "(")
-            {
-                if (_IsNew)
-                {
-                    colour = InternalHtmlColors.Class;
-                }
-                else
-                {
-                    colour = InternalHtmlColors.Method;
-                }
-            }
-            else if (canGoAhead && nodes[currentIndex + 1].Text == "{")
-            {
-                colour = InternalHtmlColors.Class;
-            }
-            else if (canGoBehind && nodes[currentIndex - 1].Text == ".")
-            {
-                if (_IsUsing)
-                {
-                    colour = InternalHtmlColors.White;
-                }
-                else
-                {
-                    if (canGoAhead && nodes[currentIndex + 1].Text == "(")
-                    {
-                        colour = InternalHtmlColors.Method;
-                    }
-                    else
-                    {
-                        colour = InternalHtmlColors.White;
-                    }
-                }
-            }
-            else if (ThereIsMethodCallAhead(currentIndex, nodes))
-            {
-                colour = InternalHtmlColors.Class;
-            }
-            else if (SeemsLikePropertyUsage(currentIndex, nodes))
-            {
-                colour = InternalHtmlColors.Class;
-            }
-            else if (IsPopularClass(node.Text))
-            {
-                colour = InternalHtmlColors.Class;
             }
             else
             {
@@ -232,6 +188,78 @@ public class HTMLEmitter : IEmitter
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
         _sb.Append(span);
+    }
+
+    private bool IsInterface(int currentIndex, List<Node> nodes)
+    {
+        var node = nodes[currentIndex];
+        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoBehind = currentIndex > 0;
+
+        if (node.Text.StartsWith("I") && canGoBehind && new[] { ":", "<" }.Contains(nodes[currentIndex - 1].Text))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool IsMethod(int currentIndex, List<Node> nodes)
+    {
+        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoBehind = currentIndex > 0;
+
+        if (!_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
+        {
+            return true;
+        }
+        else if (_IsUsing && canGoAhead && nodes[currentIndex + 1].Text == "(")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool IsClass(int currentIndex, List<Node> nodes)
+    {
+        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoBehind = currentIndex > 0;
+
+        var node = nodes[currentIndex];
+
+        if (canGoBehind && nodes[currentIndex - 1].Text == ":")
+        {
+            return true;
+        }
+        else if (_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
+        {
+            return true;
+        }
+        else if (canGoAhead && nodes[currentIndex + 1].Text == "{")
+        {
+            return true;
+        }
+        else if (ThereIsMethodCallAhead(currentIndex, nodes))
+        {
+            return true;
+        }
+        else if (SeemsLikePropertyUsage(currentIndex, nodes))
+        {
+            return true;
+        }
+        else if (IsPopularClass(node.Text))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private bool SeemsLikePropertyUsage(int currentIndex, List<Node> nodes)
