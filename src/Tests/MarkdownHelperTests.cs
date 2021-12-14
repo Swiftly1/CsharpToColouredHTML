@@ -1,8 +1,8 @@
 using Xunit;
-using CsharpToColouredHTML.Extractor;
 using System.IO;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
+using CsharpToColouredHTML.Extractor;
 
 namespace Tests
 {

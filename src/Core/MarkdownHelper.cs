@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace CsharpToColouredHTML.Extractor;
+﻿namespace CsharpToColouredHTML.Extractor;
 
 public static class MarkdownHelper
 {
@@ -8,7 +6,7 @@ public static class MarkdownHelper
     {
         var beginningIndices = AllIndexesOf(s, openingStr).Select(x => x + openingStr.Length).ToList();
         var closingIndices = AllIndexesOf(s, closingStr);
-        var pairs = MakePairs(beginningIndices, closingIndices.ToList());
+        var pairs = MakePairs(beginningIndices, closingIndices);
 
         var result = new List<string>();
 
@@ -27,17 +25,21 @@ public static class MarkdownHelper
 
     private static List<(int Start, int End)> MakePairs(List<int> beginningIndices, List<int> closingIndices)
     {
+        var closingCopy = closingIndices.ToList();
+
         var pairs = new List<(int Start, int End)>();
 
         foreach (var openingIndex in beginningIndices)
         {
-            for (int i = 0; i < closingIndices.Count; i++)
+            for (int i = 0; i < closingCopy.Count; i++)
             {
-                var current = closingIndices[i];
+                var current = closingCopy[i];
                 if (openingIndex < current)
                 {
                     pairs.Add((openingIndex, current));
-                    closingIndices.RemoveRange(0, i + 1);
+                    // since indices are sorted, we're removing those from the beginning that
+                    // should never be used because openingIndex will always be higher than them
+                    closingCopy.RemoveRange(0, i + 1);
                     break;
                 }
             }
