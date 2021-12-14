@@ -104,6 +104,14 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.White;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.EnumName)
+        {
+            colour = InternalHtmlColors.Interface;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.EnumMemberName)
+        {
+            colour = InternalHtmlColors.White;
+        }
         else if (BuiltInTypes.Contains(node.Text))
         {
             colour = InternalHtmlColors.Keyword;
@@ -273,6 +281,10 @@ public class HTMLEmitter : IEmitter
             return true;
         }
         else if (IsPopularClass(node.Text))
+        {
+            return true;
+        }
+        else if (canGoBehind && nodes[currentIndex - 1].Text == "<")
         {
             return true;
         }
