@@ -6,7 +6,7 @@ using CsharpToColouredHTML.Miscs;
 
 namespace Tests
 {
-    public class MarkdownHelperTests
+    public class MarkDownHelperTests
     {
         private const string InputDir = $"InputMarkdown";
         private const string OutputDir = $"OutputMarkdown";
