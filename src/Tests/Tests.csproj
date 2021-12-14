@@ -25,32 +25,28 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Content Include="Input\**">
+		<Content Include="InputCsharp\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 	
 	<ItemGroup>
-		<Content Include="Output\**">
+		<Content Include="OutputHtml\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	
+	
+	<ItemGroup>
+		<Content Include="InputMarkdown\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <None Remove="Input\0002.txt" />
-	  <None Remove="Input\0003.txt" />
-	  <None Remove="Input\0004.txt" />
-	  <None Remove="Input\0005.txt" />
-	  <None Remove="Input\0006.txt" />
-	  <None Remove="Input\0007.txt" />
-	  <None Remove="Input\0008.txt" />
-	  <None Remove="Output\0002.txt" />
-	  <None Remove="Output\0003.txt" />
-	  <None Remove="Output\0004.txt" />
-	  <None Remove="Output\0005.txt" />
-	  <None Remove="Output\0006.txt" />
-	  <None Remove="Output\0007.txt" />
-	  <None Remove="Output\0008.txt" />
+		<Content Include="OutputMarkdown\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
-
+	
 </Project>

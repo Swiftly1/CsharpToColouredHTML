@@ -6,8 +6,8 @@ namespace Tests
 {
     public class E2E
     {
-        private const string InputDir = $"Input";
-        private const string OutputDir = $"Output";
+        private const string InputDir = $"InputCsharp";
+        private const string OutputDir = $"OutputHtml";
 
         [Theory]
         [InlineData("0001.txt")]
