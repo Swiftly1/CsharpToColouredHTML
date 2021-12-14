@@ -94,17 +94,17 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
         {
-            if (IsClass(currentIndex, nodes))
+            if (IsInterface(currentIndex, nodes))
             {
-                colour = InternalHtmlColors.Class;
+                colour = InternalHtmlColors.Interface;
             }
             else if (IsMethod(currentIndex, nodes))
             {
                 colour = InternalHtmlColors.Method;
             }
-            else if (IsInterface(currentIndex, nodes))
+            else if (IsClass(currentIndex, nodes))
             {
-                colour = InternalHtmlColors.Interface;
+                colour = InternalHtmlColors.Class;
             }
             else
             {
@@ -176,7 +176,7 @@ public class HTMLEmitter : IEmitter
         else if (node.ClassificationType == ClassificationTypeNames.FieldName)
         {
             colour = InternalHtmlColors.White;
-        }   
+        }
         else if (node.ClassificationType == ClassificationTypeNames.NumericLiteral)
         {
             colour = InternalHtmlColors.Interface;
@@ -200,6 +200,10 @@ public class HTMLEmitter : IEmitter
         {
             return true;
         }
+        else if (node.Text.StartsWith("I") && canGoBehind && new[] { "public", "private", "internal", "sealed", "protected" }.Contains(nodes[currentIndex - 1].Text))
+        {
+            return true;
+        }
         else
         {
             return false;
@@ -215,7 +219,7 @@ public class HTMLEmitter : IEmitter
         {
             return true;
         }
-        else if (_IsUsing && canGoAhead && nodes[currentIndex + 1].Text == "(")
+        else if (_IsUsing && !_IsUsing && canGoAhead && nodes[currentIndex + 1].Text == "(")
         {
             return true;
         }
@@ -244,7 +248,7 @@ public class HTMLEmitter : IEmitter
         {
             return true;
         }
-        else if (ThereIsMethodCallAhead(currentIndex, nodes))
+        else if (_IsNew && ThereIsMethodCallAhead(currentIndex, nodes))
         {
             return true;
         }
