@@ -84,6 +84,22 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.Class;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.Comment)
+        {
+            colour = InternalHtmlColors.Comment;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.PreprocessorKeyword)
+        {
+            colour = InternalHtmlColors.Preprocessor;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.StructName)
+        {
+            colour = InternalHtmlColors.Struct;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.InterfaceName)
+        {
+            colour = InternalHtmlColors.Interface;
+        }
         else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
         {
             colour = InternalHtmlColors.White;
@@ -397,6 +413,21 @@ public class HTMLEmitter : IEmitter
     {{
         color: #FF0D0D;
     }}
+
+    .{InternalHtmlColors.Comment}
+    {{
+        color: #6A9955;
+    }} 
+
+    .{InternalHtmlColors.Preprocessor}
+    {{
+        color: #808080;
+    }}
+
+    .{InternalHtmlColors.Struct}
+    {{
+        color: #86C691;
+    }}
     ";
 
     private static class InternalHtmlColors
@@ -422,5 +453,11 @@ public class HTMLEmitter : IEmitter
         public const string Interface = "interface";
 
         public const string InternalError = "internal_error";
+
+        public const string Comment = "comment";
+
+        public const string Preprocessor = "preprocessor";
+
+        public const string Struct = "struct";
     }
 }

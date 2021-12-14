@@ -1,104 +1,27 @@
-﻿using System.Text;
-using Microsoft.CodeAnalysis.Classification;
+﻿// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
 
-namespace CsharpToColouredHTML.Core;
+#nullable disable
 
-public class ConsoleEmitter : IEmitter
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using EnvDTE;
+using Microsoft;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using Task = System.Threading.Tasks.Task;
+
+namespace Roslyn.Compilers.Extension
 {
-    public ConsoleEmitter(bool addDiagnosticInfo = false)
+    [Guid("31C0675E-87A4-4061-A0DD-A4E510FCCF97")]
+    public sealed class CompilerPackage : AsyncPackage
     {
-        this.addDiagnosticInfo = addDiagnosticInfo;
-    }
+        public static string RoslynHive = null;
 
-    private readonly StringBuilder _sb = new StringBuilder();
-
-    private readonly bool addDiagnosticInfo;
-
-    public string Text { get; private set; }
-
-    public void Emit(List<Node> nodes)
-    {
-        Console.ResetColor();
-
-        Text = "";
-        _sb.Clear();
-
-        foreach (var node in nodes)
+        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            EmitNode(node);
-        }
-
-        Text = _sb.ToString();
-    }
-
-    public void EmitNode(Node node)
-    {
-        if (node.ClassificationType == ClassificationTypeNames.ClassName)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Identifier)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Keyword)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
-        {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.LocalName)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.MethodName)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Operator)
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.VerbatimStringLiteral)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ParameterName)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-        }
-        else
-        {
-            Console.ResetColor();
-        }
-
-        _sb.Append(node.TextWithTrivia);
-        Console.Write($"{node.TextWithTrivia}");
-
-        if (addDiagnosticInfo)
-        {
-            _sb.Append($"({node.ClassificationType})");
-            Console.Write($"({node.ClassificationType})");
-        }
-
-        Console.ResetColor();
-    }
-}
