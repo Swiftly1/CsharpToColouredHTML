@@ -1,8 +1,16 @@
-﻿namespace CsharpToColouredHTML.Extractor;
+﻿namespace CsharpToColouredHTML.Miscs;
 
+/// <summary>
+/// The purpose of this class is to replace C#'s code within markdown syntax
+/// with C# code represented with coloured HTML.
+/// e.g ```csharp var a = 5;``` => var a = 5; => html code.
+/// WARNING: It assumes that the input is trusted! so be careful.
+/// Here's more about the problems if you'll process input from untrusted sources e.g users.
+/// https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+/// </summary>
 public static class MarkdownHelper
 {
-    public static List<string> ExtractCodeFromMarkdown(string s, string openingStr = "```csharp", string closingStr = "```")
+    public static List<string> ReplaceCsharpMarkdownWithHTMLCode_Unsafe(string s, string openingStr = "```csharp", string closingStr = "```")
     {
         var beginningIndices = AllIndexesOf(s, openingStr).Select(x => x + openingStr.Length).ToList();
         var closingIndices = AllIndexesOf(s, closingStr);

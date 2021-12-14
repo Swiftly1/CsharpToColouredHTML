@@ -2,7 +2,7 @@ using Xunit;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using CsharpToColouredHTML.Extractor;
+using CsharpToColouredHTML.Miscs;
 
 namespace Tests
 {
@@ -24,7 +24,7 @@ namespace Tests
             var markdown = File.ReadAllText(p1);
             var codes = SplitLinesBy(File.ReadAllLines(p2), Splitter);
 
-            var extracted_codes = MarkdownHelper.ExtractCodeFromMarkdown(markdown);
+            var extracted_codes = MarkdownHelper.ReplaceCsharpMarkdownWithHTMLCode_Unsafe(markdown);
 
             for (int i = 0; i < codes.Count; i++)
             {
