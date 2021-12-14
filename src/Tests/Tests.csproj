@@ -50,6 +50,7 @@
 	  <None Remove="Output\0005.txt" />
 	  <None Remove="Output\0006.txt" />
 	  <None Remove="Output\0007.txt" />
+	  <None Remove="Output\0008.txt" />
 	</ItemGroup>
 
 </Project>
