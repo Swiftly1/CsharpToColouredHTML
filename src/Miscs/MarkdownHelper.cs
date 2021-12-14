@@ -10,10 +10,18 @@
 /// </summary>
 public static class MarkdownHelper
 {
+    /// <summary>
+    /// The purpose of this class is to replace C#'s code within markdown syntax
+    /// with C# code represented with coloured HTML.
+    /// e.g ```csharp var a = 5;``` => var a = 5; => html code.
+    /// WARNING: It assumes that the input is trusted! so be careful.
+    /// Here's more about the problems if you'll process input from untrusted sources e.g users.
+    /// https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html
+    /// </summary>
     public static List<string> ReplaceCsharpMarkdownWithHTMLCode_Unsafe(string s, string openingStr = "```csharp", string closingStr = "```")
     {
-        var beginningIndices = AllIndexesOf(s, openingStr).Select(x => x + openingStr.Length).ToList();
-        var closingIndices = AllIndexesOf(s, closingStr);
+        var beginningIndices = AllIndicesOf(s, openingStr).Select(x => x + openingStr.Length).ToList();
+        var closingIndices = AllIndicesOf(s, closingStr);
         var pairs = MakePairs(beginningIndices, closingIndices);
 
         var result = new List<string>();
@@ -56,7 +64,7 @@ public static class MarkdownHelper
         return pairs;
     }
 
-    private static List<int> AllIndexesOf(string str, string substr, bool ignoreCase = false)
+    private static List<int> AllIndicesOf(string str, string substr)
     {
         if (string.IsNullOrWhiteSpace(str) || string.IsNullOrWhiteSpace(substr))
         {
@@ -66,7 +74,7 @@ public static class MarkdownHelper
         var indexes = new List<int>();
         int index = 0;
 
-        while ((index = str.IndexOf(substr, index, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal)) != -1)
+        while ((index = str.IndexOf(substr, index)) != -1)
         {
             indexes.Add(index++);
         }
