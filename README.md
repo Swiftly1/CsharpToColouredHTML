@@ -4,7 +4,16 @@ This library tries to convert C# code into pure HTML with some CSS lines
 
 that looks as if that was inside Visual Studio Code / Studio Studio
 
-You can try live demo that's avaliable at https://csharp-colors.xyz/
+You can try live demo that's avaliable at: https://csharp-colors.xyz/
+
+Or use it in not so serious project: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
+
+via .NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.0`
+
+Sample Usage:
+
+	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
+	Console.WriteLine(html);
 
 * [Example 1 - Code from this project](#ex1)
 
