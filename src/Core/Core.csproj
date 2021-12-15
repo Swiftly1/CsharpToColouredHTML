@@ -5,6 +5,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>CsharpToColouredHTML</RootNamespace>
+    <Company>none</Company>
+    <Authors>wx</Authors>
+    <Copyright>wx</Copyright>
+    <PackageProjectUrl>https://github.com/Swiftly1/CsharpToColouredHTML</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Swiftly1/CsharpToColouredHTML</RepositoryUrl>
+    <PackageId>CsharpToColouredHTML.Core</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
