@@ -14,6 +14,12 @@ but also I wanted to have server-side rendering, so users aren't required to hav
 
 \* Ironically demo page uses a few lines of js just to make messing with the demo more sane
 
+# Security Considerations
+
+Even despite performing [escaping](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/src/Core/HTMLEmitter.cs#L327)
+
+I still recommend to use it only on trusted inputs, at least for now. 
+
 # Demo 
 
 You can try live demo that's avaliable at: https://csharp-colors.xyz/
