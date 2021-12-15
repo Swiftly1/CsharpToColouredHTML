@@ -4,6 +4,8 @@ This library tries to convert C# code into pure HTML with some CSS lines
 
 that looks as if that was inside Visual Studio Code / Studio Studio
 
+You can try live demo that's avaliable at https://csharp-colors.xyz/
+
 * [Example 1 - Code from this project](#ex1)
 
 * [Example 2 - Random code from Roslyn](#ex2)
