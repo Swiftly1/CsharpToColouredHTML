@@ -1,14 +1,26 @@
 # CsharpToColouredHTML
 
-This library tries to convert C# code into pure HTML with some CSS lines 
+This library tries to convert C# code into pure HTML with some lines of CSS that
 
-that looks as if that was inside Visual Studio Code / Studio Studio
+make it look as if that was inside Visual Studio or Visual Studio Code.
+
+# Why? 
+
+Motivation for doing it was that I wanted to put C# code fragments on website, 
+
+but I didn't like the colours that were provided by popular sytnax highlighting solutions - they were not so IDE-ish, 
+
+but also I wanted to have server-side rendering, so users aren't required to have JavaScript enabled* in order to see colors.
+
+\* Ironically demo page uses a few lines of js just to make messing with the demo more sane
+
+# Demo 
 
 You can try live demo that's avaliable at: https://csharp-colors.xyz/
 
-Or use it in not so serious project: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
+Or use it in not so serious projects: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
 
-via .NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.0`
+.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.0`
 
 Sample Usage:
 
