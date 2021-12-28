@@ -30,5 +30,24 @@ namespace Tests
 
             Assert.Equal(goodHTML, resultHTML);
         }
+
+        [Fact]
+        public void TestOverrideCSS_1()
+        {
+            var code = "Console.WriteLine(\"asd\")";
+            var myCSS = "";
+            var resultHTML = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(myCSS));
+
+            Assert.DoesNotContain("style", resultHTML);
+        }
+
+        [Fact]
+        public void TestOverrideCSS_2()
+        {
+            var code = "Console.WriteLine(\"asd\")";
+            var myCSS = "<style>MY_CSS</style>";
+            var resultHTML = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(myCSS));
+            Assert.Contains(myCSS, resultHTML);
+        }
     }
 }

@@ -1,16 +1,23 @@
-﻿using System.Text;
-using System.Web;
+﻿using System.Web;
+using System.Text;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core;
 
 public class HTMLEmitter : IEmitter
 {
+    public HTMLEmitter(string user_provided_css = null)
+    {
+        UserProvidedCSS = user_provided_css;
+    }
+
     public string Text { get; private set; }
 
     // Internal Stuff:
 
     private readonly StringBuilder _sb = new StringBuilder();
+
+    private readonly string UserProvidedCSS = null;
 
     private bool _IsUsing = false;
 
@@ -59,9 +66,7 @@ public class HTMLEmitter : IEmitter
 
     public void Emit(List<Node> nodes)
     {
-        Text = "";
-        _sb.Clear();
-
+        Reset();
         AddCSS();
         _sb.AppendLine(@"<pre class=""background"">");
 
@@ -73,6 +78,15 @@ public class HTMLEmitter : IEmitter
         _sb.AppendLine("</pre>");
 
         Text = _sb.ToString();
+    }
+
+    private void Reset()
+    {
+        Text = "";
+        _sb.Clear();
+        _IsUsing = false;
+        _IsNew = false;
+        _ParenthesisCounter = 0;
     }
 
     public void EmitNode(int currentIndex, List<Node> nodes)
@@ -208,6 +222,22 @@ public class HTMLEmitter : IEmitter
         else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
         {
             colour = InternalHtmlColors.Control;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.LabelName)
+        {
+            colour = InternalHtmlColors.White;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.OperatorOverloaded)
+        {
+            colour = InternalHtmlColors.White;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.RecordStructName)
+        {
+            colour = InternalHtmlColors.Interface;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.RecordClassName)
+        {
+            colour = InternalHtmlColors.Class;
         }
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
@@ -364,16 +394,24 @@ public class HTMLEmitter : IEmitter
 
     private void AddCSS()
     {
-        _sb.AppendLine("<style>");
-        _sb.AppendLine(new string(CSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
-        _sb.AppendLine("</style>");
+        if (UserProvidedCSS != null)
+        {
+            _sb.AppendLine(UserProvidedCSS);
+        }
+        else
+        {
+            _sb.AppendLine("<style>");
+            _sb.AppendLine(new string(DEFAULT_CSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
+            _sb.AppendLine("</style>");
+        }
     }
 
-    public const string CSS =
+    public const string DEFAULT_CSS =
     @$".{InternalHtmlColors.Background}
     {{
         font-family: monaco,Consolas,Lucida Console,monospace; 
         background-color: #1E1E1E;
+        overflow:scroll;
     }}
 
     .{InternalHtmlColors.Numeric}

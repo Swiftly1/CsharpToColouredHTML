@@ -50,4 +50,9 @@
 		</Content>
 	</ItemGroup>
 	
+	<ItemGroup>
+	  <None Remove="InputCsharp\0009.txt" />
+	  <None Remove="OutputHtml\0009.txt" />
+	</ItemGroup>
+	
 </Project>
