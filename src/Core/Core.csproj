@@ -11,6 +11,7 @@
     <PackageProjectUrl>https://github.com/Swiftly1/CsharpToColouredHTML</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Swiftly1/CsharpToColouredHTML</RepositoryUrl>
     <PackageId>CsharpToColouredHTML.Core</PackageId>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

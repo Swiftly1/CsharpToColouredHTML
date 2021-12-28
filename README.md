@@ -26,11 +26,15 @@ You can try live demo that's avaliable at: https://csharp-colors.xyz/
 
 Or use it in not so serious projects: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
 
-.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.0`
+.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.1`
 
 Sample Usage:
 
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
+	Console.WriteLine(html);
+___
+	var myCustomCSS = "<style>...</style>";
+	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(myCustomCSS));
 	Console.WriteLine(html);
 
 * [Example 1 - Code from this project](#ex1)
