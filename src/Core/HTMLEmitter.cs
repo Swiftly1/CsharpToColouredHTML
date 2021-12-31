@@ -357,6 +357,9 @@ public class HTMLEmitter : IEmitter
 
         next = nodes[currentIndex + 3];
 
+        if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.LocalName)
+            return false;
+
         return new string[] { ")", "(", "=", ";" }.Contains(next.Text);
     }
 
