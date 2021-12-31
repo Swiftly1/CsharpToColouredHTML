@@ -53,8 +53,10 @@
 	<ItemGroup>
 	  <None Remove="InputCsharp\0009.txt" />
 	  <None Remove="InputCsharp\0010.txt" />
+	  <None Remove="InputCsharp\0011.txt" />
 	  <None Remove="OutputHtml\0009.txt" />
 	  <None Remove="OutputHtml\0010.txt" />
+	  <None Remove="OutputHtml\0011.txt" />
 	</ItemGroup>
 	
 </Project>

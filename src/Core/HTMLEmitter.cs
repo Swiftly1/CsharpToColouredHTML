@@ -239,6 +239,14 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.Class;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.TypeParameterName)
+        {
+            colour = InternalHtmlColors.Interface;
+        }
+        else if (node.ClassificationType.Contains("xml doc comment"))
+        {
+            colour = InternalHtmlColors.Comment;
+        }
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
         _sb.Append(span);
