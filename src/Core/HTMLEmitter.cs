@@ -318,6 +318,11 @@ public class HTMLEmitter : IEmitter
         {
             return true;
         }
+        // new DictionaryList<int, int>();
+        else if (_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "<")
+        {
+            return true;
+        }
         else
         {
             return false;
