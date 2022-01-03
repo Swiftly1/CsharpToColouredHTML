@@ -1,4 +1,6 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿using CsharpToColouredHTML.Miscs;
+
+namespace CsharpToColouredHTML.Core;
 
 public class Node
 {
@@ -8,6 +10,8 @@ public class Node
         Text = text;
         Trivia = trivia;
         TextWithTrivia = trivia + text;
+        HasNewLine = TextWithTrivia.Contains(Environment.NewLine);
+        NewLineCount = MarkdownHelper.AllIndicesOf(TextWithTrivia, Environment.NewLine).Count;
     }
 
     public string TextWithTrivia { get; }
@@ -17,6 +21,10 @@ public class Node
     public string Text { get; }
 
     public string Trivia { get; }
+
+    public bool HasNewLine { get; }
+
+    public int NewLineCount { get; }
 
     public override string ToString()
     {

@@ -64,9 +64,9 @@ public static class MarkdownHelper
         return pairs;
     }
 
-    private static List<int> AllIndicesOf(string str, string substr)
+    public static List<int> AllIndicesOf(string str, string substr)
     {
-        if (string.IsNullOrWhiteSpace(str) || string.IsNullOrWhiteSpace(substr))
+        if ((string.IsNullOrWhiteSpace(str) || string.IsNullOrWhiteSpace(substr)) && substr != Environment.NewLine)
         {
             throw new ArgumentException("String or substring is not specified.");
         }

@@ -1,6 +1,8 @@
 using Xunit;
+using System;
 using System.IO;
 using CsharpToColouredHTML.Core;
+using CsharpToColouredHTML.Miscs;
 
 namespace Tests
 {
@@ -51,6 +53,14 @@ namespace Tests
             var myCSS = "<style>MY_CSS</style>";
             var resultHTML = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(myCSS));
             Assert.Contains(myCSS, resultHTML);
+        }
+
+        [Fact]
+        public void AllIndicesOfTest()
+        {
+            var str = $"test {Environment.NewLine}{Environment.NewLine} test";
+
+            Assert.Equal(2, MarkdownHelper.AllIndicesOf(str, Environment.NewLine).Count);
         }
     }
 }

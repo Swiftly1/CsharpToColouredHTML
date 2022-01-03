@@ -6,9 +6,10 @@ namespace CsharpToColouredHTML.Core;
 
 public class HTMLEmitter : IEmitter
 {
-    public HTMLEmitter(string user_provided_css = null)
+    public HTMLEmitter(string user_provided_css = null, bool addLineNumber = false)
     {
         UserProvidedCSS = user_provided_css;
+        AddLineNumber = addLineNumber;
     }
 
     public string Text { get; private set; }
@@ -18,6 +19,8 @@ public class HTMLEmitter : IEmitter
     private readonly StringBuilder _sb = new StringBuilder();
 
     private readonly string UserProvidedCSS = null;
+
+    private readonly bool AddLineNumber = true;
 
     private bool _IsUsing = false;
 
@@ -70,9 +73,40 @@ public class HTMLEmitter : IEmitter
         AddCSS();
         _sb.AppendLine(@"<pre class=""background"">");
 
+        var isOpened = false;
+        var lineCounter = 0;
+
+        if (AddLineNumber)
+        {
+            _sb.AppendLine("<table>");
+            _sb.AppendLine("<tbody>");
+        }
+
         for (int i = 0; i < nodes.Count; i++)
         {
-            EmitNode(i, nodes);
+            if (AddLineNumber)
+            {
+                if (i == 0 || nodes[i].HasNewLine)
+                {
+                    if (isOpened)
+                    {
+                        _sb.AppendLine("</td></tr>");
+                    }
+
+                    _sb.AppendLine("<tr>");
+                    _sb.AppendLine($"<td class=\"line_no\">{lineCounter++}</td><td class=\"test\">");
+                    isOpened = true;
+                }
+            }
+
+            var span = EmitNode(i, nodes);
+            _sb.AppendLine(span);
+        }
+
+        if (AddLineNumber)
+        {
+            _sb.AppendLine("</tbody>");
+            _sb.AppendLine("<table>");
         }
 
         _sb.AppendLine("</pre>");
@@ -89,7 +123,7 @@ public class HTMLEmitter : IEmitter
         _ParenthesisCounter = 0;
     }
 
-    public void EmitNode(int currentIndex, List<Node> nodes)
+    public string EmitNode(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
         var colour = InternalHtmlColors.InternalError;
@@ -249,7 +283,7 @@ public class HTMLEmitter : IEmitter
         }
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
-        _sb.Append(span);
+        return span;
     }
 
     private bool IsInterface(int currentIndex, List<Node> nodes)
@@ -493,6 +527,11 @@ public class HTMLEmitter : IEmitter
     .{InternalHtmlColors.Struct}
     {{
         color: #86C691;
+    }}
+
+    table
+    {{
+        color: white;
     }}
     ";
 
