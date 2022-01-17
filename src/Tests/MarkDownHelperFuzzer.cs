@@ -67,7 +67,7 @@ namespace Tests
 
         private static List<int>? ExecutePrivateMethod(string opening, string str)
         {
-            return MarkdownHelper.AllIndicesOf(str, opening);
+            return StringHelper.AllIndicesOf(str, opening);
         }
 
         public string RandomString(int length)

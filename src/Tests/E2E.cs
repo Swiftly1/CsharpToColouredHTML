@@ -23,6 +23,8 @@ namespace Tests
         [InlineData("0009.txt")]
         [InlineData("0010.txt")]
         [InlineData("0011.txt")]
+        [InlineData("0012.txt")]
+        [InlineData("0013.txt")]
         public void Test1(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
@@ -49,6 +51,7 @@ namespace Tests
         [InlineData("0010.txt")]
         [InlineData("0011.txt")]
         [InlineData("0012.txt")]
+        [InlineData("0013.txt")]
         public void Test2(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
@@ -85,7 +88,7 @@ namespace Tests
         {
             var str = $"test {Environment.NewLine}{Environment.NewLine} test";
 
-            Assert.Equal(2, MarkdownHelper.AllIndicesOf(str, Environment.NewLine).Count);
+            Assert.Equal(2, StringHelper.AllIndicesOf(str, Environment.NewLine).Count);
         }
     }
 }
