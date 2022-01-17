@@ -11,7 +11,17 @@ public class Node
         Trivia = trivia;
         TextWithTrivia = trivia + text;
         HasNewLine = TextWithTrivia.Contains(Environment.NewLine);
-        NewLineCount = MarkdownHelper.AllIndicesOf(TextWithTrivia, Environment.NewLine).Count;
+        NewLineCount = StringHelper.AllIndicesOf(TextWithTrivia, Environment.NewLine).Count;
+    }
+
+    public Node(string currentClassificationType, string text, string trivia, bool hasNewLine, int newLineCount)
+    {
+        ClassificationType = currentClassificationType;
+        Text = text;
+        Trivia = trivia;
+        TextWithTrivia = trivia + text;
+        HasNewLine = hasNewLine;
+        NewLineCount = newLineCount;
     }
 
     public string TextWithTrivia { get; }
@@ -22,7 +32,7 @@ public class Node
 
     public string Trivia { get; }
 
-    public bool HasNewLine { get; }
+    public bool HasNewLine { get;  }
 
     public int NewLineCount { get; }
 

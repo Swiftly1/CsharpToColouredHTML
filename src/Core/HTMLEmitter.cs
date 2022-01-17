@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Text;
 using Microsoft.CodeAnalysis.Classification;
+using CsharpToColouredHTML.Miscs;
 
 namespace CsharpToColouredHTML.Core;
 
@@ -28,6 +29,8 @@ public class HTMLEmitter : IEmitter
 
     private int _ParenthesisCounter = 0;
 
+    private int LineCounter = 0;
+
     public List<string> BuiltInTypes { get; } = new List<string>
     {
         "bool",
@@ -54,7 +57,13 @@ public class HTMLEmitter : IEmitter
     {
         "List",
         "Dictionary",
-        "Console"
+        "Console",
+        "Task"
+    };
+
+    public List<string> ReallyPopularStructs { get; } = new List<string>
+    {
+        "CancellationToken",
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
@@ -65,6 +74,7 @@ public class HTMLEmitter : IEmitter
         "Manager",
         "Handler",
         "Node",
+        "Exception",
     };
 
     public void Emit(List<Node> nodes)
@@ -74,7 +84,6 @@ public class HTMLEmitter : IEmitter
         _sb.AppendLine(@"<pre class=""background"">");
 
         var isOpened = false;
-        var lineCounter = 0;
 
         if (AddLineNumber)
         {
@@ -94,10 +103,10 @@ public class HTMLEmitter : IEmitter
                         _sb.Append("</td></tr>");
                     }
 
-                    CreateRowsForNewLinesIfNeeded(current, ref lineCounter);
+                    CreateRowsForNewLinesIfNeeded(current);
 
                     _sb.Append("<tr>");
-                    AddNewLineNumber(ref lineCounter);
+                    AddNewLineNumber();
                     _sb.Append("<td class=\"code_column\">");
                     isOpened = true;
                 }
@@ -126,26 +135,28 @@ public class HTMLEmitter : IEmitter
         Text = _sb.ToString();
     }
 
-    private void AddNewLineNumber(ref int lineCounter)
-    {
-        var value = lineCounter++;
-        _sb.Append($"<td class=\"line_no\">{value}</td>");
-    }
-
-    private void CreateRowsForNewLinesIfNeeded(Node current, ref int lineCounter)
-    {
-        for (int i = current.NewLineCount - 1; i > 0; i--)
-        {
-            _sb.Append("<tr>");
-            AddNewLineNumber(ref lineCounter);
-            _sb.Append("<td>");
-            _sb.Append("</tr>");
-        }
-    }
-
     private string RemoveNewLines(string span)
     {
         return span.Replace(Environment.NewLine, "");
+    }
+
+    private void AddNewLineNumber()
+    {
+        var value = LineCounter++;
+        _sb.Append($"<td class=\"line_no\">{value}</td>");
+    }
+
+    private void CreateRowsForNewLinesIfNeeded(Node current)
+    {
+        var newLinesCountAtTheBeginningOrEnd = StringHelper.AllIndicesOf(current.Trivia, Environment.NewLine).Count;
+
+        for (int i = newLinesCountAtTheBeginningOrEnd - 1; i > 0; i--)
+        {
+            _sb.Append("<tr>");
+            AddNewLineNumber();
+            _sb.Append("<td>");
+            _sb.Append("</tr>");
+        }
     }
 
     private void Reset()
@@ -211,6 +222,10 @@ public class HTMLEmitter : IEmitter
             else if (IsClass(currentIndex, nodes))
             {
                 colour = InternalHtmlColors.Class;
+            }
+            else if (IsStruct(currentIndex, nodes))
+            {
+                colour = InternalHtmlColors.Struct;
             }
             else
             {
@@ -316,9 +331,22 @@ public class HTMLEmitter : IEmitter
             colour = InternalHtmlColors.Comment;
         }
 
-        var escaped = Escape(node.TextWithTrivia);
-        var span = @$"<span class=""{colour}"">{escaped}</span>";
+        var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
         return span;
+    }
+
+    private bool IsStruct(int currentIndex, List<Node> nodes)
+    {
+        var node = nodes[currentIndex];
+        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoBehind = currentIndex > 0;
+
+        if (IsPopularStruct(node.Text))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private bool IsInterface(int currentIndex, List<Node> nodes)
@@ -437,6 +465,11 @@ public class HTMLEmitter : IEmitter
         return ReallyPopularClasses.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase))
             ||
             ReallyPopularClassSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool IsPopularStruct(string text)
+    {
+        return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase));
     }
 
     private string Escape(string textWithTrivia)
