@@ -1,4 +1,5 @@
-﻿namespace CsharpToColouredHTML.Miscs;
+﻿using CsharpToColouredHTML.Core;
+namespace CsharpToColouredHTML.Miscs;
 
 /// <summary>
 /// The purpose of this class is to replace C#'s code within markdown syntax

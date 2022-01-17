@@ -1,8 +1,7 @@
 ﻿using Xunit;
 using System;
 using System.Linq;
-using System.Reflection;
-using CsharpToColouredHTML.Miscs;
+using CsharpToColouredHTML.Core;
 using System.Collections.Generic;
 
 namespace Tests

@@ -1,6 +1,4 @@
-﻿using CsharpToColouredHTML.Miscs;
-
-namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core;
 
 public class Node
 {

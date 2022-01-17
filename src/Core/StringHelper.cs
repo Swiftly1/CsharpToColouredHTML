@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Miscs;
+﻿namespace CsharpToColouredHTML.Core;
 
 public static class StringHelper
 {
