@@ -86,21 +86,33 @@ public class HTMLEmitter : IEmitter
         {
             if (AddLineNumber)
             {
-                if (i == 0 || nodes[i].HasNewLine)
+                var current = nodes[i];
+                if (i == 0 || current.HasNewLine)
                 {
                     if (isOpened)
                     {
-                        _sb.AppendLine("</td></tr>");
+                        _sb.Append("</td></tr>");
                     }
 
-                    _sb.AppendLine("<tr>");
-                    _sb.AppendLine($"<td class=\"line_no\">{lineCounter++}</td><td class=\"test\">");
+                    CreateRowsForNewLinesIfNeeded(current, ref lineCounter);
+
+                    _sb.Append("<tr>");
+                    AddNewLineNumber(ref lineCounter);
+                    _sb.Append("<td class=\"code_column\">");
                     isOpened = true;
                 }
             }
 
             var span = EmitNode(i, nodes);
-            _sb.AppendLine(span);
+
+            if (AddLineNumber)
+            {
+                _sb.Append(RemoveNewLines(span));
+            }
+            else
+            {
+                _sb.Append(span);
+            }
         }
 
         if (AddLineNumber)
@@ -112,6 +124,28 @@ public class HTMLEmitter : IEmitter
         _sb.AppendLine("</pre>");
 
         Text = _sb.ToString();
+    }
+
+    private void AddNewLineNumber(ref int lineCounter)
+    {
+        var value = lineCounter++;
+        _sb.Append($"<td class=\"line_no\">{value}</td>");
+    }
+
+    private void CreateRowsForNewLinesIfNeeded(Node current, ref int lineCounter)
+    {
+        for (int i = current.NewLineCount - 1; i > 0; i--)
+        {
+            _sb.Append("<tr>");
+            AddNewLineNumber(ref lineCounter);
+            _sb.Append("<td>");
+            _sb.Append("</tr>");
+        }
+    }
+
+    private string RemoveNewLines(string span)
+    {
+        return span.Replace(Environment.NewLine, "");
     }
 
     private void Reset()
@@ -282,7 +316,8 @@ public class HTMLEmitter : IEmitter
             colour = InternalHtmlColors.Comment;
         }
 
-        var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
+        var escaped = Escape(node.TextWithTrivia);
+        var span = @$"<span class=""{colour}"">{escaped}</span>";
         return span;
     }
 
@@ -452,6 +487,12 @@ public class HTMLEmitter : IEmitter
         {
             _sb.AppendLine("<style>");
             _sb.AppendLine(new string(DEFAULT_CSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
+
+            if (AddLineNumber)
+            {
+                _sb.AppendLine(new string(LineNumbersCSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
+            }
+
             _sb.AppendLine("</style>");
         }
     }
@@ -528,10 +569,24 @@ public class HTMLEmitter : IEmitter
     {{
         color: #86C691;
     }}
+    ";
 
+    public const string LineNumbersCSS =
+    @$"
     table
     {{
         color: white;
+        white-space: pre;
+    }}
+
+    .line_no
+    {{
+        user-select: none;
+    }}   
+
+    .code_column
+    {{
+        padding-left: 5px;
     }}
     ";
 
