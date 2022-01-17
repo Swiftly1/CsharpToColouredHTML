@@ -43,7 +43,30 @@ public class CsharpColourer
                 var trivia = srcText.GetSubText(triviaTextSpan);
 
                 var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
-                nodes.Add(node);
+
+                if (node.ClassificationType == ClassificationTypeNames.VerbatimStringLiteral &&
+                    node.Text.Contains(Environment.NewLine))
+                {
+                    var splitted = node.Text.Split(Environment.NewLine);
+
+                    for (int y = 0; y < splitted.Length; y++)
+                    {
+                        var split_node = new Node
+                        (
+                            node.ClassificationType,
+                            splitted[y],
+                            y == 0 ? node.Trivia : Environment.NewLine,
+                            y == 0 ? false : true,
+                            y == 0 ? 0 : 1
+                        );
+
+                        nodes.Add(split_node);
+                    }
+                }
+                else
+                {
+                    nodes.Add(node);
+                }
 
                 previous = current.TextSpan;
             }

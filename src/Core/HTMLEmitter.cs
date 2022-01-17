@@ -1,14 +1,16 @@
 ﻿using System.Web;
 using System.Text;
 using Microsoft.CodeAnalysis.Classification;
+using CsharpToColouredHTML.Miscs;
 
 namespace CsharpToColouredHTML.Core;
 
 public class HTMLEmitter : IEmitter
 {
-    public HTMLEmitter(string user_provided_css = null)
+    public HTMLEmitter(string user_provided_css = null, bool addLineNumber = false)
     {
         UserProvidedCSS = user_provided_css;
+        AddLineNumber = addLineNumber;
     }
 
     public string Text { get; private set; }
@@ -19,11 +21,15 @@ public class HTMLEmitter : IEmitter
 
     private readonly string UserProvidedCSS = null;
 
+    private readonly bool AddLineNumber = true;
+
     private bool _IsUsing = false;
 
     private bool _IsNew = false;
 
     private int _ParenthesisCounter = 0;
+
+    private int LineCounter = 0;
 
     public List<string> BuiltInTypes { get; } = new List<string>
     {
@@ -51,7 +57,13 @@ public class HTMLEmitter : IEmitter
     {
         "List",
         "Dictionary",
-        "Console"
+        "Console",
+        "Task"
+    };
+
+    public List<string> ReallyPopularStructs { get; } = new List<string>
+    {
+        "CancellationToken",
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
@@ -62,6 +74,7 @@ public class HTMLEmitter : IEmitter
         "Manager",
         "Handler",
         "Node",
+        "Exception",
     };
 
     public void Emit(List<Node> nodes)
@@ -70,14 +83,80 @@ public class HTMLEmitter : IEmitter
         AddCSS();
         _sb.AppendLine(@"<pre class=""background"">");
 
+        var isOpened = false;
+
+        if (AddLineNumber)
+        {
+            _sb.AppendLine("<table>");
+            _sb.AppendLine("<tbody>");
+        }
+
         for (int i = 0; i < nodes.Count; i++)
         {
-            EmitNode(i, nodes);
+            if (AddLineNumber)
+            {
+                var current = nodes[i];
+                if (i == 0 || current.HasNewLine)
+                {
+                    if (isOpened)
+                    {
+                        _sb.Append("</td></tr>");
+                    }
+
+                    CreateRowsForNewLinesIfNeeded(current);
+
+                    _sb.Append("<tr>");
+                    AddNewLineNumber();
+                    _sb.Append("<td class=\"code_column\">");
+                    isOpened = true;
+                }
+            }
+
+            var span = EmitNode(i, nodes);
+
+            if (AddLineNumber)
+            {
+                _sb.Append(RemoveNewLines(span));
+            }
+            else
+            {
+                _sb.Append(span);
+            }
+        }
+
+        if (AddLineNumber)
+        {
+            _sb.AppendLine("</tbody>");
+            _sb.AppendLine("<table>");
         }
 
         _sb.AppendLine("</pre>");
 
         Text = _sb.ToString();
+    }
+
+    private string RemoveNewLines(string span)
+    {
+        return span.Replace(Environment.NewLine, "");
+    }
+
+    private void AddNewLineNumber()
+    {
+        var value = LineCounter++;
+        _sb.Append($"<td class=\"line_no\">{value}</td>");
+    }
+
+    private void CreateRowsForNewLinesIfNeeded(Node current)
+    {
+        var newLinesCountAtTheBeginningOrEnd = StringHelper.AllIndicesOf(current.Trivia, Environment.NewLine).Count;
+
+        for (int i = newLinesCountAtTheBeginningOrEnd - 1; i > 0; i--)
+        {
+            _sb.Append("<tr>");
+            AddNewLineNumber();
+            _sb.Append("<td>");
+            _sb.Append("</tr>");
+        }
     }
 
     private void Reset()
@@ -89,7 +168,7 @@ public class HTMLEmitter : IEmitter
         _ParenthesisCounter = 0;
     }
 
-    public void EmitNode(int currentIndex, List<Node> nodes)
+    public string EmitNode(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
         var colour = InternalHtmlColors.InternalError;
@@ -143,6 +222,10 @@ public class HTMLEmitter : IEmitter
             else if (IsClass(currentIndex, nodes))
             {
                 colour = InternalHtmlColors.Class;
+            }
+            else if (IsStruct(currentIndex, nodes))
+            {
+                colour = InternalHtmlColors.Struct;
             }
             else
             {
@@ -249,7 +332,21 @@ public class HTMLEmitter : IEmitter
         }
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
-        _sb.Append(span);
+        return span;
+    }
+
+    private bool IsStruct(int currentIndex, List<Node> nodes)
+    {
+        var node = nodes[currentIndex];
+        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoBehind = currentIndex > 0;
+
+        if (IsPopularStruct(node.Text))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private bool IsInterface(int currentIndex, List<Node> nodes)
@@ -370,6 +467,11 @@ public class HTMLEmitter : IEmitter
             ReallyPopularClassSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }
 
+    private bool IsPopularStruct(string text)
+    {
+        return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase));
+    }
+
     private string Escape(string textWithTrivia)
     {
         var escaped = HttpUtility.HtmlEncode(textWithTrivia);
@@ -418,6 +520,12 @@ public class HTMLEmitter : IEmitter
         {
             _sb.AppendLine("<style>");
             _sb.AppendLine(new string(DEFAULT_CSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
+
+            if (AddLineNumber)
+            {
+                _sb.AppendLine(new string(LineNumbersCSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
+            }
+
             _sb.AppendLine("</style>");
         }
     }
@@ -493,6 +601,25 @@ public class HTMLEmitter : IEmitter
     .{InternalHtmlColors.Struct}
     {{
         color: #86C691;
+    }}
+    ";
+
+    public const string LineNumbersCSS =
+    @$"
+    table
+    {{
+        color: white;
+        white-space: pre;
+    }}
+
+    .line_no
+    {{
+        user-select: none;
+    }}   
+
+    .code_column
+    {{
+        padding-left: 5px;
     }}
     ";
 

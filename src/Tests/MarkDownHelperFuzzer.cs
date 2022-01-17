@@ -11,7 +11,7 @@ namespace Tests
     {
         private Random rnd = new Random();
 
-        [Fact]
+        //[Fact]
         public void Fuzzer()
         {
             var opening = "```csharp";
@@ -67,14 +67,7 @@ namespace Tests
 
         private static List<int>? ExecutePrivateMethod(string opening, string str)
         {
-            var method = typeof(MarkdownHelper).GetMethod
-            (
-                "AllIndicesOf", BindingFlags.NonPublic | BindingFlags.Static, null,
-                new[] { typeof(string), typeof(string) }, null
-            );
-
-            var result = method.Invoke(null, new object[] { str, opening }) as List<int>;
-            return result;
+            return StringHelper.AllIndicesOf(str, opening);
         }
 
         public string RandomString(int length)

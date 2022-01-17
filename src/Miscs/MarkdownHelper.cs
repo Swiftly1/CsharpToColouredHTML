@@ -20,8 +20,8 @@ public static class MarkdownHelper
     /// </summary>
     public static List<string> ReplaceCsharpMarkdownWithHTMLCode_Unsafe(string s, string openingStr = "```csharp", string closingStr = "```")
     {
-        var beginningIndices = AllIndicesOf(s, openingStr).Select(x => x + openingStr.Length).ToList();
-        var closingIndices = AllIndicesOf(s, closingStr);
+        var beginningIndices = StringHelper.AllIndicesOf(s, openingStr).Select(x => x + openingStr.Length).ToList();
+        var closingIndices = StringHelper.AllIndicesOf(s, closingStr);
         var pairs = MakePairs(beginningIndices, closingIndices);
 
         var result = new List<string>();
@@ -62,23 +62,5 @@ public static class MarkdownHelper
         }
 
         return pairs;
-    }
-
-    private static List<int> AllIndicesOf(string str, string substr)
-    {
-        if (string.IsNullOrWhiteSpace(str) || string.IsNullOrWhiteSpace(substr))
-        {
-            throw new ArgumentException("String or substring is not specified.");
-        }
-
-        var indexes = new List<int>();
-        int index = 0;
-
-        while ((index = str.IndexOf(substr, index)) != -1)
-        {
-            indexes.Add(index++);
-        }
-
-        return indexes;
     }
 }
