@@ -126,7 +126,7 @@ public class HTMLEmitter : IEmitter
         if (AddLineNumber)
         {
             _sb.AppendLine("</tbody>");
-            _sb.AppendLine("<table>");
+            _sb.AppendLine("</table>");
         }
 
         _sb.AppendLine("</pre>");

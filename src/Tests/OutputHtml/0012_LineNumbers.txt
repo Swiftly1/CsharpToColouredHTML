@@ -6,5 +6,5 @@ table{color:white;white-space:pre;}.line_no{user-select:none;}.code_column{paddi
 <table>
 <tbody>
 <tr><td class="line_no">0</td><td class="code_column"><span class="class">	Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="white">value1</span><span class="white">)</span><span class="white">;</span></tbody>
-<table>
+</table>
 </pre>
