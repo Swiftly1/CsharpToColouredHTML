@@ -44,6 +44,7 @@
 	  <None Remove="InputCsharp\0013.txt" />
 	  <None Remove="InputCsharp\0014.txt" />
 	  <None Remove="InputCsharp\0015.txt" />
+	  <None Remove="InputCsharp\0016.txt" />
 	  <None Remove="OutputHtml\0009.txt" />
 	  <None Remove="OutputHtml\0010.txt" />
 	  <None Remove="OutputHtml\0011.txt" />
@@ -55,6 +56,8 @@
 	  <None Remove="OutputHtml\0014_LineNumbers.txt" />
 	  <None Remove="OutputHtml\0015.txt" />
 	  <None Remove="OutputHtml\0015_LineNumbers.txt" />
+	  <None Remove="OutputHtml\0016.txt" />
+	  <None Remove="OutputHtml\0016_LineNumbers.txt" />
 	</ItemGroup>
 	
 </Project>

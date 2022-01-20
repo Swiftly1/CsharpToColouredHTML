@@ -1,0 +1,2 @@
+﻿  if (node.ClassificationType == ClassificationTypeNames.VerbatimStringLiteral &&
+                    node.Text.Contains(Environment.NewLine))

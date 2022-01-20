@@ -480,7 +480,7 @@ public class HTMLEmitter : IEmitter
             return false;
 
         // OLEMSGICON.OLEMSGICON_WARNING,
-        return new string[] { ")", "(", "=", ";", "}", ","}.Contains(next.Text);
+        return new string[] { ")", "(", "=", ";", "}", ",", "&", "&&", "|", "||"}.Contains(next.Text);
     }
 
     private bool IsPopularClass(string text)
