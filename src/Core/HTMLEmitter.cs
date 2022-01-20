@@ -62,11 +62,6 @@ public class HTMLEmitter : IEmitter
         "Task"
     };
 
-    public List<string> ReallyPopularStructs { get; } = new List<string>
-    {
-        "CancellationToken",
-    };
-
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
     {
         "Controller",
@@ -76,6 +71,16 @@ public class HTMLEmitter : IEmitter
         "Handler",
         "Node",
         "Exception",
+    };
+
+    public List<string> ReallyPopularStructs { get; } = new List<string>
+    {
+        "CancellationToken",
+    };
+
+    public List<string> ReallyPopularStructsSubstrings { get; } = new List<string>
+    {
+        "Span",
     };
 
     public void Emit(List<Node> nodes)
@@ -487,7 +492,9 @@ public class HTMLEmitter : IEmitter
 
     private bool IsPopularStruct(string text)
     {
-        return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase));
+        return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)) 
+            ||
+            ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }
 
     private string Escape(string textWithTrivia)

@@ -1,4 +1,17 @@
-﻿public string ProcessSourceCode(string code, IEmitter emitter)
+﻿TextSpan? previous = null;
+var skippedClassifications = new List<string> { ClassificationTypeNames.StringEscapeCharacter };
+
+VsShellUtilities.ShowMessageBox
+(
+	this,
+	msg,
+	null,
+	OLEMSGICON.OLEMSGICON_WARNING,
+	OLEMSGBUTTON.OLEMSGBUTTON_OK,
+	OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST
+);
+
+public string ProcessSourceCode(string code, IEmitter emitter)
 {
     var nodes = GenerateInternalRepresentation(code);
     emitter.Emit(nodes);
