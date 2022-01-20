@@ -474,7 +474,8 @@ public class HTMLEmitter : IEmitter
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.LocalName)
             return false;
 
-        return new string[] { ")", "(", "=", ";" }.Contains(next.Text);
+        // OLEMSGICON.OLEMSGICON_WARNING,
+        return new string[] { ")", "(", "=", ";", "}", ","}.Contains(next.Text);
     }
 
     private bool IsPopularClass(string text)

@@ -141,8 +141,8 @@ To reload the Roslyn compiler package, close Visual Studio and any MSBuild proce
                 VsShellUtilities</span><span class="white">.</span><span class="method">ShowMessageBox</span><span class="white">(</span><span class="keyword">
                     this</span><span class="white">,</span><span class="blue">
                     msg</span><span class="white">,</span><span class="keyword">
-                    null</span><span class="white">,</span><span class="white">
-                    OLEMSGICON</span><span class="white">.</span><span class="white">OLEMSGICON_WARNING</span><span class="white">,</span><span class="white">
+                    null</span><span class="white">,</span><span class="class">
+                    OLEMSGICON</span><span class="white">.</span><span class="white">OLEMSGICON_WARNING</span><span class="white">,</span><span class="class">
                     OLEMSGBUTTON</span><span class="white">.</span><span class="white">OLEMSGBUTTON_OK</span><span class="white">,</span><span class="class">
                     OLEMSGDEFBUTTON</span><span class="white">.</span><span class="white">OLEMSGDEFBUTTON_FIRST</span><span class="white">)</span><span class="white">;</span><span class="white">
             }</span><span class="white">
