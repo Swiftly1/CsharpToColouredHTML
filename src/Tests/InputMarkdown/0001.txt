@@ -1,6 +1,0 @@
-﻿asd asd
-
-```csharp
-```
-
-asd asd

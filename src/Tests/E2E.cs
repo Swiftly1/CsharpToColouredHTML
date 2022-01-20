@@ -2,7 +2,6 @@ using Xunit;
 using System;
 using System.IO;
 using CsharpToColouredHTML.Core;
-using CsharpToColouredHTML.Miscs;
 
 namespace Tests
 {

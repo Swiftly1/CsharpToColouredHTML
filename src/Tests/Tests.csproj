@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\Miscs\Miscs.csproj" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -33,19 +32,6 @@
 	
 	<ItemGroup>
 		<Content Include="OutputHtml\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-	
-	
-	<ItemGroup>
-		<Content Include="InputMarkdown\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-	</ItemGroup>
-	
-	<ItemGroup>
-		<Content Include="OutputMarkdown\**">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
