@@ -12,8 +12,6 @@ public class HTMLEmitter : IEmitter
         AddLineNumber = addLineNumber;
     }
 
-    public string Text { get; private set; }
-
     // Internal Stuff:
 
     private readonly StringBuilder _sb = new StringBuilder();
@@ -28,7 +26,11 @@ public class HTMLEmitter : IEmitter
 
     private int _ParenthesisCounter = 0;
 
-    private int LineCounter = 0;
+    private int _LineCounter = 0;
+
+    // Public Stuff:
+
+    public string Text { get; private set; }
 
     public List<string> BuiltInTypes { get; } = new List<string>
     {
@@ -141,15 +143,15 @@ public class HTMLEmitter : IEmitter
 
     private void AddNewLineNumber()
     {
-        var value = LineCounter++;
+        var value = _LineCounter++;
         _sb.Append($"<td class=\"line_no\">{value}</td>");
     }
 
     private void CreateRowsForNewLinesIfNeeded(Node current)
     {
-        var newLinesCountAtTheBeginningOrEnd = StringHelper.AllIndicesOf(current.Trivia, Environment.NewLine).Count;
+        var newLinesCount = StringHelper.AllIndicesOf(current.Trivia, Environment.NewLine).Count;
 
-        for (int i = newLinesCountAtTheBeginningOrEnd - 1; i > 0; i--)
+        for (int i = newLinesCount - 1; i > 0; i--)
         {
             _sb.Append("<tr>");
             AddNewLineNumber();
@@ -165,6 +167,7 @@ public class HTMLEmitter : IEmitter
         _IsUsing = false;
         _IsNew = false;
         _ParenthesisCounter = 0;
+        _LineCounter = 0;
     }
 
     public string EmitNode(int currentIndex, List<Node> nodes)
@@ -621,35 +624,4 @@ public class HTMLEmitter : IEmitter
         padding-left: 5px;
     }}
     ";
-
-    private static class InternalHtmlColors
-    {
-        public const string Background = "background";
-
-        public const string Numeric = "numeric";
-
-        public const string Method = "method";
-
-        public const string Class = "class";
-
-        public const string Keyword = "keyword";
-
-        public const string Blue = "blue";
-
-        public const string White = "white";
-
-        public const string String = "string";
-
-        public const string Control = "control";
-
-        public const string Interface = "interface";
-
-        public const string InternalError = "internal_error";
-
-        public const string Comment = "comment";
-
-        public const string Preprocessor = "preprocessor";
-
-        public const string Struct = "struct";
-    }
 }
