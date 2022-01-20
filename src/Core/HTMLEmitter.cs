@@ -366,11 +366,17 @@ public class HTMLEmitter : IEmitter
         var canGoAhead = nodes.Count > currentIndex + 1;
         var canGoBehind = currentIndex > 0;
 
-        if (node.Text.StartsWith("I") && canGoBehind && new[] { ":", "<" }.Contains(nodes[currentIndex - 1].Text))
+        var startsWithI = node.Text.StartsWith("I");
+
+        if (startsWithI && canGoBehind && new[] { ":", "<" }.Contains(nodes[currentIndex - 1].Text))
         {
             return true;
         }
-        else if (node.Text.StartsWith("I") && canGoBehind && new[] { "public", "private", "internal", "sealed", "protected" }.Contains(nodes[currentIndex - 1].Text))
+        else if (startsWithI && canGoBehind && new[] { "public", "private", "internal", "sealed", "protected" }.Contains(nodes[currentIndex - 1].Text))
+        {
+            return true;
+        }
+        else if (startsWithI && canGoAhead && nodes[currentIndex + 1].ClassificationType == ClassificationTypeNames.ParameterName)
         {
             return true;
         }

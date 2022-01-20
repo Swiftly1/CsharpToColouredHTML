@@ -1,0 +1,6 @@
+﻿public string ProcessSourceCode(string code, IEmitter emitter)
+{
+    var nodes = GenerateInternalRepresentation(code);
+    emitter.Emit(nodes);
+    return emitter.Text;
+}
