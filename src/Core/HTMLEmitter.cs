@@ -125,10 +125,15 @@ public class HTMLEmitter : IEmitter
             }
         }
 
+        if (AddLineNumber && isOpened)
+        {
+            _sb.Append("</td></tr>");
+        }
+
         if (AddLineNumber)
         {
             _sb.AppendLine("</tbody>");
-            _sb.AppendLine("</table>");
+            _sb.Append("</table>");
         }
 
         _sb.AppendLine("</pre>");
@@ -144,7 +149,7 @@ public class HTMLEmitter : IEmitter
     private void AddNewLineNumber()
     {
         var value = _LineCounter++;
-        _sb.Append($"<td class=\"line_no\">{value}</td>");
+        _sb.Append($"<td class=\"line_no\" line_no=\"{value}\"></td>");
     }
 
     private void CreateRowsForNewLinesIfNeeded(Node current)
@@ -614,9 +619,9 @@ public class HTMLEmitter : IEmitter
         white-space: pre;
     }}
 
-    .line_no
+    .line_no::before
     {{
-        user-select: none;
+        content: attr(line_no);
     }}   
 
     .code_column
