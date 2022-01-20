@@ -24,6 +24,7 @@ namespace Tests
         [InlineData("0011.txt")]
         [InlineData("0012.txt")]
         [InlineData("0013.txt")]
+        [InlineData("0014.txt")]
         public void Test1(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
@@ -51,6 +52,7 @@ namespace Tests
         [InlineData("0011.txt")]
         [InlineData("0012.txt")]
         [InlineData("0013.txt")]
+        [InlineData("0014.txt")]
         public void Test2(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);

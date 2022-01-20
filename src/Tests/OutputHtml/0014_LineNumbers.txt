@@ -1,0 +1,9 @@
+﻿<style>
+.background{font-family:monaco,Consolas,LucidaConsole,monospace;background-color:#1E1E1E;overflow:scroll;}.numeric{color:#b5cea8;}.method{color:#DCDCAA;}.class{color:#4EC9B0;}.keyword{color:#569cd6;}.blue{color:#9CDCFE;}.white{color:#D4D4D4;}.string{color:#ce9178;}.interface{color:#b8d7a3;}.control{color:#C586C0;}.internal_error{color:#FF0D0D;}.comment{color:#6A9955;}.preprocessor{color:#808080;}.struct{color:#86C691;}
+table{color:white;white-space:pre;}.line_no::before{content:attr(line_no);}.code_column{padding-left:5px;}
+</style>
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">typeof</span><span class="white">(</span><span class="keyword">int</span><span class="white">)</span><span class="white">.</span><span class="method">GetTypeInfo</span><span class="white">(</span><span class="white">)</span><span class="white">.</span><span class="white">Assembly</span></td></tr></tbody>
+</table></pre>

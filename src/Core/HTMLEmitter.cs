@@ -337,6 +337,10 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.Comment;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.ExtensionMethodName)
+        {
+            colour = InternalHtmlColors.Method;
+        }
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
         return span;
