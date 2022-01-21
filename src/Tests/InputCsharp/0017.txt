@@ -4,3 +4,6 @@ private const string InputDir = $"InputCsharp";
 
 var list = new List<int>{1,2,3};
 var a = list[test()];
+
+var list2 = new List<int>{1,2,3};
+var b = list[Helper.test()];

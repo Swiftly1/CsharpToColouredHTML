@@ -409,7 +409,8 @@ public class HTMLEmitter : IEmitter
             var hasIdentifierBefore = identifier == ClassificationTypeNames.Identifier ||
                 identifier == ClassificationTypeNames.LocalName;
 
-            return hasIdentifierBefore;
+            if (!hasIdentifierBefore)
+                return false;
         }
 
         if (!_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
