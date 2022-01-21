@@ -1,0 +1,6 @@
+﻿[Theory]
+[InlineData("0001.txt")]
+private const string InputDir = $"InputCsharp";
+
+var list = new List<int>{1,2,3};
+var a = list[test()];

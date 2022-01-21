@@ -346,6 +346,10 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.Method;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.ConstantName)
+        {
+            colour = InternalHtmlColors.White;
+        }
 
         var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
         return span;
@@ -396,6 +400,18 @@ public class HTMLEmitter : IEmitter
         var canGoAhead = nodes.Count > currentIndex + 1;
         var canGoBehind = currentIndex > 0;
 
+        // [InlineData("0001.txt")]
+        // var a = list[test()];
+        if (currentIndex > 1 && nodes[currentIndex - 1].Text == "[")
+        {
+            var identifier = nodes[currentIndex - 2].ClassificationType;
+
+            var hasIdentifierBefore = identifier == ClassificationTypeNames.Identifier ||
+                identifier == ClassificationTypeNames.LocalName;
+
+            return hasIdentifierBefore;
+        }
+
         if (!_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
         {
             return true;
@@ -442,6 +458,10 @@ public class HTMLEmitter : IEmitter
             return true;
         }
         else if (canGoBehind && nodes[currentIndex - 1].Text == "<")
+        {
+            return true;
+        }
+        else if (canGoBehind && nodes[currentIndex - 1].Text == "[")
         {
             return true;
         }
