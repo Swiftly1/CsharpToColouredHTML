@@ -14,6 +14,12 @@ public class HTMLEmitter : IEmitter
 
     // Internal Stuff:
 
+    private string Escape(string textWithTrivia)
+    {
+        var escaped = HttpUtility.HtmlEncode(textWithTrivia);
+        return escaped;
+    }
+
     private readonly StringBuilder _sb = new StringBuilder();
 
     private readonly string UserProvidedCSS = null;
@@ -516,12 +522,6 @@ public class HTMLEmitter : IEmitter
         return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)) 
             ||
             ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
-    }
-
-    private string Escape(string textWithTrivia)
-    {
-        var escaped = HttpUtility.HtmlEncode(textWithTrivia);
-        return escaped;
     }
 
     private bool ThereIsMethodCallAhead(int currentIndex, List<Node> nodes)

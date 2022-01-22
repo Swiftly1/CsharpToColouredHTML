@@ -16,7 +16,7 @@ but also I wanted to have server-side rendering, so users aren't required to hav
 
 # Security Considerations
 
-Even despite performing [escaping](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/src/Core/HTMLEmitter.cs#L476)
+Even despite performing [escaping](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/src/Core/HTMLEmitter.cs#L17)
 
 I still recommend to use it only on trusted inputs, at least for now. 
 
@@ -26,7 +26,7 @@ You can try live demo that's avaliable at: https://csharp-colors.xyz/
 
 Or use it in not so serious projects: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
 
-.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.9`
+.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.10`
 
 Sample Usage:
 
