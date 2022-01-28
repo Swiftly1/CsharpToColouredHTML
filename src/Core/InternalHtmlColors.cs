@@ -28,5 +28,7 @@ internal static class InternalHtmlColors
 
     public const string Preprocessor = "preprocessor";
 
+    public const string PreprocessorText = "preprocessor_text";
+
     public const string Struct = "struct";
 }

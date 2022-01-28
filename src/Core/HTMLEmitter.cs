@@ -203,6 +203,10 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.Preprocessor;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.PreprocessorText)
+        {
+            colour = InternalHtmlColors.PreprocessorText;
+        }
         else if (node.ClassificationType == ClassificationTypeNames.StructName)
         {
             colour = InternalHtmlColors.Struct;
@@ -642,6 +646,11 @@ public class HTMLEmitter : IEmitter
     .{InternalHtmlColors.Preprocessor}
     {{
         color: #808080;
+    }}
+
+    .{InternalHtmlColors.PreprocessorText}
+    {{
+        color: #a4a4a4;
     }}
 
     .{InternalHtmlColors.Struct}
