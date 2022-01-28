@@ -36,7 +36,8 @@ namespace Tests
             var code = File.ReadAllText(p1);
             var goodHTML = File.ReadAllText(p2);
 
-            var resultHTML = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
+            var emitter = new HTMLEmitter(user_provided_css: "");
+            var resultHTML = new CsharpColourer().ProcessSourceCode(code, emitter);
 
             Assert.Equal(goodHTML, resultHTML);
         }
@@ -66,7 +67,8 @@ namespace Tests
 
             var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_LineNumbers."));
             var p2Lines = File.ReadAllText(linesPath);
-            var linesResult = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(addLineNumber: true));
+            var emitter = new HTMLEmitter(user_provided_css: "", addLineNumber: true);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
 
             Assert.Equal(p2Lines, linesResult);
         }
