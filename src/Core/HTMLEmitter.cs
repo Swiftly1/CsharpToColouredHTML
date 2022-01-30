@@ -365,7 +365,19 @@ public class HTMLEmitter : IEmitter
             colour = InternalHtmlColors.White;
         }
 
-        var escaped = Escape(node.TextWithTrivia);
+        var processed_Text = "";
+
+        if (AddLineNumber)
+        {
+            var last = node.Trivia.Split(Environment.NewLine).Last();
+            processed_Text = last + node.Text;
+        }
+        else
+        {
+            processed_Text = node.TextWithTrivia;
+        }
+
+        var escaped = Escape(processed_Text);
         var changed_tabs = escaped.Replace("\t", "    ");
         var span = @$"<span class=""{colour}"">{changed_tabs}</span>";
         return span;
