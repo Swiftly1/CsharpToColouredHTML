@@ -9,7 +9,7 @@ dict</span><span class="white">.</span><span class="method">Add</span><span clas
 dict</span><span class="white">.</span><span class="method">Add</span><span class="white">(</span><span class="blue">list2</span><span class="white">,</span><span class="interface"> 10</span><span class="white">)</span><span class="white">;</span><span class="control">
 
 if</span><span class="white"> (</span><span class="blue">dict</span><span class="white">.</span><span class="method">TryGet</span><span class="white">(</span><span class="blue">list1</span><span class="white">,</span><span class="keyword"> out</span><span class="keyword"> var</span><span class="blue"> value1</span><span class="white">)</span><span class="white">)</span><span class="class">
-	Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="blue">value1</span><span class="white">)</span><span class="white">;</span><span class="blue">
+    Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="blue">value1</span><span class="white">)</span><span class="white">;</span><span class="blue">
 
 dict</span><span class="white">.</span><span class="method">TryGet</span><span class="white">(</span><span class="blue">list2</span><span class="white">,</span><span class="keyword"> out</span><span class="keyword"> var</span><span class="blue"> value2</span><span class="white">)</span><span class="white">;</span><span class="class">
 Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="blue">value2</span><span class="white">)</span><span class="white">;</span></pre>

@@ -65,7 +65,10 @@ public class HTMLEmitter : IEmitter
         "List",
         "Dictionary",
         "Console",
-        "Task"
+        "Task",
+        "Func",
+        "Action",
+        "Predicate"
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
@@ -82,6 +85,7 @@ public class HTMLEmitter : IEmitter
     public List<string> ReallyPopularStructs { get; } = new List<string>
     {
         "CancellationToken",
+        "IEnumerable"
     };
 
     public List<string> ReallyPopularStructsSubstrings { get; } = new List<string>
@@ -361,7 +365,9 @@ public class HTMLEmitter : IEmitter
             colour = InternalHtmlColors.White;
         }
 
-        var span = @$"<span class=""{colour}"">{Escape(node.TextWithTrivia)}</span>";
+        var escaped = Escape(node.TextWithTrivia);
+        var changed_tabs = escaped.Replace("\t", "    ");
+        var span = @$"<span class=""{colour}"">{changed_tabs}</span>";
         return span;
     }
 
