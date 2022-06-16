@@ -537,6 +537,9 @@ public class HTMLEmitter : IEmitter
 
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.LocalName)
             return false;
+        
+        if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.ParameterName)
+            return false;
 
         // OLEMSGICON.OLEMSGICON_WARNING,
         return new string[] { ")", "(", "=", ";", "}", ",", "&", "&&", "|", "||"}.Contains(next.Text);
