@@ -1,0 +1,9 @@
+﻿using (var test = File.CreateText(@"test.txt"))
+{
+	foreach (var line in File.ReadLines(@"abc.txt"))
+	{
+		using (var test2 = File.ReadLines(@"test.txt"))
+		{
+		}
+	}
+}

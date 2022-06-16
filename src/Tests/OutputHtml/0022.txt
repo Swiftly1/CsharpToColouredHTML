@@ -1,0 +1,11 @@
+﻿
+<pre class="background">
+<span class="keyword">using</span><span class="white"> (</span><span class="keyword">var</span><span class="blue"> test</span><span class="white"> =</span><span class="class"> File</span><span class="white">.</span><span class="method">CreateText</span><span class="white">(</span><span class="string">@&quot;test.txt&quot;</span><span class="white">)</span><span class="white">)</span><span class="white">
+{</span><span class="control">
+    foreach</span><span class="white"> (</span><span class="keyword">var</span><span class="blue"> line</span><span class="control"> in</span><span class="class"> File</span><span class="white">.</span><span class="method">ReadLines</span><span class="white">(</span><span class="string">@&quot;abc.txt&quot;</span><span class="white">)</span><span class="white">)</span><span class="white">
+    {</span><span class="keyword">
+        using</span><span class="white"> (</span><span class="keyword">var</span><span class="blue"> test2</span><span class="white"> =</span><span class="class"> File</span><span class="white">.</span><span class="method">ReadLines</span><span class="white">(</span><span class="string">@&quot;test.txt&quot;</span><span class="white">)</span><span class="white">)</span><span class="white">
+        {</span><span class="white">
+        }</span><span class="white">
+    }</span><span class="white">
+}</span></pre>

@@ -30,7 +30,11 @@ namespace Tests
         [InlineData("0017.txt")]
         [InlineData("0018.txt")]
         [InlineData("0019.txt")]
-        public void Test1(string fileName)
+        [InlineData("0020.txt")]
+        [InlineData("0021.txt")]
+        [InlineData("0022.txt")]
+        [InlineData("0023.txt")]
+        public void WithoutLineNumbers(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
             var p2 = Path.Combine(OutputDir, fileName);
@@ -64,7 +68,11 @@ namespace Tests
         [InlineData("0017.txt")]
         [InlineData("0018.txt")]
         [InlineData("0019.txt")]
-        public void Test2(string fileName)
+        [InlineData("0020.txt")]
+        [InlineData("0021.txt")]
+        [InlineData("0022.txt")]
+        [InlineData("0023.txt")]
+        public void LineNumbers(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);

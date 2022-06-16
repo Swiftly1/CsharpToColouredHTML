@@ -1,0 +1,3 @@
+﻿
+<pre class="background">
+<span class="class">Test</span><span class="blue"> test</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> Test</span><span class="white">(</span><span class="white">)</span><span class="white">;</span></pre>

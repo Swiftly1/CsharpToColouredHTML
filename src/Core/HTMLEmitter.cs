@@ -68,7 +68,9 @@ public class HTMLEmitter : IEmitter
         "Task",
         "Func",
         "Action",
-        "Predicate"
+        "Predicate",
+        "EventArgs",
+        "File"
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
@@ -80,6 +82,7 @@ public class HTMLEmitter : IEmitter
         "Handler",
         "Node",
         "Exception",
+        "EventHandler"
     };
 
     public List<string> ReallyPopularStructs { get; } = new List<string>
@@ -409,7 +412,7 @@ public class HTMLEmitter : IEmitter
         {
             return true;
         }
-        else if (startsWithI && canGoBehind && new[] { "public", "private", "internal", "sealed", "protected" }.Contains(nodes[currentIndex - 1].Text))
+        else if (startsWithI && canGoBehind && new[] { "public", "private", "internal", "sealed", "protected", "readonly" }.Contains(nodes[currentIndex - 1].Text))
         {
             return true;
         }
@@ -496,6 +499,13 @@ public class HTMLEmitter : IEmitter
         }
         // new DictionaryList<int, int>();
         else if (_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "<")
+        {
+            return true;
+        }
+        else if (nodes.Count > currentIndex + 4 &&
+            nodes[currentIndex + 2].Text == "=" &&
+            nodes[currentIndex + 3].Text == "new" &&
+            nodes[currentIndex + 4].Text == node.Text)
         {
             return true;
         }

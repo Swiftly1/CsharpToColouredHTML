@@ -1,0 +1,4 @@
+﻿internal class TestService : ITestService
+{
+    private readonly ITest _test;
+}

@@ -1,0 +1,4 @@
+﻿public void Form1_Load(object sender, EventArgs e)
+{
+	Test.Tick += new EventHandler(Temp);
+}
