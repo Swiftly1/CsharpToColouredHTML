@@ -8,7 +8,7 @@ make it look as if that was inside Visual Studio or Visual Studio Code.
 
 Motivation for doing it was that I wanted to put C# code fragments on website, 
 
-but I didn't like the colours that were provided by popular sytnax highlighting solutions - they were not so IDE-ish, 
+but I didn't like the colours that were provided by popular syntax highlighting solutions - they were not so IDE-ish, 
 
 but also I wanted to have server-side rendering, so users aren't required to have JavaScript enabled* in order to see colors.
 
