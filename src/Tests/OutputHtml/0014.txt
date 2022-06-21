@@ -1,3 +1,3 @@
-﻿
+
 <pre class="background">
 <span class="keyword">typeof</span><span class="white">(</span><span class="keyword">int</span><span class="white">)</span><span class="white">.</span><span class="method">GetTypeInfo</span><span class="white">(</span><span class="white">)</span><span class="white">.</span><span class="white">Assembly</span></pre>

@@ -1,106 +1,106 @@
-﻿
+
 <pre class="background">
-<span class="keyword">using</span><span class="white"> System</span><span class="white">.</span><span class="white">Text</span><span class="white">;</span><span class="keyword">
-using</span><span class="white"> Microsoft</span><span class="white">.</span><span class="white">CodeAnalysis</span><span class="white">.</span><span class="white">Classification</span><span class="white">;</span><span class="keyword">
+<span class="keyword">using</span> <span class="white">System</span><span class="white">.</span><span class="white">Text</span><span class="white">;</span>
+<span class="keyword">using</span> <span class="white">Microsoft</span><span class="white">.</span><span class="white">CodeAnalysis</span><span class="white">.</span><span class="white">Classification</span><span class="white">;</span>
 
-namespace</span><span class="white"> CsharpToColouredHTML</span><span class="white">.</span><span class="white">Core</span><span class="white">;</span><span class="keyword">
+<span class="keyword">namespace</span> <span class="white">CsharpToColouredHTML</span><span class="white">.</span><span class="white">Core</span><span class="white">;</span>
 
-public</span><span class="keyword"> class</span><span class="class"> ConsoleEmitter</span><span class="white"> :</span><span class="interface"> IEmitter</span><span class="white">
-{</span><span class="keyword">
-    public</span><span class="class"> ConsoleEmitter</span><span class="white">(</span><span class="keyword">bool</span><span class="blue"> addDiagnosticInfo</span><span class="white"> =</span><span class="keyword"> false</span><span class="white">)</span><span class="white">
-    {</span><span class="keyword">
-        this</span><span class="white">.</span><span class="white">addDiagnosticInfo</span><span class="white"> =</span><span class="blue"> addDiagnosticInfo</span><span class="white">;</span><span class="white">
-    }</span><span class="keyword">
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">ConsoleEmitter</span> <span class="white">:</span> <span class="interface">IEmitter</span>
+<span class="white">{</span>
+    <span class="keyword">public</span> <span class="class">ConsoleEmitter</span><span class="white">(</span><span class="keyword">bool</span> <span class="blue">addDiagnosticInfo</span> <span class="white">=</span> <span class="keyword">false</span><span class="white">)</span>
+    <span class="white">{</span>
+        <span class="keyword">this</span><span class="white">.</span><span class="white">addDiagnosticInfo</span> <span class="white">=</span> <span class="blue">addDiagnosticInfo</span><span class="white">;</span>
+    <span class="white">}</span>
 
-    private</span><span class="keyword"> readonly</span><span class="class"> StringBuilder</span><span class="white"> _sb</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> StringBuilder</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="keyword">
+    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="class">StringBuilder</span> <span class="white">_sb</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">StringBuilder</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
 
-    private</span><span class="keyword"> readonly</span><span class="keyword"> bool</span><span class="white"> addDiagnosticInfo</span><span class="white">;</span><span class="keyword">
+    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="keyword">bool</span> <span class="white">addDiagnosticInfo</span><span class="white">;</span>
 
-    public</span><span class="keyword"> string</span><span class="white"> Text</span><span class="white"> {</span><span class="keyword"> get</span><span class="white">;</span><span class="keyword"> private</span><span class="keyword"> set</span><span class="white">;</span><span class="white"> }</span><span class="keyword">
+    <span class="keyword">public</span> <span class="keyword">string</span> <span class="white">Text</span> <span class="white">{</span> <span class="keyword">get</span><span class="white">;</span> <span class="keyword">private</span> <span class="keyword">set</span><span class="white">;</span> <span class="white">}</span>
 
-    public</span><span class="keyword"> void</span><span class="method"> Emit</span><span class="white">(</span><span class="class">List</span><span class="white">&lt;</span><span class="class">Node</span><span class="white">&gt;</span><span class="blue"> nodes</span><span class="white">)</span><span class="white">
-    {</span><span class="class">
-        Console</span><span class="white">.</span><span class="method">ResetColor</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="white">
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Emit</span><span class="white">(</span><span class="class">List</span><span class="white">&lt;</span><span class="class">Node</span><span class="white">&gt;</span> <span class="blue">nodes</span><span class="white">)</span>
+    <span class="white">{</span>
+        <span class="class">Console</span><span class="white">.</span><span class="method">ResetColor</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
 
-        Text</span><span class="white"> =</span><span class="string"> &quot;&quot;</span><span class="white">;</span><span class="white">
-        _sb</span><span class="white">.</span><span class="method">Clear</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="control">
+        <span class="white">Text</span> <span class="white">=</span><span class="string"> &quot;&quot;</span><span class="white">;</span>
+        <span class="white">_sb</span><span class="white">.</span><span class="method">Clear</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
 
-        foreach</span><span class="white"> (</span><span class="keyword">var</span><span class="blue"> node</span><span class="control"> in</span><span class="blue"> nodes</span><span class="white">)</span><span class="white">
-        {</span><span class="method">
-            EmitNode</span><span class="white">(</span><span class="blue">node</span><span class="white">)</span><span class="white">;</span><span class="white">
-        }</span><span class="white">
+        <span class="control">foreach</span> <span class="white">(</span><span class="keyword">var</span> <span class="blue">node</span> <span class="control">in</span> <span class="blue">nodes</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="method">EmitNode</span><span class="white">(</span><span class="blue">node</span><span class="white">)</span><span class="white">;</span>
+        <span class="white">}</span>
 
-        Text</span><span class="white"> =</span><span class="white"> _sb</span><span class="white">.</span><span class="method">ToString</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="white">
-    }</span><span class="keyword">
+        <span class="white">Text</span> <span class="white">=</span> <span class="white">_sb</span><span class="white">.</span><span class="method">ToString</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
+    <span class="white">}</span>
 
-    public</span><span class="keyword"> void</span><span class="method"> EmitNode</span><span class="white">(</span><span class="class">Node</span><span class="blue"> node</span><span class="white">)</span><span class="white">
-    {</span><span class="control">
-        if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">ClassName</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">Red</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">NamespaceName</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">Green</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">Identifier</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">Green</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">Keyword</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">Yellow</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">StringLiteral</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">Cyan</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">LocalName</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">Blue</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">MethodName</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">Red</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">Punctuation</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">White</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">Operator</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">White</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">ControlKeyword</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">DarkRed</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">VerbatimStringLiteral</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">DarkRed</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">StringLiteral</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">DarkGreen</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="control"> if</span><span class="white"> (</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">ParameterName</span><span class="white">)</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="white">ForegroundColor</span><span class="white"> =</span><span class="class"> ConsoleColor</span><span class="white">.</span><span class="white">Yellow</span><span class="white">;</span><span class="white">
-        }</span><span class="control">
-        else</span><span class="white">
-        {</span><span class="class">
-            Console</span><span class="white">.</span><span class="method">ResetColor</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="white">
-        }</span><span class="white">
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">EmitNode</span><span class="white">(</span><span class="class">Node</span> <span class="blue">node</span><span class="white">)</span>
+    <span class="white">{</span>
+        <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">ClassName</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">Red</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">NamespaceName</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">Green</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">Identifier</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">Green</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">Keyword</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">Yellow</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">StringLiteral</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">Cyan</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">LocalName</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">Blue</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">MethodName</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">Red</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">Punctuation</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">White</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">Operator</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">White</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">ControlKeyword</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">DarkRed</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">VerbatimStringLiteral</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">DarkRed</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">StringLiteral</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">DarkGreen</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span> <span class="control">if</span> <span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">ParameterName</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="white">ForegroundColor</span> <span class="white">=</span> <span class="class">ConsoleColor</span><span class="white">.</span><span class="white">Yellow</span><span class="white">;</span>
+        <span class="white">}</span>
+        <span class="control">else</span>
+        <span class="white">{</span>
+            <span class="class">Console</span><span class="white">.</span><span class="method">ResetColor</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
+        <span class="white">}</span>
 
-        _sb</span><span class="white">.</span><span class="method">Append</span><span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">TextWithTrivia</span><span class="white">)</span><span class="white">;</span><span class="class">
-        Console</span><span class="white">.</span><span class="method">Write</span><span class="white">(</span><span class="string">$&quot;</span><span class="white">{</span><span class="blue">node</span><span class="white">.</span><span class="white">TextWithTrivia</span><span class="white">}</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span><span class="control">
+        <span class="white">_sb</span><span class="white">.</span><span class="method">Append</span><span class="white">(</span><span class="blue">node</span><span class="white">.</span><span class="white">TextWithTrivia</span><span class="white">)</span><span class="white">;</span>
+        <span class="class">Console</span><span class="white">.</span><span class="method">Write</span><span class="white">(</span><span class="string">$&quot;</span><span class="white">{</span><span class="blue">node</span><span class="white">.</span><span class="white">TextWithTrivia</span><span class="white">}</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span>
 
-        if</span><span class="white"> (</span><span class="white">addDiagnosticInfo</span><span class="white">)</span><span class="white">
-        {</span><span class="white">
-            _sb</span><span class="white">.</span><span class="method">Append</span><span class="white">(</span><span class="string">$&quot;</span><span class="string">(</span><span class="white">{</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white">}</span><span class="string">)</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span><span class="class">
-            Console</span><span class="white">.</span><span class="method">Write</span><span class="white">(</span><span class="string">$&quot;</span><span class="string">(</span><span class="white">{</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white">}</span><span class="string">)</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span><span class="white">
-        }</span><span class="class">
+        <span class="control">if</span> <span class="white">(</span><span class="white">addDiagnosticInfo</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="white">_sb</span><span class="white">.</span><span class="method">Append</span><span class="white">(</span><span class="string">$&quot;</span><span class="string">(</span><span class="white">{</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white">}</span><span class="string">)</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span>
+            <span class="class">Console</span><span class="white">.</span><span class="method">Write</span><span class="white">(</span><span class="string">$&quot;</span><span class="string">(</span><span class="white">{</span><span class="blue">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white">}</span><span class="string">)</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span>
+        <span class="white">}</span>
 
-        Console</span><span class="white">.</span><span class="method">ResetColor</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="white">
-    }</span><span class="white">
-}</span></pre>
+        <span class="class">Console</span><span class="white">.</span><span class="method">ResetColor</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
+    <span class="white">}</span>
+<span class="white">}</span></pre>

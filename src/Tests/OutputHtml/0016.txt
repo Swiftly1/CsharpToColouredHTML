@@ -1,4 +1,4 @@
-﻿
+
 <pre class="background">
-<span class="control">  if</span><span class="white"> (</span><span class="class">node</span><span class="white">.</span><span class="white">ClassificationType</span><span class="white"> ==</span><span class="class"> ClassificationTypeNames</span><span class="white">.</span><span class="white">VerbatimStringLiteral</span><span class="white"> &amp;&amp;</span><span class="class">
+  <span class="control">if</span> <span class="white">(</span><span class="class">node</span><span class="white">.</span><span class="white">ClassificationType</span> <span class="white">==</span> <span class="class">ClassificationTypeNames</span><span class="white">.</span><span class="white">VerbatimStringLiteral</span><span class="white"> &amp;&amp;</span><span class="class">
                     node</span><span class="white">.</span><span class="class">Text</span><span class="white">.</span><span class="method">Contains</span><span class="white">(</span><span class="class">Environment</span><span class="white">.</span><span class="white">NewLine</span><span class="white">)</span><span class="white">)</span></pre>

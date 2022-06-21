@@ -1,6 +1,6 @@
-﻿
+
 <pre class="background">
-<span class="keyword">public</span><span class="keyword"> void</span><span class="method"> Form1_Load</span><span class="white">(</span><span class="keyword">object</span><span class="blue"> sender</span><span class="white">,</span><span class="class"> EventArgs</span><span class="blue"> e</span><span class="white">)</span><span class="white">
-{</span><span class="white">
-    Test</span><span class="white">.</span><span class="white">Tick</span><span class="white"> +=</span><span class="keyword"> new</span><span class="class"> EventHandler</span><span class="white">(</span><span class="white">Temp</span><span class="white">)</span><span class="white">;</span><span class="white">
-}</span></pre>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Form1_Load</span><span class="white">(</span><span class="keyword">object</span> <span class="blue">sender</span><span class="white">,</span> <span class="class">EventArgs</span> <span class="blue">e</span><span class="white">)</span>
+<span class="white">{</span><span class="white">
+    Test</span><span class="white">.</span><span class="white">Tick</span><span class="white"> +=</span> <span class="keyword">new</span> <span class="class">EventHandler</span><span class="white">(</span><span class="white">Temp</span><span class="white">)</span><span class="white">;</span>
+<span class="white">}</span></pre>

@@ -1,11 +1,11 @@
-﻿
+
 <pre class="background">
 <span class="comment">            // A map of the file name to the content we need to ensure exists in the file</span><span class="keyword">
-            var</span><span class="blue"> filesToWrite</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> Dictionary</span><span class="white">&lt;</span><span class="keyword">string</span><span class="white">,</span><span class="keyword"> string</span><span class="white">&gt;</span><span class="white">(</span><span class="class">StringComparer</span><span class="white">.</span><span class="white">OrdinalIgnoreCase</span><span class="white">)</span><span class="white">;</span><span class="comment">
+            var</span> <span class="blue">filesToWrite</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">Dictionary</span><span class="white">&lt;</span><span class="keyword">string</span><span class="white">,</span> <span class="keyword">string</span><span class="white">&gt;</span><span class="white">(</span><span class="class">StringComparer</span><span class="white">.</span><span class="white">OrdinalIgnoreCase</span><span class="white">)</span><span class="white">;</span><span class="comment">
 
             // The props we want to be included as early as possible since we want our tasks to be used and</span><span class="comment">
             // to ensure our setting of targets path happens early enough</span><span class="blue">
-            filesToWrite</span><span class="white">.</span><span class="method">Add</span><span class="white">(</span><span class="keyword">await</span><span class="method"> GetMSBuildRelativePathAsync</span><span class="white">(</span><span class="string">$@&quot;</span><span class="string">Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span><span class="white">{</span><span class="white">hiveName</span><span class="white">}</span><span class="string">.props</span><span class="string">&quot;</span><span class="white">,</span><span class="struct"> cancellationToken</span><span class="white">)</span><span class="white">.</span><span class="method">ConfigureAwait</span><span class="white">(</span><span class="keyword">true</span><span class="white">)</span><span class="white">,</span><span class="string">
+            filesToWrite</span><span class="white">.</span><span class="method">Add</span><span class="white">(</span><span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span><span class="white">(</span><span class="string">$@&quot;</span><span class="string">Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span><span class="white">{</span><span class="white">hiveName</span><span class="white">}</span><span class="string">.props</span><span class="string">&quot;</span><span class="white">,</span> <span class="struct">cancellationToken</span><span class="white">)</span><span class="white">.</span><span class="method">ConfigureAwait</span><span class="white">(</span><span class="keyword">true</span><span class="white">)</span><span class="white">,</span><span class="string">
                 $@&quot;</span><span class="string">&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span><span class="string">
 &lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span><span class="string">
   &lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span><span class="white">{</span><span class="white">hiveName</span><span class="white">}</span><span class="string">&#39;&quot;&quot;&gt;</span><span class="string">
@@ -18,7 +18,7 @@
 &lt;/Project&gt;</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span><span class="comment">
 
             // This targets content we want to be included later since the project file might touch UseSharedCompilation</span><span class="keyword">
-            var</span><span class="blue"> targetsContent</span><span class="white"> =</span><span class="string">
+            var</span> <span class="blue">targetsContent</span> <span class="white">=</span><span class="string">
                     $@&quot;</span><span class="string">&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span><span class="string">
 &lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span><span class="string">
   &lt;!-- If we&#39;re not using the compiler server, set ToolPath/Exe to direct to the exes in this package --&gt;</span><span class="string">

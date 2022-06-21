@@ -1,35 +1,35 @@
-﻿
+
 <pre class="background">
-<span class="keyword">using</span><span class="white"> System</span><span class="white">.</span><span class="white">Text</span><span class="white">;</span><span class="keyword">
-using</span><span class="white"> System</span><span class="white">.</span><span class="white">Web</span><span class="white">;</span><span class="keyword">
-using</span><span class="white"> Microsoft</span><span class="white">.</span><span class="white">CodeAnalysis</span><span class="white">.</span><span class="white">Classification</span><span class="white">;</span><span class="keyword">
+<span class="keyword">using</span> <span class="white">System</span><span class="white">.</span><span class="white">Text</span><span class="white">;</span>
+<span class="keyword">using</span> <span class="white">System</span><span class="white">.</span><span class="white">Web</span><span class="white">;</span>
+<span class="keyword">using</span> <span class="white">Microsoft</span><span class="white">.</span><span class="white">CodeAnalysis</span><span class="white">.</span><span class="white">Classification</span><span class="white">;</span>
 
-namespace</span><span class="white"> CsharpToColouredHTML</span><span class="white">.</span><span class="white">Core</span><span class="white">;</span><span class="keyword">
+<span class="keyword">namespace</span> <span class="white">CsharpToColouredHTML</span><span class="white">.</span><span class="white">Core</span><span class="white">;</span>
 
-public</span><span class="keyword"> class</span><span class="class"> HTMLEmitter</span><span class="white"> :</span><span class="interface"> IEmitter</span><span class="white">
-{</span><span class="keyword">
-    private</span><span class="keyword"> readonly</span><span class="class"> StringBuilder</span><span class="white"> _sb</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> StringBuilder</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="keyword">
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">HTMLEmitter</span> <span class="white">:</span> <span class="interface">IEmitter</span>
+<span class="white">{</span>
+    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="class">StringBuilder</span> <span class="white">_sb</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">StringBuilder</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
 
-    public</span><span class="class"> List</span><span class="white">&lt;</span><span class="keyword">string</span><span class="white">&gt;</span><span class="white"> BuiltInTypes</span><span class="white"> {</span><span class="keyword"> get</span><span class="white">;</span><span class="white"> }</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> List</span><span class="white">&lt;</span><span class="keyword">string</span><span class="white">&gt;</span><span class="white">
-    {</span><span class="string">
-        &quot;bool&quot;</span><span class="white">,</span><span class="string">
-        &quot;byte&quot;</span><span class="white">,</span><span class="string">
-        &quot;sbyte&quot;</span><span class="white">,</span><span class="string">
-        &quot;char&quot;</span><span class="white">,</span><span class="string">
-        &quot;decimal&quot;</span><span class="white">,</span><span class="string">
-        &quot;double&quot;</span><span class="white">,</span><span class="string">
-        &quot;float&quot;</span><span class="white">,</span><span class="string">
-        &quot;int&quot;</span><span class="white">,</span><span class="string">
-        &quot;uint&quot;</span><span class="white">,</span><span class="string">
-        &quot;nint&quot;</span><span class="white">,</span><span class="string">
-        &quot;nuint&quot;</span><span class="white">,</span><span class="string">
-        &quot;long&quot;</span><span class="white">,</span><span class="string">
-        &quot;ulong&quot;</span><span class="white">,</span><span class="string">
-        &quot;short&quot;</span><span class="white">,</span><span class="string">
-        &quot;ushort&quot;</span><span class="white">,</span><span class="string">
-        &quot;object&quot;</span><span class="white">,</span><span class="string">
-        &quot;string&quot;</span><span class="white">,</span><span class="string">
-        &quot;dynamic&quot;</span><span class="white">,</span><span class="white">
-    }</span><span class="white">;</span><span class="white">
+    <span class="keyword">public</span> <span class="class">List</span><span class="white">&lt;</span><span class="keyword">string</span><span class="white">&gt;</span> <span class="white">BuiltInTypes</span> <span class="white">{</span> <span class="keyword">get</span><span class="white">;</span> <span class="white">}</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">List</span><span class="white">&lt;</span><span class="keyword">string</span><span class="white">&gt;</span>
+    <span class="white">{</span>
+        <span class="string">&quot;bool&quot;</span><span class="white">,</span>
+        <span class="string">&quot;byte&quot;</span><span class="white">,</span>
+        <span class="string">&quot;sbyte&quot;</span><span class="white">,</span>
+        <span class="string">&quot;char&quot;</span><span class="white">,</span>
+        <span class="string">&quot;decimal&quot;</span><span class="white">,</span>
+        <span class="string">&quot;double&quot;</span><span class="white">,</span>
+        <span class="string">&quot;float&quot;</span><span class="white">,</span>
+        <span class="string">&quot;int&quot;</span><span class="white">,</span>
+        <span class="string">&quot;uint&quot;</span><span class="white">,</span>
+        <span class="string">&quot;nint&quot;</span><span class="white">,</span>
+        <span class="string">&quot;nuint&quot;</span><span class="white">,</span>
+        <span class="string">&quot;long&quot;</span><span class="white">,</span>
+        <span class="string">&quot;ulong&quot;</span><span class="white">,</span>
+        <span class="string">&quot;short&quot;</span><span class="white">,</span>
+        <span class="string">&quot;ushort&quot;</span><span class="white">,</span>
+        <span class="string">&quot;object&quot;</span><span class="white">,</span>
+        <span class="string">&quot;string&quot;</span><span class="white">,</span>
+        <span class="string">&quot;dynamic&quot;</span><span class="white">,</span>
+    <span class="white">}</span><span class="white">;</span>
 
-}</span></pre>
+<span class="white">}</span></pre>

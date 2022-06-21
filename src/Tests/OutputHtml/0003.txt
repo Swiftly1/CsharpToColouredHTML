@@ -1,11 +1,11 @@
-﻿
+
 <pre class="background">
-<span class="keyword">using</span><span class="white"> CsharpToColouredHTML</span><span class="white">.</span><span class="white">Core</span><span class="white">;</span><span class="keyword">
+<span class="keyword">using</span> <span class="white">CsharpToColouredHTML</span><span class="white">.</span><span class="white">Core</span><span class="white">;</span>
 
-var</span><span class="blue"> code</span><span class="white"> =</span><span class="class"> File</span><span class="white">.</span><span class="method">ReadAllText</span><span class="white">(</span><span class="string">&quot;code.txt&quot;</span><span class="white">)</span><span class="white">;</span><span class="keyword">
+<span class="keyword">var</span> <span class="blue">code</span> <span class="white">=</span> <span class="class">File</span><span class="white">.</span><span class="method">ReadAllText</span><span class="white">(</span><span class="string">&quot;code.txt&quot;</span><span class="white">)</span><span class="white">;</span>
 
-var</span><span class="blue"> html</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> CsharpColourer</span><span class="white">(</span><span class="white">)</span><span class="white">.</span><span class="method">ProcessSourceCode</span><span class="white">(</span><span class="blue">code</span><span class="white">,</span><span class="keyword"> new</span><span class="class"> HTMLEmitter</span><span class="white">(</span><span class="white">)</span><span class="white">)</span><span class="white">;</span><span class="class">
+<span class="keyword">var</span> <span class="blue">html</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">CsharpColourer</span><span class="white">(</span><span class="white">)</span><span class="white">.</span><span class="method">ProcessSourceCode</span><span class="white">(</span><span class="blue">code</span><span class="white">,</span> <span class="keyword">new</span> <span class="class">HTMLEmitter</span><span class="white">(</span><span class="white">)</span><span class="white">)</span><span class="white">;</span>
 
-Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="blue">html</span><span class="white">)</span><span class="white">;</span><span class="keyword">
+<span class="class">Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="blue">html</span><span class="white">)</span><span class="white">;</span>
 
-new</span><span class="class"> CsharpColourer</span><span class="white">(</span><span class="white">)</span><span class="white">.</span><span class="method">ProcessSourceCode</span><span class="white">(</span><span class="blue">code</span><span class="white">,</span><span class="keyword"> new</span><span class="class"> ConsoleEmitter</span><span class="white">(</span><span class="white">)</span><span class="white">)</span><span class="white">;</span></pre>
+<span class="keyword">new</span> <span class="class">CsharpColourer</span><span class="white">(</span><span class="white">)</span><span class="white">.</span><span class="method">ProcessSourceCode</span><span class="white">(</span><span class="blue">code</span><span class="white">,</span> <span class="keyword">new</span> <span class="class">ConsoleEmitter</span><span class="white">(</span><span class="white">)</span><span class="white">)</span><span class="white">;</span></pre>
