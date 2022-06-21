@@ -109,7 +109,7 @@
                 <span class="white">{</span>
                     <span class="control">if</span> <span class="white">(</span><span class="blue">isLast</span><span class="white">)</span>
                     <span class="white">{</span>
-                        <span class="control">if</span> <span class="white">(</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span> <span class="white">==</span> <span class="keyword">null</span><span class="white"> ||</span> <span class="white">!</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">HasValue</span><span class="white">)</span>
+                        <span class="control">if</span> <span class="white">(</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span> <span class="white">==</span> <span class="keyword">null</span> <span class="white">||</span> <span class="white">!</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">HasValue</span><span class="white">)</span>
                             <span class="control">goto</span> <span class="white">Fail</span><span class="white">;</span>
 
                         <span class="blue">value</span> <span class="white">=</span> <span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">Value</span><span class="white">;</span>
