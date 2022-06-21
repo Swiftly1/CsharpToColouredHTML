@@ -396,6 +396,9 @@ public class HTMLEmitter : IEmitter
         var before = string.Join(string.Empty, textWithReplacedTabs.TakeWhile(char.IsWhiteSpace));
         var after = string.Join(string.Empty, textWithReplacedTabs.Reverse().TakeWhile(char.IsWhiteSpace));
 
+        if (before.Length == textWithReplacedTabs.Length)
+            return (string.Empty, before, string.Empty);
+
         var length = textWithReplacedTabs.Length - before.Length - after.Length;
         var content = textWithReplacedTabs.Substring(before.Length, length);
 
