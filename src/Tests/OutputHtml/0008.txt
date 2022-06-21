@@ -44,7 +44,7 @@
 
             // Is it a valid Hive looks similar to:  </span><span class="comment">
             //  &#39;Software\Microsoft\VisualStudio\14.0&#39;  &#39;Software\Microsoft\VisualStudio\14.0Roslyn&#39;  &#39;Software\Microsoft\VSWinExpress\14.0&#39;</span>
-            <span class="control">if</span> <span class="white">(</span><span class="blue">registryParts</span><span class="white">.</span><span class="white">Length</span><span class="white"> &gt;=</span> <span class="interface">4</span><span class="white">)</span>
+            <span class="control">if</span> <span class="white">(</span><span class="blue">registryParts</span><span class="white">.</span><span class="white">Length</span> <span class="white">&gt;=</span> <span class="interface">4</span><span class="white">)</span>
             <span class="white">{</span>
                 <span class="keyword">var</span> <span class="blue">skuName</span> <span class="white">=</span> <span class="blue">registryParts</span><span class="white">[</span><span class="interface">2</span><span class="white">]</span><span class="white">;</span>
                 <span class="keyword">var</span> <span class="blue">hiveName</span> <span class="white">=</span> <span class="blue">registryParts</span><span class="white">[</span><span class="interface">3</span><span class="white">]</span><span class="white">;</span>
@@ -72,29 +72,29 @@
             // The props we want to be included as early as possible since we want our tasks to be used and</span><span class="comment">
             // to ensure our setting of targets path happens early enough</span>
             <span class="blue">filesToWrite</span><span class="white">.</span><span class="method">Add</span><span class="white">(</span><span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span><span class="white">(</span><span class="string">$@&quot;</span><span class="string">Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span><span class="white">{</span><span class="blue">hiveName</span><span class="white">}</span><span class="string">.props</span><span class="string">&quot;</span><span class="white">,</span> <span class="blue">cancellationToken</span><span class="white">)</span><span class="white">.</span><span class="method">ConfigureAwait</span><span class="white">(</span><span class="keyword">true</span><span class="white">)</span><span class="white">,</span><span class="string">
-                $@&quot;</span><span class="string">&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span><span class="string">
-&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span><span class="string">
+                $@&quot;</span><span class="string">&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span>
+<span class="string">&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span><span class="string">
   &lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span><span class="white">{</span><span class="blue">hiveName</span><span class="white">}</span><span class="string">&#39;&quot;&quot;&gt;</span><span class="string">
     &lt;CSharpCoreTargetsPath&gt;</span><span class="white">{</span><span class="blue">packagePath</span><span class="white">}</span><span class="string">\Microsoft.CSharp.Core.targets&lt;/CSharpCoreTargetsPath&gt;</span><span class="string">
     &lt;VisualBasicCoreTargetsPath&gt;</span><span class="white">{</span><span class="blue">packagePath</span><span class="white">}</span><span class="string">\Microsoft.VisualBasic.Core.targets&lt;/VisualBasicCoreTargetsPath&gt;</span><span class="string">
   &lt;/PropertyGroup&gt; </span><span class="string">
 </span><span class="string">
   &lt;UsingTask TaskName=&quot;&quot;Microsoft.CodeAnalysis.BuildTasks.Csc&quot;&quot; AssemblyFile=&quot;&quot;</span><span class="white">{</span><span class="blue">packagePath</span><span class="white">}</span><span class="string">\Microsoft.Build.Tasks.CodeAnalysis.dll&quot;&quot; Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span><span class="white">{</span><span class="blue">hiveName</span><span class="white">}</span><span class="string">&#39;&quot;&quot; /&gt;</span><span class="string">
-  &lt;UsingTask TaskName=&quot;&quot;Microsoft.CodeAnalysis.BuildTasks.Vbc&quot;&quot; AssemblyFile=&quot;&quot;</span><span class="white">{</span><span class="blue">packagePath</span><span class="white">}</span><span class="string">\Microsoft.Build.Tasks.CodeAnalysis.dll&quot;&quot; Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span><span class="white">{</span><span class="blue">hiveName</span><span class="white">}</span><span class="string">&#39;&quot;&quot; /&gt;</span><span class="string">
-&lt;/Project&gt;</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span><span class="comment">
+  &lt;UsingTask TaskName=&quot;&quot;Microsoft.CodeAnalysis.BuildTasks.Vbc&quot;&quot; AssemblyFile=&quot;&quot;</span><span class="white">{</span><span class="blue">packagePath</span><span class="white">}</span><span class="string">\Microsoft.Build.Tasks.CodeAnalysis.dll&quot;&quot; Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span><span class="white">{</span><span class="blue">hiveName</span><span class="white">}</span><span class="string">&#39;&quot;&quot; /&gt;</span>
+<span class="string">&lt;/Project&gt;</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span><span class="comment">
 
             // This targets content we want to be included later since the project file might touch UseSharedCompilation</span>
             <span class="keyword">var</span> <span class="blue">targetsContent</span> <span class="white">=</span><span class="string">
-                    $@&quot;</span><span class="string">&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span><span class="string">
-&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span><span class="string">
+                    $@&quot;</span><span class="string">&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span>
+<span class="string">&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span><span class="string">
   &lt;!-- If we&#39;re not using the compiler server, set ToolPath/Exe to direct to the exes in this package --&gt;</span><span class="string">
   &lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span><span class="white">{</span><span class="blue">hiveName</span><span class="white">}</span><span class="string">&#39; and &#39;$(UseSharedCompilation)&#39; == &#39;false&#39;&quot;&quot;&gt;</span><span class="string">
     &lt;CscToolPath&gt;</span><span class="white">{</span><span class="blue">packagePath</span><span class="white">}</span><span class="string">&lt;/CscToolPath&gt;</span><span class="string">
     &lt;CscToolExe&gt;csc.exe&lt;/CscToolExe&gt;</span><span class="string">
     &lt;VbcToolPath&gt;</span><span class="white">{</span><span class="blue">packagePath</span><span class="white">}</span><span class="string">&lt;/VbcToolPath&gt;</span><span class="string">
     &lt;VbcToolExe&gt;vbc.exe&lt;/VbcToolExe&gt;</span><span class="string">
-  &lt;/PropertyGroup&gt;</span><span class="string">
-&lt;/Project&gt;</span><span class="string">&quot;</span><span class="white">;</span>
+  &lt;/PropertyGroup&gt;</span>
+<span class="string">&lt;/Project&gt;</span><span class="string">&quot;</span><span class="white">;</span>
 
             <span class="blue">filesToWrite</span><span class="white">.</span><span class="method">Add</span><span class="white">(</span><span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span><span class="white">(</span><span class="string">$@&quot;</span><span class="string">Microsoft.CSharp.targets\ImportBefore\Roslyn.Compilers.Extension.</span><span class="white">{</span><span class="blue">hiveName</span><span class="white">}</span><span class="string">.targets</span><span class="string">&quot;</span><span class="white">,</span> <span class="blue">cancellationToken</span><span class="white">)</span><span class="white">.</span><span class="method">ConfigureAwait</span><span class="white">(</span><span class="keyword">true</span><span class="white">)</span><span class="white">,</span> <span class="blue">targetsContent</span><span class="white">)</span><span class="white">;</span>
             <span class="blue">filesToWrite</span><span class="white">.</span><span class="method">Add</span><span class="white">(</span><span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span><span class="white">(</span><span class="string">$@&quot;</span><span class="string">Microsoft.VisualBasic.targets\ImportBefore\Roslyn.Compilers.Extension.</span><span class="white">{</span><span class="blue">hiveName</span><span class="white">}</span><span class="string">.targets</span><span class="string">&quot;</span><span class="white">,</span> <span class="blue">cancellationToken</span><span class="white">)</span><span class="white">.</span><span class="method">ConfigureAwait</span><span class="white">(</span><span class="keyword">true</span><span class="white">)</span><span class="white">,</span> <span class="blue">targetsContent</span><span class="white">)</span><span class="white">;</span><span class="comment">
@@ -121,7 +121,7 @@
                     <span class="blue">parentDirectory</span><span class="white">.</span><span class="method">Create</span><span class="white">(</span><span class="white">)</span><span class="white">;</span><span class="comment">
 
                     // If we already know the file has the same contents, then we can skip</span>
-                    <span class="control">if</span> <span class="white">(</span><span class="class">File</span><span class="white">.</span><span class="method">Exists</span><span class="white">(</span><span class="blue">fileAndContents</span><span class="white">.</span><span class="white">Key</span><span class="white">)</span><span class="white"> &amp;&amp;</span> <span class="class">File</span><span class="white">.</span><span class="method">ReadAllText</span><span class="white">(</span><span class="blue">fileAndContents</span><span class="white">.</span><span class="white">Key</span><span class="white">)</span> <span class="white">==</span> <span class="blue">fileAndContents</span><span class="white">.</span><span class="white">Value</span><span class="white">)</span>
+                    <span class="control">if</span> <span class="white">(</span><span class="class">File</span><span class="white">.</span><span class="method">Exists</span><span class="white">(</span><span class="blue">fileAndContents</span><span class="white">.</span><span class="white">Key</span><span class="white">)</span> <span class="white">&amp;&amp;</span> <span class="class">File</span><span class="white">.</span><span class="method">ReadAllText</span><span class="white">(</span><span class="blue">fileAndContents</span><span class="white">.</span><span class="white">Key</span><span class="white">)</span> <span class="white">==</span> <span class="blue">fileAndContents</span><span class="white">.</span><span class="white">Value</span><span class="white">)</span>
                     <span class="white">{</span>
                         <span class="control">continue</span><span class="white">;</span>
                     <span class="white">}</span>
@@ -160,15 +160,15 @@ $@&quot;</span><span class="white">{</span><span class="blue">e</span><span clas
 
             <span class="keyword">int</span> <span class="blue">majorVersion</span> <span class="white">=</span> <span class="keyword">int</span><span class="white">.</span><span class="method">Parse</span><span class="white">(</span><span class="blue">parts</span><span class="white">[</span><span class="interface">0</span><span class="white">]</span><span class="white">)</span><span class="white">;</span>
 
-            <span class="control">if</span> <span class="white">(</span><span class="blue">majorVersion</span><span class="white"> &gt;=</span> <span class="interface">16</span><span class="white">)</span>
+            <span class="control">if</span> <span class="white">(</span><span class="blue">majorVersion</span> <span class="white">&gt;=</span> <span class="interface">16</span><span class="white">)</span>
             <span class="white">{</span><span class="comment">
                 // Starting in Visual Studio 2019, the folder is just called &quot;Current&quot;. See</span><span class="comment">
                 // https://github.com/Microsoft/msbuild/issues/4149 for further commentary.</span>
-                <span class="control">return</span><span class="string"> &quot;Current&quot;</span><span class="white">;</span>
+                <span class="control">return</span> <span class="string">&quot;Current&quot;</span><span class="white">;</span>
             <span class="white">}</span>
             <span class="control">else</span>
             <span class="white">{</span>
-                <span class="control">return</span> <span class="blue">majorVersion</span><span class="white"> +</span><span class="string"> &quot;.0&quot;</span><span class="white">;</span>
+                <span class="control">return</span> <span class="blue">majorVersion</span><span class="white"> +</span> <span class="string">&quot;.0&quot;</span><span class="white">;</span>
             <span class="white">}</span>
         <span class="white">}</span>
 

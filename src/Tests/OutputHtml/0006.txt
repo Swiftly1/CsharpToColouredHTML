@@ -21,7 +21,7 @@
     <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Emit</span><span class="white">(</span><span class="class">List</span><span class="white">&lt;</span><span class="class">Node</span><span class="white">&gt;</span> <span class="blue">nodes</span><span class="white">)</span>
     <span class="white">{</span>
         <span class="class">Console</span><span class="white">.</span><span class="method">ResetColor</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
-        <span class="white">Text</span> <span class="white">=</span><span class="string"> &quot;&quot;</span><span class="white">;</span>
+        <span class="white">Text</span> <span class="white">=</span> <span class="string">&quot;&quot;</span><span class="white">;</span>
         <span class="white">_sb</span><span class="white">.</span><span class="method">Clear</span><span class="white">(</span><span class="white">)</span><span class="white">;</span>
 
         <span class="control">foreach</span> <span class="white">(</span><span class="keyword">var</span> <span class="blue">node</span> <span class="control">in</span> <span class="blue">nodes</span><span class="white">)</span>
