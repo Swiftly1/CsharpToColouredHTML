@@ -2,12 +2,12 @@
 <pre class="background">
 <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">record</span> <span class="keyword">class</span> <span class="class">DailyTemperature</span><span class="white">(</span><span class="keyword">double</span> <span class="blue">HighTemp</span><span class="white">,</span> <span class="keyword">double</span> <span class="blue">LowTemp</span><span class="white">)</span>
 <span class="white">{</span>
-    <span class="keyword">public</span> <span class="keyword">double</span> <span class="white">Mean</span> <span class="white">=&gt;</span> <span class="white">(</span><span class="white">HighTemp</span><span class="white"> +</span> <span class="white">LowTemp</span><span class="white">)</span> <span class="white">/</span> <span class="interface">2.0</span><span class="white">;</span>
+    <span class="keyword">public</span> <span class="keyword">double</span> <span class="white">Mean</span> <span class="white">=&gt;</span> <span class="white">(</span><span class="white">HighTemp</span> <span class="white">+</span> <span class="white">LowTemp</span><span class="white">)</span> <span class="white">/</span> <span class="interface">2.0</span><span class="white">;</span>
 <span class="white">}</span>
 
 <span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">record</span> <span class="keyword">struct</span> <span class="interface">DailyTemperature</span><span class="white">(</span><span class="keyword">double</span> <span class="blue">HighTemp</span><span class="white">,</span> <span class="keyword">double</span> <span class="blue">LowTemp</span><span class="white">)</span>
 <span class="white">{</span>
-    <span class="keyword">public</span> <span class="keyword">double</span> <span class="white">Mean</span> <span class="white">=&gt;</span> <span class="white">(</span><span class="white">HighTemp</span><span class="white"> +</span> <span class="white">LowTemp</span><span class="white">)</span> <span class="white">/</span> <span class="interface">2.0</span><span class="white">;</span>
+    <span class="keyword">public</span> <span class="keyword">double</span> <span class="white">Mean</span> <span class="white">=&gt;</span> <span class="white">(</span><span class="white">HighTemp</span> <span class="white">+</span> <span class="white">LowTemp</span><span class="white">)</span> <span class="white">/</span> <span class="interface">2.0</span><span class="white">;</span>
 <span class="white">}</span>
 
 
@@ -33,7 +33,7 @@
     <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="white">==</span><span class="white">(</span><span class="struct">R1</span> <span class="blue">r1</span><span class="white">,</span> <span class="struct">R1</span> <span class="blue">r2</span><span class="white">)</span>
         <span class="white">=&gt;</span> <span class="blue">r1</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="blue">r2</span><span class="white">)</span><span class="white">;</span>
     <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="white">!=</span><span class="white">(</span><span class="struct">R1</span> <span class="blue">r1</span><span class="white">,</span> <span class="struct">R1</span> <span class="blue">r2</span><span class="white">)</span>
-        <span class="white">=&gt;</span><span class="white"> !</span><span class="white">(</span><span class="blue">r1</span> <span class="white">==</span> <span class="blue">r2</span><span class="white">)</span><span class="white">;</span>    
+        <span class="white">=&gt;</span> <span class="white">!</span><span class="white">(</span><span class="blue">r1</span> <span class="white">==</span> <span class="blue">r2</span><span class="white">)</span><span class="white">;</span>    
     <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> <span class="method">GetHashCode</span><span class="white">(</span><span class="white">)</span>
     <span class="white">{</span>
         <span class="control">return</span> <span class="method">Combine</span><span class="white">(</span>
