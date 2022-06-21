@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="comment">            // A map of the file name to the content we need to ensure exists in the file</span><span class="keyword">
+            <span class="comment">// A map of the file name to the content we need to ensure exists in the file</span><span class="keyword">
             var</span> <span class="blue">filesToWrite</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">Dictionary</span><span class="white">&lt;</span><span class="keyword">string</span><span class="white">,</span> <span class="keyword">string</span><span class="white">&gt;</span><span class="white">(</span><span class="class">StringComparer</span><span class="white">.</span><span class="white">OrdinalIgnoreCase</span><span class="white">)</span><span class="white">;</span><span class="comment">
 
             // The props we want to be included as early as possible since we want our tasks to be used and</span><span class="comment">

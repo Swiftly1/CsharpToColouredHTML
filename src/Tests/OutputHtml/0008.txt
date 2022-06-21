@@ -1,10 +1,10 @@
 
 <pre class="background">
-<span class="comment">// Licensed to the .NET Foundation under one or more agreements.</span><span class="comment">
-// The .NET Foundation licenses this file to you under the MIT license.</span><span class="comment">
-// See the LICENSE file in the project root for more information.</span><span class="preprocessor">
+<span class="comment">// Licensed to the .NET Foundation under one or more agreements.</span>
+<span class="comment">// The .NET Foundation licenses this file to you under the MIT license.</span>
+<span class="comment">// See the LICENSE file in the project root for more information.</span>
 
-#</span><span class="preprocessor">nullable</span> <span class="preprocessor">disable</span>
+<span class="preprocessor">#</span><span class="preprocessor">nullable</span> <span class="preprocessor">disable</span>
 
 <span class="keyword">using</span> <span class="white">System</span><span class="white">;</span>
 <span class="keyword">using</span> <span class="white">System</span><span class="white">.</span><span class="white">Collections</span><span class="white">.</span><span class="white">Generic</span><span class="white">;</span>
@@ -40,10 +40,10 @@
 
             <span class="keyword">string</span> <span class="blue">localRegistryRoot</span><span class="white">;</span>
             <span class="blue">reg</span><span class="white">.</span><span class="method">GetLocalRegistryRoot</span><span class="white">(</span><span class="keyword">out</span> <span class="blue">localRegistryRoot</span><span class="white">)</span><span class="white">;</span>
-            <span class="keyword">var</span> <span class="blue">registryParts</span> <span class="white">=</span> <span class="blue">localRegistryRoot</span><span class="white">.</span><span class="method">Split</span><span class="white">(</span><span class="string">&#39;\\&#39;</span><span class="white">)</span><span class="white">;</span><span class="comment">
+            <span class="keyword">var</span> <span class="blue">registryParts</span> <span class="white">=</span> <span class="blue">localRegistryRoot</span><span class="white">.</span><span class="method">Split</span><span class="white">(</span><span class="string">&#39;\\&#39;</span><span class="white">)</span><span class="white">;</span>
 
-            // Is it a valid Hive looks similar to:  </span><span class="comment">
-            //  &#39;Software\Microsoft\VisualStudio\14.0&#39;  &#39;Software\Microsoft\VisualStudio\14.0Roslyn&#39;  &#39;Software\Microsoft\VSWinExpress\14.0&#39;</span>
+            <span class="comment">// Is it a valid Hive looks similar to:  </span>
+            <span class="comment">//  &#39;Software\Microsoft\VisualStudio\14.0&#39;  &#39;Software\Microsoft\VisualStudio\14.0Roslyn&#39;  &#39;Software\Microsoft\VSWinExpress\14.0&#39;</span>
             <span class="control">if</span> <span class="white">(</span><span class="blue">registryParts</span><span class="white">.</span><span class="white">Length</span> <span class="white">&gt;=</span> <span class="interface">4</span><span class="white">)</span>
             <span class="white">{</span>
                 <span class="keyword">var</span> <span class="blue">skuName</span> <span class="white">=</span> <span class="blue">registryParts</span><span class="white">[</span><span class="interface">2</span><span class="white">]</span><span class="white">;</span>

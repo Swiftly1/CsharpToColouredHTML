@@ -1,20 +1,20 @@
 
 <pre class="background">
 <span class="control">if</span> <span class="white">(</span><span class="white">A</span><span class="white">)</span>
-<span class="white">{</span><span class="class">
-    Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;.&quot;</span><span class="white">)</span><span class="white">;</span><span class="control">
-    if</span> <span class="white">(</span><span class="white">B</span><span class="white">)</span><span class="white">
-    {</span><span class="control">
-        if</span> <span class="white">(</span><span class="white">B2</span><span class="white">)</span><span class="class">
-            Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;.&quot;</span><span class="white">)</span><span class="white">;</span><span class="control">
-        else</span><span class="class">
-            Result</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;..&quot;</span><span class="white">)</span><span class="white">;</span><span class="control">
+<span class="white">{</span>
+    <span class="class">Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;.&quot;</span><span class="white">)</span><span class="white">;</span>
+    <span class="control">if</span> <span class="white">(</span><span class="white">B</span><span class="white">)</span>
+    <span class="white">{</span>
+        <span class="control">if</span> <span class="white">(</span><span class="white">B2</span><span class="white">)</span>
+            <span class="class">Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;.&quot;</span><span class="white">)</span><span class="white">;</span>
+        <span class="control">else</span>
+            <span class="class">Result</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;..&quot;</span><span class="white">)</span><span class="white">;</span>
 
-        if</span> <span class="white">(</span><span class="white">C</span><span class="white">)</span><span class="white">
-        {</span><span class="control">
-            if</span> <span class="white">(</span><span class="white">D</span><span class="white">)</span><span class="control">
-                if</span> <span class="white">(</span><span class="white">E</span><span class="white">)</span><span class="class">
-                    Result</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;.&quot;</span><span class="white">)</span><span class="white">;</span><span class="white">
-        }</span><span class="white">
-    }</span>
+        <span class="control">if</span> <span class="white">(</span><span class="white">C</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="control">if</span> <span class="white">(</span><span class="white">D</span><span class="white">)</span>
+                <span class="control">if</span> <span class="white">(</span><span class="white">E</span><span class="white">)</span>
+                    <span class="class">Result</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;.&quot;</span><span class="white">)</span><span class="white">;</span>
+        <span class="white">}</span>
+    <span class="white">}</span>
 <span class="white">}</span></pre>
