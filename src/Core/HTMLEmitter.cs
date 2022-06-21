@@ -380,10 +380,29 @@ public class HTMLEmitter : IEmitter
             processed_Text = node.TextWithTrivia;
         }
 
-        var escaped = Escape(processed_Text);
-        var changed_tabs = escaped.Replace("\t", "    ");
-        var span = @$"<span class=""{colour}"">{changed_tabs}</span>";
+        var postProcessed = PostProcessing(processed_Text);
+        var span = @$"{postProcessed.Before}<span class=""{colour}"">{postProcessed.Content}</span>{postProcessed.After}";
         return span;
+    }
+
+    private (string Before, string Content, string After) PostProcessing(string processed_Text)
+    {
+        var escaped = Escape(processed_Text);
+        var textWithReplacedTabs = escaped.Replace("\t", "    ");
+
+        if (!textWithReplacedTabs.Any(char.IsWhiteSpace))
+            return (string.Empty, textWithReplacedTabs, string.Empty);
+
+        var before = string.Join(string.Empty, textWithReplacedTabs.TakeWhile(char.IsWhiteSpace));
+        var after = string.Join(string.Empty, textWithReplacedTabs.Reverse().TakeWhile(char.IsWhiteSpace));
+
+        if (before.Length == textWithReplacedTabs.Length)
+            return (string.Empty, before, string.Empty);
+
+        var length = textWithReplacedTabs.Length - before.Length - after.Length;
+        var content = textWithReplacedTabs.Substring(before.Length, length);
+
+        return (before, content, after);
     }
 
     private bool IsStruct(int currentIndex, List<Node> nodes)

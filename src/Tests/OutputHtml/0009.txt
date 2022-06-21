@@ -1,43 +1,43 @@
-﻿
+
 <pre class="background">
-<span class="keyword">public</span><span class="keyword"> readonly</span><span class="keyword"> record</span><span class="keyword"> class</span><span class="class"> DailyTemperature</span><span class="white">(</span><span class="keyword">double</span><span class="blue"> HighTemp</span><span class="white">,</span><span class="keyword"> double</span><span class="blue"> LowTemp</span><span class="white">)</span><span class="white">
-{</span><span class="keyword">
-    public</span><span class="keyword"> double</span><span class="white"> Mean</span><span class="white"> =&gt;</span><span class="white"> (</span><span class="white">HighTemp</span><span class="white"> +</span><span class="white"> LowTemp</span><span class="white">)</span><span class="white"> /</span><span class="interface"> 2.0</span><span class="white">;</span><span class="white">
-}</span><span class="keyword">
+<span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">record</span> <span class="keyword">class</span> <span class="class">DailyTemperature</span><span class="white">(</span><span class="keyword">double</span> <span class="blue">HighTemp</span><span class="white">,</span> <span class="keyword">double</span> <span class="blue">LowTemp</span><span class="white">)</span>
+<span class="white">{</span>
+    <span class="keyword">public</span> <span class="keyword">double</span> <span class="white">Mean</span> <span class="white">=&gt;</span> <span class="white">(</span><span class="white">HighTemp</span> <span class="white">+</span> <span class="white">LowTemp</span><span class="white">)</span> <span class="white">/</span> <span class="interface">2.0</span><span class="white">;</span>
+<span class="white">}</span>
 
-public</span><span class="keyword"> readonly</span><span class="keyword"> record</span><span class="keyword"> struct</span><span class="interface"> DailyTemperature</span><span class="white">(</span><span class="keyword">double</span><span class="blue"> HighTemp</span><span class="white">,</span><span class="keyword"> double</span><span class="blue"> LowTemp</span><span class="white">)</span><span class="white">
-{</span><span class="keyword">
-    public</span><span class="keyword"> double</span><span class="white"> Mean</span><span class="white"> =&gt;</span><span class="white"> (</span><span class="white">HighTemp</span><span class="white"> +</span><span class="white"> LowTemp</span><span class="white">)</span><span class="white"> /</span><span class="interface"> 2.0</span><span class="white">;</span><span class="white">
-}</span><span class="control">
-
-
-goto</span><span class="white"> Label</span><span class="white">;</span><span class="class">
-
-Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;123&quot;</span><span class="white">)</span><span class="white">;</span><span class="white">
-
-Label</span><span class="white">:</span><span class="control">
-return</span><span class="interface"> 5</span><span class="white">;</span><span class="keyword">
+<span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">record</span> <span class="keyword">struct</span> <span class="interface">DailyTemperature</span><span class="white">(</span><span class="keyword">double</span> <span class="blue">HighTemp</span><span class="white">,</span> <span class="keyword">double</span> <span class="blue">LowTemp</span><span class="white">)</span>
+<span class="white">{</span>
+    <span class="keyword">public</span> <span class="keyword">double</span> <span class="white">Mean</span> <span class="white">=&gt;</span> <span class="white">(</span><span class="white">HighTemp</span> <span class="white">+</span> <span class="white">LowTemp</span><span class="white">)</span> <span class="white">/</span> <span class="interface">2.0</span><span class="white">;</span>
+<span class="white">}</span>
 
 
-struct</span><span class="struct"> R1</span><span class="white"> :</span><span class="interface"> IEquatable</span><span class="white">&lt;</span><span class="struct">R1</span><span class="white">&gt;</span><span class="white">
-{</span><span class="keyword">
-    public</span><span class="white"> T1</span><span class="white"> P1</span><span class="white"> {</span><span class="keyword"> get</span><span class="white">;</span><span class="keyword"> set</span><span class="white">;</span><span class="white"> }</span><span class="keyword">
-    public</span><span class="white"> T2</span><span class="white"> P2</span><span class="white"> {</span><span class="keyword"> get</span><span class="white">;</span><span class="keyword"> set</span><span class="white">;</span><span class="white"> }</span><span class="keyword">
-    public</span><span class="keyword"> override</span><span class="keyword"> bool</span><span class="method"> Equals</span><span class="white">(</span><span class="keyword">object</span><span class="white">?</span><span class="blue"> obj</span><span class="white">)</span><span class="white"> =&gt;</span><span class="blue"> obj</span><span class="keyword"> is</span><span class="struct"> R1</span><span class="blue"> temp</span><span class="white"> &amp;&amp;</span><span class="method"> Equals</span><span class="white">(</span><span class="blue">temp</span><span class="white">)</span><span class="white">;</span><span class="keyword">
-    public</span><span class="keyword"> bool</span><span class="method"> Equals</span><span class="white">(</span><span class="struct">R1</span><span class="blue"> other</span><span class="white">)</span><span class="white">
-    {</span><span class="control">
-        return</span><span class="white">
-            EqualityComparer</span><span class="white">&lt;</span><span class="class">T1</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="white">P1</span><span class="white">,</span><span class="blue"> other</span><span class="white">.</span><span class="white">P1</span><span class="white">)</span><span class="white"> &amp;&amp;</span><span class="white">
-            EqualityComparer</span><span class="white">&lt;</span><span class="class">T2</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="white">P2</span><span class="white">,</span><span class="blue"> other</span><span class="white">.</span><span class="white">P2</span><span class="white">)</span><span class="white">;</span><span class="white">
-    }</span><span class="keyword">
-    public</span><span class="keyword"> static</span><span class="keyword"> bool</span><span class="keyword"> operator</span><span class="white">==</span><span class="white">(</span><span class="struct">R1</span><span class="blue"> r1</span><span class="white">,</span><span class="struct"> R1</span><span class="blue"> r2</span><span class="white">)</span><span class="white">
-        =&gt;</span><span class="blue"> r1</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="blue">r2</span><span class="white">)</span><span class="white">;</span><span class="keyword">
-    public</span><span class="keyword"> static</span><span class="keyword"> bool</span><span class="keyword"> operator</span><span class="white">!=</span><span class="white">(</span><span class="struct">R1</span><span class="blue"> r1</span><span class="white">,</span><span class="struct"> R1</span><span class="blue"> r2</span><span class="white">)</span><span class="white">
-        =&gt;</span><span class="white"> !</span><span class="white">(</span><span class="blue">r1</span><span class="white"> ==</span><span class="blue"> r2</span><span class="white">)</span><span class="white">;</span><span class="keyword">    
-    public</span><span class="keyword"> override</span><span class="keyword"> int</span><span class="method"> GetHashCode</span><span class="white">(</span><span class="white">)</span><span class="white">
-    {</span><span class="control">
-        return</span><span class="method"> Combine</span><span class="white">(</span><span class="white">
-            EqualityComparer</span><span class="white">&lt;</span><span class="class">T1</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">GetHashCode</span><span class="white">(</span><span class="white">P1</span><span class="white">)</span><span class="white">,</span><span class="white">
-            EqualityComparer</span><span class="white">&lt;</span><span class="class">T2</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">GetHashCode</span><span class="white">(</span><span class="white">P2</span><span class="white">)</span><span class="white">)</span><span class="white">;</span><span class="white">
-    }</span><span class="white">
-}</span></pre>
+<span class="control">goto</span> <span class="white">Label</span><span class="white">;</span>
+
+<span class="class">Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;123&quot;</span><span class="white">)</span><span class="white">;</span>
+
+<span class="white">Label</span><span class="white">:</span>
+<span class="control">return</span> <span class="interface">5</span><span class="white">;</span>
+
+
+<span class="keyword">struct</span> <span class="struct">R1</span> <span class="white">:</span> <span class="interface">IEquatable</span><span class="white">&lt;</span><span class="struct">R1</span><span class="white">&gt;</span>
+<span class="white">{</span>
+    <span class="keyword">public</span> <span class="white">T1</span> <span class="white">P1</span> <span class="white">{</span> <span class="keyword">get</span><span class="white">;</span> <span class="keyword">set</span><span class="white">;</span> <span class="white">}</span>
+    <span class="keyword">public</span> <span class="white">T2</span> <span class="white">P2</span> <span class="white">{</span> <span class="keyword">get</span><span class="white">;</span> <span class="keyword">set</span><span class="white">;</span> <span class="white">}</span>
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="method">Equals</span><span class="white">(</span><span class="keyword">object</span><span class="white">?</span> <span class="blue">obj</span><span class="white">)</span> <span class="white">=&gt;</span> <span class="blue">obj</span> <span class="keyword">is</span> <span class="struct">R1</span> <span class="blue">temp</span> <span class="white">&amp;&amp;</span> <span class="method">Equals</span><span class="white">(</span><span class="blue">temp</span><span class="white">)</span><span class="white">;</span>
+    <span class="keyword">public</span> <span class="keyword">bool</span> <span class="method">Equals</span><span class="white">(</span><span class="struct">R1</span> <span class="blue">other</span><span class="white">)</span>
+    <span class="white">{</span>
+        <span class="control">return</span>
+            <span class="white">EqualityComparer</span><span class="white">&lt;</span><span class="class">T1</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="white">P1</span><span class="white">,</span> <span class="blue">other</span><span class="white">.</span><span class="white">P1</span><span class="white">)</span> <span class="white">&amp;&amp;</span>
+            <span class="white">EqualityComparer</span><span class="white">&lt;</span><span class="class">T2</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="white">P2</span><span class="white">,</span> <span class="blue">other</span><span class="white">.</span><span class="white">P2</span><span class="white">)</span><span class="white">;</span>
+    <span class="white">}</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="white">==</span><span class="white">(</span><span class="struct">R1</span> <span class="blue">r1</span><span class="white">,</span> <span class="struct">R1</span> <span class="blue">r2</span><span class="white">)</span>
+        <span class="white">=&gt;</span> <span class="blue">r1</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="blue">r2</span><span class="white">)</span><span class="white">;</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="white">!=</span><span class="white">(</span><span class="struct">R1</span> <span class="blue">r1</span><span class="white">,</span> <span class="struct">R1</span> <span class="blue">r2</span><span class="white">)</span>
+        <span class="white">=&gt;</span> <span class="white">!</span><span class="white">(</span><span class="blue">r1</span> <span class="white">==</span> <span class="blue">r2</span><span class="white">)</span><span class="white">;</span>    
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> <span class="method">GetHashCode</span><span class="white">(</span><span class="white">)</span>
+    <span class="white">{</span>
+        <span class="control">return</span> <span class="method">Combine</span><span class="white">(</span>
+            <span class="white">EqualityComparer</span><span class="white">&lt;</span><span class="class">T1</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">GetHashCode</span><span class="white">(</span><span class="white">P1</span><span class="white">)</span><span class="white">,</span>
+            <span class="white">EqualityComparer</span><span class="white">&lt;</span><span class="class">T2</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">GetHashCode</span><span class="white">(</span><span class="white">P2</span><span class="white">)</span><span class="white">)</span><span class="white">;</span>
+    <span class="white">}</span>
+<span class="white">}</span></pre>

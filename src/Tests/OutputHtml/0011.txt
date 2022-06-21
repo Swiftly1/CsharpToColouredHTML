@@ -1,132 +1,132 @@
-﻿
+
 <pre class="background">
-<span class="keyword">using</span><span class="white"> System</span><span class="white">;</span><span class="keyword">
-using</span><span class="white"> System</span><span class="white">.</span><span class="white">Collections</span><span class="white">.</span><span class="white">Generic</span><span class="white">;</span><span class="keyword">
-using</span><span class="white"> System</span><span class="white">.</span><span class="white">Runtime</span><span class="white">.</span><span class="white">CompilerServices</span><span class="white">;</span><span class="keyword">
+<span class="keyword">using</span> <span class="white">System</span><span class="white">;</span>
+<span class="keyword">using</span> <span class="white">System</span><span class="white">.</span><span class="white">Collections</span><span class="white">.</span><span class="white">Generic</span><span class="white">;</span>
+<span class="keyword">using</span> <span class="white">System</span><span class="white">.</span><span class="white">Runtime</span><span class="white">.</span><span class="white">CompilerServices</span><span class="white">;</span>
 
-namespace</span><span class="white"> DictionaryList</span><span class="white">
-{</span><span class="keyword">
-    public</span><span class="keyword"> class</span><span class="class"> DictionaryList</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span><span class="interface"> U</span><span class="white">&gt;</span><span class="white">
-    {</span><span class="keyword">
-        private</span><span class="keyword"> readonly</span><span class="class"> Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span><span class="interface"> U</span><span class="white">&gt;</span><span class="white"> Root</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span><span class="interface"> U</span><span class="white">&gt;</span><span class="white">(</span><span class="keyword">default</span><span class="white">!</span><span class="white">,</span><span class="keyword"> null</span><span class="white">)</span><span class="white"> {</span><span class="white"> IsRoot</span><span class="white"> =</span><span class="keyword"> true</span><span class="white"> }</span><span class="white">;</span><span class="comment">
+<span class="keyword">namespace</span> <span class="white">DictionaryList</span>
+<span class="white">{</span>
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">DictionaryList</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span> <span class="interface">U</span><span class="white">&gt;</span>
+    <span class="white">{</span>
+        <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="class">Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span> <span class="interface">U</span><span class="white">&gt;</span> <span class="white">Root</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span> <span class="interface">U</span><span class="white">&gt;</span><span class="white">(</span><span class="keyword">default</span><span class="white">!</span><span class="white">,</span> <span class="keyword">null</span><span class="white">)</span> <span class="white">{</span> <span class="white">IsRoot</span> <span class="white">=</span> <span class="keyword">true</span> <span class="white">}</span><span class="white">;</span>
 
-        ///</span><span class="comment"> </span><span class="comment">&lt;</span><span class="comment">summary</span><span class="comment">&gt;</span><span class="comment">
-        ///</span><span class="comment"> This parameter indicates whether key contains NULLs e.g [UserA, null, new User()].</span><span class="comment">
-        ///</span><span class="comment"> Allowing NULLs within keys has some performance - speed and memory penalty, that&#39;s why it is disabled by default.</span><span class="comment">
-        ///</span><span class="comment"> </span><span class="comment">&lt;/</span><span class="comment">summary</span><span class="comment">&gt;</span><span class="keyword">
-        public</span><span class="keyword"> bool</span><span class="white"> AllowNULLsInKeys</span><span class="white"> {</span><span class="keyword"> get</span><span class="white">;</span><span class="keyword"> set</span><span class="white">;</span><span class="white"> }</span><span class="comment">
+        <span class="comment">///</span><span class="comment"> </span><span class="comment">&lt;</span><span class="comment">summary</span><span class="comment">&gt;</span>
+        <span class="comment">///</span> <span class="comment">This parameter indicates whether key contains NULLs e.g [UserA, null, new User()].</span>
+        <span class="comment">///</span> <span class="comment">Allowing NULLs within keys has some performance - speed and memory penalty, that&#39;s why it is disabled by default.</span>
+        <span class="comment">///</span><span class="comment"> </span><span class="comment">&lt;/</span><span class="comment">summary</span><span class="comment">&gt;</span>
+        <span class="keyword">public</span> <span class="keyword">bool</span> <span class="white">AllowNULLsInKeys</span> <span class="white">{</span> <span class="keyword">get</span><span class="white">;</span> <span class="keyword">set</span><span class="white">;</span> <span class="white">}</span>
 
-        ///</span><span class="comment"> </span><span class="comment">&lt;</span><span class="comment">summary</span><span class="comment">&gt;</span><span class="comment">
-        ///</span><span class="comment"> </span><span class="comment">
-        ///</span><span class="comment"> </span><span class="comment">&lt;/</span><span class="comment">summary</span><span class="comment">&gt;</span><span class="comment">
-        ///</span><span class="comment"> </span><span class="comment">&lt;</span><span class="comment">param</span><span class="comment"> name</span><span class="comment">=</span><span class="comment">&quot;</span><span class="blue">allow_keys_with_nulls</span><span class="comment">&quot;</span><span class="comment">&gt;</span><span class="comment">This parameter indicates whether key contains NULLs e.g [UserA, null, new User()].</span><span class="comment">
-        ///</span><span class="comment"> Allowing NULLs within keys has some performance - speed and memory penalty, that&#39;s why it is disabled by default.</span><span class="comment">&lt;/</span><span class="comment">param</span><span class="comment">&gt;</span><span class="keyword">
-        public</span><span class="class"> DictionaryList</span><span class="white">(</span><span class="keyword">bool</span><span class="blue"> allow_keys_with_nulls</span><span class="white"> =</span><span class="keyword"> false</span><span class="white">)</span><span class="white">
-        {</span><span class="white">
-            AllowNULLsInKeys</span><span class="white"> =</span><span class="blue"> allow_keys_with_nulls</span><span class="white">;</span><span class="white">
-        }</span><span class="keyword">
+        <span class="comment">///</span><span class="comment"> </span><span class="comment">&lt;</span><span class="comment">summary</span><span class="comment">&gt;</span>
+        <span class="comment">///</span><span class="comment"> </span>
+        <span class="comment">///</span><span class="comment"> </span><span class="comment">&lt;/</span><span class="comment">summary</span><span class="comment">&gt;</span>
+        <span class="comment">///</span><span class="comment"> </span><span class="comment">&lt;</span><span class="comment">param</span> <span class="comment">name</span><span class="comment">=</span><span class="comment">&quot;</span><span class="blue">allow_keys_with_nulls</span><span class="comment">&quot;</span><span class="comment">&gt;</span><span class="comment">This parameter indicates whether key contains NULLs e.g [UserA, null, new User()].</span>
+        <span class="comment">///</span> <span class="comment">Allowing NULLs within keys has some performance - speed and memory penalty, that&#39;s why it is disabled by default.</span><span class="comment">&lt;/</span><span class="comment">param</span><span class="comment">&gt;</span>
+        <span class="keyword">public</span> <span class="class">DictionaryList</span><span class="white">(</span><span class="keyword">bool</span> <span class="blue">allow_keys_with_nulls</span> <span class="white">=</span> <span class="keyword">false</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="white">AllowNULLsInKeys</span> <span class="white">=</span> <span class="blue">allow_keys_with_nulls</span><span class="white">;</span>
+        <span class="white">}</span>
 
-        public</span><span class="keyword"> void</span><span class="method"> Add</span><span class="white">(</span><span class="class">List</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">&gt;</span><span class="blue"> data</span><span class="white">,</span><span class="interface"> U</span><span class="blue"> value</span><span class="white">)</span><span class="white">
-        {</span><span class="keyword">
-            var</span><span class="blue"> current</span><span class="white"> =</span><span class="white"> Root</span><span class="white">;</span><span class="control">
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Add</span><span class="white">(</span><span class="class">List</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">&gt;</span> <span class="blue">data</span><span class="white">,</span> <span class="interface">U</span> <span class="blue">value</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="keyword">var</span> <span class="blue">current</span> <span class="white">=</span> <span class="white">Root</span><span class="white">;</span>
 
-            for</span><span class="white"> (</span><span class="keyword">int</span><span class="blue"> i</span><span class="white"> =</span><span class="interface"> 0</span><span class="white">;</span><span class="blue"> i</span><span class="white"> &lt;</span><span class="blue"> data</span><span class="white">.</span><span class="white">Count</span><span class="white">;</span><span class="blue"> i</span><span class="white">++</span><span class="white">)</span><span class="white">
-            {</span><span class="interface">
-                T</span><span class="blue"> item</span><span class="white"> =</span><span class="blue"> data</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">;</span><span class="control">
+            <span class="control">for</span> <span class="white">(</span><span class="keyword">int</span> <span class="blue">i</span> <span class="white">=</span> <span class="interface">0</span><span class="white">;</span> <span class="blue">i</span> <span class="white">&lt;</span> <span class="blue">data</span><span class="white">.</span><span class="white">Count</span><span class="white">;</span> <span class="blue">i</span><span class="white">++</span><span class="white">)</span>
+            <span class="white">{</span>
+                <span class="interface">T</span> <span class="blue">item</span> <span class="white">=</span> <span class="blue">data</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">;</span>
 
-                if</span><span class="white"> (</span><span class="white">!</span><span class="white">AllowNULLsInKeys</span><span class="white"> &amp;&amp;</span><span class="blue"> item</span><span class="white"> ==</span><span class="keyword"> null</span><span class="white">)</span><span class="control">
-                    throw</span><span class="keyword"> new</span><span class="class"> ArgumentException</span><span class="white">(</span><span class="string">$&quot;</span><span class="string">Element at index &#39;</span><span class="white">{</span><span class="blue">i</span><span class="white">}</span><span class="string">&#39; is NULL. It cannot be used as a Key&#39;s element. </span><span class="string">&quot;</span><span class="white"> +</span><span class="string">
-                        $&quot;</span><span class="string">If you want to use NULLs inside Keys, then either use constructor &#39;DictionaryList(true)&#39; or set property &#39;AllowNULLsInKeys&#39; to true.</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span><span class="class">
+                <span class="control">if</span> <span class="white">(</span><span class="white">!</span><span class="white">AllowNULLsInKeys</span> <span class="white">&amp;&amp;</span> <span class="blue">item</span> <span class="white">==</span> <span class="keyword">null</span><span class="white">)</span>
+                    <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span><span class="white">(</span><span class="string">$&quot;</span><span class="string">Element at index &#39;</span><span class="white">{</span><span class="blue">i</span><span class="white">}</span><span class="string">&#39; is NULL. It cannot be used as a Key&#39;s element.</span> <span class="string">&quot;</span> <span class="white">+</span>
+                        <span class="string">$&quot;</span><span class="string">If you want to use NULLs inside Keys, then either use constructor &#39;DictionaryList(true)&#39; or set property &#39;AllowNULLsInKeys&#39; to true.</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span>
 
-                Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span><span class="interface"> U</span><span class="white">&gt;</span><span class="blue"> found</span><span class="white"> =</span><span class="method"> FindNode</span><span class="white">(</span><span class="blue">current</span><span class="white">,</span><span class="blue"> item</span><span class="white">)</span><span class="white">;</span><span class="keyword">
+                <span class="class">Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span> <span class="interface">U</span><span class="white">&gt;</span> <span class="blue">found</span> <span class="white">=</span> <span class="method">FindNode</span><span class="white">(</span><span class="blue">current</span><span class="white">,</span> <span class="blue">item</span><span class="white">)</span><span class="white">;</span>
 
-                var</span><span class="blue"> isLast</span><span class="white"> =</span><span class="blue"> i</span><span class="white"> ==</span><span class="blue"> data</span><span class="white">.</span><span class="white">Count</span><span class="white"> -</span><span class="interface"> 1</span><span class="white">;</span><span class="control">
+                <span class="keyword">var</span> <span class="blue">isLast</span> <span class="white">=</span> <span class="blue">i</span> <span class="white">==</span> <span class="blue">data</span><span class="white">.</span><span class="white">Count</span> <span class="white">-</span> <span class="interface">1</span><span class="white">;</span>
 
-                if</span><span class="white"> (</span><span class="blue">found</span><span class="white"> !=</span><span class="keyword"> null</span><span class="white">)</span><span class="white">
-                {</span><span class="control">
-                    if</span><span class="white"> (</span><span class="blue">isLast</span><span class="white">)</span><span class="white">
-                    {</span><span class="control">
-                        if</span><span class="white"> (</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="keyword"> is</span><span class="keyword"> null</span><span class="white">)</span><span class="white">
-                        {</span><span class="blue">
-                            found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> ValueWrapper</span><span class="white">&lt;</span><span class="interface">U</span><span class="white">&gt;</span><span class="white">(</span><span class="keyword">true</span><span class="white">,</span><span class="blue"> value</span><span class="white">)</span><span class="white">;</span><span class="white">
-                        }</span><span class="control">
-                        else</span><span class="white">
-                        {</span><span class="control">
-                            if</span><span class="white"> (</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">HasValue</span><span class="white"> &amp;&amp;</span><span class="white"> !</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">Value</span><span class="white">!</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="blue">value</span><span class="white">)</span><span class="white">)</span><span class="white">
-                            {</span><span class="control">
-                                throw</span><span class="keyword"> new</span><span class="class"> ArgumentException</span><span class="white">(</span><span class="string">$&quot;</span><span class="string">Value: &#39;</span><span class="white">{</span><span class="blue">value</span><span class="white">}</span><span class="string">&#39; cannot be saved because there&#39;s already value:</span><span class="string">&quot;</span><span class="white"> +</span><span class="string">
-                                    $&quot;</span><span class="string"> </span><span class="white">{</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">Value</span><span class="white">}</span><span class="string">. Key: </span><span class="white">{</span><span class="keyword">string</span><span class="white">.</span><span class="method">Join</span><span class="white">(</span><span class="string">&quot;,&quot;</span><span class="white">,</span><span class="blue"> data</span><span class="white">)</span><span class="white">}</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span><span class="white">
-                            }</span><span class="white">
-                        }</span><span class="white">
-                    }</span><span class="blue">
+                <span class="control">if</span> <span class="white">(</span><span class="blue">found</span> <span class="white">!=</span> <span class="keyword">null</span><span class="white">)</span>
+                <span class="white">{</span>
+                    <span class="control">if</span> <span class="white">(</span><span class="blue">isLast</span><span class="white">)</span>
+                    <span class="white">{</span>
+                        <span class="control">if</span> <span class="white">(</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span> <span class="keyword">is</span> <span class="keyword">null</span><span class="white">)</span>
+                        <span class="white">{</span>
+                            <span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">ValueWrapper</span><span class="white">&lt;</span><span class="interface">U</span><span class="white">&gt;</span><span class="white">(</span><span class="keyword">true</span><span class="white">,</span> <span class="blue">value</span><span class="white">)</span><span class="white">;</span>
+                        <span class="white">}</span>
+                        <span class="control">else</span>
+                        <span class="white">{</span>
+                            <span class="control">if</span> <span class="white">(</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">HasValue</span> <span class="white">&amp;&amp;</span> <span class="white">!</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">Value</span><span class="white">!</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="blue">value</span><span class="white">)</span><span class="white">)</span>
+                            <span class="white">{</span>
+                                <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span><span class="white">(</span><span class="string">$&quot;</span><span class="string">Value: &#39;</span><span class="white">{</span><span class="blue">value</span><span class="white">}</span><span class="string">&#39; cannot be saved because there&#39;s already value:</span><span class="string">&quot;</span> <span class="white">+</span>
+                                    <span class="string">$&quot;</span><span class="string"> </span><span class="white">{</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">Value</span><span class="white">}</span><span class="string">. Key:</span> <span class="white">{</span><span class="keyword">string</span><span class="white">.</span><span class="method">Join</span><span class="white">(</span><span class="string">&quot;,&quot;</span><span class="white">,</span> <span class="blue">data</span><span class="white">)</span><span class="white">}</span><span class="string">&quot;</span><span class="white">)</span><span class="white">;</span>
+                            <span class="white">}</span>
+                        <span class="white">}</span>
+                    <span class="white">}</span>
 
-                    current</span><span class="white"> =</span><span class="blue"> found</span><span class="white">;</span><span class="white">
-                }</span><span class="control">
-                else</span><span class="white">
-                {</span><span class="keyword">
-                    var</span><span class="blue"> wrapper2</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> ValueWrapper</span><span class="white">&lt;</span><span class="interface">U</span><span class="white">&gt;</span><span class="white">(</span><span class="blue">isLast</span><span class="white">,</span><span class="blue"> value</span><span class="white">)</span><span class="white">;</span><span class="blue">
-                    current</span><span class="white"> =</span><span class="blue"> current</span><span class="white">.</span><span class="method">Add</span><span class="white">(</span><span class="blue">item</span><span class="white">,</span><span class="blue"> wrapper2</span><span class="white">)</span><span class="white">;</span><span class="white">
-                }</span><span class="white">
-            }</span><span class="white">
-        }</span><span class="white">
+                    <span class="blue">current</span> <span class="white">=</span> <span class="blue">found</span><span class="white">;</span>
+                <span class="white">}</span>
+                <span class="control">else</span>
+                <span class="white">{</span>
+                    <span class="keyword">var</span> <span class="blue">wrapper2</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">ValueWrapper</span><span class="white">&lt;</span><span class="interface">U</span><span class="white">&gt;</span><span class="white">(</span><span class="blue">isLast</span><span class="white">,</span> <span class="blue">value</span><span class="white">)</span><span class="white">;</span>
+                    <span class="blue">current</span> <span class="white">=</span> <span class="blue">current</span><span class="white">.</span><span class="method">Add</span><span class="white">(</span><span class="blue">item</span><span class="white">,</span> <span class="blue">wrapper2</span><span class="white">)</span><span class="white">;</span>
+                <span class="white">}</span>
+            <span class="white">}</span>
+        <span class="white">}</span>
 
-        [</span><span class="class">MethodImpl</span><span class="white">(</span><span class="interface">MethodImplOptions</span><span class="white">.</span><span class="white">AggressiveInlining</span><span class="white">)</span><span class="white">]</span><span class="keyword">
-        private</span><span class="class"> Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span><span class="interface"> U</span><span class="white">&gt;</span><span class="method"> FindNode</span><span class="white">(</span><span class="class">Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span><span class="interface"> U</span><span class="white">&gt;</span><span class="blue"> current</span><span class="white">,</span><span class="interface"> T</span><span class="blue"> item</span><span class="white">)</span><span class="white">
-        {</span><span class="control">
-            if</span><span class="white"> (</span><span class="white">AllowNULLsInKeys</span><span class="white">)</span><span class="white">
-            {</span><span class="control">
-                for</span><span class="white"> (</span><span class="keyword">int</span><span class="blue"> i</span><span class="white"> =</span><span class="interface"> 0</span><span class="white">;</span><span class="blue"> i</span><span class="white"> &lt;</span><span class="blue"> current</span><span class="white">.</span><span class="white">Children</span><span class="white">.</span><span class="white">Count</span><span class="white">;</span><span class="blue"> i</span><span class="white">++</span><span class="white">)</span><span class="white">
-                {</span><span class="control">
-                    if</span><span class="white"> (</span><span class="method">Equals</span><span class="white">(</span><span class="blue">current</span><span class="white">.</span><span class="white">Children</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">.</span><span class="white">ArrayValue</span><span class="white">,</span><span class="blue"> item</span><span class="white">)</span><span class="white">)</span><span class="control">
-                        return</span><span class="blue"> current</span><span class="white">.</span><span class="white">Children</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">;</span><span class="white">
-                }</span><span class="white">
-            }</span><span class="control">
-            else</span><span class="white">
-            {</span><span class="control">
-                for</span><span class="white"> (</span><span class="keyword">int</span><span class="blue"> i</span><span class="white"> =</span><span class="interface"> 0</span><span class="white">;</span><span class="blue"> i</span><span class="white"> &lt;</span><span class="blue"> current</span><span class="white">.</span><span class="white">Children</span><span class="white">.</span><span class="white">Count</span><span class="white">;</span><span class="blue"> i</span><span class="white">++</span><span class="white">)</span><span class="white">
-                {</span><span class="control">
-                    if</span><span class="white"> (</span><span class="blue">current</span><span class="white">.</span><span class="white">Children</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">.</span><span class="white">ArrayValue</span><span class="white">!</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="blue">item</span><span class="white">)</span><span class="white">)</span><span class="control">
-                        return</span><span class="blue"> current</span><span class="white">.</span><span class="white">Children</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">;</span><span class="white">
-                }</span><span class="white">
-            }</span><span class="control">
+        <span class="white">[</span><span class="class">MethodImpl</span><span class="white">(</span><span class="interface">MethodImplOptions</span><span class="white">.</span><span class="white">AggressiveInlining</span><span class="white">)</span><span class="white">]</span>
+        <span class="keyword">private</span> <span class="class">Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span> <span class="interface">U</span><span class="white">&gt;</span> <span class="method">FindNode</span><span class="white">(</span><span class="class">Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span> <span class="interface">U</span><span class="white">&gt;</span> <span class="blue">current</span><span class="white">,</span> <span class="interface">T</span> <span class="blue">item</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="control">if</span> <span class="white">(</span><span class="white">AllowNULLsInKeys</span><span class="white">)</span>
+            <span class="white">{</span>
+                <span class="control">for</span> <span class="white">(</span><span class="keyword">int</span> <span class="blue">i</span> <span class="white">=</span> <span class="interface">0</span><span class="white">;</span> <span class="blue">i</span> <span class="white">&lt;</span> <span class="blue">current</span><span class="white">.</span><span class="white">Children</span><span class="white">.</span><span class="white">Count</span><span class="white">;</span> <span class="blue">i</span><span class="white">++</span><span class="white">)</span>
+                <span class="white">{</span>
+                    <span class="control">if</span> <span class="white">(</span><span class="method">Equals</span><span class="white">(</span><span class="blue">current</span><span class="white">.</span><span class="white">Children</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">.</span><span class="white">ArrayValue</span><span class="white">,</span> <span class="blue">item</span><span class="white">)</span><span class="white">)</span>
+                        <span class="control">return</span> <span class="blue">current</span><span class="white">.</span><span class="white">Children</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">;</span>
+                <span class="white">}</span>
+            <span class="white">}</span>
+            <span class="control">else</span>
+            <span class="white">{</span>
+                <span class="control">for</span> <span class="white">(</span><span class="keyword">int</span> <span class="blue">i</span> <span class="white">=</span> <span class="interface">0</span><span class="white">;</span> <span class="blue">i</span> <span class="white">&lt;</span> <span class="blue">current</span><span class="white">.</span><span class="white">Children</span><span class="white">.</span><span class="white">Count</span><span class="white">;</span> <span class="blue">i</span><span class="white">++</span><span class="white">)</span>
+                <span class="white">{</span>
+                    <span class="control">if</span> <span class="white">(</span><span class="blue">current</span><span class="white">.</span><span class="white">Children</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">.</span><span class="white">ArrayValue</span><span class="white">!</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="blue">item</span><span class="white">)</span><span class="white">)</span>
+                        <span class="control">return</span> <span class="blue">current</span><span class="white">.</span><span class="white">Children</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">;</span>
+                <span class="white">}</span>
+            <span class="white">}</span>
 
-            return</span><span class="keyword"> null</span><span class="white">;</span><span class="white">
-        }</span><span class="keyword">
+            <span class="control">return</span> <span class="keyword">null</span><span class="white">;</span>
+        <span class="white">}</span>
 
-        public</span><span class="keyword"> bool</span><span class="method"> TryGet</span><span class="white">(</span><span class="class">List</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">&gt;</span><span class="blue"> data</span><span class="white">,</span><span class="keyword"> out</span><span class="interface"> U</span><span class="white">?</span><span class="blue"> value</span><span class="white">)</span><span class="white">
-        {</span><span class="keyword">
-            var</span><span class="blue"> current</span><span class="white"> =</span><span class="white"> Root</span><span class="white">;</span><span class="control">
+        <span class="keyword">public</span> <span class="keyword">bool</span> <span class="method">TryGet</span><span class="white">(</span><span class="class">List</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">&gt;</span> <span class="blue">data</span><span class="white">,</span> <span class="keyword">out</span> <span class="interface">U</span><span class="white">?</span> <span class="blue">value</span><span class="white">)</span>
+        <span class="white">{</span>
+            <span class="keyword">var</span> <span class="blue">current</span> <span class="white">=</span> <span class="white">Root</span><span class="white">;</span>
 
-            for</span><span class="white"> (</span><span class="keyword">int</span><span class="blue"> i</span><span class="white"> =</span><span class="interface"> 0</span><span class="white">;</span><span class="blue"> i</span><span class="white"> &lt;</span><span class="blue"> data</span><span class="white">.</span><span class="white">Count</span><span class="white">;</span><span class="blue"> i</span><span class="white">++</span><span class="white">)</span><span class="white">
-            {</span><span class="interface">
-                T</span><span class="blue"> item</span><span class="white"> =</span><span class="blue"> data</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">;</span><span class="class">
+            <span class="control">for</span> <span class="white">(</span><span class="keyword">int</span> <span class="blue">i</span> <span class="white">=</span> <span class="interface">0</span><span class="white">;</span> <span class="blue">i</span> <span class="white">&lt;</span> <span class="blue">data</span><span class="white">.</span><span class="white">Count</span><span class="white">;</span> <span class="blue">i</span><span class="white">++</span><span class="white">)</span>
+            <span class="white">{</span>
+                <span class="interface">T</span> <span class="blue">item</span> <span class="white">=</span> <span class="blue">data</span><span class="white">[</span><span class="blue">i</span><span class="white">]</span><span class="white">;</span>
 
-                Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span><span class="interface"> U</span><span class="white">&gt;</span><span class="blue"> found</span><span class="white"> =</span><span class="method"> FindNode</span><span class="white">(</span><span class="blue">current</span><span class="white">,</span><span class="blue"> item</span><span class="white">)</span><span class="white">;</span><span class="keyword">
+                <span class="class">Node</span><span class="white">&lt;</span><span class="interface">T</span><span class="white">,</span> <span class="interface">U</span><span class="white">&gt;</span> <span class="blue">found</span> <span class="white">=</span> <span class="method">FindNode</span><span class="white">(</span><span class="blue">current</span><span class="white">,</span> <span class="blue">item</span><span class="white">)</span><span class="white">;</span>
 
-                var</span><span class="blue"> isLast</span><span class="white"> =</span><span class="blue"> i</span><span class="white"> ==</span><span class="blue"> data</span><span class="white">.</span><span class="white">Count</span><span class="white"> -</span><span class="interface"> 1</span><span class="white">;</span><span class="control">
+                <span class="keyword">var</span> <span class="blue">isLast</span> <span class="white">=</span> <span class="blue">i</span> <span class="white">==</span> <span class="blue">data</span><span class="white">.</span><span class="white">Count</span> <span class="white">-</span> <span class="interface">1</span><span class="white">;</span>
 
-                if</span><span class="white"> (</span><span class="blue">found</span><span class="white"> !=</span><span class="keyword"> null</span><span class="white">)</span><span class="white">
-                {</span><span class="control">
-                    if</span><span class="white"> (</span><span class="blue">isLast</span><span class="white">)</span><span class="white">
-                    {</span><span class="control">
-                        if</span><span class="white"> (</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white"> ==</span><span class="keyword"> null</span><span class="white"> ||</span><span class="white"> !</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">HasValue</span><span class="white">)</span><span class="control">
-                            goto</span><span class="white"> Fail</span><span class="white">;</span><span class="blue">
+                <span class="control">if</span> <span class="white">(</span><span class="blue">found</span> <span class="white">!=</span> <span class="keyword">null</span><span class="white">)</span>
+                <span class="white">{</span>
+                    <span class="control">if</span> <span class="white">(</span><span class="blue">isLast</span><span class="white">)</span>
+                    <span class="white">{</span>
+                        <span class="control">if</span> <span class="white">(</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span> <span class="white">==</span> <span class="keyword">null</span> <span class="white">||</span> <span class="white">!</span><span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">HasValue</span><span class="white">)</span>
+                            <span class="control">goto</span> <span class="white">Fail</span><span class="white">;</span>
 
-                        value</span><span class="white"> =</span><span class="blue"> found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">Value</span><span class="white">;</span><span class="control">
-                        return</span><span class="keyword"> true</span><span class="white">;</span><span class="white">
-                    }</span><span class="blue">
+                        <span class="blue">value</span> <span class="white">=</span> <span class="blue">found</span><span class="white">.</span><span class="white">StoredValue</span><span class="white">.</span><span class="white">Value</span><span class="white">;</span>
+                        <span class="control">return</span> <span class="keyword">true</span><span class="white">;</span>
+                    <span class="white">}</span>
 
-                    current</span><span class="white"> =</span><span class="blue"> found</span><span class="white">;</span><span class="white">
-                }</span><span class="control">
-                else</span><span class="white">
-                {</span><span class="control">
-                    goto</span><span class="white"> Fail</span><span class="white">;</span><span class="white">
-                }</span><span class="white">
-            }</span><span class="white">
+                    <span class="blue">current</span> <span class="white">=</span> <span class="blue">found</span><span class="white">;</span>
+                <span class="white">}</span>
+                <span class="control">else</span>
+                <span class="white">{</span>
+                    <span class="control">goto</span> <span class="white">Fail</span><span class="white">;</span>
+                <span class="white">}</span>
+            <span class="white">}</span>
 
-            Fail</span><span class="white">:</span><span class="blue">
-            value</span><span class="white"> =</span><span class="keyword"> default</span><span class="white">;</span><span class="control">
-            return</span><span class="keyword"> false</span><span class="white">;</span><span class="white">
-        }</span><span class="white">
-    }</span><span class="white">
-}</span></pre>
+            <span class="white">Fail</span><span class="white">:</span>
+            <span class="blue">value</span> <span class="white">=</span> <span class="keyword">default</span><span class="white">;</span>
+            <span class="control">return</span> <span class="keyword">false</span><span class="white">;</span>
+        <span class="white">}</span>
+    <span class="white">}</span>
+<span class="white">}</span></pre>

@@ -1,26 +1,26 @@
-﻿
+
 <pre class="background">
-<span class="keyword">using</span><span class="white"> MarkdownSharp</span><span class="white">;</span><span class="keyword">
-using</span><span class="white"> Microsoft</span><span class="white">.</span><span class="white">AspNetCore</span><span class="white">.</span><span class="white">Mvc</span><span class="white">;</span><span class="keyword">
-using</span><span class="white"> Newtonsoft</span><span class="white">.</span><span class="white">Json</span><span class="white">;</span><span class="keyword">
+<span class="keyword">using</span> <span class="white">MarkdownSharp</span><span class="white">;</span>
+<span class="keyword">using</span> <span class="white">Microsoft</span><span class="white">.</span><span class="white">AspNetCore</span><span class="white">.</span><span class="white">Mvc</span><span class="white">;</span>
+<span class="keyword">using</span> <span class="white">Newtonsoft</span><span class="white">.</span><span class="white">Json</span><span class="white">;</span>
 
-namespace</span><span class="white"> Blog</span><span class="white">.</span><span class="white">Controllers</span><span class="white">;</span><span class="keyword">
+<span class="keyword">namespace</span> <span class="white">Blog</span><span class="white">.</span><span class="white">Controllers</span><span class="white">;</span>
 
-public</span><span class="keyword"> class</span><span class="class"> HomeController</span><span class="white"> :</span><span class="class"> Controller</span><span class="white">
-{</span><span class="keyword">
-    public</span><span class="class"> HomeController</span><span class="white">(</span><span class="white">)</span><span class="white">
-    {</span><span class="white">
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">HomeController</span> <span class="white">:</span> <span class="class">Controller</span>
+<span class="white">{</span>
+    <span class="keyword">public</span> <span class="class">HomeController</span><span class="white">(</span><span class="white">)</span>
+    <span class="white">{</span>
 
-    }</span><span class="keyword">
+    <span class="white">}</span>
 
-    public</span><span class="interface"> IActionResult</span><span class="method"> Index</span><span class="white">(</span><span class="white">)</span><span class="white">
-    {</span><span class="keyword">
-        string</span><span class="blue"> contents</span><span class="white">;</span><span class="keyword">
-        using</span><span class="white"> (</span><span class="keyword">var</span><span class="blue"> wc</span><span class="white"> =</span><span class="keyword"> new</span><span class="white"> System</span><span class="white">.</span><span class="white">Net</span><span class="white">.</span><span class="class">WebClient</span><span class="white">(</span><span class="white">)</span><span class="white">)</span><span class="blue">
-            contents</span><span class="white"> =</span><span class="blue"> wc</span><span class="white">.</span><span class="method">DownloadString</span><span class="white">(</span><span class="string">&quot;https://raw.githubusercontent.com/asd&quot;</span><span class="white">)</span><span class="white">;</span><span class="keyword">
+    <span class="keyword">public</span> <span class="interface">IActionResult</span> <span class="method">Index</span><span class="white">(</span><span class="white">)</span>
+    <span class="white">{</span>
+        <span class="keyword">string</span> <span class="blue">contents</span><span class="white">;</span>
+        <span class="keyword">using</span> <span class="white">(</span><span class="keyword">var</span> <span class="blue">wc</span> <span class="white">=</span> <span class="keyword">new</span> <span class="white">System</span><span class="white">.</span><span class="white">Net</span><span class="white">.</span><span class="class">WebClient</span><span class="white">(</span><span class="white">)</span><span class="white">)</span>
+            <span class="blue">contents</span> <span class="white">=</span> <span class="blue">wc</span><span class="white">.</span><span class="method">DownloadString</span><span class="white">(</span><span class="string">&quot;https://raw.githubusercontent.com/asd&quot;</span><span class="white">)</span><span class="white">;</span>
 
-        var</span><span class="blue"> test</span><span class="white"> =</span><span class="keyword"> new</span><span class="class"> Markdown</span><span class="white">(</span><span class="keyword">new</span><span class="class"> MarkdownOptions</span><span class="white"> {</span><span class="white"> }</span><span class="white">)</span><span class="white">;</span><span class="keyword">
-        var</span><span class="blue"> html</span><span class="white"> =</span><span class="blue"> test</span><span class="white">.</span><span class="method">Transform</span><span class="white">(</span><span class="blue">contents</span><span class="white">)</span><span class="white">;</span><span class="control">
-        return</span><span class="method"> View</span><span class="white">(</span><span class="string">&quot;Index&quot;</span><span class="white">,</span><span class="class"> JsonConvert</span><span class="white">.</span><span class="method">SerializeObject</span><span class="white">(</span><span class="blue">html</span><span class="white">)</span><span class="white">)</span><span class="white">;</span><span class="white">
-    }</span><span class="white">
-}</span></pre>
+        <span class="keyword">var</span> <span class="blue">test</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">Markdown</span><span class="white">(</span><span class="keyword">new</span> <span class="class">MarkdownOptions</span> <span class="white">{</span> <span class="white">}</span><span class="white">)</span><span class="white">;</span>
+        <span class="keyword">var</span> <span class="blue">html</span> <span class="white">=</span> <span class="blue">test</span><span class="white">.</span><span class="method">Transform</span><span class="white">(</span><span class="blue">contents</span><span class="white">)</span><span class="white">;</span>
+        <span class="control">return</span> <span class="method">View</span><span class="white">(</span><span class="string">&quot;Index&quot;</span><span class="white">,</span> <span class="class">JsonConvert</span><span class="white">.</span><span class="method">SerializeObject</span><span class="white">(</span><span class="blue">html</span><span class="white">)</span><span class="white">)</span><span class="white">;</span>
+    <span class="white">}</span>
+<span class="white">}</span></pre>
