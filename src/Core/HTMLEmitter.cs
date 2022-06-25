@@ -20,8 +20,6 @@ public class HTMLEmitter : IEmitter
         return escaped;
     }
 
-    private readonly StringBuilder _sb = new StringBuilder();
-
     private readonly string UserProvidedCSS = null;
 
     private readonly bool AddLineNumber = true;
@@ -96,104 +94,104 @@ public class HTMLEmitter : IEmitter
         "Span",
     };
 
-    public void Emit(List<Node> nodes)
+    public void Emit(List<Node> input)
     {
         Reset();
-        AddCSS();
-        _sb.AppendLine(@"<pre class=""background"">");
-
-        var isOpened = false;
-
-        if (AddLineNumber)
-        {
-            _sb.AppendLine("<table>");
-            _sb.AppendLine("<tbody>");
-        }
-
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            if (AddLineNumber)
-            {
-                var current = nodes[i];
-                if (i == 0 || current.HasNewLine)
-                {
-                    if (isOpened)
-                    {
-                        _sb.Append("</td></tr>");
-                    }
-
-                    CreateRowsForNewLinesIfNeeded(current);
-
-                    _sb.Append("<tr>");
-                    AddNewLineNumber();
-                    _sb.Append("<td class=\"code_column\">");
-                    isOpened = true;
-                }
-            }
-
-            var span = EmitNode(i, nodes);
-
-            if (AddLineNumber)
-            {
-                _sb.Append(RemoveNewLines(span));
-            }
-            else
-            {
-                _sb.Append(span);
-            }
-        }
-
-        if (AddLineNumber && isOpened)
-        {
-            _sb.Append("</td></tr>");
-        }
-
-        if (AddLineNumber)
-        {
-            _sb.AppendLine("</tbody>");
-            _sb.Append("</table>");
-        }
-
-        _sb.AppendLine("</pre>");
-
-        Text = _sb.ToString();
+        var nodes = Preprocess(input);
+        Text = GenerateHtml(nodes);
     }
 
-    private string RemoveNewLines(string span)
-    {
-        return span.Replace(Environment.NewLine, "");
-    }
-
-    private void AddNewLineNumber()
-    {
-        var value = _LineCounter++;
-        _sb.Append($"<td class=\"line_no\" line_no=\"{value}\"></td>");
-    }
-
-    private void CreateRowsForNewLinesIfNeeded(Node current)
-    {
-        var newLinesCount = StringHelper.AllIndicesOf(current.Trivia, Environment.NewLine).Count;
-
-        for (int i = newLinesCount - 1; i > 0; i--)
-        {
-            _sb.Append("<tr>");
-            AddNewLineNumber();
-            _sb.Append("<td>");
-            _sb.Append("</tr>");
-        }
-    }
+    // Internals:
 
     private void Reset()
     {
         Text = "";
-        _sb.Clear();
         _IsUsing = false;
         _IsNew = false;
         _ParenthesisCounter = 0;
         _LineCounter = 0;
     }
 
-    public string EmitNode(int currentIndex, List<Node> nodes)
+    private List<NodeWithDetails> Preprocess(List<Node> nodes)
+    {
+        var list = new List<NodeWithDetails>();
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            var span = ExtractColourAndSetMetaData(i, nodes);
+            var nodeWithDetails = new NodeWithDetails(nodes[i], span, _IsNew, _IsUsing, _ParenthesisCounter);
+            list.Add(nodeWithDetails);
+        }
+
+        return list;
+    }
+
+    private string GenerateHtml(List<NodeWithDetails> nodes)
+    {
+        var sb = new StringBuilder();
+
+        sb.Append(GetCSS());
+        sb.AppendLine(@"<pre class=""background"">");
+
+        var isOpened = false;
+
+        if (AddLineNumber)
+        {
+            sb.AppendLine("<table>");
+            sb.AppendLine("<tbody>");
+        }
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            var current = nodes[i];
+            if (AddLineNumber)
+            {
+                if (i == 0 || current.Node.HasNewLine)
+                {
+                    if (isOpened)
+                    {
+                        sb.Append("</td></tr>");
+                    }
+
+                    AddRowsForNewLinesIfNeededToStringBuilder(current.Node, sb);
+
+                    sb.Append("<tr>");
+                    AddNewLineNumberToStringBuilder(sb);
+                    sb.Append("<td class=\"code_column\">");
+                    isOpened = true;
+                }
+            }
+
+            var postProcessed = PostProcessing(current.Node);
+            var span = @$"{postProcessed.Before}<span class=""{current.Colour}"">{postProcessed.Content}</span>{postProcessed.After}";
+
+            if (AddLineNumber)
+            {
+                sb.Append(RemoveNewLines(span));
+            }
+            else
+            {
+                sb.Append(span);
+            }
+        }
+
+        if (AddLineNumber && isOpened)
+        {
+            sb.Append("</td></tr>");
+        }
+
+        if (AddLineNumber)
+        {
+            sb.AppendLine("</tbody>");
+            sb.Append("</table>");
+        }
+
+        sb.AppendLine("</pre>");
+
+        return sb.ToString();
+    }
+
+    private string ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
         var colour = InternalHtmlColors.InternalError;
@@ -368,6 +366,35 @@ public class HTMLEmitter : IEmitter
             colour = InternalHtmlColors.White;
         }
 
+        return colour;
+    }
+
+    private string RemoveNewLines(string span)
+    {
+        return span.Replace(Environment.NewLine, "");
+    }
+
+    private void AddNewLineNumberToStringBuilder(StringBuilder sb)
+    {
+        var value = _LineCounter++;
+        sb.Append($"<td class=\"line_no\" line_no=\"{value}\"></td>");
+    }
+
+    private void AddRowsForNewLinesIfNeededToStringBuilder(Node current, StringBuilder sb)
+    {
+        var newLinesCount = StringHelper.AllIndicesOf(current.Trivia, Environment.NewLine).Count;
+
+        for (int i = newLinesCount - 1; i > 0; i--)
+        {
+            sb.Append("<tr>");
+            AddNewLineNumberToStringBuilder(sb);
+            sb.Append("<td>");
+            sb.Append("</tr>");
+        }
+    }
+
+    private (string Before, string Content, string After) PostProcessing(Node node)
+    {
         var processed_Text = "";
 
         if (AddLineNumber)
@@ -380,13 +407,6 @@ public class HTMLEmitter : IEmitter
             processed_Text = node.TextWithTrivia;
         }
 
-        var postProcessed = PostProcessing(processed_Text);
-        var span = @$"{postProcessed.Before}<span class=""{colour}"">{postProcessed.Content}</span>{postProcessed.After}";
-        return span;
-    }
-
-    private (string Before, string Content, string After) PostProcessing(string processed_Text)
-    {
         var escaped = Escape(processed_Text);
         var textWithReplacedTabs = escaped.Replace("\t", "    ");
 
@@ -408,8 +428,6 @@ public class HTMLEmitter : IEmitter
     private bool IsStruct(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
-        var canGoAhead = nodes.Count > currentIndex + 1;
-        var canGoBehind = currentIndex > 0;
 
         if (IsPopularStruct(node.Text))
         {
@@ -556,7 +574,7 @@ public class HTMLEmitter : IEmitter
 
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.LocalName)
             return false;
-        
+
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.ParameterName)
             return false;
 
@@ -610,8 +628,10 @@ public class HTMLEmitter : IEmitter
         return false;
     }
 
-    private void AddCSS()
+    private string GetCSS()
     {
+        var _sb = new StringBuilder();
+
         if (UserProvidedCSS != null)
         {
             _sb.AppendLine(UserProvidedCSS);
@@ -628,6 +648,8 @@ public class HTMLEmitter : IEmitter
 
             _sb.AppendLine("</style>");
         }
+
+        return _sb.ToString();
     }
 
     public const string DEFAULT_CSS =
