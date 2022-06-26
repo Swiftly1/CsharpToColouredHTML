@@ -1,0 +1,21 @@
+
+<pre class="background">
+<span class="struct">TextSpan</span>? <span class="blue">previous</span> = <span class="keyword">null</span>;
+<span class="keyword">var</span> <span class="blue">skippedClassifications</span> = <span class="keyword">new</span> <span class="class">List</span>&lt;<span class="keyword">string</span>&gt; { <span class="class">ClassificationTypeNames</span>.StringEscapeCharacter };
+
+<span class="class">VsShellUtilities</span>.<span class="method">ShowMessageBox</span>
+(
+    <span class="keyword">this</span>,
+    msg,
+    <span class="keyword">null</span>,
+    <span class="class">OLEMSGICON</span>.OLEMSGICON_WARNING,
+    <span class="class">OLEMSGBUTTON</span>.OLEMSGBUTTON_OK,
+    <span class="class">OLEMSGDEFBUTTON</span>.OLEMSGDEFBUTTON_FIRST
+);
+
+<span class="keyword">public string</span> <span class="method">ProcessSourceCode</span>(<span class="keyword">string</span> <span class="blue">code</span>, <span class="interface">IEmitter</span> <span class="blue">emitter</span>)
+{
+    <span class="keyword">var</span> <span class="blue">nodes</span> = <span class="method">GenerateInternalRepresentation</span>(<span class="blue">code</span>);
+    <span class="blue">emitter</span>.<span class="method">Emit</span>(<span class="blue">nodes</span>);
+    <span class="control">return</span> <span class="blue">emitter</span>.Text;
+}</pre>

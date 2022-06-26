@@ -4,14 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <RootNamespace>CsharpToColouredHTML</RootNamespace>
+    <RootNamespace>CsharpToColouredHTML.Core</RootNamespace>
     <Company>none</Company>
     <Authors>wx</Authors>
     <Copyright>wx</Copyright>
     <PackageProjectUrl>https://github.com/Swiftly1/CsharpToColouredHTML</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Swiftly1/CsharpToColouredHTML</RepositoryUrl>
     <PackageId>CsharpToColouredHTML.Core</PackageId>
-    <Version>1.0.14</Version>
+    <Version>1.0.15</Version>
     <Description>Converts C# into HTML with highlighting</Description>
     <PackageTags>c#;html;highlighting</PackageTags>
     <RepositoryType>git</RepositoryType>

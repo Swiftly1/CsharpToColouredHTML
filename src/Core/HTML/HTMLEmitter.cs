@@ -6,23 +6,40 @@ namespace CsharpToColouredHTML.Core;
 
 public class HTMLEmitter : IEmitter
 {
-    public HTMLEmitter(string user_provided_css = null, bool addLineNumber = false)
+    /// <summary>
+    /// Assumed Settings:
+    ///     Default CSS,
+    ///     Adding Line Numbers,
+    ///     Optimization of generated HTML
+    /// </summary>
+    public HTMLEmitter()
     {
-        UserProvidedCSS = user_provided_css;
-        AddLineNumber = addLineNumber;
+        var settings = new HTMLEmitterSettings();
+        UserProvidedCSS = settings.UserProvidedCSS;
+        AddLineNumber = settings.AddLineNumber;
+        Optimize = settings.Optimize;
+    }
+
+    public HTMLEmitter(HTMLEmitterSettings settings)
+    {
+        UserProvidedCSS = settings.UserProvidedCSS;
+        AddLineNumber = settings.AddLineNumber;
+        Optimize = settings.Optimize;
     }
 
     // Internal Stuff:
-
+    // This method is at the top, so I don't have to update link to the line in README.
     private string Escape(string textWithTrivia)
     {
         var escaped = HttpUtility.HtmlEncode(textWithTrivia);
         return escaped;
     }
 
-    private readonly string UserProvidedCSS = null;
+    private readonly string? UserProvidedCSS = null;
 
     private readonly bool AddLineNumber = true;
+
+    private readonly bool Optimize = true;
 
     private bool _IsUsing = false;
 
@@ -98,10 +115,10 @@ public class HTMLEmitter : IEmitter
     {
         Reset();
         var nodes = Preprocess(input);
-        Text = GenerateHtml(nodes);
+        Text = AddLineNumber ? GenerateHtmlWithLineNumbers(nodes) : GenerateHtml(nodes);
     }
 
-    // Internals:
+    // Implementation:
 
     private void Reset()
     {
@@ -118,9 +135,47 @@ public class HTMLEmitter : IEmitter
 
         for (int i = 0; i < nodes.Count; i++)
         {
-            var span = ExtractColourAndSetMetaData(i, nodes);
-            var nodeWithDetails = new NodeWithDetails(nodes[i], span, _IsNew, _IsUsing, _ParenthesisCounter);
+            var colour = ExtractColourAndSetMetaData(i, nodes);
+            var nodeWithDetails = new NodeWithDetails
+            (
+                colour: colour,
+                text: nodes[i].Text,
+                trivia: nodes[i].Trivia,
+                hasNewLine: nodes[i].HasNewLine,
+                isNew: _IsNew,
+                isUsing: _IsUsing,
+                parenthesisCounter: _ParenthesisCounter
+            );
             list.Add(nodeWithDetails);
+        }
+
+        // Optimizer - Merges Nodes with the same colour
+        if (Optimize)
+        {
+            var mostCommonColour = list.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                var current = list[i];
+
+                // TODO: For now, it works only for White colour because I'd need to add support in CSS code gen 
+                // mostCommonColour == InternalHtmlColors.White
+                if (mostCommonColour == InternalHtmlColors.White && current.Colour == mostCommonColour)
+                    list[i].UsesMostCommonColour = true;
+
+                if (i + 1 >= list.Count)
+                    break;
+
+                var next = list[i + 1];
+                var mergable = current.Colour == next.Colour && !next.Trivia.Contains(Environment.NewLine);
+
+                if (!mergable)
+                    continue;
+
+                list[i] = MergeNodes(current, next);
+                list.RemoveAt(i + 1);
+                i--;
+            }
         }
 
         return list;
@@ -133,59 +188,69 @@ public class HTMLEmitter : IEmitter
         sb.Append(GetCSS());
         sb.AppendLine(@"<pre class=""background"">");
 
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            var current = nodes[i];
+            var postProcessed = PostProcessing(current);
+
+            var span = current.UsesMostCommonColour ?
+                $"{postProcessed.Before}{postProcessed.Content}{postProcessed.After}" :
+                @$"{postProcessed.Before}<span class=""{current.Colour}"">{postProcessed.Content}</span>{postProcessed.After}";
+
+            sb.Append(span);
+        }
+
+        sb.AppendLine("</pre>");
+
+        return sb.ToString();
+    }
+
+    private string GenerateHtmlWithLineNumbers(List<NodeWithDetails> nodes)
+    {
+        var sb = new StringBuilder();
+
+        sb.Append(GetCSS());
+        sb.AppendLine(@"<pre class=""background"">");
+
         var isOpened = false;
 
-        if (AddLineNumber)
-        {
-            sb.AppendLine("<table>");
-            sb.AppendLine("<tbody>");
-        }
+        sb.AppendLine("<table>");
+        sb.AppendLine("<tbody>");
 
         for (int i = 0; i < nodes.Count; i++)
         {
             var current = nodes[i];
-            if (AddLineNumber)
+            if (i == 0 || current.HasNewLine)
             {
-                if (i == 0 || current.Node.HasNewLine)
+                if (isOpened)
                 {
-                    if (isOpened)
-                    {
-                        sb.Append("</td></tr>");
-                    }
-
-                    AddRowsForNewLinesIfNeededToStringBuilder(current.Node, sb);
-
-                    sb.Append("<tr>");
-                    AddNewLineNumberToStringBuilder(sb);
-                    sb.Append("<td class=\"code_column\">");
-                    isOpened = true;
+                    sb.Append("</td></tr>");
                 }
+
+                AddRowsForNewLinesIfNeededToStringBuilder(current.Trivia, sb);
+
+                sb.Append("<tr>");
+                AddNewLineNumberToStringBuilder(sb);
+                sb.Append("<td class=\"code_column\">");
+                isOpened = true;
             }
 
-            var postProcessed = PostProcessing(current.Node);
-            var span = @$"{postProcessed.Before}<span class=""{current.Colour}"">{postProcessed.Content}</span>{postProcessed.After}";
+            var postProcessed = PostProcessing(current);
 
-            if (AddLineNumber)
-            {
-                sb.Append(RemoveNewLines(span));
-            }
-            else
-            {
-                sb.Append(span);
-            }
+            var span = current.UsesMostCommonColour ?
+                $"{postProcessed.Before}{postProcessed.Content}{postProcessed.After}" :
+                @$"{postProcessed.Before}<span class=""{current.Colour}"">{postProcessed.Content}</span>{postProcessed.After}";
+
+            sb.Append(RemoveNewLines(span));
         }
 
-        if (AddLineNumber && isOpened)
+        if (isOpened)
         {
             sb.Append("</td></tr>");
         }
 
-        if (AddLineNumber)
-        {
-            sb.AppendLine("</tbody>");
-            sb.Append("</table>");
-        }
-
+        sb.AppendLine("</tbody>");
+        sb.Append("</table>");
         sb.AppendLine("</pre>");
 
         return sb.ToString();
@@ -380,9 +445,9 @@ public class HTMLEmitter : IEmitter
         sb.Append($"<td class=\"line_no\" line_no=\"{value}\"></td>");
     }
 
-    private void AddRowsForNewLinesIfNeededToStringBuilder(Node current, StringBuilder sb)
+    private void AddRowsForNewLinesIfNeededToStringBuilder(string trivia, StringBuilder sb)
     {
-        var newLinesCount = StringHelper.AllIndicesOf(current.Trivia, Environment.NewLine).Count;
+        var newLinesCount = StringHelper.AllIndicesOf(trivia, Environment.NewLine).Count;
 
         for (int i = newLinesCount - 1; i > 0; i--)
         {
@@ -393,7 +458,7 @@ public class HTMLEmitter : IEmitter
         }
     }
 
-    private (string Before, string Content, string After) PostProcessing(Node node)
+    private (string Before, string Content, string After) PostProcessing(NodeWithDetails node)
     {
         var processed_Text = "";
 
@@ -423,6 +488,25 @@ public class HTMLEmitter : IEmitter
         var content = textWithReplacedTabs.Substring(before.Length, length);
 
         return (before, content, after);
+    }
+
+    private NodeWithDetails MergeNodes(NodeWithDetails current, NodeWithDetails next)
+    {
+        var newText = current.Text + next.TextWithTrivia;
+        var newTrivia = current.Trivia;
+
+        var details = new NodeWithDetails
+        (
+            colour: current.Colour,
+            text: newText,
+            trivia: newTrivia,
+            hasNewLine: current.HasNewLine,
+            isNew: current.IsNew,
+            isUsing: current.IsUsing,
+            parenthesisCounter: current.ParenthesisCounter
+        );
+
+        return details;
     }
 
     private bool IsStruct(int currentIndex, List<Node> nodes)
@@ -579,7 +663,7 @@ public class HTMLEmitter : IEmitter
             return false;
 
         // OLEMSGICON.OLEMSGICON_WARNING,
-        return new string[] { ")", "(", "=", ";", "}", ",", "&", "&&", "|", "||"}.Contains(next.Text);
+        return new string[] { ")", "(", "=", ";", "}", ",", "&", "&&", "|", "||" }.Contains(next.Text);
     }
 
     private bool IsPopularClass(string text)
@@ -591,7 +675,7 @@ public class HTMLEmitter : IEmitter
 
     private bool IsPopularStruct(string text)
     {
-        return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)) 
+        return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase))
             ||
             ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }
@@ -658,6 +742,7 @@ public class HTMLEmitter : IEmitter
         font-family: monaco,Consolas,Lucida Console,monospace; 
         background-color: #1E1E1E;
         overflow:scroll;
+        color: #efefef;
     }}
 
     .{InternalHtmlColors.Numeric}
@@ -684,11 +769,6 @@ public class HTMLEmitter : IEmitter
     {{
         color: #9CDCFE;
     }}  
-
-    .{InternalHtmlColors.White}
-    {{
-        color: #D4D4D4;
-    }}
 
     .{InternalHtmlColors.String}
     {{
@@ -735,18 +815,19 @@ public class HTMLEmitter : IEmitter
     @$"
     table
     {{
-        color: white;
         white-space: pre;
     }}
 
     .line_no::before
     {{
         content: attr(line_no);
+        color: white;
     }}   
 
     .code_column
     {{
         padding-left: 5px;
+        color: #efefef;
     }}
     ";
 }

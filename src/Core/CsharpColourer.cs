@@ -56,8 +56,7 @@ public class CsharpColourer
                             node.ClassificationType,
                             splitted[y],
                             y == 0 ? node.Trivia : Environment.NewLine,
-                            y == 0 ? false : true,
-                            y == 0 ? 0 : 1
+                            y == 0 ? false : true
                         );
 
                         nodes.Add(split_node);
