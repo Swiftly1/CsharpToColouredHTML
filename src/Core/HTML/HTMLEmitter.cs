@@ -472,22 +472,21 @@ public class HTMLEmitter : IEmitter
             processed_Text = node.TextWithTrivia;
         }
 
-        var escaped = Escape(processed_Text);
-        var textWithReplacedTabs = escaped.Replace("\t", "    ");
+        var textWithReplacedTabs = processed_Text.Replace("\t", "    ");
 
         if (!textWithReplacedTabs.Any(char.IsWhiteSpace))
-            return (string.Empty, textWithReplacedTabs, string.Empty);
+            return (string.Empty, Escape(textWithReplacedTabs), string.Empty);
 
         var before = string.Join(string.Empty, textWithReplacedTabs.TakeWhile(char.IsWhiteSpace));
         var after = string.Join(string.Empty, textWithReplacedTabs.Reverse().TakeWhile(char.IsWhiteSpace));
 
         if (before.Length == textWithReplacedTabs.Length)
-            return (string.Empty, before, string.Empty);
+            return (string.Empty, Escape(before), string.Empty);
 
         var length = textWithReplacedTabs.Length - before.Length - after.Length;
         var content = textWithReplacedTabs.Substring(before.Length, length);
 
-        return (before, content, after);
+        return (Escape(before), Escape(content), Escape(after));
     }
 
     private NodeWithDetails MergeNodes(NodeWithDetails current, NodeWithDetails next)
