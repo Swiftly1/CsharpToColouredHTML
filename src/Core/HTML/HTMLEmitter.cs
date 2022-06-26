@@ -98,7 +98,7 @@ public class HTMLEmitter : IEmitter
     {
         Reset();
         var nodes = Preprocess(input);
-        Text = GenerateHtml(nodes);
+        Text = AddLineNumber ? GenerateHtmlWithLineNumbers(nodes) : GenerateHtml(nodes);
     }
 
     // Implementation:
@@ -161,59 +161,61 @@ public class HTMLEmitter : IEmitter
         sb.Append(GetCSS());
         sb.AppendLine(@"<pre class=""background"">");
 
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            var current = nodes[i];
+            var postProcessed = PostProcessing(current);
+            var span = @$"{postProcessed.Before}<span class=""{current.Colour}"">{postProcessed.Content}</span>{postProcessed.After}";
+            sb.Append(span);
+        }
+
+        sb.AppendLine("</pre>");
+
+        return sb.ToString();
+    }
+
+    private string GenerateHtmlWithLineNumbers(List<NodeWithDetails> nodes)
+    {
+        var sb = new StringBuilder();
+
+        sb.Append(GetCSS());
+        sb.AppendLine(@"<pre class=""background"">");
+
         var isOpened = false;
 
-        if (AddLineNumber)
-        {
-            sb.AppendLine("<table>");
-            sb.AppendLine("<tbody>");
-        }
+        sb.AppendLine("<table>");
+        sb.AppendLine("<tbody>");
 
         for (int i = 0; i < nodes.Count; i++)
         {
             var current = nodes[i];
-            if (AddLineNumber)
+            if (i == 0 || current.HasNewLine)
             {
-                if (i == 0 || current.HasNewLine)
+                if (isOpened)
                 {
-                    if (isOpened)
-                    {
-                        sb.Append("</td></tr>");
-                    }
-
-                    AddRowsForNewLinesIfNeededToStringBuilder(current.Trivia, sb);
-
-                    sb.Append("<tr>");
-                    AddNewLineNumberToStringBuilder(sb);
-                    sb.Append("<td class=\"code_column\">");
-                    isOpened = true;
+                    sb.Append("</td></tr>");
                 }
+
+                AddRowsForNewLinesIfNeededToStringBuilder(current.Trivia, sb);
+
+                sb.Append("<tr>");
+                AddNewLineNumberToStringBuilder(sb);
+                sb.Append("<td class=\"code_column\">");
+                isOpened = true;
             }
 
             var postProcessed = PostProcessing(current);
             var span = @$"{postProcessed.Before}<span class=""{current.Colour}"">{postProcessed.Content}</span>{postProcessed.After}";
-
-            if (AddLineNumber)
-            {
-                sb.Append(RemoveNewLines(span));
-            }
-            else
-            {
-                sb.Append(span);
-            }
+            sb.Append(RemoveNewLines(span));
         }
 
-        if (AddLineNumber && isOpened)
+        if (isOpened)
         {
             sb.Append("</td></tr>");
         }
 
-        if (AddLineNumber)
-        {
-            sb.AppendLine("</tbody>");
-            sb.Append("</table>");
-        }
-
+        sb.AppendLine("</tbody>");
+        sb.Append("</table>");
         sb.AppendLine("</pre>");
 
         return sb.ToString();
