@@ -7,20 +7,11 @@ This patch was focused mostly on optimizing generated HTML code, refactor to sep
 _______________
 The size difference between generated HTML on some real world examples is:
 
-Example1:
-Before: 48205
-After: 33628
-**Diff: ~30%**
-
-Example2:
-Before: 31626
-After: 21015
-**Diff: ~33.5%**
-
-Example3:
-Before: 3592
-After: 2593
-**Diff: ~27.8%**
+| Description | Before | After | Diff   |
+|-------------|--------|-------|--------|
+| Example 1   | 48205  | 33628 | ~30%   |
+| Example 2   | 31626  | 21015 | ~33.5% |
+| Example 3   | 3592   | 2593  | ~27.8% |
 
 Of course the difference will vary and may be not as this big on very small code fragments.
 _______________
