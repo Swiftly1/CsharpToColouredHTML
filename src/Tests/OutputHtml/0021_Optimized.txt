@@ -1,0 +1,6 @@
+
+<pre class="background">
+<span class="keyword">internal class</span> <span class="class">TestService</span> : <span class="interface">ITestService</span>
+{
+    <span class="keyword">private readonly</span> <span class="interface">ITest</span> _test;
+}</pre>

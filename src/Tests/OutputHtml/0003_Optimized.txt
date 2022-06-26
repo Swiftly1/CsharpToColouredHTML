@@ -1,0 +1,11 @@
+
+<pre class="background">
+<span class="keyword">using</span> CsharpToColouredHTML.Core;
+
+<span class="keyword">var</span> <span class="blue">code</span> = <span class="class">File</span>.<span class="method">ReadAllText</span>(<span class="string">&quot;code.txt&quot;</span>);
+
+<span class="keyword">var</span> <span class="blue">html</span> = <span class="keyword">new</span> <span class="class">CsharpColourer</span>().<span class="method">ProcessSourceCode</span>(<span class="blue">code</span>, <span class="keyword">new</span> <span class="class">HTMLEmitter</span>());
+
+<span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="blue">html</span>);
+
+<span class="keyword">new</span> <span class="class">CsharpColourer</span>().<span class="method">ProcessSourceCode</span>(<span class="blue">code</span>, <span class="keyword">new</span> <span class="class">ConsoleEmitter</span>());</pre>

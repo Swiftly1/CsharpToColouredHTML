@@ -1,0 +1,11 @@
+
+<pre class="background">
+[<span class="class">Theory</span>]
+[<span class="class">InlineData</span>(<span class="string">&quot;0001.txt&quot;</span>)]
+<span class="keyword">private const string</span> InputDir = <span class="string">$&quot;InputCsharp&quot;</span>;
+
+<span class="keyword">var</span> <span class="blue">list</span> = <span class="keyword">new</span> <span class="class">List</span>&lt;<span class="keyword">int</span>&gt;{<span class="interface">1</span>,<span class="interface">2</span>,<span class="interface">3</span>};
+<span class="keyword">var</span> <span class="blue">a</span> = <span class="blue">list</span>[<span class="method">test</span>()];
+
+<span class="keyword">var</span> <span class="blue">list2</span> = <span class="keyword">new</span> <span class="class">List</span>&lt;<span class="keyword">int</span>&gt;{<span class="interface">1</span>,<span class="interface">2</span>,<span class="interface">3</span>};
+<span class="keyword">var</span> <span class="blue">b</span> = <span class="blue">list</span>[<span class="class">Helper</span>.<span class="method">test</span>()];</pre>

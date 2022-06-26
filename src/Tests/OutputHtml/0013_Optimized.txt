@@ -1,0 +1,31 @@
+
+<pre class="background">
+            <span class="comment">// A map of the file name to the content we need to ensure exists in the file</span>
+            <span class="keyword">var</span> <span class="blue">filesToWrite</span> = <span class="keyword">new</span> <span class="class">Dictionary</span>&lt;<span class="keyword">string</span>, <span class="keyword">string</span>&gt;(<span class="class">StringComparer</span>.OrdinalIgnoreCase);
+
+            <span class="comment">// The props we want to be included as early as possible since we want our tasks to be used and</span>
+            <span class="comment">// to ensure our setting of targets path happens early enough</span>
+            <span class="blue">filesToWrite</span>.<span class="method">Add</span>(<span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span>{hiveName}<span class="string">.props&quot;</span>, <span class="struct">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>),
+                <span class="string">$@&quot;&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span>
+<span class="string">&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span>
+  <span class="string">&lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{hiveName}<span class="string">&#39;&quot;&quot;&gt;</span>
+    <span class="string">&lt;CSharpCoreTargetsPath&gt;</span>{packagePath}<span class="string">\Microsoft.CSharp.Core.targets&lt;/CSharpCoreTargetsPath&gt;</span>
+    <span class="string">&lt;VisualBasicCoreTargetsPath&gt;</span>{packagePath}<span class="string">\Microsoft.VisualBasic.Core.targets&lt;/VisualBasicCoreTargetsPath&gt;</span>
+  <span class="string">&lt;/PropertyGroup&gt;</span> <span class="string">
+</span>
+  <span class="string">&lt;UsingTask TaskName=&quot;&quot;Microsoft.CodeAnalysis.BuildTasks.Csc&quot;&quot; AssemblyFile=&quot;&quot;</span>{packagePath}<span class="string">\Microsoft.Build.Tasks.CodeAnalysis.dll&quot;&quot; Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{hiveName}<span class="string">&#39;&quot;&quot; /&gt;</span>
+  <span class="string">&lt;UsingTask TaskName=&quot;&quot;Microsoft.CodeAnalysis.BuildTasks.Vbc&quot;&quot; AssemblyFile=&quot;&quot;</span>{packagePath}<span class="string">\Microsoft.Build.Tasks.CodeAnalysis.dll&quot;&quot; Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{hiveName}<span class="string">&#39;&quot;&quot; /&gt;</span>
+<span class="string">&lt;/Project&gt;&quot;</span>);
+
+            <span class="comment">// This targets content we want to be included later since the project file might touch UseSharedCompilation</span>
+            <span class="keyword">var</span> <span class="blue">targetsContent</span> =
+                    <span class="string">$@&quot;&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span>
+<span class="string">&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span>
+  <span class="string">&lt;!-- If we&#39;re not using the compiler server, set ToolPath/Exe to direct to the exes in this package --&gt;</span>
+  <span class="string">&lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{hiveName}<span class="string">&#39; and &#39;$(UseSharedCompilation)&#39; == &#39;false&#39;&quot;&quot;&gt;</span>
+    <span class="string">&lt;CscToolPath&gt;</span>{packagePath}<span class="string">&lt;/CscToolPath&gt;</span>
+    <span class="string">&lt;CscToolExe&gt;csc.exe&lt;/CscToolExe&gt;</span>
+    <span class="string">&lt;VbcToolPath&gt;</span>{packagePath}<span class="string">&lt;/VbcToolPath&gt;</span>
+    <span class="string">&lt;VbcToolExe&gt;vbc.exe&lt;/VbcToolExe&gt;</span>
+  <span class="string">&lt;/PropertyGroup&gt;</span>
+<span class="string">&lt;/Project&gt;&quot;</span>;</pre>

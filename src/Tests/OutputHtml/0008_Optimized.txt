@@ -1,0 +1,187 @@
+
+<pre class="background">
+<span class="comment">// Licensed to the .NET Foundation under one or more agreements.</span>
+<span class="comment">// The .NET Foundation licenses this file to you under the MIT license.</span>
+<span class="comment">// See the LICENSE file in the project root for more information.</span>
+
+<span class="preprocessor">#nullable disable</span>
+
+<span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Collections.Generic;
+<span class="keyword">using</span> System.IO;
+<span class="keyword">using</span> System.Reflection;
+<span class="keyword">using</span> System.Runtime.InteropServices;
+<span class="keyword">using</span> System.Threading;
+<span class="keyword">using</span> System.Threading.Tasks;
+<span class="keyword">using</span> EnvDTE;
+<span class="keyword">using</span> Microsoft;
+<span class="keyword">using</span> Microsoft.VisualStudio.Shell;
+<span class="keyword">using</span> Microsoft.VisualStudio.Shell.Interop;
+<span class="keyword">using</span> <span class="class">Task</span> = System.Threading.Tasks.<span class="class">Task</span>;
+
+<span class="keyword">namespace</span> Roslyn.Compilers.Extension
+{
+    [<span class="class">Guid</span>(<span class="string">&quot;31C0675E-87A4-4061-A0DD-A4E510FCCF97&quot;</span>)]
+    <span class="keyword">public sealed class</span> <span class="class">CompilerPackage</span> : <span class="class">AsyncPackage</span>
+    {
+        <span class="keyword">public static string</span> RoslynHive = <span class="keyword">null</span>;
+
+        <span class="keyword">protected override async</span> <span class="class">Task</span> <span class="method">InitializeAsync</span>(<span class="struct">CancellationToken</span> <span class="blue">cancellationToken</span>, <span class="interface">IProgress</span>&lt;<span class="class">ServiceProgressData</span>&gt; <span class="blue">progress</span>)
+        {
+            <span class="keyword">await base</span>.<span class="method">InitializeAsync</span>(<span class="blue">cancellationToken</span>, <span class="blue">progress</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+
+            <span class="keyword">await</span> <span class="class">JoinableTaskFactory</span>.<span class="method">SwitchToMainThreadAsync</span>(<span class="blue">cancellationToken</span>);
+
+            <span class="keyword">var</span> <span class="blue">reg</span> = (ILocalRegistry2)<span class="keyword">await</span> <span class="method">GetServiceAsync</span>(<span class="keyword">typeof</span>(SLocalRegistry)).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+            <span class="blue">cancellationToken</span>.<span class="method">ThrowIfCancellationRequested</span>();
+            <span class="class">Assumes</span>.<span class="method">Present</span>(<span class="blue">reg</span>);
+
+            <span class="keyword">var</span> <span class="blue">packagePath</span> = <span class="class">Path</span>.<span class="method">GetDirectoryName</span>(<span class="class">Assembly</span>.<span class="method">GetExecutingAssembly</span>().Location);
+
+            <span class="keyword">string</span> <span class="blue">localRegistryRoot</span>;
+            <span class="blue">reg</span>.<span class="method">GetLocalRegistryRoot</span>(<span class="keyword">out</span> <span class="blue">localRegistryRoot</span>);
+            <span class="keyword">var</span> <span class="blue">registryParts</span> = <span class="blue">localRegistryRoot</span>.<span class="method">Split</span>(<span class="string">&#39;\\&#39;</span>);
+
+            <span class="comment">// Is it a valid Hive looks similar to:</span>  
+            <span class="comment">//  &#39;Software\Microsoft\VisualStudio\14.0&#39;  &#39;Software\Microsoft\VisualStudio\14.0Roslyn&#39;  &#39;Software\Microsoft\VSWinExpress\14.0&#39;</span>
+            <span class="control">if</span> (<span class="blue">registryParts</span>.Length &gt;= <span class="interface">4</span>)
+            {
+                <span class="keyword">var</span> <span class="blue">skuName</span> = <span class="blue">registryParts</span>[<span class="interface">2</span>];
+                <span class="keyword">var</span> <span class="blue">hiveName</span> = <span class="blue">registryParts</span>[<span class="interface">3</span>];
+                RoslynHive = <span class="keyword">string</span>.<span class="method">Format</span>(<span class="string">@&quot;{0}.{1}&quot;</span>, <span class="blue">registryParts</span>[<span class="interface">2</span>], <span class="blue">registryParts</span>[<span class="interface">3</span>]);
+
+                <span class="keyword">await</span> <span class="method">WriteMSBuildFilesAsync</span>(<span class="blue">packagePath</span>, RoslynHive, <span class="blue">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+
+                <span class="control">try</span>
+                {
+                    Microsoft.Build.Evaluation.ProjectCollection.<span class="class">GlobalProjectCollection</span>.DisableMarkDirty = <span class="keyword">true</span>;
+                    Microsoft.Build.Evaluation.ProjectCollection.<span class="class">GlobalProjectCollection</span>.<span class="method">SetGlobalProperty</span>(<span class="string">&quot;RoslynHive&quot;</span>, RoslynHive);
+                }
+                <span class="control">finally</span>
+                {
+                    Microsoft.Build.Evaluation.ProjectCollection.<span class="class">GlobalProjectCollection</span>.DisableMarkDirty = <span class="keyword">false</span>;
+                }
+            }
+        }
+
+        <span class="keyword">private async</span> <span class="class">Task</span> <span class="method">WriteMSBuildFilesAsync</span>(<span class="keyword">string</span> <span class="blue">packagePath</span>, <span class="keyword">string</span> <span class="blue">hiveName</span>, <span class="struct">CancellationToken</span> <span class="blue">cancellationToken</span>)
+        {
+            <span class="comment">// A map of the file name to the content we need to ensure exists in the file</span>
+            <span class="keyword">var</span> <span class="blue">filesToWrite</span> = <span class="keyword">new</span> <span class="class">Dictionary</span>&lt;<span class="keyword">string</span>, <span class="keyword">string</span>&gt;(<span class="class">StringComparer</span>.OrdinalIgnoreCase);
+
+            <span class="comment">// The props we want to be included as early as possible since we want our tasks to be used and</span>
+            <span class="comment">// to ensure our setting of targets path happens early enough</span>
+            <span class="blue">filesToWrite</span>.<span class="method">Add</span>(<span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="blue">hiveName</span>}<span class="string">.props&quot;</span>, <span class="blue">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>),
+                <span class="string">$@&quot;&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span>
+<span class="string">&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span>
+  <span class="string">&lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{<span class="blue">hiveName</span>}<span class="string">&#39;&quot;&quot;&gt;</span>
+    <span class="string">&lt;CSharpCoreTargetsPath&gt;</span>{<span class="blue">packagePath</span>}<span class="string">\Microsoft.CSharp.Core.targets&lt;/CSharpCoreTargetsPath&gt;</span>
+    <span class="string">&lt;VisualBasicCoreTargetsPath&gt;</span>{<span class="blue">packagePath</span>}<span class="string">\Microsoft.VisualBasic.Core.targets&lt;/VisualBasicCoreTargetsPath&gt;</span>
+  <span class="string">&lt;/PropertyGroup&gt;</span> <span class="string">
+</span>
+  <span class="string">&lt;UsingTask TaskName=&quot;&quot;Microsoft.CodeAnalysis.BuildTasks.Csc&quot;&quot; AssemblyFile=&quot;&quot;</span>{<span class="blue">packagePath</span>}<span class="string">\Microsoft.Build.Tasks.CodeAnalysis.dll&quot;&quot; Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{<span class="blue">hiveName</span>}<span class="string">&#39;&quot;&quot; /&gt;</span>
+  <span class="string">&lt;UsingTask TaskName=&quot;&quot;Microsoft.CodeAnalysis.BuildTasks.Vbc&quot;&quot; AssemblyFile=&quot;&quot;</span>{<span class="blue">packagePath</span>}<span class="string">\Microsoft.Build.Tasks.CodeAnalysis.dll&quot;&quot; Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{<span class="blue">hiveName</span>}<span class="string">&#39;&quot;&quot; /&gt;</span>
+<span class="string">&lt;/Project&gt;&quot;</span>);
+
+            <span class="comment">// This targets content we want to be included later since the project file might touch UseSharedCompilation</span>
+            <span class="keyword">var</span> <span class="blue">targetsContent</span> =
+                    <span class="string">$@&quot;&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span>
+<span class="string">&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span>
+  <span class="string">&lt;!-- If we&#39;re not using the compiler server, set ToolPath/Exe to direct to the exes in this package --&gt;</span>
+  <span class="string">&lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{<span class="blue">hiveName</span>}<span class="string">&#39; and &#39;$(UseSharedCompilation)&#39; == &#39;false&#39;&quot;&quot;&gt;</span>
+    <span class="string">&lt;CscToolPath&gt;</span>{<span class="blue">packagePath</span>}<span class="string">&lt;/CscToolPath&gt;</span>
+    <span class="string">&lt;CscToolExe&gt;csc.exe&lt;/CscToolExe&gt;</span>
+    <span class="string">&lt;VbcToolPath&gt;</span>{<span class="blue">packagePath</span>}<span class="string">&lt;/VbcToolPath&gt;</span>
+    <span class="string">&lt;VbcToolExe&gt;vbc.exe&lt;/VbcToolExe&gt;</span>
+  <span class="string">&lt;/PropertyGroup&gt;</span>
+<span class="string">&lt;/Project&gt;&quot;</span>;
+
+            <span class="blue">filesToWrite</span>.<span class="method">Add</span>(<span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Microsoft.CSharp.targets\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="blue">hiveName</span>}<span class="string">.targets&quot;</span>, <span class="blue">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="blue">targetsContent</span>);
+            <span class="blue">filesToWrite</span>.<span class="method">Add</span>(<span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Microsoft.VisualBasic.targets\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="blue">hiveName</span>}<span class="string">.targets&quot;</span>, <span class="blue">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="blue">targetsContent</span>);
+
+            <span class="comment">// First we want to ensure any Roslyn files with our hive name that we aren&#39;t writing -- this is probably</span>
+            <span class="comment">// leftovers from older extensions</span>
+            <span class="keyword">var</span> <span class="blue">msbuildDirectory</span> = <span class="keyword">new</span> <span class="class">DirectoryInfo</span>(<span class="keyword">await</span> <span class="method">GetMSBuildPathAsync</span>(<span class="blue">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>));
+            <span class="control">if</span> (<span class="blue">msbuildDirectory</span>.Exists)
+            {
+                <span class="control">foreach</span> (<span class="keyword">var</span> <span class="blue">file</span> <span class="control">in</span> <span class="blue">msbuildDirectory</span>.<span class="method">EnumerateFiles</span>(<span class="string">$&quot;*Roslyn*</span>{<span class="blue">hiveName</span>}<span class="string">*&quot;</span>, <span class="interface">SearchOption</span>.AllDirectories))
+                {
+                    <span class="control">if</span> (!<span class="blue">filesToWrite</span>.<span class="method">ContainsKey</span>(<span class="blue">file</span>.FullName))
+                    {
+                        <span class="blue">file</span>.<span class="method">Delete</span>();
+                    }
+                }
+            }
+
+            <span class="control">try</span>
+            {
+                <span class="control">foreach</span> (<span class="keyword">var</span> <span class="blue">fileAndContents</span> <span class="control">in</span> <span class="blue">filesToWrite</span>)
+                {
+                    <span class="keyword">var</span> <span class="blue">parentDirectory</span> = <span class="keyword">new</span> <span class="class">DirectoryInfo</span>(<span class="class">Path</span>.<span class="method">GetDirectoryName</span>(<span class="blue">fileAndContents</span>.Key));
+                    <span class="blue">parentDirectory</span>.<span class="method">Create</span>();
+
+                    <span class="comment">// If we already know the file has the same contents, then we can skip</span>
+                    <span class="control">if</span> (<span class="class">File</span>.<span class="method">Exists</span>(<span class="blue">fileAndContents</span>.Key) &amp;&amp; <span class="class">File</span>.<span class="method">ReadAllText</span>(<span class="blue">fileAndContents</span>.Key) == <span class="blue">fileAndContents</span>.Value)
+                    {
+                        <span class="control">continue</span>;
+                    }
+
+                    <span class="class">File</span>.<span class="method">WriteAllText</span>(<span class="blue">fileAndContents</span>.Key, <span class="blue">fileAndContents</span>.Value);
+                }
+            }
+            <span class="control">catch</span> (<span class="class">Exception</span> <span class="blue">e</span>)
+            {
+                <span class="keyword">var</span> <span class="blue">msg</span> =
+<span class="string">$@&quot;</span>{<span class="blue">e</span>.Message}<span class="string"></span><span class="string">
+</span>
+<span class="string">To reload the Roslyn compiler package, close Visual Studio and any MSBuild processes, then restart Visual Studio.&quot;</span>;
+
+                <span class="class">VsShellUtilities</span>.<span class="method">ShowMessageBox</span>(
+                    <span class="keyword">this</span>,
+                    <span class="blue">msg</span>,
+                    <span class="keyword">null</span>,
+                    <span class="class">OLEMSGICON</span>.OLEMSGICON_WARNING,
+                    <span class="class">OLEMSGBUTTON</span>.OLEMSGBUTTON_OK,
+                    <span class="class">OLEMSGDEFBUTTON</span>.OLEMSGDEFBUTTON_FIRST);
+            }
+        }
+
+
+        <span class="keyword">private async</span> <span class="class">Task</span>&lt;<span class="keyword">string</span>&gt; <span class="method">GetMSBuildVersionStringAsync</span>(<span class="struct">CancellationToken</span> <span class="blue">cancellationToken</span>)
+        {
+            <span class="keyword">await</span> ThreadHelper.<span class="class">JoinableTaskFactory</span>.<span class="method">SwitchToMainThreadAsync</span>(<span class="blue">cancellationToken</span>);
+
+            <span class="keyword">var</span> <span class="blue">dte</span> = (DTE)<span class="keyword">await</span> <span class="method">GetServiceAsync</span>(<span class="keyword">typeof</span>(SDTE)).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+            <span class="keyword">var</span> <span class="blue">parts</span> = <span class="blue">dte</span>.Version.<span class="method">Split</span>(<span class="string">&#39;.&#39;</span>);
+            <span class="control">if</span> (<span class="blue">parts</span>.Length != <span class="interface">2</span>)
+            {
+                <span class="control">throw</span> <span class="keyword">new</span> <span class="class">Exception</span>(<span class="string">$&quot;Unrecognized Visual Studio Version:</span> {<span class="blue">dte</span>.Version}<span class="string">&quot;</span>);
+            }
+
+            <span class="keyword">int</span> <span class="blue">majorVersion</span> = <span class="keyword">int</span>.<span class="method">Parse</span>(<span class="blue">parts</span>[<span class="interface">0</span>]);
+
+            <span class="control">if</span> (<span class="blue">majorVersion</span> &gt;= <span class="interface">16</span>)
+            {
+                <span class="comment">// Starting in Visual Studio 2019, the folder is just called &quot;Current&quot;. See</span>
+                <span class="comment">// https://github.com/Microsoft/msbuild/issues/4149 for further commentary.</span>
+                <span class="control">return</span> <span class="string">&quot;Current&quot;</span>;
+            }
+            <span class="control">else</span>
+            {
+                <span class="control">return</span> <span class="blue">majorVersion</span> + <span class="string">&quot;.0&quot;</span>;
+            }
+        }
+
+        <span class="keyword">private async</span> <span class="class">Task</span>&lt;<span class="keyword">string</span>&gt; <span class="method">GetMSBuildPathAsync</span>(<span class="struct">CancellationToken</span> <span class="blue">cancellationToken</span>)
+        {
+            <span class="keyword">var</span> <span class="blue">version</span> = <span class="keyword">await</span> <span class="method">GetMSBuildVersionStringAsync</span>(<span class="blue">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+            <span class="keyword">var</span> <span class="blue">localAppData</span> = <span class="class">Environment</span>.<span class="method">GetFolderPath</span>(<span class="class">Environment</span>.<span class="interface">SpecialFolder</span>.LocalApplicationData);
+            <span class="control">return</span> <span class="class">Path</span>.<span class="method">Combine</span>(<span class="blue">localAppData</span>, <span class="string">$@&quot;Microsoft\MSBuild\</span>{<span class="blue">version</span>}<span class="string">&quot;</span>);
+        }
+
+        <span class="keyword">private async</span> <span class="class">Task</span>&lt;<span class="keyword">string</span>&gt; <span class="method">GetMSBuildRelativePathAsync</span>(<span class="keyword">string</span> <span class="blue">relativePath</span>, <span class="struct">CancellationToken</span> <span class="blue">cancellationToken</span>)
+        {
+            <span class="control">return</span> <span class="class">Path</span>.<span class="method">Combine</span>(<span class="keyword">await</span> <span class="method">GetMSBuildPathAsync</span>(<span class="blue">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="blue">relativePath</span>);
+        }
+    }
+}</pre>

@@ -11,29 +11,7 @@ namespace Tests
         private const string OutputDir = $"OutputHtml";
 
         [Theory]
-        [InlineData("0001.txt")]
-        [InlineData("0002.txt")]
-        [InlineData("0003.txt")]
-        [InlineData("0004.txt")]
-        [InlineData("0005.txt")]
-        [InlineData("0006.txt")]
-        [InlineData("0007.txt")]
-        [InlineData("0008.txt")]
-        [InlineData("0009.txt")]
-        [InlineData("0010.txt")]
-        [InlineData("0011.txt")]
-        [InlineData("0012.txt")]
-        [InlineData("0013.txt")]
-        [InlineData("0014.txt")]
-        [InlineData("0015.txt")]
-        [InlineData("0016.txt")]
-        [InlineData("0017.txt")]
-        [InlineData("0018.txt")]
-        [InlineData("0019.txt")]
-        [InlineData("0020.txt")]
-        [InlineData("0021.txt")]
-        [InlineData("0022.txt")]
-        [InlineData("0023.txt")]
+        [ClassData(typeof(FilesTestData))]
         public void WithoutLineNumbers(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
@@ -50,29 +28,7 @@ namespace Tests
         }
 
         [Theory]
-        [InlineData("0001.txt")]
-        [InlineData("0002.txt")]
-        [InlineData("0003.txt")]
-        [InlineData("0004.txt")]
-        [InlineData("0005.txt")]
-        [InlineData("0006.txt")]
-        [InlineData("0007.txt")]
-        [InlineData("0008.txt")]
-        [InlineData("0009.txt")]
-        [InlineData("0010.txt")]
-        [InlineData("0011.txt")]
-        [InlineData("0012.txt")]
-        [InlineData("0013.txt")]
-        [InlineData("0014.txt")]
-        [InlineData("0015.txt")]
-        [InlineData("0016.txt")]
-        [InlineData("0017.txt")]
-        [InlineData("0018.txt")]
-        [InlineData("0019.txt")]
-        [InlineData("0020.txt")]
-        [InlineData("0021.txt")]
-        [InlineData("0022.txt")]
-        [InlineData("0023.txt")]
+        [ClassData(typeof(FilesTestData))]
         public void LineNumbers(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
@@ -82,6 +38,40 @@ namespace Tests
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings().UseCustomCSS("").DisableOptimizations();
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Theory]
+        [ClassData(typeof(FilesTestData))]
+        public void WithoutLineNumbersOptimized(string fileName)
+        {
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_Optimized."));
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings().UseCustomCSS("").EnableOptimizations().DisableLineNumbers();
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Theory]
+        [ClassData(typeof(FilesTestData))]
+        public void LineNumbersOptimized(string fileName)
+        {
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_LineNumbersOptimized."));
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings().UseCustomCSS("").EnableOptimizations();
             var emitter = new HTMLEmitter(settings);
             var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
 
