@@ -579,7 +579,7 @@ public class HTMLEmitter : IEmitter
             return false;
 
         // OLEMSGICON.OLEMSGICON_WARNING,
-        return new string[] { ")", "(", "=", ";", "}", ",", "&", "&&", "|", "||"}.Contains(next.Text);
+        return new string[] { ")", "(", "=", ";", "}", ",", "&", "&&", "|", "||" }.Contains(next.Text);
     }
 
     private bool IsPopularClass(string text)
@@ -591,7 +591,7 @@ public class HTMLEmitter : IEmitter
 
     private bool IsPopularStruct(string text)
     {
-        return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)) 
+        return ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase))
             ||
             ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }

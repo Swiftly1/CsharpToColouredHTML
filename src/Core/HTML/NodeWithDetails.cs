@@ -1,6 +1,4 @@
-﻿using CsharpToColouredHTML.Core;
-
-namespace CsharpToColouredHTML
+﻿namespace CsharpToColouredHTML.Core
 {
     public record NodeWithDetails
     (
