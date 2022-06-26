@@ -121,35 +121,40 @@ public class HTMLEmitter : IEmitter
             var colour = ExtractColourAndSetMetaData(i, nodes);
             var nodeWithDetails = new NodeWithDetails
             (
-                Colour: colour,
-                Text: nodes[i].Text,
-                Trivia: nodes[i].Trivia,
-                TextWithTrivia: nodes[i].TextWithTrivia,
-                HasNewLine: nodes[i].HasNewLine,
-                IsNew: _IsNew,
-                IsUsing: _IsUsing,
-                ParenthesisCounter: _ParenthesisCounter
+                colour: colour,
+                text: nodes[i].Text,
+                trivia: nodes[i].Trivia,
+                hasNewLine: nodes[i].HasNewLine,
+                isNew: _IsNew,
+                isUsing: _IsUsing,
+                parenthesisCounter: _ParenthesisCounter
             );
             list.Add(nodeWithDetails);
         }
 
         // Optimizer - Merges Nodes with the same colour
-        //for (int i = 0; i < list.Count; i++)
-        //{
-        //    if (i + 1 >= list.Count)
-        //        break;
 
-        //    var current = list[i];
-        //    var next = list[i+1];
-        //    var mergable = current.Colour == next.Colour;
+        var optimize = true;
 
-        //    if (!mergable)
-        //        continue;
+        if (optimize)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i + 1 >= list.Count)
+                    break;
 
-        //    list[i] = MergeNodes(current, next);
-        //    list.RemoveAt(i + 1);
-        //    i--;
-        //}
+                var current = list[i];
+                var next = list[i + 1];
+                var mergable = current.Colour == next.Colour && !next.Trivia.Contains(Environment.NewLine);
+
+                if (!mergable)
+                    continue;
+
+                list[i] = MergeNodes(current, next);
+                list.RemoveAt(i + 1);
+                i--;
+            }
+        }
 
         return list;
     }
@@ -457,11 +462,21 @@ public class HTMLEmitter : IEmitter
 
     private NodeWithDetails MergeNodes(NodeWithDetails current, NodeWithDetails next)
     {
-        //var node = new Node(current.Colour)
-        //var details = new NodeWithDetails(current.Colour, current.IsNew, current.IsUsing, current.ParenthesisCounter);
+        var newText = current.Text + next.TextWithTrivia;
+        var newTrivia = current.Trivia;
 
+        var details = new NodeWithDetails
+        (
+            colour: current.Colour,
+            text: newText,
+            trivia: newTrivia,
+            hasNewLine: current.HasNewLine,
+            isNew: current.IsNew,
+            isUsing: current.IsUsing,
+            parenthesisCounter: current.ParenthesisCounter
+        );
 
-        return null;
+        return details;
     }
 
     private bool IsStruct(int currentIndex, List<Node> nodes)
