@@ -742,7 +742,7 @@ public class HTMLEmitter : IEmitter
         font-family: monaco,Consolas,Lucida Console,monospace; 
         background-color: #1E1E1E;
         overflow:scroll;
-        color: #efefef;
+        color: #dfdfdf;
     }}
 
     .{InternalHtmlColors.Numeric}
@@ -827,7 +827,7 @@ public class HTMLEmitter : IEmitter
     .code_column
     {{
         padding-left: 5px;
-        color: #efefef;
+        color: #dfdfdf;
     }}
     ";
 }

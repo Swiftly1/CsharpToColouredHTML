@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.16] - 26.06.2022
+**Description:**
+Minor CSS changes
+
 ## [1.0.15] - 26.06.2022
 **Description:**
 This patch was focused mostly on optimizing generated HTML code, refactor to separate data preparation from the code gen, minor default CSS changes and breaking changes to the APIs.
