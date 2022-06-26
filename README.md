@@ -16,7 +16,7 @@ but also I wanted to have server-side rendering, so users aren't required to hav
 
 # Security Considerations
 
-Even despite performing [escaping](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/src/Core/HTMLEmitter.cs#L17)
+Even despite performing [escaping](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/src/Core/HTMLEmitter.cs#L32)
 
 I still recommend to use it only on trusted inputs, at least for now. 
 
@@ -30,11 +30,12 @@ Or use it in not so serious projects: https://www.nuget.org/packages/CsharpToCol
 
 Sample Usage:
 
-	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(addLineNumber: true));
+	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
 	Console.WriteLine(html);
 ___
 	var myCustomCSS = "<style>...</style>";
-	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(myCustomCSS));
+	var settings = new HTMLEmitterSettings().UseCustomCSS(myCSS);
+	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 	Console.WriteLine(html);
 
 * [Example 1 - Code from this project](#ex1)

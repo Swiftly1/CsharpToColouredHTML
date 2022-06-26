@@ -42,7 +42,8 @@ namespace Tests
             var code = File.ReadAllText(p1);
             var goodHTML = File.ReadAllText(p2);
 
-            var emitter = new HTMLEmitter(user_provided_css: "");
+            var settings = new HTMLEmitterSettings().UseCustomCSS("").DisableLineNumbers().DisableOptimizations();
+            var emitter = new HTMLEmitter(settings);
             var resultHTML = new CsharpColourer().ProcessSourceCode(code, emitter);
 
             Assert.Equal(goodHTML, resultHTML);
@@ -79,7 +80,9 @@ namespace Tests
 
             var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_LineNumbers."));
             var p2Lines = File.ReadAllText(linesPath);
-            var emitter = new HTMLEmitter(user_provided_css: "", addLineNumber: true);
+
+            var settings = new HTMLEmitterSettings().UseCustomCSS("").DisableOptimizations();
+            var emitter = new HTMLEmitter(settings);
             var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
 
             Assert.Equal(p2Lines, linesResult);
@@ -90,7 +93,8 @@ namespace Tests
         {
             var code = "Console.WriteLine(\"asd\")";
             var myCSS = "";
-            var resultHTML = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(myCSS));
+            var settings = new HTMLEmitterSettings().UseCustomCSS(myCSS).DisableLineNumbers().DisableOptimizations();
+            var resultHTML = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 
             Assert.DoesNotContain("style", resultHTML);
         }
@@ -100,7 +104,8 @@ namespace Tests
         {
             var code = "Console.WriteLine(\"asd\")";
             var myCSS = "<style>MY_CSS</style>";
-            var resultHTML = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(myCSS));
+            var settings = new HTMLEmitterSettings().UseCustomCSS(myCSS);
+            var resultHTML = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
             Assert.Contains(myCSS, resultHTML);
         }
 
