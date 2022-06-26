@@ -5,7 +5,7 @@ All notable changes to this project since version 1.0.14 will be documented in t
 **Description:**
 This patch was focused mostly on optimizing generated HTML code, refactor to separate data preparation from the code gen, minor default CSS changes and breaking changes to the APIs.
 _______________
-The size difference between generated HTML on some real world examples is:
+The size differences between generated HTML on some real world examples are:
 
 | Description | Before | After | Diff   |
 |-------------|--------|-------|--------|
