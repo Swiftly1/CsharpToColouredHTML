@@ -13,7 +13,7 @@ public class HTMLEmitter : IEmitter
     }
 
     // Internal Stuff:
-
+    // This method is at the top, so I don't have to update link to the line in README.
     private string Escape(string textWithTrivia)
     {
         var escaped = HttpUtility.HtmlEncode(textWithTrivia);
@@ -101,7 +101,7 @@ public class HTMLEmitter : IEmitter
         Text = GenerateHtml(nodes);
     }
 
-    // Internals:
+    // Implementation:
 
     private void Reset()
     {
@@ -118,10 +118,38 @@ public class HTMLEmitter : IEmitter
 
         for (int i = 0; i < nodes.Count; i++)
         {
-            var span = ExtractColourAndSetMetaData(i, nodes);
-            var nodeWithDetails = new NodeWithDetails(nodes[i], span, _IsNew, _IsUsing, _ParenthesisCounter);
+            var colour = ExtractColourAndSetMetaData(i, nodes);
+            var nodeWithDetails = new NodeWithDetails
+            (
+                Colour: colour,
+                Text: nodes[i].Text,
+                Trivia: nodes[i].Trivia,
+                TextWithTrivia: nodes[i].TextWithTrivia,
+                HasNewLine: nodes[i].HasNewLine,
+                IsNew: _IsNew,
+                IsUsing: _IsUsing,
+                ParenthesisCounter: _ParenthesisCounter
+            );
             list.Add(nodeWithDetails);
         }
+
+        // Optimizer - Merges Nodes with the same colour
+        //for (int i = 0; i < list.Count; i++)
+        //{
+        //    if (i + 1 >= list.Count)
+        //        break;
+
+        //    var current = list[i];
+        //    var next = list[i+1];
+        //    var mergable = current.Colour == next.Colour;
+
+        //    if (!mergable)
+        //        continue;
+
+        //    list[i] = MergeNodes(current, next);
+        //    list.RemoveAt(i + 1);
+        //    i--;
+        //}
 
         return list;
     }
@@ -146,14 +174,14 @@ public class HTMLEmitter : IEmitter
             var current = nodes[i];
             if (AddLineNumber)
             {
-                if (i == 0 || current.Node.HasNewLine)
+                if (i == 0 || current.HasNewLine)
                 {
                     if (isOpened)
                     {
                         sb.Append("</td></tr>");
                     }
 
-                    AddRowsForNewLinesIfNeededToStringBuilder(current.Node, sb);
+                    AddRowsForNewLinesIfNeededToStringBuilder(current.Trivia, sb);
 
                     sb.Append("<tr>");
                     AddNewLineNumberToStringBuilder(sb);
@@ -162,7 +190,7 @@ public class HTMLEmitter : IEmitter
                 }
             }
 
-            var postProcessed = PostProcessing(current.Node);
+            var postProcessed = PostProcessing(current);
             var span = @$"{postProcessed.Before}<span class=""{current.Colour}"">{postProcessed.Content}</span>{postProcessed.After}";
 
             if (AddLineNumber)
@@ -380,9 +408,9 @@ public class HTMLEmitter : IEmitter
         sb.Append($"<td class=\"line_no\" line_no=\"{value}\"></td>");
     }
 
-    private void AddRowsForNewLinesIfNeededToStringBuilder(Node current, StringBuilder sb)
+    private void AddRowsForNewLinesIfNeededToStringBuilder(string trivia, StringBuilder sb)
     {
-        var newLinesCount = StringHelper.AllIndicesOf(current.Trivia, Environment.NewLine).Count;
+        var newLinesCount = StringHelper.AllIndicesOf(trivia, Environment.NewLine).Count;
 
         for (int i = newLinesCount - 1; i > 0; i--)
         {
@@ -393,7 +421,7 @@ public class HTMLEmitter : IEmitter
         }
     }
 
-    private (string Before, string Content, string After) PostProcessing(Node node)
+    private (string Before, string Content, string After) PostProcessing(NodeWithDetails node)
     {
         var processed_Text = "";
 
@@ -423,6 +451,15 @@ public class HTMLEmitter : IEmitter
         var content = textWithReplacedTabs.Substring(before.Length, length);
 
         return (before, content, after);
+    }
+
+    private NodeWithDetails MergeNodes(NodeWithDetails current, NodeWithDetails next)
+    {
+        //var node = new Node(current.Colour)
+        //var details = new NodeWithDetails(current.Colour, current.IsNew, current.IsUsing, current.ParenthesisCounter);
+
+
+        return null;
     }
 
     private bool IsStruct(int currentIndex, List<Node> nodes)

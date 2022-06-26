@@ -2,8 +2,11 @@
 {
     public record NodeWithDetails
     (
-        Node Node,
         string Colour,
+        string Text,
+        string Trivia,
+        string TextWithTrivia,
+        bool HasNewLine,
         bool IsNew,
         bool IsUsing,
         int ParenthesisCounter
