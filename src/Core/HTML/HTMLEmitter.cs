@@ -15,14 +15,14 @@ public class HTMLEmitter : IEmitter
     public HTMLEmitter()
     {
         var settings = new HTMLEmitterSettings();
-        UserProvidedCSS = settings.UserProvidedCSS;
+        _cssHelper = new CSSHelper(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
     }
 
     public HTMLEmitter(HTMLEmitterSettings settings)
     {
-        UserProvidedCSS = settings.UserProvidedCSS;
+        _cssHelper = new CSSHelper(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
     }
@@ -35,7 +35,7 @@ public class HTMLEmitter : IEmitter
         return escaped;
     }
 
-    private readonly string? UserProvidedCSS = null;
+    private readonly CSSHelper _cssHelper;
 
     private readonly bool AddLineNumber = true;
 
@@ -185,7 +185,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.Append(GetCSS());
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber));
         sb.AppendLine(@"<pre class=""background"">");
 
         for (int i = 0; i < nodes.Count; i++)
@@ -209,7 +209,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.Append(GetCSS());
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber));
         sb.AppendLine(@"<pre class=""background"">");
 
         var isOpened = false;
@@ -710,123 +710,4 @@ public class HTMLEmitter : IEmitter
 
         return false;
     }
-
-    private string GetCSS()
-    {
-        var _sb = new StringBuilder();
-
-        if (UserProvidedCSS != null)
-        {
-            _sb.AppendLine(UserProvidedCSS);
-        }
-        else
-        {
-            _sb.AppendLine("<style>");
-            _sb.AppendLine(new string(DEFAULT_CSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
-
-            if (AddLineNumber)
-            {
-                _sb.AppendLine(new string(LineNumbersCSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
-            }
-
-            _sb.AppendLine("</style>");
-        }
-
-        return _sb.ToString();
-    }
-
-    public const string DEFAULT_CSS =
-    @$".{InternalHtmlColors.Background}
-    {{
-        font-family: monaco,Consolas,Lucida Console,monospace; 
-        background-color: #1E1E1E;
-        overflow:scroll;
-        color: #dfdfdf;
-    }}
-
-    .{InternalHtmlColors.Numeric}
-    {{
-        color: #b5cea8;
-    }}
-
-    .{InternalHtmlColors.Method}
-    {{
-        color: #DCDCAA;
-    }}
-  
-    .{InternalHtmlColors.Class}
-    {{
-        color: #4EC9B0;
-    }}
-  
-    .{InternalHtmlColors.Keyword}
-    {{
-        color: #569cd6;
-    }}
-  
-    .{InternalHtmlColors.Blue}
-    {{
-        color: #9CDCFE;
-    }}  
-
-    .{InternalHtmlColors.String}
-    {{
-        color: #ce9178;
-    }}
-
-    .{InternalHtmlColors.Interface}
-    {{
-        color: #b8d7a3;
-    }}
-
-    .{InternalHtmlColors.Control}
-    {{
-        color: #C586C0;
-    }}
-
-    .{InternalHtmlColors.InternalError}
-    {{
-        color: #FF0D0D;
-    }}
-
-    .{InternalHtmlColors.Comment}
-    {{
-        color: #6A9955;
-    }} 
-
-    .{InternalHtmlColors.Preprocessor}
-    {{
-        color: #808080;
-    }}
-
-    .{InternalHtmlColors.PreprocessorText}
-    {{
-        color: #a4a4a4;
-    }}
-
-    .{InternalHtmlColors.Struct}
-    {{
-        color: #86C691;
-    }}
-    ";
-
-    public const string LineNumbersCSS =
-    @$"
-    table
-    {{
-        white-space: pre;
-    }}
-
-    .line_no::before
-    {{
-        content: attr(line_no);
-        color: white;
-    }}   
-
-    .code_column
-    {{
-        padding-left: 5px;
-        color: #dfdfdf;
-    }}
-    ";
 }
