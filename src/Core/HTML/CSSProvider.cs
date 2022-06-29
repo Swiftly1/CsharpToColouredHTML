@@ -4,40 +4,46 @@ namespace CsharpToColouredHTML.Core
 {
     internal class CSSProvider
     {
-        private static string DEFAULT_CSS = string.Empty;
+        private static string DEFAULT_CSS_COLORS = string.Empty;
         private string? UserProvidedCSS;
+        private string _MostCommonColourValue = string.Empty;
 
         public CSSProvider(string? userProvidedCSS)
         {
             UserProvidedCSS = userProvidedCSS;
 
             // Generate CSS from ColorsMap at first run
-            if (string.IsNullOrEmpty(DEFAULT_CSS))
-                DEFAULT_CSS = GenerateDefaultCSS();
+            if (string.IsNullOrEmpty(DEFAULT_CSS_COLORS))
+                DEFAULT_CSS_COLORS = GenerateDefaultCSSColors();
         }
+
         public string GetMappedColour(string s) => ColorsMap[s];
 
-        public string GetCSS(bool addLineNumber)
+        public string GetCSS(bool addLineNumber, string mostCommonColourValue)
         {
+            _MostCommonColourValue = mostCommonColourValue;
+
             if (UserProvidedCSS != null)
             {
                 return UserProvidedCSS;
             }
 
+            var background = ApplyMostCommonColourToTemplateCSS(Background_CSS_Template, _MostCommonColourValue);
             var _sb = new StringBuilder();
             _sb.AppendLine("<style>");
-            _sb.AppendLine(new string(DEFAULT_CSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
+            _sb.Append(background);
+            _sb.AppendLine(DEFAULT_CSS_COLORS);
 
             if (addLineNumber)
             {
-                _sb.AppendLine(new string(LineNumbersCSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
+                _sb.AppendLine(ApplyMostCommonColourToTemplateCSS(LineNumbers_CSS_Template, _MostCommonColourValue));
             }
 
             _sb.AppendLine("</style>");
-            return _sb.ToString();
+            return new string(_sb.ToString().Where(x => !char.IsWhiteSpace(x)).ToArray());
         }
 
-        private string GenerateDefaultCSS()
+        private string GenerateDefaultCSSColors()
         {
             var template =
             @".{0}
@@ -46,14 +52,17 @@ namespace CsharpToColouredHTML.Core
             }}";
 
             var sb = new StringBuilder();
-            sb.Append(BACKGROUND_CSS);
-
             foreach (var entry in ColorsMap)
                 sb.Append(string.Format(template, entry.Key, entry.Value));
 
             sb.AppendLine();
 
             return sb.ToString();
+        }
+
+        private string ApplyMostCommonColourToTemplateCSS(string template, string colour_value)
+        {
+            return template.Replace("_PLACEHOLDER_", colour_value);
         }
 
         private Dictionary<string, string> ColorsMap = new Dictionary<string, string>
@@ -89,16 +98,16 @@ namespace CsharpToColouredHTML.Core
             { InternalHtmlColors.ParameterName, "#9CDCFE" },
         };
 
-        private const string BACKGROUND_CSS =
+        private const string Background_CSS_Template =
         $@".{InternalHtmlColors.Background}
         {{
             font-family: monaco,Consolas,Lucida Console,monospace; 
             background-color: #1E1E1E;
             overflow:scroll;
-            color: #dfdfdf;
+            color: _PLACEHOLDER_;
         }}";
 
-        private const string LineNumbersCSS =
+        private const string LineNumbers_CSS_Template =
         @$"
         table
         {{
@@ -114,7 +123,7 @@ namespace CsharpToColouredHTML.Core
         .code_column
         {{
             padding-left: 5px;
-            color: #dfdfdf;
+            color: _PLACEHOLDER_;
         }}
         ";
     }

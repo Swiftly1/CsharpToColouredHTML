@@ -49,6 +49,8 @@ public class HTMLEmitter : IEmitter
 
     private int _LineCounter = 0;
 
+    private string _MostCommonColourValue = string.Empty;
+
     // Public Stuff:
 
     public string Text { get; private set; }
@@ -153,14 +155,14 @@ public class HTMLEmitter : IEmitter
         if (Optimize)
         {
             var mostCommonColourName = list.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
-            var mostCommonColourValue = _cssHelper.GetMappedColour(mostCommonColourName);
+            _MostCommonColourValue = _cssHelper.GetMappedColour(mostCommonColourName);
 
             for (int i = 0; i < list.Count; i++)
             {
                 var current = list[i];
 
                 var mapped_colour = _cssHelper.GetMappedColour(current.Colour);
-                if (mapped_colour == mostCommonColourValue)
+                if (mapped_colour == _MostCommonColourValue)
                     list[i].UsesMostCommonColour = true;
 
                 if (i + 1 >= list.Count)
@@ -185,7 +187,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber));
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, _MostCommonColourValue));
         sb.AppendLine(@"<pre class=""background"">");
 
         for (int i = 0; i < nodes.Count; i++)
@@ -209,7 +211,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber));
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, _MostCommonColourValue));
         sb.AppendLine(@"<pre class=""background"">");
 
         var isOpened = false;
