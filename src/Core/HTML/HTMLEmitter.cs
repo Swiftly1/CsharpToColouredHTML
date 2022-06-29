@@ -15,14 +15,14 @@ public class HTMLEmitter : IEmitter
     public HTMLEmitter()
     {
         var settings = new HTMLEmitterSettings();
-        _cssHelper = new CSSHelper(settings.UserProvidedCSS);
+        _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
     }
 
     public HTMLEmitter(HTMLEmitterSettings settings)
     {
-        _cssHelper = new CSSHelper(settings.UserProvidedCSS);
+        _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
     }
@@ -35,7 +35,7 @@ public class HTMLEmitter : IEmitter
         return escaped;
     }
 
-    private readonly CSSHelper _cssHelper;
+    private readonly CSSProvider _cssHelper;
 
     private readonly bool AddLineNumber = true;
 
@@ -152,15 +152,15 @@ public class HTMLEmitter : IEmitter
         // Optimizer - Merges Nodes with the same colour
         if (Optimize)
         {
-            var mostCommonColour = list.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
+            var mostCommonColourName = list.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
+            var mostCommonColourValue = _cssHelper.GetMappedColour(mostCommonColourName);
 
             for (int i = 0; i < list.Count; i++)
             {
                 var current = list[i];
 
-                // TODO: For now, it works only for White colour because I'd need to add support in CSS code gen 
-                // mostCommonColour == InternalHtmlColors.White
-                if (mostCommonColour == InternalHtmlColors.White && current.Colour == mostCommonColour)
+                var mapped_colour = _cssHelper.GetMappedColour(current.Colour);
+                if (mapped_colour == mostCommonColourValue)
                     list[i].UsesMostCommonColour = true;
 
                 if (i + 1 >= list.Count)
@@ -287,15 +287,15 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.Namespace;
         }
         else if (node.ClassificationType == ClassificationTypeNames.EnumName)
         {
-            colour = InternalHtmlColors.Interface;
+            colour = InternalHtmlColors.EnumName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.EnumMemberName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.EnumMemberName;
         }
         else if (BuiltInTypes.Contains(node.Text))
         {
@@ -321,7 +321,7 @@ public class HTMLEmitter : IEmitter
             }
             else
             {
-                colour = InternalHtmlColors.White;
+                colour = InternalHtmlColors.Identifier;
             }
         }
         else if (node.ClassificationType == ClassificationTypeNames.Keyword)
@@ -344,7 +344,7 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.LocalName)
         {
-            colour = InternalHtmlColors.Blue;
+            colour = InternalHtmlColors.LocalName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.MethodName)
         {
@@ -372,27 +372,27 @@ public class HTMLEmitter : IEmitter
                 _IsNew = false;
             }
 
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.Punctuation;
         }
         else if (node.ClassificationType == ClassificationTypeNames.Operator)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.Operator;
         }
         else if (node.ClassificationType == ClassificationTypeNames.PropertyName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.PropertyName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.ParameterName)
         {
-            colour = InternalHtmlColors.Blue;
+            colour = InternalHtmlColors.ParameterName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.FieldName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.FieldName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.NumericLiteral)
         {
-            colour = InternalHtmlColors.Interface;
+            colour = InternalHtmlColors.NumericLiteral;
         }
         else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
         {
@@ -400,15 +400,15 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.LabelName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.LabelName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.OperatorOverloaded)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.OperatorOverloaded;
         }
         else if (node.ClassificationType == ClassificationTypeNames.RecordStructName)
         {
-            colour = InternalHtmlColors.Interface;
+            colour = InternalHtmlColors.RecordStructName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.RecordClassName)
         {
@@ -416,7 +416,7 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.TypeParameterName)
         {
-            colour = InternalHtmlColors.Interface;
+            colour = InternalHtmlColors.TypeParameterName;
         }
         else if (node.ClassificationType.Contains("xml doc comment"))
         {
@@ -424,11 +424,11 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.ExtensionMethodName)
         {
-            colour = InternalHtmlColors.Method;
+            colour = InternalHtmlColors.ExtensionMethodName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.ConstantName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.ConstantName;
         }
 
         return colour;

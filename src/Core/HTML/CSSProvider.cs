@@ -2,12 +2,12 @@
 
 namespace CsharpToColouredHTML.Core
 {
-    internal class CSSHelper
+    internal class CSSProvider
     {
         private static string DEFAULT_CSS = string.Empty;
         private string? UserProvidedCSS;
 
-        public CSSHelper(string? userProvidedCSS)
+        public CSSProvider(string? userProvidedCSS)
         {
             UserProvidedCSS = userProvidedCSS;
 
@@ -15,6 +15,7 @@ namespace CsharpToColouredHTML.Core
             if (string.IsNullOrEmpty(DEFAULT_CSS))
                 DEFAULT_CSS = GenerateDefaultCSS();
         }
+        public string GetMappedColour(string s) => ColorsMap[s];
 
         public string GetCSS(bool addLineNumber)
         {
@@ -61,18 +62,34 @@ namespace CsharpToColouredHTML.Core
             { InternalHtmlColors.Method, "#DCDCAA" },
             { InternalHtmlColors.Class, "#4EC9B0" },
             { InternalHtmlColors.Keyword, "#569cd6" },
-            { InternalHtmlColors.Blue, "#9CDCFE" },
             { InternalHtmlColors.String, "#ce9178" },
             { InternalHtmlColors.Interface, "#b8d7a3" },
+            { InternalHtmlColors.EnumName, "#b8d7a3" },
+            { InternalHtmlColors.NumericLiteral, "#b8d7a3" },
+            { InternalHtmlColors.RecordStructName, "#b8d7a3" },
+            { InternalHtmlColors.TypeParameterName, "#b8d7a3" },
+            { InternalHtmlColors.ExtensionMethodName, "#b8d7a3" },
             { InternalHtmlColors.Control, "#C586C0" },
             { InternalHtmlColors.InternalError, "#FF0D0D" },
             { InternalHtmlColors.Comment, "#6A9955" },
             { InternalHtmlColors.Preprocessor, "#808080" },
             { InternalHtmlColors.PreprocessorText, "#a4a4a4" },
             { InternalHtmlColors.Struct, "#86C691" },
+            { InternalHtmlColors.Namespace, "#dfdfdf" },
+            { InternalHtmlColors.EnumMemberName, "#dfdfdf" },
+            { InternalHtmlColors.Identifier, "#dfdfdf" },
+            { InternalHtmlColors.Punctuation, "#dfdfdf" },
+            { InternalHtmlColors.Operator, "#dfdfdf" },
+            { InternalHtmlColors.PropertyName, "#dfdfdf" },
+            { InternalHtmlColors.FieldName, "#dfdfdf" },
+            { InternalHtmlColors.LabelName, "#dfdfdf" },
+            { InternalHtmlColors.OperatorOverloaded, "#dfdfdf" },
+            { InternalHtmlColors.ConstantName, "#dfdfdf" },
+            { InternalHtmlColors.LocalName, "#9CDCFE" },
+            { InternalHtmlColors.ParameterName, "#9CDCFE" },
         };
 
-        public const string BACKGROUND_CSS =
+        private const string BACKGROUND_CSS =
         $@".{InternalHtmlColors.Background}
         {{
             font-family: monaco,Consolas,Lucida Console,monospace; 
@@ -81,7 +98,7 @@ namespace CsharpToColouredHTML.Core
             color: #dfdfdf;
         }}";
 
-        public const string LineNumbersCSS =
+        private const string LineNumbersCSS =
         @$"
         table
         {{
