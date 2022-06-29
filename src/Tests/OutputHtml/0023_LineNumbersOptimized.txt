@@ -2,5 +2,5 @@
 <pre class="background">
 <table>
 <tbody>
-<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="class">Test</span> <span class="blue">test</span> = <span class="keyword">new</span> <span class="class">Test</span>();</td></tr></tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="class">Test</span> <span class="localName">test</span> = <span class="keyword">new</span> <span class="class">Test</span>();</td></tr></tbody>
 </table></pre>
