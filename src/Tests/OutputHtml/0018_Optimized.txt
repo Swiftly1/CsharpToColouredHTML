@@ -1,4 +1,4 @@
 
 <pre class="background">
-<span class="preprocessor">#region</span> <span class="preprocessor_text">Dynamic</span>
-<span class="preprocessor">#endregion</span> <span class="preprocessor_text">Dynamic</span></pre>
+#region <span class="preprocessorText">Dynamic</span>
+#endregion <span class="preprocessorText">Dynamic</span></pre>
