@@ -15,12 +15,12 @@
 
     <span class="keyword">public</span> <span class="interface">IActionResult</span> <span class="method">Index</span>()
     {
-        <span class="keyword">string</span> <span class="blue">contents</span>;
-        <span class="keyword">using</span> (<span class="keyword">var</span> <span class="blue">wc</span> = <span class="keyword">new</span> System.Net.<span class="class">WebClient</span>())
-            <span class="blue">contents</span> = <span class="blue">wc</span>.<span class="method">DownloadString</span>(<span class="string">&quot;https://raw.githubusercontent.com/asd&quot;</span>);
+        <span class="keyword">string</span> <span class="localName">contents</span>;
+        <span class="keyword">using</span> (<span class="keyword">var</span> <span class="localName">wc</span> = <span class="keyword">new</span> System.Net.<span class="class">WebClient</span>())
+            <span class="localName">contents</span> = <span class="localName">wc</span>.<span class="method">DownloadString</span>(<span class="string">&quot;https://raw.githubusercontent.com/asd&quot;</span>);
 
-        <span class="keyword">var</span> <span class="blue">test</span> = <span class="keyword">new</span> <span class="class">Markdown</span>(<span class="keyword">new</span> <span class="class">MarkdownOptions</span> { });
-        <span class="keyword">var</span> <span class="blue">html</span> = <span class="blue">test</span>.<span class="method">Transform</span>(<span class="blue">contents</span>);
-        <span class="control">return</span> <span class="method">View</span>(<span class="string">&quot;Index&quot;</span>, <span class="class">JsonConvert</span>.<span class="method">SerializeObject</span>(<span class="blue">html</span>));
+        <span class="keyword">var</span> <span class="localName">test</span> = <span class="keyword">new</span> <span class="class">Markdown</span>(<span class="keyword">new</span> <span class="class">MarkdownOptions</span> { });
+        <span class="keyword">var</span> <span class="localName">html</span> = <span class="localName">test</span>.<span class="method">Transform</span>(<span class="localName">contents</span>);
+        <span class="control">return</span> <span class="method">View</span>(<span class="string">&quot;Index&quot;</span>, <span class="class">JsonConvert</span>.<span class="method">SerializeObject</span>(<span class="localName">html</span>));
     }
 }</pre>

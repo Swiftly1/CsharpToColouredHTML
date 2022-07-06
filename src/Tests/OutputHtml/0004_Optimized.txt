@@ -1,5 +1,5 @@
 
 <pre class="background">
-<span class="keyword">private</span> <span class="class">List</span>&lt;<span class="class">Node</span>&gt; <span class="method">GenerateInternalRepresentation</span>(<span class="keyword">string</span> <span class="blue">code</span>)
+<span class="keyword">private</span> <span class="class">List</span>&lt;<span class="class">Node</span>&gt; <span class="method">GenerateInternalRepresentation</span>(<span class="keyword">string</span> <span class="parameter">code</span>)
 {
 }</pre>
