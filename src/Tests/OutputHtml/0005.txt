@@ -1,10 +1,10 @@
 
 <pre class="background">
-<span class="control">if</span> <span class="punctuation">(</span><span class="class">node</span><span class="operator">.</span><span class="identifier">ClassificationType</span> <span class="operator">==</span> <span class="class">ClassificationTypeNames</span><span class="operator">.</span><span class="identifier">ClassName</span><span class="punctuation">)</span>
+<span class="control">if</span> <span class="punctuation">(</span><span class="localName">node</span><span class="operator">.</span><span class="identifier">ClassificationType</span> <span class="operator">==</span> <span class="class">ClassificationTypeNames</span><span class="operator">.</span><span class="identifier">ClassName</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
     <span class="class">Console</span><span class="operator">.</span><span class="identifier">ForegroundColor</span> <span class="operator">=</span> <span class="class">ConsoleColor</span><span class="operator">.</span><span class="identifier">Red</span><span class="punctuation">;</span>
 <span class="punctuation">}</span>
-<span class="control">else</span> <span class="control">if</span> <span class="punctuation">(</span><span class="class">node</span><span class="operator">.</span><span class="identifier">ClassificationType</span> <span class="operator">==</span> <span class="class">ClassificationTypeNames</span><span class="operator">.</span><span class="identifier">NamespaceName</span><span class="punctuation">)</span>
+<span class="control">else</span> <span class="control">if</span> <span class="punctuation">(</span><span class="localName">node</span><span class="operator">.</span><span class="identifier">ClassificationType</span> <span class="operator">==</span> <span class="class">ClassificationTypeNames</span><span class="operator">.</span><span class="identifier">NamespaceName</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
     <span class="class">Console</span><span class="operator">.</span><span class="identifier">ForegroundColor</span> <span class="operator">=</span> <span class="class">ConsoleColor</span><span class="operator">.</span><span class="identifier">Green</span><span class="punctuation">;</span>
 <span class="punctuation">}</span></pre>

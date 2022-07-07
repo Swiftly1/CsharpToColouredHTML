@@ -315,7 +315,14 @@ public class HTMLEmitter : IEmitter
             }
             else if (IsClass(currentIndex, nodes))
             {
-                colour = InternalHtmlColors.Class;
+                if (node.Text.Length > 0 && char.IsLower(node.Text[0]))
+                {
+                    colour = InternalHtmlColors.LocalName;
+                }
+                else
+                {
+                    colour = InternalHtmlColors.Class;
+                }
             }
             else if (IsStruct(currentIndex, nodes))
             {
@@ -595,6 +602,7 @@ public class HTMLEmitter : IEmitter
 
         var node = nodes[currentIndex];
         bool isPopularClass = false;
+
         if (canGoBehind && nodes[currentIndex - 1].Text == ":")
         {
             return true;

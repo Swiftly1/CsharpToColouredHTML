@@ -1,4 +1,4 @@
 
 <pre class="background">
-  <span class="control">if</span> (<span class="class">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.VerbatimStringLiteral &amp;&amp;
-                    <span class="class">node</span>.<span class="class">Text</span>.<span class="method">Contains</span>(<span class="class">Environment</span>.NewLine))</pre>
+  <span class="control">if</span> (<span class="localName">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.VerbatimStringLiteral &amp;&amp;
+                    <span class="localName">node</span>.<span class="class">Text</span>.<span class="method">Contains</span>(<span class="class">Environment</span>.NewLine))</pre>

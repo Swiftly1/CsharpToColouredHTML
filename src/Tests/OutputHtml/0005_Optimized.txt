@@ -1,10 +1,10 @@
 
 <pre class="background">
-<span class="control">if</span> (<span class="class">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ClassName)
+<span class="control">if</span> (<span class="localName">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ClassName)
 {
     <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Red;
 }
-<span class="control">else if</span> (<span class="class">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.NamespaceName)
+<span class="control">else if</span> (<span class="localName">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.NamespaceName)
 {
     <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Green;
 }</pre>
