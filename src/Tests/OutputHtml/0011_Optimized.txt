@@ -6,9 +6,9 @@
 
 <span class="keyword">namespace</span> DictionaryList
 {
-    <span class="keyword">public class</span> <span class="class">DictionaryList</span>&lt;<span class="interface">T</span>, <span class="interface">U</span>&gt;
+    <span class="keyword">public class</span> <span class="class">DictionaryList</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt;
     {
-        <span class="keyword">private readonly</span> <span class="class">Node</span>&lt;<span class="interface">T</span>, <span class="interface">U</span>&gt; Root = <span class="keyword">new</span> <span class="class">Node</span>&lt;<span class="interface">T</span>, <span class="interface">U</span>&gt;(<span class="keyword">default</span>!, <span class="keyword">null</span>) { IsRoot = <span class="keyword">true</span> };
+        <span class="keyword">private readonly</span> <span class="class">Node</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt; Root = <span class="keyword">new</span> <span class="class">Node</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt;(<span class="keyword">default</span>!, <span class="keyword">null</span>) { IsRoot = <span class="keyword">true</span> };
 
         <span class="comment">/// &lt;summary&gt;</span>
         <span class="comment">/// This parameter indicates whether key contains NULLs e.g [UserA, null, new User()].</span>
@@ -19,104 +19,104 @@
         <span class="comment">/// &lt;summary&gt;</span>
         <span class="comment">///</span> 
         <span class="comment">/// &lt;/summary&gt;</span>
-        <span class="comment">/// &lt;param name=&quot;</span><span class="blue">allow_keys_with_nulls</span><span class="comment">&quot;&gt;This parameter indicates whether key contains NULLs e.g [UserA, null, new User()].</span>
+        <span class="comment">/// &lt;param name=&quot;</span><span class="parameter">allow_keys_with_nulls</span><span class="comment">&quot;&gt;This parameter indicates whether key contains NULLs e.g [UserA, null, new User()].</span>
         <span class="comment">/// Allowing NULLs within keys has some performance - speed and memory penalty, that&#39;s why it is disabled by default.&lt;/param&gt;</span>
-        <span class="keyword">public</span> <span class="class">DictionaryList</span>(<span class="keyword">bool</span> <span class="blue">allow_keys_with_nulls</span> = <span class="keyword">false</span>)
+        <span class="keyword">public</span> <span class="class">DictionaryList</span>(<span class="keyword">bool</span> <span class="parameter">allow_keys_with_nulls</span> = <span class="keyword">false</span>)
         {
-            AllowNULLsInKeys = <span class="blue">allow_keys_with_nulls</span>;
+            AllowNULLsInKeys = <span class="parameter">allow_keys_with_nulls</span>;
         }
 
-        <span class="keyword">public void</span> <span class="method">Add</span>(<span class="class">List</span>&lt;<span class="interface">T</span>&gt; <span class="blue">data</span>, <span class="interface">U</span> <span class="blue">value</span>)
+        <span class="keyword">public void</span> <span class="method">Add</span>(<span class="class">List</span>&lt;<span class="typeParam">T</span>&gt; <span class="parameter">data</span>, <span class="typeParam">U</span> <span class="parameter">value</span>)
         {
-            <span class="keyword">var</span> <span class="blue">current</span> = Root;
+            <span class="keyword">var</span> <span class="localName">current</span> = Root;
 
-            <span class="control">for</span> (<span class="keyword">int</span> <span class="blue">i</span> = <span class="interface">0</span>; <span class="blue">i</span> &lt; <span class="blue">data</span>.Count; <span class="blue">i</span>++)
+            <span class="control">for</span> (<span class="keyword">int</span> <span class="localName">i</span> = <span class="numericLiteral">0</span>; <span class="localName">i</span> &lt; <span class="parameter">data</span>.Count; <span class="localName">i</span>++)
             {
-                <span class="interface">T</span> <span class="blue">item</span> = <span class="blue">data</span>[<span class="blue">i</span>];
+                <span class="typeParam">T</span> <span class="localName">item</span> = <span class="parameter">data</span>[<span class="localName">i</span>];
 
-                <span class="control">if</span> (!AllowNULLsInKeys &amp;&amp; <span class="blue">item</span> == <span class="keyword">null</span>)
-                    <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span>(<span class="string">$&quot;Element at index &#39;</span>{<span class="blue">i</span>}<span class="string">&#39; is NULL. It cannot be used as a Key&#39;s element. &quot;</span> +
+                <span class="control">if</span> (!AllowNULLsInKeys &amp;&amp; <span class="localName">item</span> == <span class="keyword">null</span>)
+                    <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span>(<span class="string">$&quot;Element at index &#39;</span>{<span class="localName">i</span>}<span class="string">&#39; is NULL. It cannot be used as a Key&#39;s element. &quot;</span> +
                         <span class="string">$&quot;If you want to use NULLs inside Keys, then either use constructor &#39;DictionaryList(true)&#39; or set property &#39;AllowNULLsInKeys&#39; to true.&quot;</span>);
 
-                <span class="class">Node</span>&lt;<span class="interface">T</span>, <span class="interface">U</span>&gt; <span class="blue">found</span> = <span class="method">FindNode</span>(<span class="blue">current</span>, <span class="blue">item</span>);
+                <span class="class">Node</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt; <span class="localName">found</span> = <span class="method">FindNode</span>(<span class="localName">current</span>, <span class="localName">item</span>);
 
-                <span class="keyword">var</span> <span class="blue">isLast</span> = <span class="blue">i</span> == <span class="blue">data</span>.Count - <span class="interface">1</span>;
+                <span class="keyword">var</span> <span class="localName">isLast</span> = <span class="localName">i</span> == <span class="parameter">data</span>.Count - <span class="numericLiteral">1</span>;
 
-                <span class="control">if</span> (<span class="blue">found</span> != <span class="keyword">null</span>)
+                <span class="control">if</span> (<span class="localName">found</span> != <span class="keyword">null</span>)
                 {
-                    <span class="control">if</span> (<span class="blue">isLast</span>)
+                    <span class="control">if</span> (<span class="localName">isLast</span>)
                     {
-                        <span class="control">if</span> (<span class="blue">found</span>.StoredValue <span class="keyword">is null</span>)
+                        <span class="control">if</span> (<span class="localName">found</span>.StoredValue <span class="keyword">is null</span>)
                         {
-                            <span class="blue">found</span>.StoredValue = <span class="keyword">new</span> <span class="class">ValueWrapper</span>&lt;<span class="interface">U</span>&gt;(<span class="keyword">true</span>, <span class="blue">value</span>);
+                            <span class="localName">found</span>.StoredValue = <span class="keyword">new</span> <span class="class">ValueWrapper</span>&lt;<span class="typeParam">U</span>&gt;(<span class="keyword">true</span>, <span class="parameter">value</span>);
                         }
                         <span class="control">else</span>
                         {
-                            <span class="control">if</span> (<span class="blue">found</span>.StoredValue.HasValue &amp;&amp; !<span class="blue">found</span>.StoredValue.Value!.<span class="method">Equals</span>(<span class="blue">value</span>))
+                            <span class="control">if</span> (<span class="localName">found</span>.StoredValue.HasValue &amp;&amp; !<span class="localName">found</span>.StoredValue.Value!.<span class="method">Equals</span>(<span class="parameter">value</span>))
                             {
-                                <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span>(<span class="string">$&quot;Value: &#39;</span>{<span class="blue">value</span>}<span class="string">&#39; cannot be saved because there&#39;s already value:&quot;</span> +
-                                    <span class="string">$&quot;</span> {<span class="blue">found</span>.StoredValue.Value}<span class="string">. Key:</span> {<span class="keyword">string</span>.<span class="method">Join</span>(<span class="string">&quot;,&quot;</span>, <span class="blue">data</span>)}<span class="string">&quot;</span>);
+                                <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span>(<span class="string">$&quot;Value: &#39;</span>{<span class="parameter">value</span>}<span class="string">&#39; cannot be saved because there&#39;s already value:&quot;</span> +
+                                    <span class="string">$&quot;</span> {<span class="localName">found</span>.StoredValue.Value}<span class="string">. Key:</span> {<span class="keyword">string</span>.<span class="method">Join</span>(<span class="string">&quot;,&quot;</span>, <span class="parameter">data</span>)}<span class="string">&quot;</span>);
                             }
                         }
                     }
 
-                    <span class="blue">current</span> = <span class="blue">found</span>;
+                    <span class="localName">current</span> = <span class="localName">found</span>;
                 }
                 <span class="control">else</span>
                 {
-                    <span class="keyword">var</span> <span class="blue">wrapper2</span> = <span class="keyword">new</span> <span class="class">ValueWrapper</span>&lt;<span class="interface">U</span>&gt;(<span class="blue">isLast</span>, <span class="blue">value</span>);
-                    <span class="blue">current</span> = <span class="blue">current</span>.<span class="method">Add</span>(<span class="blue">item</span>, <span class="blue">wrapper2</span>);
+                    <span class="keyword">var</span> <span class="localName">wrapper2</span> = <span class="keyword">new</span> <span class="class">ValueWrapper</span>&lt;<span class="typeParam">U</span>&gt;(<span class="localName">isLast</span>, <span class="parameter">value</span>);
+                    <span class="localName">current</span> = <span class="localName">current</span>.<span class="method">Add</span>(<span class="localName">item</span>, <span class="localName">wrapper2</span>);
                 }
             }
         }
 
-        [<span class="class">MethodImpl</span>(<span class="interface">MethodImplOptions</span>.AggressiveInlining)]
-        <span class="keyword">private</span> <span class="class">Node</span>&lt;<span class="interface">T</span>, <span class="interface">U</span>&gt; <span class="method">FindNode</span>(<span class="class">Node</span>&lt;<span class="interface">T</span>, <span class="interface">U</span>&gt; <span class="blue">current</span>, <span class="interface">T</span> <span class="blue">item</span>)
+        [<span class="class">MethodImpl</span>(<span class="enumName">MethodImplOptions</span>.AggressiveInlining)]
+        <span class="keyword">private</span> <span class="class">Node</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt; <span class="method">FindNode</span>(<span class="class">Node</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt; <span class="parameter">current</span>, <span class="typeParam">T</span> <span class="parameter">item</span>)
         {
             <span class="control">if</span> (AllowNULLsInKeys)
             {
-                <span class="control">for</span> (<span class="keyword">int</span> <span class="blue">i</span> = <span class="interface">0</span>; <span class="blue">i</span> &lt; <span class="blue">current</span>.Children.Count; <span class="blue">i</span>++)
+                <span class="control">for</span> (<span class="keyword">int</span> <span class="localName">i</span> = <span class="numericLiteral">0</span>; <span class="localName">i</span> &lt; <span class="parameter">current</span>.Children.Count; <span class="localName">i</span>++)
                 {
-                    <span class="control">if</span> (<span class="method">Equals</span>(<span class="blue">current</span>.Children[<span class="blue">i</span>].ArrayValue, <span class="blue">item</span>))
-                        <span class="control">return</span> <span class="blue">current</span>.Children[<span class="blue">i</span>];
+                    <span class="control">if</span> (<span class="method">Equals</span>(<span class="parameter">current</span>.Children[<span class="localName">i</span>].ArrayValue, <span class="parameter">item</span>))
+                        <span class="control">return</span> <span class="parameter">current</span>.Children[<span class="localName">i</span>];
                 }
             }
             <span class="control">else</span>
             {
-                <span class="control">for</span> (<span class="keyword">int</span> <span class="blue">i</span> = <span class="interface">0</span>; <span class="blue">i</span> &lt; <span class="blue">current</span>.Children.Count; <span class="blue">i</span>++)
+                <span class="control">for</span> (<span class="keyword">int</span> <span class="localName">i</span> = <span class="numericLiteral">0</span>; <span class="localName">i</span> &lt; <span class="parameter">current</span>.Children.Count; <span class="localName">i</span>++)
                 {
-                    <span class="control">if</span> (<span class="blue">current</span>.Children[<span class="blue">i</span>].ArrayValue!.<span class="method">Equals</span>(<span class="blue">item</span>))
-                        <span class="control">return</span> <span class="blue">current</span>.Children[<span class="blue">i</span>];
+                    <span class="control">if</span> (<span class="parameter">current</span>.Children[<span class="localName">i</span>].ArrayValue!.<span class="method">Equals</span>(<span class="parameter">item</span>))
+                        <span class="control">return</span> <span class="parameter">current</span>.Children[<span class="localName">i</span>];
                 }
             }
 
             <span class="control">return</span> <span class="keyword">null</span>;
         }
 
-        <span class="keyword">public bool</span> <span class="method">TryGet</span>(<span class="class">List</span>&lt;<span class="interface">T</span>&gt; <span class="blue">data</span>, <span class="keyword">out</span> <span class="interface">U</span>? <span class="blue">value</span>)
+        <span class="keyword">public bool</span> <span class="method">TryGet</span>(<span class="class">List</span>&lt;<span class="typeParam">T</span>&gt; <span class="parameter">data</span>, <span class="keyword">out</span> <span class="typeParam">U</span>? <span class="parameter">value</span>)
         {
-            <span class="keyword">var</span> <span class="blue">current</span> = Root;
+            <span class="keyword">var</span> <span class="localName">current</span> = Root;
 
-            <span class="control">for</span> (<span class="keyword">int</span> <span class="blue">i</span> = <span class="interface">0</span>; <span class="blue">i</span> &lt; <span class="blue">data</span>.Count; <span class="blue">i</span>++)
+            <span class="control">for</span> (<span class="keyword">int</span> <span class="localName">i</span> = <span class="numericLiteral">0</span>; <span class="localName">i</span> &lt; <span class="parameter">data</span>.Count; <span class="localName">i</span>++)
             {
-                <span class="interface">T</span> <span class="blue">item</span> = <span class="blue">data</span>[<span class="blue">i</span>];
+                <span class="typeParam">T</span> <span class="localName">item</span> = <span class="parameter">data</span>[<span class="localName">i</span>];
 
-                <span class="class">Node</span>&lt;<span class="interface">T</span>, <span class="interface">U</span>&gt; <span class="blue">found</span> = <span class="method">FindNode</span>(<span class="blue">current</span>, <span class="blue">item</span>);
+                <span class="class">Node</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt; <span class="localName">found</span> = <span class="method">FindNode</span>(<span class="localName">current</span>, <span class="localName">item</span>);
 
-                <span class="keyword">var</span> <span class="blue">isLast</span> = <span class="blue">i</span> == <span class="blue">data</span>.Count - <span class="interface">1</span>;
+                <span class="keyword">var</span> <span class="localName">isLast</span> = <span class="localName">i</span> == <span class="parameter">data</span>.Count - <span class="numericLiteral">1</span>;
 
-                <span class="control">if</span> (<span class="blue">found</span> != <span class="keyword">null</span>)
+                <span class="control">if</span> (<span class="localName">found</span> != <span class="keyword">null</span>)
                 {
-                    <span class="control">if</span> (<span class="blue">isLast</span>)
+                    <span class="control">if</span> (<span class="localName">isLast</span>)
                     {
-                        <span class="control">if</span> (<span class="blue">found</span>.StoredValue == <span class="keyword">null</span> || !<span class="blue">found</span>.StoredValue.HasValue)
+                        <span class="control">if</span> (<span class="localName">found</span>.StoredValue == <span class="keyword">null</span> || !<span class="localName">found</span>.StoredValue.HasValue)
                             <span class="control">goto</span> Fail;
 
-                        <span class="blue">value</span> = <span class="blue">found</span>.StoredValue.Value;
+                        <span class="parameter">value</span> = <span class="localName">found</span>.StoredValue.Value;
                         <span class="control">return</span> <span class="keyword">true</span>;
                     }
 
-                    <span class="blue">current</span> = <span class="blue">found</span>;
+                    <span class="localName">current</span> = <span class="localName">found</span>;
                 }
                 <span class="control">else</span>
                 {
@@ -125,7 +125,7 @@
             }
 
             Fail:
-            <span class="blue">value</span> = <span class="keyword">default</span>;
+            <span class="parameter">value</span> = <span class="keyword">default</span>;
             <span class="control">return</span> <span class="keyword">false</span>;
         }
     }

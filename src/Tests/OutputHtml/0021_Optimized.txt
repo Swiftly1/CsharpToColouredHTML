@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="keyword">internal class</span> <span class="class">TestService</span> : <span class="interface">ITestService</span>
-{
-    <span class="keyword">private readonly</span> <span class="interface">ITest</span> _test;
-}</pre>
+internal class <span class="class">TestService</span> <span class="punctuation">:</span> <span class="interface">ITestService</span>
+<span class="punctuation">{</span>
+    private readonly <span class="interface">ITest</span> <span class="fieldName">_test</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></pre>

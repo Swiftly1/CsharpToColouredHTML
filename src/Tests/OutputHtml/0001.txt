@@ -1,26 +1,26 @@
 
 <pre class="background">
-<span class="keyword">using</span> <span class="white">MarkdownSharp</span><span class="white">;</span>
-<span class="keyword">using</span> <span class="white">Microsoft</span><span class="white">.</span><span class="white">AspNetCore</span><span class="white">.</span><span class="white">Mvc</span><span class="white">;</span>
-<span class="keyword">using</span> <span class="white">Newtonsoft</span><span class="white">.</span><span class="white">Json</span><span class="white">;</span>
+<span class="keyword">using</span> <span class="identifier">MarkdownSharp</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">Microsoft</span><span class="operator">.</span><span class="identifier">AspNetCore</span><span class="operator">.</span><span class="identifier">Mvc</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="identifier">Newtonsoft</span><span class="operator">.</span><span class="identifier">Json</span><span class="punctuation">;</span>
 
-<span class="keyword">namespace</span> <span class="white">Blog</span><span class="white">.</span><span class="white">Controllers</span><span class="white">;</span>
+<span class="keyword">namespace</span> <span class="namespace">Blog</span><span class="operator">.</span><span class="namespace">Controllers</span><span class="punctuation">;</span>
 
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">HomeController</span> <span class="white">:</span> <span class="class">Controller</span>
-<span class="white">{</span>
-    <span class="keyword">public</span> <span class="class">HomeController</span><span class="white">(</span><span class="white">)</span>
-    <span class="white">{</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">HomeController</span> <span class="punctuation">:</span> <span class="class">Controller</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="class">HomeController</span><span class="punctuation">(</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
 
-    <span class="white">}</span>
+    <span class="punctuation">}</span>
 
-    <span class="keyword">public</span> <span class="interface">IActionResult</span> <span class="method">Index</span><span class="white">(</span><span class="white">)</span>
-    <span class="white">{</span>
-        <span class="keyword">string</span> <span class="blue">contents</span><span class="white">;</span>
-        <span class="keyword">using</span> <span class="white">(</span><span class="keyword">var</span> <span class="blue">wc</span> <span class="white">=</span> <span class="keyword">new</span> <span class="white">System</span><span class="white">.</span><span class="white">Net</span><span class="white">.</span><span class="class">WebClient</span><span class="white">(</span><span class="white">)</span><span class="white">)</span>
-            <span class="blue">contents</span> <span class="white">=</span> <span class="blue">wc</span><span class="white">.</span><span class="method">DownloadString</span><span class="white">(</span><span class="string">&quot;https://raw.githubusercontent.com/asd&quot;</span><span class="white">)</span><span class="white">;</span>
+    <span class="keyword">public</span> <span class="interface">IActionResult</span> <span class="method">Index</span><span class="punctuation">(</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">string</span> <span class="localName">contents</span><span class="punctuation">;</span>
+        <span class="keyword">using</span> <span class="punctuation">(</span><span class="keyword">var</span> <span class="localName">wc</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Net</span><span class="operator">.</span><span class="class">WebClient</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
+            <span class="localName">contents</span> <span class="operator">=</span> <span class="localName">wc</span><span class="operator">.</span><span class="method">DownloadString</span><span class="punctuation">(</span><span class="string">&quot;https://raw.githubusercontent.com/asd&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
 
-        <span class="keyword">var</span> <span class="blue">test</span> <span class="white">=</span> <span class="keyword">new</span> <span class="class">Markdown</span><span class="white">(</span><span class="keyword">new</span> <span class="class">MarkdownOptions</span> <span class="white">{</span> <span class="white">}</span><span class="white">)</span><span class="white">;</span>
-        <span class="keyword">var</span> <span class="blue">html</span> <span class="white">=</span> <span class="blue">test</span><span class="white">.</span><span class="method">Transform</span><span class="white">(</span><span class="blue">contents</span><span class="white">)</span><span class="white">;</span>
-        <span class="control">return</span> <span class="method">View</span><span class="white">(</span><span class="string">&quot;Index&quot;</span><span class="white">,</span> <span class="class">JsonConvert</span><span class="white">.</span><span class="method">SerializeObject</span><span class="white">(</span><span class="blue">html</span><span class="white">)</span><span class="white">)</span><span class="white">;</span>
-    <span class="white">}</span>
-<span class="white">}</span></pre>
+        <span class="keyword">var</span> <span class="localName">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Markdown</span><span class="punctuation">(</span><span class="keyword">new</span> <span class="class">MarkdownOptions</span> <span class="punctuation">{</span> <span class="punctuation">}</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="keyword">var</span> <span class="localName">html</span> <span class="operator">=</span> <span class="localName">test</span><span class="operator">.</span><span class="method">Transform</span><span class="punctuation">(</span><span class="localName">contents</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="control">return</span> <span class="method">View</span><span class="punctuation">(</span><span class="string">&quot;Index&quot;</span><span class="punctuation">,</span> <span class="class">JsonConvert</span><span class="operator">.</span><span class="method">SerializeObject</span><span class="punctuation">(</span><span class="localName">html</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

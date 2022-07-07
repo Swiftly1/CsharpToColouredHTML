@@ -7,9 +7,9 @@
 
 <span class="keyword">public class</span> <span class="class">ConsoleEmitter</span> : <span class="interface">IEmitter</span>
 {
-    <span class="keyword">public</span> <span class="class">ConsoleEmitter</span>(<span class="keyword">bool</span> <span class="blue">addDiagnosticInfo</span> = <span class="keyword">false</span>)
+    <span class="keyword">public</span> <span class="class">ConsoleEmitter</span>(<span class="keyword">bool</span> <span class="parameter">addDiagnosticInfo</span> = <span class="keyword">false</span>)
     {
-        <span class="keyword">this</span>.addDiagnosticInfo = <span class="blue">addDiagnosticInfo</span>;
+        <span class="keyword">this</span>.addDiagnosticInfo = <span class="parameter">addDiagnosticInfo</span>;
     }
 
     <span class="keyword">private readonly</span> <span class="class">StringBuilder</span> _sb = <span class="keyword">new</span> <span class="class">StringBuilder</span>();
@@ -18,67 +18,67 @@
 
     <span class="keyword">public string</span> Text { <span class="keyword">get</span>; <span class="keyword">private set</span>; }
 
-    <span class="keyword">public void</span> <span class="method">Emit</span>(<span class="class">List</span>&lt;<span class="class">Node</span>&gt; <span class="blue">nodes</span>)
+    <span class="keyword">public void</span> <span class="method">Emit</span>(<span class="class">List</span>&lt;<span class="class">Node</span>&gt; <span class="parameter">nodes</span>)
     {
         <span class="class">Console</span>.<span class="method">ResetColor</span>();
         Text = <span class="string">&quot;&quot;</span>;
         _sb.<span class="method">Clear</span>();
 
-        <span class="control">foreach</span> (<span class="keyword">var</span> <span class="blue">node</span> <span class="control">in</span> <span class="blue">nodes</span>)
+        <span class="control">foreach</span> (<span class="keyword">var</span> <span class="localName">node</span> <span class="control">in</span> <span class="parameter">nodes</span>)
         {
-            <span class="method">EmitNode</span>(<span class="blue">node</span>);
+            <span class="method">EmitNode</span>(<span class="localName">node</span>);
         }
 
         Text = _sb.<span class="method">ToString</span>();
     }
 
-    <span class="keyword">public void</span> <span class="method">EmitNode</span>(<span class="class">Node</span> <span class="blue">node</span>)
+    <span class="keyword">public void</span> <span class="method">EmitNode</span>(<span class="class">Node</span> <span class="parameter">node</span>)
     {
-        <span class="control">if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ClassName)
+        <span class="control">if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ClassName)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Red;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.NamespaceName)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.NamespaceName)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Green;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Keyword)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Keyword)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Yellow;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.StringLiteral)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.StringLiteral)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Cyan;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.LocalName)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.LocalName)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Blue;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.MethodName)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.MethodName)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Red;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Punctuation)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Punctuation)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.White;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Operator)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Operator)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.White;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ControlKeyword)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ControlKeyword)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.DarkRed;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.VerbatimStringLiteral)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.VerbatimStringLiteral)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.DarkRed;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.StringLiteral)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.StringLiteral)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.DarkGreen;
         }
-        <span class="control">else if</span> (<span class="blue">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ParameterName)
+        <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ParameterName)
         {
             <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Yellow;
         }
@@ -87,13 +87,13 @@
             <span class="class">Console</span>.<span class="method">ResetColor</span>();
         }
 
-        _sb.<span class="method">Append</span>(<span class="blue">node</span>.TextWithTrivia);
-        <span class="class">Console</span>.<span class="method">Write</span>(<span class="string">$&quot;</span>{<span class="blue">node</span>.TextWithTrivia}<span class="string">&quot;</span>);
+        _sb.<span class="method">Append</span>(<span class="parameter">node</span>.TextWithTrivia);
+        <span class="class">Console</span>.<span class="method">Write</span>(<span class="string">$&quot;</span>{<span class="parameter">node</span>.TextWithTrivia}<span class="string">&quot;</span>);
 
         <span class="control">if</span> (addDiagnosticInfo)
         {
-            _sb.<span class="method">Append</span>(<span class="string">$&quot;(</span>{<span class="blue">node</span>.ClassificationType}<span class="string">)&quot;</span>);
-            <span class="class">Console</span>.<span class="method">Write</span>(<span class="string">$&quot;(</span>{<span class="blue">node</span>.ClassificationType}<span class="string">)&quot;</span>);
+            _sb.<span class="method">Append</span>(<span class="string">$&quot;(</span>{<span class="parameter">node</span>.ClassificationType}<span class="string">)&quot;</span>);
+            <span class="class">Console</span>.<span class="method">Write</span>(<span class="string">$&quot;(</span>{<span class="parameter">node</span>.ClassificationType}<span class="string">)&quot;</span>);
         }
 
         <span class="class">Console</span>.<span class="method">ResetColor</span>();

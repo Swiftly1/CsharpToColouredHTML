@@ -15,14 +15,14 @@ public class HTMLEmitter : IEmitter
     public HTMLEmitter()
     {
         var settings = new HTMLEmitterSettings();
-        UserProvidedCSS = settings.UserProvidedCSS;
+        _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
     }
 
     public HTMLEmitter(HTMLEmitterSettings settings)
     {
-        UserProvidedCSS = settings.UserProvidedCSS;
+        _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
     }
@@ -35,7 +35,7 @@ public class HTMLEmitter : IEmitter
         return escaped;
     }
 
-    private readonly string? UserProvidedCSS = null;
+    private readonly CSSProvider _cssHelper;
 
     private readonly bool AddLineNumber = true;
 
@@ -48,6 +48,8 @@ public class HTMLEmitter : IEmitter
     private int _ParenthesisCounter = 0;
 
     private int _LineCounter = 0;
+
+    private string _MostCommonColourValue = string.Empty;
 
     // Public Stuff:
 
@@ -152,15 +154,15 @@ public class HTMLEmitter : IEmitter
         // Optimizer - Merges Nodes with the same colour
         if (Optimize)
         {
-            var mostCommonColour = list.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
+            var mostCommonColourName = list.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
+            _MostCommonColourValue = _cssHelper.GetMappedColour(mostCommonColourName);
 
             for (int i = 0; i < list.Count; i++)
             {
                 var current = list[i];
 
-                // TODO: For now, it works only for White colour because I'd need to add support in CSS code gen 
-                // mostCommonColour == InternalHtmlColors.White
-                if (mostCommonColour == InternalHtmlColors.White && current.Colour == mostCommonColour)
+                var mappedColour = _cssHelper.GetMappedColour(current.Colour);
+                if (mappedColour == _MostCommonColourValue)
                     list[i].UsesMostCommonColour = true;
 
                 if (i + 1 >= list.Count)
@@ -185,7 +187,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.Append(GetCSS());
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, _MostCommonColourValue));
         sb.AppendLine(@"<pre class=""background"">");
 
         for (int i = 0; i < nodes.Count; i++)
@@ -209,7 +211,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.Append(GetCSS());
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, _MostCommonColourValue));
         sb.AppendLine(@"<pre class=""background"">");
 
         var isOpened = false;
@@ -287,15 +289,15 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.Namespace;
         }
         else if (node.ClassificationType == ClassificationTypeNames.EnumName)
         {
-            colour = InternalHtmlColors.Interface;
+            colour = InternalHtmlColors.EnumName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.EnumMemberName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.EnumMemberName;
         }
         else if (BuiltInTypes.Contains(node.Text))
         {
@@ -321,7 +323,7 @@ public class HTMLEmitter : IEmitter
             }
             else
             {
-                colour = InternalHtmlColors.White;
+                colour = InternalHtmlColors.Identifier;
             }
         }
         else if (node.ClassificationType == ClassificationTypeNames.Keyword)
@@ -344,7 +346,7 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.LocalName)
         {
-            colour = InternalHtmlColors.Blue;
+            colour = InternalHtmlColors.LocalName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.MethodName)
         {
@@ -372,27 +374,27 @@ public class HTMLEmitter : IEmitter
                 _IsNew = false;
             }
 
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.Punctuation;
         }
         else if (node.ClassificationType == ClassificationTypeNames.Operator)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.Operator;
         }
         else if (node.ClassificationType == ClassificationTypeNames.PropertyName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.PropertyName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.ParameterName)
         {
-            colour = InternalHtmlColors.Blue;
+            colour = InternalHtmlColors.ParameterName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.FieldName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.FieldName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.NumericLiteral)
         {
-            colour = InternalHtmlColors.Interface;
+            colour = InternalHtmlColors.NumericLiteral;
         }
         else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
         {
@@ -400,15 +402,15 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.LabelName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.LabelName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.OperatorOverloaded)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.OperatorOverloaded;
         }
         else if (node.ClassificationType == ClassificationTypeNames.RecordStructName)
         {
-            colour = InternalHtmlColors.Interface;
+            colour = InternalHtmlColors.RecordStructName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.RecordClassName)
         {
@@ -416,7 +418,7 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.TypeParameterName)
         {
-            colour = InternalHtmlColors.Interface;
+            colour = InternalHtmlColors.TypeParameterName;
         }
         else if (node.ClassificationType.Contains("xml doc comment"))
         {
@@ -424,11 +426,11 @@ public class HTMLEmitter : IEmitter
         }
         else if (node.ClassificationType == ClassificationTypeNames.ExtensionMethodName)
         {
-            colour = InternalHtmlColors.Method;
+            colour = InternalHtmlColors.ExtensionMethodName;
         }
         else if (node.ClassificationType == ClassificationTypeNames.ConstantName)
         {
-            colour = InternalHtmlColors.White;
+            colour = InternalHtmlColors.ConstantName;
         }
 
         return colour;
@@ -710,123 +712,4 @@ public class HTMLEmitter : IEmitter
 
         return false;
     }
-
-    private string GetCSS()
-    {
-        var _sb = new StringBuilder();
-
-        if (UserProvidedCSS != null)
-        {
-            _sb.AppendLine(UserProvidedCSS);
-        }
-        else
-        {
-            _sb.AppendLine("<style>");
-            _sb.AppendLine(new string(DEFAULT_CSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
-
-            if (AddLineNumber)
-            {
-                _sb.AppendLine(new string(LineNumbersCSS.Where(c => !char.IsWhiteSpace(c)).ToArray()));
-            }
-
-            _sb.AppendLine("</style>");
-        }
-
-        return _sb.ToString();
-    }
-
-    public const string DEFAULT_CSS =
-    @$".{InternalHtmlColors.Background}
-    {{
-        font-family: monaco,Consolas,Lucida Console,monospace; 
-        background-color: #1E1E1E;
-        overflow:scroll;
-        color: #dfdfdf;
-    }}
-
-    .{InternalHtmlColors.Numeric}
-    {{
-        color: #b5cea8;
-    }}
-
-    .{InternalHtmlColors.Method}
-    {{
-        color: #DCDCAA;
-    }}
-  
-    .{InternalHtmlColors.Class}
-    {{
-        color: #4EC9B0;
-    }}
-  
-    .{InternalHtmlColors.Keyword}
-    {{
-        color: #569cd6;
-    }}
-  
-    .{InternalHtmlColors.Blue}
-    {{
-        color: #9CDCFE;
-    }}  
-
-    .{InternalHtmlColors.String}
-    {{
-        color: #ce9178;
-    }}
-
-    .{InternalHtmlColors.Interface}
-    {{
-        color: #b8d7a3;
-    }}
-
-    .{InternalHtmlColors.Control}
-    {{
-        color: #C586C0;
-    }}
-
-    .{InternalHtmlColors.InternalError}
-    {{
-        color: #FF0D0D;
-    }}
-
-    .{InternalHtmlColors.Comment}
-    {{
-        color: #6A9955;
-    }} 
-
-    .{InternalHtmlColors.Preprocessor}
-    {{
-        color: #808080;
-    }}
-
-    .{InternalHtmlColors.PreprocessorText}
-    {{
-        color: #a4a4a4;
-    }}
-
-    .{InternalHtmlColors.Struct}
-    {{
-        color: #86C691;
-    }}
-    ";
-
-    public const string LineNumbersCSS =
-    @$"
-    table
-    {{
-        white-space: pre;
-    }}
-
-    .line_no::before
-    {{
-        content: attr(line_no);
-        color: white;
-    }}   
-
-    .code_column
-    {{
-        padding-left: 5px;
-        color: #dfdfdf;
-    }}
-    ";
 }

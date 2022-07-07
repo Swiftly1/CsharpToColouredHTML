@@ -2,5 +2,5 @@
 <pre class="background">
 <table>
 <tbody>
-<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">private</span> <span class="class">List</span><span class="white">&lt;</span><span class="class">Node</span><span class="white">&gt;</span> <span class="method">GenerateInternalRepresentation</span><span class="white">(</span><span class="keyword">string</span> <span class="blue">code</span><span class="white">)</span></td></tr><tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="white">{</span></td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column"><span class="white">}</span></td></tr></tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">private</span> <span class="class">List</span><span class="punctuation">&lt;</span><span class="class">Node</span><span class="punctuation">&gt;</span> <span class="method">GenerateInternalRepresentation</span><span class="punctuation">(</span><span class="keyword">string</span> <span class="parameter">code</span><span class="punctuation">)</span></td></tr><tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="punctuation">{</span></td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column"><span class="punctuation">}</span></td></tr></tbody>
 </table></pre>
