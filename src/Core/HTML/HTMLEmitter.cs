@@ -513,8 +513,16 @@ public class HTMLEmitter : IEmitter
     private bool IsStruct(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
+        var canGoBehind = currentIndex > 0;
 
-        if (IsPopularStruct(node.Text))
+        var isPopularStruct = IsPopularStruct(node.Text);
+
+        if (isPopularStruct && !canGoBehind)
+        {
+            return true;
+        }
+
+        if (isPopularStruct && canGoBehind && nodes[currentIndex - 1].Text != ".")
         {
             return true;
         }
@@ -586,7 +594,7 @@ public class HTMLEmitter : IEmitter
         var canGoBehind = currentIndex > 0;
 
         var node = nodes[currentIndex];
-
+        bool isPopularClass = false;
         if (canGoBehind && nodes[currentIndex - 1].Text == ":")
         {
             return true;
@@ -606,8 +614,12 @@ public class HTMLEmitter : IEmitter
         else if (SeemsLikePropertyUsage(currentIndex, nodes))
         {
             return true;
+        } // be careful, if you remove those parenthesis around that assignment, then it'll change its behaviour
+        else if ((isPopularClass = IsPopularClass(node.Text)) && !canGoBehind)
+        {
+            return true;
         }
-        else if (IsPopularClass(node.Text))
+        else if (isPopularClass && canGoBehind && nodes[currentIndex - 1].Text != ".")
         {
             return true;
         }
