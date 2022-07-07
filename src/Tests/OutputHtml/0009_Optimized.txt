@@ -1,13 +1,13 @@
 
 <pre class="background">
-<span class="keyword">public readonly record class</span> <span class="class">DailyTemperature</span>(<span class="keyword">double</span> <span class="blue">HighTemp</span>, <span class="keyword">double</span> <span class="blue">LowTemp</span>)
+<span class="keyword">public readonly record class</span> <span class="class">DailyTemperature</span>(<span class="keyword">double</span> <span class="parameter">HighTemp</span>, <span class="keyword">double</span> <span class="parameter">LowTemp</span>)
 {
-    <span class="keyword">public double</span> Mean =&gt; (HighTemp + LowTemp) / <span class="interface">2.0</span>;
+    <span class="keyword">public double</span> Mean =&gt; (HighTemp + LowTemp) / <span class="numericLiteral">2.0</span>;
 }
 
-<span class="keyword">public readonly record struct</span> <span class="interface">DailyTemperature</span>(<span class="keyword">double</span> <span class="blue">HighTemp</span>, <span class="keyword">double</span> <span class="blue">LowTemp</span>)
+<span class="keyword">public readonly record struct</span> <span class="recordStruct">DailyTemperature</span>(<span class="keyword">double</span> <span class="parameter">HighTemp</span>, <span class="keyword">double</span> <span class="parameter">LowTemp</span>)
 {
-    <span class="keyword">public double</span> Mean =&gt; (HighTemp + LowTemp) / <span class="interface">2.0</span>;
+    <span class="keyword">public double</span> Mean =&gt; (HighTemp + LowTemp) / <span class="numericLiteral">2.0</span>;
 }
 
 
@@ -16,24 +16,24 @@
 <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="string">&quot;123&quot;</span>);
 
 Label:
-<span class="control">return</span> <span class="interface">5</span>;
+<span class="control">return</span> <span class="numericLiteral">5</span>;
 
 
 <span class="keyword">struct</span> <span class="struct">R1</span> : <span class="interface">IEquatable</span>&lt;<span class="struct">R1</span>&gt;
 {
     <span class="keyword">public</span> T1 P1 { <span class="keyword">get</span>; <span class="keyword">set</span>; }
     <span class="keyword">public</span> T2 P2 { <span class="keyword">get</span>; <span class="keyword">set</span>; }
-    <span class="keyword">public override bool</span> <span class="method">Equals</span>(<span class="keyword">object</span>? <span class="blue">obj</span>) =&gt; <span class="blue">obj</span> <span class="keyword">is</span> <span class="struct">R1</span> <span class="blue">temp</span> &amp;&amp; <span class="method">Equals</span>(<span class="blue">temp</span>);
-    <span class="keyword">public bool</span> <span class="method">Equals</span>(<span class="struct">R1</span> <span class="blue">other</span>)
+    <span class="keyword">public override bool</span> <span class="method">Equals</span>(<span class="keyword">object</span>? <span class="parameter">obj</span>) =&gt; <span class="parameter">obj</span> <span class="keyword">is</span> <span class="struct">R1</span> <span class="localName">temp</span> &amp;&amp; <span class="method">Equals</span>(<span class="localName">temp</span>);
+    <span class="keyword">public bool</span> <span class="method">Equals</span>(<span class="struct">R1</span> <span class="parameter">other</span>)
     {
         <span class="control">return</span>
-            EqualityComparer&lt;<span class="class">T1</span>&gt;.<span class="class">Default</span>.<span class="method">Equals</span>(P1, <span class="blue">other</span>.P1) &amp;&amp;
-            EqualityComparer&lt;<span class="class">T2</span>&gt;.<span class="class">Default</span>.<span class="method">Equals</span>(P2, <span class="blue">other</span>.P2);
+            EqualityComparer&lt;<span class="class">T1</span>&gt;.<span class="class">Default</span>.<span class="method">Equals</span>(P1, <span class="parameter">other</span>.P1) &amp;&amp;
+            EqualityComparer&lt;<span class="class">T2</span>&gt;.<span class="class">Default</span>.<span class="method">Equals</span>(P2, <span class="parameter">other</span>.P2);
     }
-    <span class="keyword">public static bool operator</span>==(<span class="struct">R1</span> <span class="blue">r1</span>, <span class="struct">R1</span> <span class="blue">r2</span>)
-        =&gt; <span class="blue">r1</span>.<span class="method">Equals</span>(<span class="blue">r2</span>);
-    <span class="keyword">public static bool operator</span>!=(<span class="struct">R1</span> <span class="blue">r1</span>, <span class="struct">R1</span> <span class="blue">r2</span>)
-        =&gt; !(<span class="blue">r1</span> == <span class="blue">r2</span>);    
+    <span class="keyword">public static bool operator</span>==(<span class="struct">R1</span> <span class="parameter">r1</span>, <span class="struct">R1</span> <span class="parameter">r2</span>)
+        =&gt; <span class="parameter">r1</span>.<span class="method">Equals</span>(<span class="parameter">r2</span>);
+    <span class="keyword">public static bool operator</span>!=(<span class="struct">R1</span> <span class="parameter">r1</span>, <span class="struct">R1</span> <span class="parameter">r2</span>)
+        =&gt; !(<span class="parameter">r1</span> == <span class="parameter">r2</span>);    
     <span class="keyword">public override int</span> <span class="method">GetHashCode</span>()
     {
         <span class="control">return</span> <span class="method">Combine</span>(
