@@ -1,0 +1,1 @@
+﻿var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());

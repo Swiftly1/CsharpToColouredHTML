@@ -1,0 +1,3 @@
+
+<pre class="background">
+<span class="keyword">var</span> <span class="localName">node</span> = <span class="keyword">new</span> <span class="class">Node</span>(<span class="localName">current</span>.ClassificationType, <span class="localName">srcText</span>.<span class="method">ToString</span>(<span class="localName">current</span>.TextSpan), <span class="localName">trivia</span>.<span class="method">ToString</span>());</pre>

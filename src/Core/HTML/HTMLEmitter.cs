@@ -609,6 +609,7 @@ public class HTMLEmitter : IEmitter
         }
         else if (_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
         {
+            _IsNew = false;
             return true;
         }
         else if (canGoAhead && nodes[currentIndex + 1].Text == "{")
@@ -617,6 +618,7 @@ public class HTMLEmitter : IEmitter
         }
         else if (_IsNew && ThereIsMethodCallAhead(currentIndex, nodes))
         {
+            _IsNew = false;
             return true;
         }
         else if (SeemsLikePropertyUsage(currentIndex, nodes))
@@ -642,6 +644,7 @@ public class HTMLEmitter : IEmitter
         // new DictionaryList<int, int>();
         else if (_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "<")
         {
+            _IsNew = false;
             return true;
         }
         else if (nodes.Count > currentIndex + 4 &&
