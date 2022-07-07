@@ -1,0 +1,2 @@
+﻿new Test().TextSpan;
+new Test().Task;

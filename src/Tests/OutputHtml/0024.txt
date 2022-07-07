@@ -1,0 +1,4 @@
+
+<pre class="background">
+<span class="keyword">new</span> <span class="class">Test</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="operator">.</span><span class="identifier">TextSpan</span><span class="punctuation">;</span>
+<span class="keyword">new</span> <span class="class">Test</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="operator">.</span><span class="identifier">Task</span><span class="punctuation">;</span></pre>

@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">new</span> <span class="class">Test</span>().TextSpan;</td></tr><tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">new</span> <span class="class">Test</span>().Task;</td></tr></tbody>
+</table></pre>
