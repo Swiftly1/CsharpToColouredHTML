@@ -161,8 +161,8 @@ public class HTMLEmitter : IEmitter
             {
                 var current = list[i];
 
-                var mapped_colour = _cssHelper.GetMappedColour(current.Colour);
-                if (mapped_colour == _MostCommonColourValue)
+                var mappedColour = _cssHelper.GetMappedColour(current.Colour);
+                if (mappedColour == _MostCommonColourValue)
                     list[i].UsesMostCommonColour = true;
 
                 if (i + 1 >= list.Count)
