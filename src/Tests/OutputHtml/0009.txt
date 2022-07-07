@@ -1,43 +1,43 @@
 
 <pre class="background">
-<span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">record</span> <span class="keyword">class</span> <span class="class">DailyTemperature</span><span class="white">(</span><span class="keyword">double</span> <span class="blue">HighTemp</span><span class="white">,</span> <span class="keyword">double</span> <span class="blue">LowTemp</span><span class="white">)</span>
-<span class="white">{</span>
-    <span class="keyword">public</span> <span class="keyword">double</span> <span class="white">Mean</span> <span class="white">=&gt;</span> <span class="white">(</span><span class="white">HighTemp</span> <span class="white">+</span> <span class="white">LowTemp</span><span class="white">)</span> <span class="white">/</span> <span class="interface">2.0</span><span class="white">;</span>
-<span class="white">}</span>
+<span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">record</span> <span class="keyword">class</span> <span class="class">DailyTemperature</span><span class="punctuation">(</span><span class="keyword">double</span> <span class="parameter">HighTemp</span><span class="punctuation">,</span> <span class="keyword">double</span> <span class="parameter">LowTemp</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="keyword">double</span> <span class="propertyName">Mean</span> <span class="operator">=&gt;</span> <span class="punctuation">(</span><span class="propertyName">HighTemp</span> <span class="operator">+</span> <span class="propertyName">LowTemp</span><span class="punctuation">)</span> <span class="operator">/</span> <span class="numericLiteral">2.0</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
 
-<span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">record</span> <span class="keyword">struct</span> <span class="interface">DailyTemperature</span><span class="white">(</span><span class="keyword">double</span> <span class="blue">HighTemp</span><span class="white">,</span> <span class="keyword">double</span> <span class="blue">LowTemp</span><span class="white">)</span>
-<span class="white">{</span>
-    <span class="keyword">public</span> <span class="keyword">double</span> <span class="white">Mean</span> <span class="white">=&gt;</span> <span class="white">(</span><span class="white">HighTemp</span> <span class="white">+</span> <span class="white">LowTemp</span><span class="white">)</span> <span class="white">/</span> <span class="interface">2.0</span><span class="white">;</span>
-<span class="white">}</span>
-
-
-<span class="control">goto</span> <span class="white">Label</span><span class="white">;</span>
-
-<span class="class">Console</span><span class="white">.</span><span class="method">WriteLine</span><span class="white">(</span><span class="string">&quot;123&quot;</span><span class="white">)</span><span class="white">;</span>
-
-<span class="white">Label</span><span class="white">:</span>
-<span class="control">return</span> <span class="interface">5</span><span class="white">;</span>
+<span class="keyword">public</span> <span class="keyword">readonly</span> <span class="keyword">record</span> <span class="keyword">struct</span> <span class="recordStruct">DailyTemperature</span><span class="punctuation">(</span><span class="keyword">double</span> <span class="parameter">HighTemp</span><span class="punctuation">,</span> <span class="keyword">double</span> <span class="parameter">LowTemp</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="keyword">double</span> <span class="propertyName">Mean</span> <span class="operator">=&gt;</span> <span class="punctuation">(</span><span class="propertyName">HighTemp</span> <span class="operator">+</span> <span class="propertyName">LowTemp</span><span class="punctuation">)</span> <span class="operator">/</span> <span class="numericLiteral">2.0</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
 
 
-<span class="keyword">struct</span> <span class="struct">R1</span> <span class="white">:</span> <span class="interface">IEquatable</span><span class="white">&lt;</span><span class="struct">R1</span><span class="white">&gt;</span>
-<span class="white">{</span>
-    <span class="keyword">public</span> <span class="white">T1</span> <span class="white">P1</span> <span class="white">{</span> <span class="keyword">get</span><span class="white">;</span> <span class="keyword">set</span><span class="white">;</span> <span class="white">}</span>
-    <span class="keyword">public</span> <span class="white">T2</span> <span class="white">P2</span> <span class="white">{</span> <span class="keyword">get</span><span class="white">;</span> <span class="keyword">set</span><span class="white">;</span> <span class="white">}</span>
-    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="method">Equals</span><span class="white">(</span><span class="keyword">object</span><span class="white">?</span> <span class="blue">obj</span><span class="white">)</span> <span class="white">=&gt;</span> <span class="blue">obj</span> <span class="keyword">is</span> <span class="struct">R1</span> <span class="blue">temp</span> <span class="white">&amp;&amp;</span> <span class="method">Equals</span><span class="white">(</span><span class="blue">temp</span><span class="white">)</span><span class="white">;</span>
-    <span class="keyword">public</span> <span class="keyword">bool</span> <span class="method">Equals</span><span class="white">(</span><span class="struct">R1</span> <span class="blue">other</span><span class="white">)</span>
-    <span class="white">{</span>
+<span class="control">goto</span> <span class="labelName">Label</span><span class="punctuation">;</span>
+
+<span class="class">Console</span><span class="operator">.</span><span class="method">WriteLine</span><span class="punctuation">(</span><span class="string">&quot;123&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+<span class="labelName">Label</span><span class="punctuation">:</span>
+<span class="control">return</span> <span class="numericLiteral">5</span><span class="punctuation">;</span>
+
+
+<span class="keyword">struct</span> <span class="struct">R1</span> <span class="punctuation">:</span> <span class="interface">IEquatable</span><span class="punctuation">&lt;</span><span class="struct">R1</span><span class="punctuation">&gt;</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="identifier">T1</span> <span class="propertyName">P1</span> <span class="punctuation">{</span> <span class="keyword">get</span><span class="punctuation">;</span> <span class="keyword">set</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+    <span class="keyword">public</span> <span class="identifier">T2</span> <span class="propertyName">P2</span> <span class="punctuation">{</span> <span class="keyword">get</span><span class="punctuation">;</span> <span class="keyword">set</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">bool</span> <span class="method">Equals</span><span class="punctuation">(</span><span class="keyword">object</span><span class="operator">?</span> <span class="parameter">obj</span><span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="parameter">obj</span> <span class="keyword">is</span> <span class="struct">R1</span> <span class="localName">temp</span> <span class="operator">&amp;&amp;</span> <span class="method">Equals</span><span class="punctuation">(</span><span class="localName">temp</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="keyword">public</span> <span class="keyword">bool</span> <span class="method">Equals</span><span class="punctuation">(</span><span class="struct">R1</span> <span class="parameter">other</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
         <span class="control">return</span>
-            <span class="white">EqualityComparer</span><span class="white">&lt;</span><span class="class">T1</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="white">P1</span><span class="white">,</span> <span class="blue">other</span><span class="white">.</span><span class="white">P1</span><span class="white">)</span> <span class="white">&amp;&amp;</span>
-            <span class="white">EqualityComparer</span><span class="white">&lt;</span><span class="class">T2</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="white">P2</span><span class="white">,</span> <span class="blue">other</span><span class="white">.</span><span class="white">P2</span><span class="white">)</span><span class="white">;</span>
-    <span class="white">}</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="white">==</span><span class="white">(</span><span class="struct">R1</span> <span class="blue">r1</span><span class="white">,</span> <span class="struct">R1</span> <span class="blue">r2</span><span class="white">)</span>
-        <span class="white">=&gt;</span> <span class="blue">r1</span><span class="white">.</span><span class="method">Equals</span><span class="white">(</span><span class="blue">r2</span><span class="white">)</span><span class="white">;</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="white">!=</span><span class="white">(</span><span class="struct">R1</span> <span class="blue">r1</span><span class="white">,</span> <span class="struct">R1</span> <span class="blue">r2</span><span class="white">)</span>
-        <span class="white">=&gt;</span> <span class="white">!</span><span class="white">(</span><span class="blue">r1</span> <span class="white">==</span> <span class="blue">r2</span><span class="white">)</span><span class="white">;</span>    
-    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> <span class="method">GetHashCode</span><span class="white">(</span><span class="white">)</span>
-    <span class="white">{</span>
-        <span class="control">return</span> <span class="method">Combine</span><span class="white">(</span>
-            <span class="white">EqualityComparer</span><span class="white">&lt;</span><span class="class">T1</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">GetHashCode</span><span class="white">(</span><span class="white">P1</span><span class="white">)</span><span class="white">,</span>
-            <span class="white">EqualityComparer</span><span class="white">&lt;</span><span class="class">T2</span><span class="white">&gt;</span><span class="white">.</span><span class="class">Default</span><span class="white">.</span><span class="method">GetHashCode</span><span class="white">(</span><span class="white">P2</span><span class="white">)</span><span class="white">)</span><span class="white">;</span>
-    <span class="white">}</span>
-<span class="white">}</span></pre>
+            <span class="identifier">EqualityComparer</span><span class="punctuation">&lt;</span><span class="class">T1</span><span class="punctuation">&gt;</span><span class="operator">.</span><span class="class">Default</span><span class="operator">.</span><span class="method">Equals</span><span class="punctuation">(</span><span class="propertyName">P1</span><span class="punctuation">,</span> <span class="parameter">other</span><span class="operator">.</span><span class="propertyName">P1</span><span class="punctuation">)</span> <span class="operator">&amp;&amp;</span>
+            <span class="identifier">EqualityComparer</span><span class="punctuation">&lt;</span><span class="class">T2</span><span class="punctuation">&gt;</span><span class="operator">.</span><span class="class">Default</span><span class="operator">.</span><span class="method">Equals</span><span class="punctuation">(</span><span class="propertyName">P2</span><span class="punctuation">,</span> <span class="parameter">other</span><span class="operator">.</span><span class="propertyName">P2</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="operator">==</span><span class="punctuation">(</span><span class="struct">R1</span> <span class="parameter">r1</span><span class="punctuation">,</span> <span class="struct">R1</span> <span class="parameter">r2</span><span class="punctuation">)</span>
+        <span class="operator">=&gt;</span> <span class="parameter">r1</span><span class="operator">.</span><span class="method">Equals</span><span class="punctuation">(</span><span class="parameter">r2</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="keyword">operator</span><span class="operator">!=</span><span class="punctuation">(</span><span class="struct">R1</span> <span class="parameter">r1</span><span class="punctuation">,</span> <span class="struct">R1</span> <span class="parameter">r2</span><span class="punctuation">)</span>
+        <span class="operator">=&gt;</span> <span class="operator">!</span><span class="punctuation">(</span><span class="parameter">r1</span> <span class="operator_overloaded">==</span> <span class="parameter">r2</span><span class="punctuation">)</span><span class="punctuation">;</span>    
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">int</span> <span class="method">GetHashCode</span><span class="punctuation">(</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="control">return</span> <span class="method">Combine</span><span class="punctuation">(</span>
+            <span class="identifier">EqualityComparer</span><span class="punctuation">&lt;</span><span class="class">T1</span><span class="punctuation">&gt;</span><span class="operator">.</span><span class="class">Default</span><span class="operator">.</span><span class="method">GetHashCode</span><span class="punctuation">(</span><span class="propertyName">P1</span><span class="punctuation">)</span><span class="punctuation">,</span>
+            <span class="identifier">EqualityComparer</span><span class="punctuation">&lt;</span><span class="class">T2</span><span class="punctuation">&gt;</span><span class="operator">.</span><span class="class">Default</span><span class="operator">.</span><span class="method">GetHashCode</span><span class="punctuation">(</span><span class="propertyName">P2</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>
