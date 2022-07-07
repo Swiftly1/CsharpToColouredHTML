@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+
+## [1.0.18] - 07.07.2022
+**Description:**
+Hotfix
+
 ## [1.0.17] - 07.07.2022
 **Description:**
 Improved CSS customization by adding way more CSS Colours
