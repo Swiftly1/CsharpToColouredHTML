@@ -6,7 +6,6 @@ namespace CsharpToColouredHTML.Core
     {
         private static string DEFAULT_CSS_COLORS = string.Empty;
         private string? UserProvidedCSS;
-        private string _MostCommonColourValue = string.Empty;
 
         public CSSProvider(string? userProvidedCSS)
         {
@@ -21,14 +20,12 @@ namespace CsharpToColouredHTML.Core
 
         public string GetCSS(bool addLineNumber, string mostCommonColourValue)
         {
-            _MostCommonColourValue = mostCommonColourValue;
-
             if (UserProvidedCSS != null)
             {
                 return UserProvidedCSS;
             }
 
-            var background = ApplyMostCommonColourToTemplateCSS(Background_CSS_Template, _MostCommonColourValue);
+            var background = ApplyMostCommonColourToTemplateCSS(Background_CSS_Template, mostCommonColourValue);
             var _sb = new StringBuilder();
             _sb.AppendLine("<style>");
             _sb.Append(background);
@@ -36,7 +33,7 @@ namespace CsharpToColouredHTML.Core
 
             if (addLineNumber)
             {
-                _sb.AppendLine(ApplyMostCommonColourToTemplateCSS(LineNumbers_CSS_Template, _MostCommonColourValue));
+                _sb.AppendLine(ApplyMostCommonColourToTemplateCSS(LineNumbers_CSS_Template, mostCommonColourValue));
             }
 
             _sb.AppendLine("</style>");
