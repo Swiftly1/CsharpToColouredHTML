@@ -654,7 +654,7 @@ public class HTMLEmitter : IEmitter
         if (_IsUsing)
             return false;
 
-        if (currentIndex + 3 >= nodes.Count - 1)
+        if (currentIndex + 3 >= nodes.Count)
             return false;
 
         var next = nodes[currentIndex + 1];
