@@ -1,6 +1,20 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.17] - 07.07.2022
+**Description:**
+Improved CSS customization by adding way more CSS Colours
+e.g "White" CSS class was split into "ConstantName", "ExtensionMethodName", "LabelName" and many more.
+
+Improved optimizer introduced in 1.0.15 by not limiting it to just "White" CSS class.
+
+Improved heuristics:
+
+1) `new Test().TextSpan;` doesn't think that TextSpan is struct in this context
+
+2) `if (node.ClassificationType == ClassificationTypeNames.ClassName)` doesn't think that first `node` is a class
+
+
 ## [1.0.16] - 26.06.2022
 **Description:**
 Minor CSS changes
