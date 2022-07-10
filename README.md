@@ -38,6 +38,12 @@ ___
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 	Console.WriteLine(html);
 
+# [CSS Customizability](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/Customizability.md)
+
+# [Change Log](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/CHANGELOG.md)
+
+# Examples
+
 * [Example 1 - Code from this project](#ex1)
 
 * [Example 2 - Random code from Roslyn](#ex2)
