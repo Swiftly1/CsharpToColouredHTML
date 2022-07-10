@@ -1,6 +1,6 @@
 Here's the default CSS which may help you create your own colors scheme
 
-Although there is one quirk: the `color` of `background` and `code_column` class is not constant / static. When optimizations are enabled (they are applied by default on `https://csharp-colors.xyz/`, but library itself allows to disable them (yea it's TODO to add that option to page)), then the `background`/`code_column` colour has the value of the most commonly occuring colour in the code.
+:warning: Although there is one quirk: the `color` of `background` and `code_column` class is not constant / static. When optimizations are enabled (they are applied by default on `https://csharp-colors.xyz/`, but library itself allows to disable them (yea it's TODO to add that option to page)), then the `background`/`code_column` colour has the value of the most commonly occuring colour in the code.
 
 Very often the `#dfdfdf` is the desired value for those, but there are code fragments where colors more blue-ish are the most common
 
