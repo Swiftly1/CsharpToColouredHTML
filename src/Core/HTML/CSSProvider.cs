@@ -25,7 +25,9 @@ namespace CsharpToColouredHTML.Core
                 return UserProvidedCSS;
             }
 
-            var background = ApplyMostCommonColourToTemplateCSS(Background_CSS_Template, mostCommonColourValue);
+            // If we're generating HTML with line numbers, then colour will be defined in other CSS Template
+            var backgroundColour = addLineNumber ? string.Empty : mostCommonColourValue;
+            var background = ApplyMostCommonColourToTemplateCSS(Background_CSS_Template, backgroundColour);
             var _sb = new StringBuilder();
             _sb.AppendLine("<style>");
             _sb.Append(background);
@@ -59,7 +61,8 @@ namespace CsharpToColouredHTML.Core
 
         private string ApplyMostCommonColourToTemplateCSS(string template, string colour_value)
         {
-            return template.Replace("_PLACEHOLDER_", colour_value);
+            var cssValue = string.IsNullOrEmpty(colour_value) ? string.Empty : $"color: {colour_value};";
+            return template.Replace("_PLACEHOLDER_", cssValue);
         }
 
         private Dictionary<string, string> ColorsMap = new Dictionary<string, string>
@@ -101,7 +104,7 @@ namespace CsharpToColouredHTML.Core
             font-family: monaco,Consolas,Lucida Console,monospace; 
             background-color: #1E1E1E;
             overflow:scroll;
-            color: _PLACEHOLDER_;
+            _PLACEHOLDER_
         }}";
 
         private const string LineNumbers_CSS_Template =
@@ -120,7 +123,7 @@ namespace CsharpToColouredHTML.Core
         .code_column
         {{
             padding-left: 5px;
-            color: _PLACEHOLDER_;
+            _PLACEHOLDER_
         }}
         ";
     }
