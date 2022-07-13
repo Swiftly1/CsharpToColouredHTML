@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.20] - 13.07.2022
+**Description:**
+Improved heuristics + New Line handling
 
 ## [1.0.19] - 13.07.2022
 **Description:**
