@@ -187,7 +187,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, _MostCommonColourValue));
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, Optimize, nodes, _MostCommonColourValue));
         sb.AppendLine(@"<pre class=""background"">");
 
         for (int i = 0; i < nodes.Count; i++)
@@ -211,7 +211,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, _MostCommonColourValue));
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, Optimize, nodes, _MostCommonColourValue));
         sb.AppendLine(@"<pre class=""background"">");
 
         var isOpened = false;

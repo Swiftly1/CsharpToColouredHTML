@@ -106,5 +106,73 @@ namespace Tests
 
             Assert.Equal(2, StringHelper.AllIndicesOf(str, Environment.NewLine).Count);
         }
+
+        [Fact]
+        public void CSS_OnlyUsedColours_1()
+        {
+            var fileName = "0011.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_CSS_Optimized."));
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings().EnableLineNumbers().EnableOptimizations();
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void CSS_AllColours_1()
+        {
+            var fileName = "0011.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_CSS."));
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings().EnableLineNumbers().DisableOptimizations();
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void CSS_OnlyUsedColours_2()
+        {
+            var fileName = "0018.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_CSS_Optimized."));
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings().EnableLineNumbers().EnableOptimizations();
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void CSS_AllColours_2()
+        {
+            var fileName = "0018.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_CSS."));
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings().EnableLineNumbers().DisableOptimizations();
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
     }
 }

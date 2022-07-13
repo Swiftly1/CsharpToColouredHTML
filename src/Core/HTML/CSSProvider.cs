@@ -4,21 +4,16 @@ namespace CsharpToColouredHTML.Core
 {
     internal class CSSProvider
     {
-        private static string DEFAULT_CSS_COLORS = string.Empty;
         private string? UserProvidedCSS;
 
         public CSSProvider(string? userProvidedCSS)
         {
             UserProvidedCSS = userProvidedCSS;
-
-            // Generate CSS from ColorsMap at first run
-            if (string.IsNullOrEmpty(DEFAULT_CSS_COLORS))
-                DEFAULT_CSS_COLORS = GenerateDefaultCSSColors();
         }
 
         public string GetMappedColour(string s) => ColorsMap[s];
 
-        public string GetCSS(bool addLineNumber, string mostCommonColourValue)
+        public string GetCSS(bool addLineNumber, bool optimize, List<NodeWithDetails> nodes, string mostCommonColourValue)
         {
             if (UserProvidedCSS != null)
             {
@@ -31,7 +26,7 @@ namespace CsharpToColouredHTML.Core
             var _sb = new StringBuilder();
             _sb.AppendLine("<style>");
             _sb.Append(background);
-            _sb.AppendLine(DEFAULT_CSS_COLORS);
+            _sb.AppendLine(GenerateDefaultCSSColors(optimize, nodes));
 
             if (addLineNumber)
             {
@@ -42,7 +37,7 @@ namespace CsharpToColouredHTML.Core
             return new string(_sb.ToString().Where(x => !char.IsWhiteSpace(x)).ToArray());
         }
 
-        private string GenerateDefaultCSSColors()
+        private string GenerateDefaultCSSColors(bool optimize, List<NodeWithDetails> nodes)
         {
             var template =
             @".{0}
@@ -51,7 +46,13 @@ namespace CsharpToColouredHTML.Core
             }}";
 
             var sb = new StringBuilder();
-            foreach (var entry in ColorsMap)
+
+            var neededColors = ColorsMap.ToList();
+
+            if (optimize)
+                neededColors = neededColors.Where(colour => nodes.Any(n => n.Colour == colour.Key)).ToList();
+
+            foreach (var entry in neededColors)
                 sb.Append(string.Format(template, entry.Key, entry.Value));
 
             sb.AppendLine();
