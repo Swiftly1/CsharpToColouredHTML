@@ -112,7 +112,7 @@ Default CSS with line numbers:
 
 Default CSS without line numbers:
 
-		.background {
+	.background {
 	  font-family: monaco, Consolas, LucidaConsole, monospace;
 	  background-color: #1e1e1e;
 	  overflow: scroll;
