@@ -1,0 +1,12 @@
+﻿var template =
+@".{0}
+{{
+    color: {1};
+}}";
+
+var _sb = new StringBuilder();
+return new string(_sb.ToString().Where(x => !char.IsWhiteSpace(x)).ToArray());
+
+using System.Text;
+var _sb = new StringBuilder();
+return new string(_sb.ToString().Where(x => !char.IsWhiteSpace(x)).ToArray());

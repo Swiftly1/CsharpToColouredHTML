@@ -1,0 +1,14 @@
+
+<pre class="background">
+<span class="keyword">var</span> <span class="localName">template</span> =
+<span class="string">@&quot;.{0}</span>
+<span class="string">{{</span>
+    <span class="string">color: {1};</span>
+<span class="string">}}&quot;</span>;
+
+<span class="keyword">var</span> <span class="localName">_sb</span> = <span class="keyword">new</span> <span class="class">StringBuilder</span>();
+<span class="control">return</span> <span class="keyword">new string</span>(<span class="localName">_sb</span>.<span class="method">ToString</span>().<span class="method">Where</span>(<span class="parameter">x</span> =&gt; !<span class="keyword">char</span>.<span class="method">IsWhiteSpace</span>(<span class="parameter">x</span>)).<span class="method">ToArray</span>());
+
+<span class="keyword">using</span> System.Text;
+<span class="keyword">var</span> <span class="localName">_sb</span> = <span class="keyword">new</span> <span class="class">StringBuilder</span>();
+<span class="control">return</span> <span class="keyword">new string</span>(<span class="localName">_sb</span>.<span class="method">ToString</span>().<span class="method">Where</span>(<span class="parameter">x</span> =&gt; !<span class="keyword">char</span>.<span class="method">IsWhiteSpace</span>(<span class="parameter">x</span>)).<span class="method">ToArray</span>());</pre>

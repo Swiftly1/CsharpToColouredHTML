@@ -301,6 +301,7 @@ public class HTMLEmitter : IEmitter
         }
         else if (BuiltInTypes.Contains(node.Text))
         {
+            _IsNew = false;
             colour = InternalHtmlColors.Keyword;
         }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
