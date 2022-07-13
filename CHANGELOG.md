@@ -2,6 +2,11 @@
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
 
+## [1.0.19] - 13.07.2022
+**Description:**
+Improvements with CSS generation:
+Since now when optimizations are enabled, then only used colours will be present in generated CSS.
+
 ## [1.0.18] - 07.07.2022
 **Description:**
 Hotfix
