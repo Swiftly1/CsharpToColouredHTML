@@ -10,7 +10,6 @@ Default CSS with line numbers:
 	  font-family: monaco, Consolas, LucidaConsole, monospace;
 	  background-color: #1e1e1e;
 	  overflow: scroll;
-	  color: #dfdfdf;
 	}
 	.numeric {
 	  color: #b5cea8;
@@ -108,16 +107,15 @@ Default CSS with line numbers:
 	}
 	.code_column {
 	  padding-left: 5px;
-	  color: #dfdfdf;
 	}
+
 
 Default CSS without line numbers:
 
-	.background {
+		.background {
 	  font-family: monaco, Consolas, LucidaConsole, monospace;
 	  background-color: #1e1e1e;
 	  overflow: scroll;
-	  color: #dfdfdf;
 	}
 	.numeric {
 	  color: #b5cea8;
@@ -206,3 +204,4 @@ Default CSS without line numbers:
 	.parameter {
 	  color: #9cdcfe;
 	}
+	
