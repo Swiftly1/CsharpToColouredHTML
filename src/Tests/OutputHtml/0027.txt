@@ -1,0 +1,256 @@
+
+<pre class="background">
+<span class="keyword">using</span> <span class="namespace">System</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Collections</span><span class="operator">.</span><span class="namespace">Concurrent</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Collections</span><span class="operator">.</span><span class="namespace">Generic</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Runtime</span><span class="operator">.</span><span class="namespace">InteropServices</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Threading</span><span class="punctuation">;</span>
+ 
+<span class="keyword">namespace</span> <span class="namespace">AsyncWithFibers</span>
+<span class="punctuation">{</span>
+    <span class="keyword">class</span> <span class="class">Program</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">Main</span><span class="punctuation">(</span><span class="keyword">string</span><span class="punctuation">[</span><span class="punctuation">]</span> <span class="parameter">args</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="class">HKTMonadFiberAsync</span><span class="operator">.</span><span class="method">Run</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">WhereAmI</span><span class="punctuation">(</span><span class="keyword">string</span> <span class="parameter">what</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="class">Console</span><span class="operator">.</span><span class="method">WriteLine</span><span class="punctuation">(</span><span class="string">$&quot;</span><span class="string">Thread</span> <span class="punctuation">{</span><span class="class">Thread</span><span class="operator">.</span><span class="propertyName">CurrentThread</span><span class="operator">.</span><span class="propertyName">ManagedThreadId</span><span class="punctuation">}</span> <span class="string">Time</span> <span class="punctuation">{</span><span class="struct">DateTime</span><span class="operator">.</span><span class="propertyName">Now</span><span class="punctuation">}</span><span class="string">:</span> <span class="punctuation">{</span><span class="parameter">what</span><span class="punctuation">}</span><span class="string">&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+ 
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">FiberHelper</span>
+    <span class="punctuation">{</span>
+        <span class="punctuation">[</span><span class="class">DllImport</span><span class="punctuation">(</span><span class="string">&quot;kernel32.dll&quot;</span><span class="punctuation">)</span><span class="punctuation">]</span>
+        <span class="keyword">static</span> <span class="keyword">extern</span> <span class="struct">IntPtr</span> <span class="method">ConvertThreadToFiber</span><span class="punctuation">(</span><span class="struct">IntPtr</span> <span class="parameter">lpParameter</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+        <span class="punctuation">[</span><span class="class">DllImport</span><span class="punctuation">(</span><span class="string">&quot;kernel32.dll&quot;</span><span class="punctuation">)</span><span class="punctuation">]</span>
+        <span class="keyword">static</span> <span class="keyword">extern</span> <span class="struct">IntPtr</span> <span class="method">CreateFiber</span><span class="punctuation">(</span><span class="keyword">uint</span> <span class="parameter">dwStackSize</span><span class="punctuation">,</span> <span class="struct">IntPtr</span> <span class="parameter">lpStartAddress</span><span class="punctuation">,</span> <span class="struct">IntPtr</span> <span class="parameter">lpParameter</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+        <span class="punctuation">[</span><span class="class">DllImport</span><span class="punctuation">(</span><span class="string">&quot;kernel32.dll&quot;</span><span class="punctuation">)</span><span class="punctuation">]</span>
+        <span class="keyword">static</span> <span class="keyword">extern</span> <span class="struct">IntPtr</span> <span class="method">SwitchToFiber</span><span class="punctuation">(</span><span class="struct">IntPtr</span> <span class="parameter">lpStartAddress</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+        <span class="punctuation">[</span><span class="class">DllImport</span><span class="punctuation">(</span><span class="string">&quot;kernel32.dll&quot;</span><span class="punctuation">)</span><span class="punctuation">]</span>
+        <span class="keyword">static</span> <span class="keyword">extern</span> <span class="struct">IntPtr</span> <span class="method">DeleteFiber</span><span class="punctuation">(</span><span class="struct">IntPtr</span> <span class="parameter">lpStartAddress</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+        <span class="class">Dictionary</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="struct">IntPtr</span><span class="punctuation">&gt;</span> <span class="fieldName">actions</span><span class="punctuation">;</span>
+        <span class="keyword">public</span> <span class="struct">IntPtr</span> <span class="fieldName">fiberCaller</span><span class="punctuation">;</span>
+ 
+        <span class="keyword">public</span> <span class="class">FiberHelper</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="fieldName">actions</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Dictionary</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="struct">IntPtr</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Convert</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="fieldName">actions</span><span class="operator">.</span><span class="method">Add</span><span class="punctuation">(</span><span class="numericLiteral">0</span><span class="punctuation">,</span> <span class="method">ConvertThreadToFiber</span><span class="punctuation">(</span><span class="struct">IntPtr</span><span class="operator">.</span><span class="fieldName">Zero</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Create</span><span class="punctuation">(</span><span class="keyword">int</span> <span class="parameter">action</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="fieldName">actions</span><span class="operator">.</span><span class="method">Add</span><span class="punctuation">(</span><span class="parameter">action</span><span class="punctuation">,</span> <span class="method">CreateFiber</span><span class="punctuation">(</span><span class="numericLiteral">1024</span> <span class="operator">*</span> <span class="numericLiteral">1024</span><span class="punctuation">,</span> <span class="fieldName">fiberCaller</span><span class="punctuation">,</span> <span class="punctuation">(</span><span class="struct">IntPtr</span><span class="punctuation">)</span><span class="parameter">action</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Switch</span><span class="punctuation">(</span><span class="keyword">int</span> <span class="parameter">action</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="class">Thread</span><span class="operator">.</span><span class="method">Sleep</span><span class="punctuation">(</span><span class="numericLiteral">100</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="struct">IntPtr</span> <span class="localName">param</span> <span class="operator">=</span> <span class="fieldName">actions</span><span class="punctuation">[</span><span class="parameter">action</span><span class="punctuation">]</span><span class="punctuation">;</span>
+            <span class="method">SwitchToFiber</span><span class="punctuation">(</span><span class="localName">param</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Delete</span><span class="punctuation">(</span><span class="keyword">int</span> <span class="parameter">action</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="method">DeleteFiber</span><span class="punctuation">(</span><span class="fieldName">actions</span><span class="punctuation">[</span><span class="parameter">action</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+ 
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">HKTMonadFiberAsync</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class">ConcurrentDictionary</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="keyword">byte</span><span class="punctuation">&gt;</span> <span class="fieldName">readyToGo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">ConcurrentDictionary</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="keyword">byte</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class">ConcurrentDictionary</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="delegate">Action</span><span class="punctuation">&gt;</span> <span class="fieldName">allJobs</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">ConcurrentDictionary</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="delegate">Action</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="class">FiberHelper</span> <span class="fieldName">helper</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">FiberHelper</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="fieldName">current</span><span class="punctuation">;</span>
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">bool</span> <span class="fieldName">done</span><span class="punctuation">;</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="method">StartFiber</span><span class="punctuation">(</span><span class="keyword">int</span> <span class="parameter">actionId</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="fieldName">allJobs</span><span class="punctuation">[</span><span class="parameter">actionId</span><span class="punctuation">]</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="control">if</span> <span class="punctuation">(</span><span class="parameter">actionId</span> <span class="operator">!=</span> <span class="numericLiteral">0</span><span class="punctuation">)</span>
+            <span class="punctuation">{</span>
+                <span class="class">HKTMonadFiberAsync</span><span class="operator">.</span><span class="fieldName">done</span> <span class="operator">=</span> <span class="keyword">true</span><span class="punctuation">;</span>
+                <span class="class">HKTMonadFiberAsync</span><span class="operator">.</span><span class="fieldName">helper</span><span class="operator">.</span><span class="method">Switch</span><span class="punctuation">(</span><span class="numericLiteral">0</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="punctuation">}</span>
+ 
+            <span class="control">return</span> <span class="numericLiteral">0</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">delegate</span> <span class="keyword">int</span> <span class="delegate">StartFiberDelegate</span><span class="punctuation">(</span><span class="keyword">int</span> <span class="parameter">actionId</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">Run</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="fieldName">helper</span><span class="operator">.</span><span class="fieldName">fiberCaller</span> <span class="operator">=</span> <span class="class">Marshal</span><span class="operator">.</span><span class="method">GetFunctionPointerForDelegate</span><span class="punctuation">(</span><span class="punctuation">(</span><span class="delegate">StartFiberDelegate</span><span class="punctuation">)</span><span class="method">StartFiber</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+            <span class="fieldName">helper</span><span class="operator">.</span><span class="method">Convert</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+            <span class="fieldName">allJobs</span><span class="operator">.</span><span class="method">TryAdd</span><span class="punctuation">(</span><span class="numericLiteral">1</span><span class="punctuation">,</span> <span class="method">RunInternal</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="fieldName">readyToGo</span><span class="operator">.</span><span class="method">TryAdd</span><span class="punctuation">(</span><span class="numericLiteral">1</span><span class="punctuation">,</span> <span class="numericLiteral">0</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="fieldName">helper</span><span class="operator">.</span><span class="method">Create</span><span class="punctuation">(</span><span class="numericLiteral">1</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+            <span class="fieldName">allJobs</span><span class="operator">.</span><span class="method">TryAdd</span><span class="punctuation">(</span><span class="numericLiteral">2</span><span class="punctuation">,</span> <span class="method">SideJob</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="fieldName">readyToGo</span><span class="operator">.</span><span class="method">TryAdd</span><span class="punctuation">(</span><span class="numericLiteral">2</span><span class="punctuation">,</span> <span class="numericLiteral">0</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="fieldName">helper</span><span class="operator">.</span><span class="method">Create</span><span class="punctuation">(</span><span class="numericLiteral">2</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+ 
+            <span class="control">while</span> <span class="punctuation">(</span><span class="keyword">true</span><span class="punctuation">)</span>
+            <span class="punctuation">{</span>
+                <span class="fieldName">done</span> <span class="operator">=</span> <span class="keyword">false</span><span class="punctuation">;</span>
+                <span class="keyword">var</span> <span class="localName">keys</span> <span class="operator">=</span> <span class="fieldName">readyToGo</span><span class="operator">.</span><span class="class">Keys</span><span class="operator">.</span><span class="method">GetEnumerator</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                <span class="control">while</span> <span class="punctuation">(</span><span class="localName">keys</span><span class="operator">.</span><span class="method">MoveNext</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
+                <span class="punctuation">{</span>
+                    <span class="fieldName">current</span> <span class="operator">=</span> <span class="localName">keys</span><span class="operator">.</span><span class="identifier">Current</span><span class="punctuation">;</span>
+                    <span class="fieldName">helper</span><span class="operator">.</span><span class="method">Switch</span><span class="punctuation">(</span><span class="fieldName">current</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                    <span class="control">if</span> <span class="punctuation">(</span><span class="fieldName">done</span><span class="punctuation">)</span>
+                    <span class="punctuation">{</span>
+                        <span class="fieldName">helper</span><span class="operator">.</span><span class="method">Delete</span><span class="punctuation">(</span><span class="fieldName">current</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                        <span class="delegate">Action</span> <span class="localName">action</span><span class="punctuation">;</span>
+                        <span class="fieldName">allJobs</span><span class="operator">.</span><span class="method">TryRemove</span><span class="punctuation">(</span><span class="fieldName">current</span><span class="punctuation">,</span> <span class="keyword">out</span> <span class="localName">action</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                        <span class="keyword">byte</span> <span class="localName">b</span><span class="punctuation">;</span>
+                        <span class="fieldName">readyToGo</span><span class="operator">.</span><span class="method">TryRemove</span><span class="punctuation">(</span><span class="fieldName">current</span><span class="punctuation">,</span> <span class="keyword">out</span> <span class="localName">b</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                    <span class="punctuation">}</span>
+                <span class="punctuation">}</span>
+ 
+                <span class="control">if</span> <span class="punctuation">(</span><span class="fieldName">allJobs</span><span class="operator">.</span><span class="identifier">IsEmpty</span><span class="punctuation">)</span>
+                <span class="punctuation">{</span>
+                    <span class="control">break</span><span class="punctuation">;</span>
+                <span class="punctuation">}</span>
+ 
+                <span class="class">Thread</span><span class="operator">.</span><span class="method">Sleep</span><span class="punctuation">(</span><span class="numericLiteral">1</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">RunInternal</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="class">Program</span><span class="operator">.</span><span class="method">WhereAmI</span><span class="punctuation">(</span><span class="string">&quot;\tBefore nesting&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+            <span class="method">RunInternalNested</span><span class="punctuation">&lt;</span><span class="class">AsyncBuilder</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="comment">//RunInternalNested&lt;IdBuilder&gt;();</span>
+ 
+            <span class="class">Program</span><span class="operator">.</span><span class="method">WhereAmI</span><span class="punctuation">(</span><span class="string">&quot;\tAfter nesting&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">RunInternalNested</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="keyword">where</span> <span class="typeParam">T</span> <span class="punctuation">:</span> <span class="class">Builder</span><span class="punctuation">,</span> <span class="keyword">new</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="class">Program</span><span class="operator">.</span><span class="method">WhereAmI</span><span class="punctuation">(</span><span class="string">&quot;\t\tBefore creating delay&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+            <span class="method">Delay</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="numericLiteral">2000</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+            <span class="class">Program</span><span class="operator">.</span><span class="method">WhereAmI</span><span class="punctuation">(</span><span class="string">&quot;\t\tAfter sleeping&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+            <span class="keyword">var</span> <span class="localName">data</span> <span class="operator">=</span> <span class="method">Data</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">,</span> <span class="keyword">string</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="string">&quot;Some string&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+ 
+            <span class="class">Program</span><span class="operator">.</span><span class="method">WhereAmI</span><span class="punctuation">(</span><span class="string">$&quot;</span><span class="string">\t\tAfter creating data</span> <span class="punctuation">{</span><span class="localName">data</span><span class="punctuation">}</span><span class="string">&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">Delay</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="keyword">int</span> <span class="parameter">timeout</span><span class="punctuation">)</span> <span class="keyword">where</span> <span class="typeParam">T</span> <span class="punctuation">:</span> <span class="class">Builder</span><span class="punctuation">,</span> <span class="keyword">new</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="keyword">var</span> <span class="localName">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="typeParam">T</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="operator">.</span><span class="method">Build</span><span class="punctuation">&lt;</span><span class="keyword">object</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="keyword">var</span> <span class="localName">timer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Timer</span><span class="punctuation">(</span><span class="parameter">_</span> <span class="operator">=&gt;</span> <span class="localName">context</span><span class="operator">.</span><span class="method">Complete</span><span class="punctuation">(</span><span class="keyword">new</span> <span class="keyword">object</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">,</span> <span class="keyword">null</span><span class="punctuation">,</span> <span class="parameter">timeout</span><span class="punctuation">,</span> <span class="class">Timeout</span><span class="operator">.</span><span class="constant">Infinite</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="class">GC</span><span class="operator">.</span><span class="method">KeepAlive</span><span class="punctuation">(</span><span class="localName">timer</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="localName">context</span><span class="operator">.</span><span class="method">Map</span><span class="punctuation">(</span><span class="punctuation">(</span><span class="keyword">object</span><span class="punctuation">)</span><span class="keyword">null</span><span class="punctuation">,</span> <span class="parameter">_</span> <span class="operator">=&gt;</span> <span class="parameter">timeout</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="typeParam">U</span> <span class="method">Data</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">,</span> <span class="typeParam">U</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="typeParam">U</span> <span class="parameter">d</span><span class="punctuation">)</span> <span class="keyword">where</span> <span class="typeParam">T</span> <span class="punctuation">:</span> <span class="class">Builder</span><span class="punctuation">,</span> <span class="keyword">new</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="keyword">var</span> <span class="localName">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="typeParam">T</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="operator">.</span><span class="method">Build</span><span class="punctuation">&lt;</span><span class="typeParam">U</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="control">return</span> <span class="localName">context</span><span class="operator">.</span><span class="method">Map</span><span class="punctuation">(</span><span class="parameter">d</span><span class="punctuation">,</span> <span class="parameter">_</span> <span class="operator">=&gt;</span> <span class="parameter">d</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="method">SideJob</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="class">Program</span><span class="operator">.</span><span class="method">WhereAmI</span><span class="punctuation">(</span><span class="string">&quot;\tSide job&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+ 
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="class">Builder</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="interface">Monad</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span> <span class="method">Build</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+ 
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">IdBuilder</span> <span class="punctuation">:</span> <span class="class">Builder</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">public</span> <span class="keyword">override</span> <span class="interface">Monad</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span> <span class="method">Build</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="control">return</span> <span class="keyword">new</span> <span class="class">Id</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+ 
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">AsyncBuilder</span> <span class="punctuation">:</span> <span class="class">Builder</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">public</span> <span class="keyword">override</span> <span class="interface">Monad</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span> <span class="method">Build</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="control">return</span> <span class="keyword">new</span> <span class="class">Async</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+ 
+    <span class="keyword">public</span> <span class="keyword">interface</span> <span class="interface">Monad</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span>
+    <span class="punctuation">{</span>
+        <span class="typeParam">U</span> <span class="method">Map</span><span class="punctuation">&lt;</span><span class="typeParam">U</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="typeParam">T</span> <span class="parameter">value</span><span class="punctuation">,</span> <span class="delegate">Func</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">,</span> <span class="typeParam">U</span><span class="punctuation">&gt;</span> <span class="parameter">lambda</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="keyword">void</span> <span class="method">Complete</span><span class="punctuation">(</span><span class="typeParam">T</span> <span class="parameter">t</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+ 
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">Id</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span> <span class="punctuation">:</span> <span class="interface">Monad</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">private</span> <span class="typeParam">T</span> <span class="fieldName">t</span><span class="punctuation">;</span>
+ 
+        <span class="keyword">public</span> <span class="typeParam">U</span> <span class="method">Map</span><span class="punctuation">&lt;</span><span class="typeParam">U</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="typeParam">T</span> <span class="parameter">value</span><span class="punctuation">,</span> <span class="delegate">Func</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">,</span> <span class="typeParam">U</span><span class="punctuation">&gt;</span> <span class="parameter">lambda</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="keyword">this</span><span class="operator">.</span><span class="fieldName">t</span> <span class="operator">=</span> <span class="parameter">value</span><span class="punctuation">;</span>
+            <span class="keyword">lock</span> <span class="punctuation">(</span><span class="keyword">this</span><span class="punctuation">)</span>
+            <span class="punctuation">{</span>
+                <span class="control">while</span> <span class="punctuation">(</span><span class="fieldName">t</span> <span class="operator">==</span> <span class="keyword">null</span><span class="punctuation">)</span>
+                <span class="punctuation">{</span>
+                    <span class="class">Monitor</span><span class="operator">.</span><span class="method">Wait</span><span class="punctuation">(</span><span class="keyword">this</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                <span class="punctuation">}</span>
+            <span class="punctuation">}</span>
+ 
+            <span class="control">return</span> <span class="parameter">lambda</span><span class="punctuation">(</span><span class="keyword">this</span><span class="operator">.</span><span class="fieldName">t</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Complete</span><span class="punctuation">(</span><span class="typeParam">T</span> <span class="parameter">t</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="keyword">lock</span> <span class="punctuation">(</span><span class="keyword">this</span><span class="punctuation">)</span>
+            <span class="punctuation">{</span>
+                <span class="keyword">this</span><span class="operator">.</span><span class="fieldName">t</span> <span class="operator">=</span> <span class="parameter">t</span><span class="punctuation">;</span>
+                <span class="class">Monitor</span><span class="operator">.</span><span class="method">PulseAll</span><span class="punctuation">(</span><span class="keyword">this</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+ 
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">Async</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span> <span class="punctuation">:</span> <span class="interface">Monad</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">&gt;</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">private</span> <span class="typeParam">T</span> <span class="fieldName">t</span><span class="punctuation">;</span>
+        <span class="keyword">private</span> <span class="keyword">int</span> <span class="fieldName">current</span><span class="punctuation">;</span>
+ 
+        <span class="keyword">public</span> <span class="typeParam">U</span> <span class="method">Map</span><span class="punctuation">&lt;</span><span class="typeParam">U</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="typeParam">T</span> <span class="parameter">value</span><span class="punctuation">,</span> <span class="delegate">Func</span><span class="punctuation">&lt;</span><span class="typeParam">T</span><span class="punctuation">,</span> <span class="typeParam">U</span><span class="punctuation">&gt;</span> <span class="parameter">lambda</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="keyword">this</span><span class="operator">.</span><span class="fieldName">t</span> <span class="operator">=</span> <span class="parameter">value</span><span class="punctuation">;</span>
+            <span class="control">if</span> <span class="punctuation">(</span><span class="fieldName">t</span> <span class="operator">==</span> <span class="keyword">null</span><span class="punctuation">)</span>
+            <span class="punctuation">{</span>
+                <span class="keyword">this</span><span class="operator">.</span><span class="fieldName">current</span> <span class="operator">=</span> <span class="class">HKTMonadFiberAsync</span><span class="operator">.</span><span class="fieldName">current</span><span class="punctuation">;</span>
+                <span class="keyword">byte</span> <span class="localName">b</span><span class="punctuation">;</span>
+                <span class="class">HKTMonadFiberAsync</span><span class="operator">.</span><span class="fieldName">readyToGo</span><span class="operator">.</span><span class="method">TryRemove</span><span class="punctuation">(</span><span class="keyword">this</span><span class="operator">.</span><span class="fieldName">current</span><span class="punctuation">,</span> <span class="keyword">out</span> <span class="localName">b</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                <span class="class">HKTMonadFiberAsync</span><span class="operator">.</span><span class="fieldName">helper</span><span class="operator">.</span><span class="method">Switch</span><span class="punctuation">(</span><span class="numericLiteral">0</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="punctuation">}</span>
+ 
+            <span class="control">return</span> <span class="parameter">lambda</span><span class="punctuation">(</span><span class="keyword">this</span><span class="operator">.</span><span class="fieldName">t</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+ 
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Complete</span><span class="punctuation">(</span><span class="typeParam">T</span> <span class="parameter">t</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="keyword">this</span><span class="operator">.</span><span class="fieldName">t</span> <span class="operator">=</span> <span class="parameter">t</span><span class="punctuation">;</span>
+            <span class="class">HKTMonadFiberAsync</span><span class="operator">.</span><span class="fieldName">readyToGo</span><span class="operator">.</span><span class="method">TryAdd</span><span class="punctuation">(</span><span class="keyword">this</span><span class="operator">.</span><span class="fieldName">current</span><span class="punctuation">,</span> <span class="numericLiteral">0</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

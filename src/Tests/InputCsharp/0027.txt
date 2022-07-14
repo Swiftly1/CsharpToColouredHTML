@@ -1,0 +1,254 @@
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading;
+ 
+namespace AsyncWithFibers
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            HKTMonadFiberAsync.Run();
+        }
+ 
+        public static void WhereAmI(string what)
+        {
+            Console.WriteLine($"Thread {Thread.CurrentThread.ManagedThreadId} Time {DateTime.Now}: {what}");
+        }
+    }
+ 
+    public class FiberHelper
+    {
+        [DllImport("kernel32.dll")]
+        static extern IntPtr ConvertThreadToFiber(IntPtr lpParameter);
+ 
+        [DllImport("kernel32.dll")]
+        static extern IntPtr CreateFiber(uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter);
+ 
+        [DllImport("kernel32.dll")]
+        static extern IntPtr SwitchToFiber(IntPtr lpStartAddress);
+ 
+        [DllImport("kernel32.dll")]
+        static extern IntPtr DeleteFiber(IntPtr lpStartAddress);
+ 
+        Dictionary<int, IntPtr> actions;
+        public IntPtr fiberCaller;
+ 
+        public FiberHelper()
+        {
+            actions = new Dictionary<int, IntPtr>();
+        }
+ 
+        public void Convert()
+        {
+            actions.Add(0, ConvertThreadToFiber(IntPtr.Zero));
+        }
+ 
+        public void Create(int action)
+        {
+            actions.Add(action, CreateFiber(1024 * 1024, fiberCaller, (IntPtr)action));
+        }
+ 
+        public void Switch(int action)
+        {
+            Thread.Sleep(100);
+            IntPtr param = actions[action];
+            SwitchToFiber(param);
+        }
+ 
+        public void Delete(int action)
+        {
+            DeleteFiber(actions[action]);
+        }
+    }
+ 
+    public class HKTMonadFiberAsync
+    {
+        public static ConcurrentDictionary<int, byte> readyToGo = new ConcurrentDictionary<int, byte>();
+        public static ConcurrentDictionary<int, Action> allJobs = new ConcurrentDictionary<int, Action>();
+        public static FiberHelper helper = new FiberHelper();
+        public static int current;
+        public static bool done;
+ 
+        public static int StartFiber(int actionId)
+        {
+            allJobs[actionId]();
+            if (actionId != 0)
+            {
+                HKTMonadFiberAsync.done = true;
+                HKTMonadFiberAsync.helper.Switch(0);
+            }
+ 
+            return 0;
+        }
+ 
+        delegate int StartFiberDelegate(int actionId);
+ 
+        public static void Run()
+        {
+            helper.fiberCaller = Marshal.GetFunctionPointerForDelegate((StartFiberDelegate)StartFiber);
+ 
+            helper.Convert();
+ 
+            allJobs.TryAdd(1, RunInternal);
+            readyToGo.TryAdd(1, 0);
+            helper.Create(1);
+ 
+            allJobs.TryAdd(2, SideJob);
+            readyToGo.TryAdd(2, 0);
+            helper.Create(2);
+ 
+ 
+            while (true)
+            {
+                done = false;
+                var keys = readyToGo.Keys.GetEnumerator();
+                while (keys.MoveNext())
+                {
+                    current = keys.Current;
+                    helper.Switch(current);
+                    if (done)
+                    {
+                        helper.Delete(current);
+                        Action action;
+                        allJobs.TryRemove(current, out action);
+                        byte b;
+                        readyToGo.TryRemove(current, out b);
+                    }
+                }
+ 
+                if (allJobs.IsEmpty)
+                {
+                    break;
+                }
+ 
+                Thread.Sleep(1);
+            }
+        }
+ 
+        private static void RunInternal()
+        {
+            Program.WhereAmI("\tBefore nesting");
+ 
+            RunInternalNested<AsyncBuilder>();
+            //RunInternalNested<IdBuilder>();
+ 
+            Program.WhereAmI("\tAfter nesting");
+        }
+ 
+        private static void RunInternalNested<T>() where T : Builder, new()
+        {
+            Program.WhereAmI("\t\tBefore creating delay");
+ 
+            Delay<T>(2000);
+ 
+            Program.WhereAmI("\t\tAfter sleeping");
+ 
+            var data = Data<T, string>("Some string");
+ 
+            Program.WhereAmI($"\t\tAfter creating data {data}");
+        }
+ 
+        private static void Delay<T>(int timeout) where T : Builder, new()
+        {
+            var context = new T().Build<object>();
+            var timer = new Timer(_ => context.Complete(new object()), null, timeout, Timeout.Infinite);
+            GC.KeepAlive(timer);
+            context.Map((object)null, _ => timeout);
+        }
+ 
+        private static U Data<T, U>(U d) where T : Builder, new()
+        {
+            var context = new T().Build<U>();
+            return context.Map(d, _ => d);
+        }
+ 
+        private static void SideJob()
+        {
+            Program.WhereAmI("\tSide job");
+        }
+    }
+ 
+    public abstract class Builder
+    {
+        public abstract Monad<T> Build<T>();
+    }
+ 
+    public class IdBuilder : Builder
+    {
+        public override Monad<T> Build<T>()
+        {
+            return new Id<T>();
+        }
+    }
+ 
+    public class AsyncBuilder : Builder
+    {
+        public override Monad<T> Build<T>()
+        {
+            return new Async<T>();
+        }
+    }
+ 
+    public interface Monad<T>
+    {
+        U Map<U>(T value, Func<T, U> lambda);
+        void Complete(T t);
+    }
+ 
+    public class Id<T> : Monad<T>
+    {
+        private T t;
+ 
+        public U Map<U>(T value, Func<T, U> lambda)
+        {
+            this.t = value;
+            lock (this)
+            {
+                while (t == null)
+                {
+                    Monitor.Wait(this);
+                }
+            }
+ 
+            return lambda(this.t);
+        }
+ 
+        public void Complete(T t)
+        {
+            lock (this)
+            {
+                this.t = t;
+                Monitor.PulseAll(this);
+            }
+        }
+    }
+ 
+    public class Async<T> : Monad<T>
+    {
+        private T t;
+        private int current;
+ 
+        public U Map<U>(T value, Func<T, U> lambda)
+        {
+            this.t = value;
+            if (t == null)
+            {
+                this.current = HKTMonadFiberAsync.current;
+                byte b;
+                HKTMonadFiberAsync.readyToGo.TryRemove(this.current, out b);
+                HKTMonadFiberAsync.helper.Switch(0);
+            }
+ 
+            return lambda(this.t);
+        }
+ 
+        public void Complete(T t)
+        {
+            this.t = t;
+            HKTMonadFiberAsync.readyToGo.TryAdd(this.current, 0);
+        }
+    }
+}

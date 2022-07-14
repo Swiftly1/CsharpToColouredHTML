@@ -61,4 +61,6 @@ internal static class InternalHtmlColors
     public const string NumericLiteral = "numericLiteral";
 
     public const string EnumName = "enumName";
+
+    public const string Delegate = "delegate";
 }

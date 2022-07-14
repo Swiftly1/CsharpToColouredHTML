@@ -440,6 +440,10 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.ConstantName;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.DelegateName)
+        {
+            colour = InternalHtmlColors.Delegate;
+        }
 
         return colour;
     }
@@ -648,10 +652,7 @@ public class HTMLEmitter : IEmitter
             _IsNew = false;
             return true;
         }
-        else if (nodes.Count > currentIndex + 4 &&
-            nodes[currentIndex + 2].Text == "=" &&
-            nodes[currentIndex + 3].Text == "new" &&
-            nodes[currentIndex + 4].Text == node.Text)
+        else if (RightSideOfAssignmentHasTheSameNameAfterNew(currentIndex, nodes))
         {
             return true;
         }
@@ -659,6 +660,42 @@ public class HTMLEmitter : IEmitter
         {
             return false;
         }
+    }
+
+    private bool RightSideOfAssignmentHasTheSameNameAfterNew(int currentIndex, List<Node> nodes)
+    {
+        var node = nodes[currentIndex];
+
+        if (nodes.Count > currentIndex + 4 &&
+                    nodes[currentIndex + 2].Text == "=" &&
+                    nodes[currentIndex + 3].Text == "new" &&
+                    nodes[currentIndex + 4].Text == node.Text)
+            return true;
+
+        //ConcurrentDictionary<int, Action> allJobs = new ConcurrentDictionary<int, Action>();
+
+        Node nextNew = null;
+        int? nextNewIndex = null;
+
+        for (int i = currentIndex; i < nodes.Count; i++)
+        {
+            var current = nodes[i];
+
+            if (current.Text == "=")
+            {
+                nextNew = current;
+                nextNewIndex = i;
+                break;
+            }
+        }
+
+        if (nextNew == null)
+            return false;
+
+        if (nextNewIndex.Value + 2 >= nodes.Count)
+            return false;
+
+        return node.Text == nodes[nextNewIndex.Value + 2].Text;
     }
 
     private bool SeemsLikePropertyUsage(int currentIndex, List<Node> nodes)

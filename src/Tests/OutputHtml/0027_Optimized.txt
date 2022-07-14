@@ -1,0 +1,256 @@
+
+<pre class="background">
+<span class="keyword">using</span> System;
+<span class="keyword">using</span> System.Collections.Concurrent;
+<span class="keyword">using</span> System.Collections.Generic;
+<span class="keyword">using</span> System.Runtime.InteropServices;
+<span class="keyword">using</span> System.Threading;
+ 
+<span class="keyword">namespace</span> AsyncWithFibers
+{
+    <span class="keyword">class</span> <span class="class">Program</span>
+    {
+        <span class="keyword">static void</span> <span class="method">Main</span>(<span class="keyword">string</span>[] <span class="parameter">args</span>)
+        {
+            <span class="class">HKTMonadFiberAsync</span>.<span class="method">Run</span>();
+        }
+ 
+        <span class="keyword">public static void</span> <span class="method">WhereAmI</span>(<span class="keyword">string</span> <span class="parameter">what</span>)
+        {
+            <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="string">$&quot;Thread</span> {<span class="class">Thread</span>.CurrentThread.ManagedThreadId} <span class="string">Time</span> {<span class="struct">DateTime</span>.Now}<span class="string">:</span> {<span class="parameter">what</span>}<span class="string">&quot;</span>);
+        }
+    }
+ 
+    <span class="keyword">public class</span> <span class="class">FiberHelper</span>
+    {
+        [<span class="class">DllImport</span>(<span class="string">&quot;kernel32.dll&quot;</span>)]
+        <span class="keyword">static extern</span> <span class="struct">IntPtr</span> <span class="method">ConvertThreadToFiber</span>(<span class="struct">IntPtr</span> <span class="parameter">lpParameter</span>);
+ 
+        [<span class="class">DllImport</span>(<span class="string">&quot;kernel32.dll&quot;</span>)]
+        <span class="keyword">static extern</span> <span class="struct">IntPtr</span> <span class="method">CreateFiber</span>(<span class="keyword">uint</span> <span class="parameter">dwStackSize</span>, <span class="struct">IntPtr</span> <span class="parameter">lpStartAddress</span>, <span class="struct">IntPtr</span> <span class="parameter">lpParameter</span>);
+ 
+        [<span class="class">DllImport</span>(<span class="string">&quot;kernel32.dll&quot;</span>)]
+        <span class="keyword">static extern</span> <span class="struct">IntPtr</span> <span class="method">SwitchToFiber</span>(<span class="struct">IntPtr</span> <span class="parameter">lpStartAddress</span>);
+ 
+        [<span class="class">DllImport</span>(<span class="string">&quot;kernel32.dll&quot;</span>)]
+        <span class="keyword">static extern</span> <span class="struct">IntPtr</span> <span class="method">DeleteFiber</span>(<span class="struct">IntPtr</span> <span class="parameter">lpStartAddress</span>);
+ 
+        <span class="class">Dictionary</span>&lt;<span class="keyword">int</span>, <span class="struct">IntPtr</span>&gt; actions;
+        <span class="keyword">public</span> <span class="struct">IntPtr</span> fiberCaller;
+ 
+        <span class="keyword">public</span> <span class="class">FiberHelper</span>()
+        {
+            actions = <span class="keyword">new</span> <span class="class">Dictionary</span>&lt;<span class="keyword">int</span>, <span class="struct">IntPtr</span>&gt;();
+        }
+ 
+        <span class="keyword">public void</span> <span class="method">Convert</span>()
+        {
+            actions.<span class="method">Add</span>(<span class="numericLiteral">0</span>, <span class="method">ConvertThreadToFiber</span>(<span class="struct">IntPtr</span>.Zero));
+        }
+ 
+        <span class="keyword">public void</span> <span class="method">Create</span>(<span class="keyword">int</span> <span class="parameter">action</span>)
+        {
+            actions.<span class="method">Add</span>(<span class="parameter">action</span>, <span class="method">CreateFiber</span>(<span class="numericLiteral">1024</span> * <span class="numericLiteral">1024</span>, fiberCaller, (<span class="struct">IntPtr</span>)<span class="parameter">action</span>));
+        }
+ 
+        <span class="keyword">public void</span> <span class="method">Switch</span>(<span class="keyword">int</span> <span class="parameter">action</span>)
+        {
+            <span class="class">Thread</span>.<span class="method">Sleep</span>(<span class="numericLiteral">100</span>);
+            <span class="struct">IntPtr</span> <span class="localName">param</span> = actions[<span class="parameter">action</span>];
+            <span class="method">SwitchToFiber</span>(<span class="localName">param</span>);
+        }
+ 
+        <span class="keyword">public void</span> <span class="method">Delete</span>(<span class="keyword">int</span> <span class="parameter">action</span>)
+        {
+            <span class="method">DeleteFiber</span>(actions[<span class="parameter">action</span>]);
+        }
+    }
+ 
+    <span class="keyword">public class</span> <span class="class">HKTMonadFiberAsync</span>
+    {
+        <span class="keyword">public static</span> <span class="class">ConcurrentDictionary</span>&lt;<span class="keyword">int</span>, <span class="keyword">byte</span>&gt; readyToGo = <span class="keyword">new</span> <span class="class">ConcurrentDictionary</span>&lt;<span class="keyword">int</span>, <span class="keyword">byte</span>&gt;();
+        <span class="keyword">public static</span> <span class="class">ConcurrentDictionary</span>&lt;<span class="keyword">int</span>, <span class="delegate">Action</span>&gt; allJobs = <span class="keyword">new</span> <span class="class">ConcurrentDictionary</span>&lt;<span class="keyword">int</span>, <span class="delegate">Action</span>&gt;();
+        <span class="keyword">public static</span> <span class="class">FiberHelper</span> helper = <span class="keyword">new</span> <span class="class">FiberHelper</span>();
+        <span class="keyword">public static int</span> current;
+        <span class="keyword">public static bool</span> done;
+ 
+        <span class="keyword">public static int</span> <span class="method">StartFiber</span>(<span class="keyword">int</span> <span class="parameter">actionId</span>)
+        {
+            allJobs[<span class="parameter">actionId</span>]();
+            <span class="control">if</span> (<span class="parameter">actionId</span> != <span class="numericLiteral">0</span>)
+            {
+                <span class="class">HKTMonadFiberAsync</span>.done = <span class="keyword">true</span>;
+                <span class="class">HKTMonadFiberAsync</span>.helper.<span class="method">Switch</span>(<span class="numericLiteral">0</span>);
+            }
+ 
+            <span class="control">return</span> <span class="numericLiteral">0</span>;
+        }
+ 
+        <span class="keyword">delegate int</span> <span class="delegate">StartFiberDelegate</span>(<span class="keyword">int</span> <span class="parameter">actionId</span>);
+ 
+        <span class="keyword">public static void</span> <span class="method">Run</span>()
+        {
+            helper.fiberCaller = <span class="class">Marshal</span>.<span class="method">GetFunctionPointerForDelegate</span>((<span class="delegate">StartFiberDelegate</span>)<span class="method">StartFiber</span>);
+ 
+            helper.<span class="method">Convert</span>();
+ 
+            allJobs.<span class="method">TryAdd</span>(<span class="numericLiteral">1</span>, <span class="method">RunInternal</span>);
+            readyToGo.<span class="method">TryAdd</span>(<span class="numericLiteral">1</span>, <span class="numericLiteral">0</span>);
+            helper.<span class="method">Create</span>(<span class="numericLiteral">1</span>);
+ 
+            allJobs.<span class="method">TryAdd</span>(<span class="numericLiteral">2</span>, <span class="method">SideJob</span>);
+            readyToGo.<span class="method">TryAdd</span>(<span class="numericLiteral">2</span>, <span class="numericLiteral">0</span>);
+            helper.<span class="method">Create</span>(<span class="numericLiteral">2</span>);
+ 
+ 
+            <span class="control">while</span> (<span class="keyword">true</span>)
+            {
+                done = <span class="keyword">false</span>;
+                <span class="keyword">var</span> <span class="localName">keys</span> = readyToGo.<span class="class">Keys</span>.<span class="method">GetEnumerator</span>();
+                <span class="control">while</span> (<span class="localName">keys</span>.<span class="method">MoveNext</span>())
+                {
+                    current = <span class="localName">keys</span>.Current;
+                    helper.<span class="method">Switch</span>(current);
+                    <span class="control">if</span> (done)
+                    {
+                        helper.<span class="method">Delete</span>(current);
+                        <span class="delegate">Action</span> <span class="localName">action</span>;
+                        allJobs.<span class="method">TryRemove</span>(current, <span class="keyword">out</span> <span class="localName">action</span>);
+                        <span class="keyword">byte</span> <span class="localName">b</span>;
+                        readyToGo.<span class="method">TryRemove</span>(current, <span class="keyword">out</span> <span class="localName">b</span>);
+                    }
+                }
+ 
+                <span class="control">if</span> (allJobs.IsEmpty)
+                {
+                    <span class="control">break</span>;
+                }
+ 
+                <span class="class">Thread</span>.<span class="method">Sleep</span>(<span class="numericLiteral">1</span>);
+            }
+        }
+ 
+        <span class="keyword">private static void</span> <span class="method">RunInternal</span>()
+        {
+            <span class="class">Program</span>.<span class="method">WhereAmI</span>(<span class="string">&quot;\tBefore nesting&quot;</span>);
+ 
+            <span class="method">RunInternalNested</span>&lt;<span class="class">AsyncBuilder</span>&gt;();
+            <span class="comment">//RunInternalNested&lt;IdBuilder&gt;();</span>
+ 
+            <span class="class">Program</span>.<span class="method">WhereAmI</span>(<span class="string">&quot;\tAfter nesting&quot;</span>);
+        }
+ 
+        <span class="keyword">private static void</span> <span class="method">RunInternalNested</span>&lt;<span class="typeParam">T</span>&gt;() <span class="keyword">where</span> <span class="typeParam">T</span> : <span class="class">Builder</span>, <span class="keyword">new</span>()
+        {
+            <span class="class">Program</span>.<span class="method">WhereAmI</span>(<span class="string">&quot;\t\tBefore creating delay&quot;</span>);
+ 
+            <span class="method">Delay</span>&lt;<span class="typeParam">T</span>&gt;(<span class="numericLiteral">2000</span>);
+ 
+            <span class="class">Program</span>.<span class="method">WhereAmI</span>(<span class="string">&quot;\t\tAfter sleeping&quot;</span>);
+ 
+            <span class="keyword">var</span> <span class="localName">data</span> = <span class="method">Data</span>&lt;<span class="typeParam">T</span>, <span class="keyword">string</span>&gt;(<span class="string">&quot;Some string&quot;</span>);
+ 
+            <span class="class">Program</span>.<span class="method">WhereAmI</span>(<span class="string">$&quot;\t\tAfter creating data</span> {<span class="localName">data</span>}<span class="string">&quot;</span>);
+        }
+ 
+        <span class="keyword">private static void</span> <span class="method">Delay</span>&lt;<span class="typeParam">T</span>&gt;(<span class="keyword">int</span> <span class="parameter">timeout</span>) <span class="keyword">where</span> <span class="typeParam">T</span> : <span class="class">Builder</span>, <span class="keyword">new</span>()
+        {
+            <span class="keyword">var</span> <span class="localName">context</span> = <span class="keyword">new</span> <span class="typeParam">T</span>().<span class="method">Build</span>&lt;<span class="keyword">object</span>&gt;();
+            <span class="keyword">var</span> <span class="localName">timer</span> = <span class="keyword">new</span> <span class="class">Timer</span>(<span class="parameter">_</span> =&gt; <span class="localName">context</span>.<span class="method">Complete</span>(<span class="keyword">new object</span>()), <span class="keyword">null</span>, <span class="parameter">timeout</span>, <span class="class">Timeout</span>.Infinite);
+            <span class="class">GC</span>.<span class="method">KeepAlive</span>(<span class="localName">timer</span>);
+            <span class="localName">context</span>.<span class="method">Map</span>((<span class="keyword">object</span>)<span class="keyword">null</span>, <span class="parameter">_</span> =&gt; <span class="parameter">timeout</span>);
+        }
+ 
+        <span class="keyword">private static</span> <span class="typeParam">U</span> <span class="method">Data</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt;(<span class="typeParam">U</span> <span class="parameter">d</span>) <span class="keyword">where</span> <span class="typeParam">T</span> : <span class="class">Builder</span>, <span class="keyword">new</span>()
+        {
+            <span class="keyword">var</span> <span class="localName">context</span> = <span class="keyword">new</span> <span class="typeParam">T</span>().<span class="method">Build</span>&lt;<span class="typeParam">U</span>&gt;();
+            <span class="control">return</span> <span class="localName">context</span>.<span class="method">Map</span>(<span class="parameter">d</span>, <span class="parameter">_</span> =&gt; <span class="parameter">d</span>);
+        }
+ 
+        <span class="keyword">private static void</span> <span class="method">SideJob</span>()
+        {
+            <span class="class">Program</span>.<span class="method">WhereAmI</span>(<span class="string">&quot;\tSide job&quot;</span>);
+        }
+    }
+ 
+    <span class="keyword">public abstract class</span> <span class="class">Builder</span>
+    {
+        <span class="keyword">public abstract</span> <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt; <span class="method">Build</span>&lt;<span class="typeParam">T</span>&gt;();
+    }
+ 
+    <span class="keyword">public class</span> <span class="class">IdBuilder</span> : <span class="class">Builder</span>
+    {
+        <span class="keyword">public override</span> <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt; <span class="method">Build</span>&lt;<span class="typeParam">T</span>&gt;()
+        {
+            <span class="control">return</span> <span class="keyword">new</span> <span class="class">Id</span>&lt;<span class="typeParam">T</span>&gt;();
+        }
+    }
+ 
+    <span class="keyword">public class</span> <span class="class">AsyncBuilder</span> : <span class="class">Builder</span>
+    {
+        <span class="keyword">public override</span> <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt; <span class="method">Build</span>&lt;<span class="typeParam">T</span>&gt;()
+        {
+            <span class="control">return</span> <span class="keyword">new</span> <span class="class">Async</span>&lt;<span class="typeParam">T</span>&gt;();
+        }
+    }
+ 
+    <span class="keyword">public interface</span> <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt;
+    {
+        <span class="typeParam">U</span> <span class="method">Map</span>&lt;<span class="typeParam">U</span>&gt;(<span class="typeParam">T</span> <span class="parameter">value</span>, <span class="delegate">Func</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt; <span class="parameter">lambda</span>);
+        <span class="keyword">void</span> <span class="method">Complete</span>(<span class="typeParam">T</span> <span class="parameter">t</span>);
+    }
+ 
+    <span class="keyword">public class</span> <span class="class">Id</span>&lt;<span class="typeParam">T</span>&gt; : <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt;
+    {
+        <span class="keyword">private</span> <span class="typeParam">T</span> t;
+ 
+        <span class="keyword">public</span> <span class="typeParam">U</span> <span class="method">Map</span>&lt;<span class="typeParam">U</span>&gt;(<span class="typeParam">T</span> <span class="parameter">value</span>, <span class="delegate">Func</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt; <span class="parameter">lambda</span>)
+        {
+            <span class="keyword">this</span>.t = <span class="parameter">value</span>;
+            <span class="keyword">lock</span> (<span class="keyword">this</span>)
+            {
+                <span class="control">while</span> (t == <span class="keyword">null</span>)
+                {
+                    <span class="class">Monitor</span>.<span class="method">Wait</span>(<span class="keyword">this</span>);
+                }
+            }
+ 
+            <span class="control">return</span> <span class="parameter">lambda</span>(<span class="keyword">this</span>.t);
+        }
+ 
+        <span class="keyword">public void</span> <span class="method">Complete</span>(<span class="typeParam">T</span> <span class="parameter">t</span>)
+        {
+            <span class="keyword">lock</span> (<span class="keyword">this</span>)
+            {
+                <span class="keyword">this</span>.t = <span class="parameter">t</span>;
+                <span class="class">Monitor</span>.<span class="method">PulseAll</span>(<span class="keyword">this</span>);
+            }
+        }
+    }
+ 
+    <span class="keyword">public class</span> <span class="class">Async</span>&lt;<span class="typeParam">T</span>&gt; : <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt;
+    {
+        <span class="keyword">private</span> <span class="typeParam">T</span> t;
+        <span class="keyword">private int</span> current;
+ 
+        <span class="keyword">public</span> <span class="typeParam">U</span> <span class="method">Map</span>&lt;<span class="typeParam">U</span>&gt;(<span class="typeParam">T</span> <span class="parameter">value</span>, <span class="delegate">Func</span>&lt;<span class="typeParam">T</span>, <span class="typeParam">U</span>&gt; <span class="parameter">lambda</span>)
+        {
+            <span class="keyword">this</span>.t = <span class="parameter">value</span>;
+            <span class="control">if</span> (t == <span class="keyword">null</span>)
+            {
+                <span class="keyword">this</span>.current = <span class="class">HKTMonadFiberAsync</span>.current;
+                <span class="keyword">byte</span> <span class="localName">b</span>;
+                <span class="class">HKTMonadFiberAsync</span>.readyToGo.<span class="method">TryRemove</span>(<span class="keyword">this</span>.current, <span class="keyword">out</span> <span class="localName">b</span>);
+                <span class="class">HKTMonadFiberAsync</span>.helper.<span class="method">Switch</span>(<span class="numericLiteral">0</span>);
+            }
+ 
+            <span class="control">return</span> <span class="parameter">lambda</span>(<span class="keyword">this</span>.t);
+        }
+ 
+        <span class="keyword">public void</span> <span class="method">Complete</span>(<span class="typeParam">T</span> <span class="parameter">t</span>)
+        {
+            <span class="keyword">this</span>.t = <span class="parameter">t</span>;
+            <span class="class">HKTMonadFiberAsync</span>.readyToGo.<span class="method">TryAdd</span>(<span class="keyword">this</span>.current, <span class="numericLiteral">0</span>);
+        }
+    }
+}</pre>
