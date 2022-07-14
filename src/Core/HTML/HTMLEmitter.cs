@@ -674,28 +674,21 @@ public class HTMLEmitter : IEmitter
 
         //ConcurrentDictionary<int, Action> allJobs = new ConcurrentDictionary<int, Action>();
 
-        Node nextNew = null;
-        int? nextNewIndex = null;
+        if (nodes.Count == 1)
+            return true;
 
-        for (int i = currentIndex; i < nodes.Count; i++)
+        for (int i = currentIndex + 1; i < nodes.Count; i++)
         {
             var current = nodes[i];
 
-            if (current.Text == "=")
+            if (current.ClassificationType == ClassificationTypeNames.Identifier && current.Text == node.Text
+                && nodes[i - 1].Text == "new")
             {
-                nextNew = current;
-                nextNewIndex = i;
-                break;
+                return true;
             }
         }
 
-        if (nextNew == null)
-            return false;
-
-        if (nextNewIndex.Value + 2 >= nodes.Count)
-            return false;
-
-        return node.Text == nodes[nextNewIndex.Value + 2].Text;
+        return false;
     }
 
     private bool SeemsLikePropertyUsage(int currentIndex, List<Node> nodes)
