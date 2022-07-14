@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.21] - 14.07.2022
+**Description:**
+Support for delegate and improved heuristics
+
 ## [1.0.20] - 13.07.2022
 **Description:**
 Improved heuristics + New Line handling
