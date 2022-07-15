@@ -8,6 +8,8 @@ public class HTMLEmitterSettings
 
     public bool Optimize = true;
 
+    public bool UseIframe = true;
+
     public HTMLEmitterSettings()
     {
     }
@@ -48,6 +50,18 @@ public class HTMLEmitterSettings
     public HTMLEmitterSettings EnableOptimizations()
     {
         Optimize = true;
+        return this;
+    }
+
+    public HTMLEmitterSettings EnableIframe()
+    {
+        UseIframe = true;
+        return this;
+    }
+
+    public HTMLEmitterSettings DisableIframe()
+    {
+        UseIframe = false;
         return this;
     }
 }

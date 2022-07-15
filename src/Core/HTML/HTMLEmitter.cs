@@ -18,6 +18,7 @@ public class HTMLEmitter : IEmitter
         _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
+        UseIframe = settings.UseIframe;
     }
 
     public HTMLEmitter(HTMLEmitterSettings settings)
@@ -25,6 +26,7 @@ public class HTMLEmitter : IEmitter
         _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
+        UseIframe = settings.UseIframe;
     }
 
     // Internal Stuff:
@@ -40,6 +42,8 @@ public class HTMLEmitter : IEmitter
     private readonly bool AddLineNumber = true;
 
     private readonly bool Optimize = true;
+
+    private readonly bool UseIframe = true;
 
     private bool _IsUsing = false;
 
@@ -117,7 +121,8 @@ public class HTMLEmitter : IEmitter
     {
         Reset();
         var nodes = Preprocess(input);
-        Text = AddLineNumber ? GenerateHtmlWithLineNumbers(nodes) : GenerateHtml(nodes);
+        var html = AddLineNumber ? GenerateHtmlWithLineNumbers(nodes) : GenerateHtml(nodes);
+        Text = UseIframe ? AddIframe(html) : html;
     }
 
     // Implementation:
@@ -765,5 +770,15 @@ public class HTMLEmitter : IEmitter
         }
 
         return false;
+    }
+
+    private string AddIframe(string html)
+    {
+        var iframe_start = "<iframe onload=\"this.height=this.contentWindow.document.body.scrollHeight;\" " +
+                            "frameborder=0 height=500 width=100% srcdoc=\"";
+        var iframe_end = "\"</iframe>";
+        var escaped = Escape(html);
+
+        return iframe_start + escaped + iframe_end;
     }
 }
