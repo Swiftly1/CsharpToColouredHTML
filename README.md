@@ -33,9 +33,8 @@ Sample Usage:
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
 	Console.WriteLine(html);
 
-```diff
-- ⚠️ If you want to have pure HTML without Iframe and HTML being escaped, then try this:
-```
+⚠️ If you want to have pure HTML without Iframe and HTML being escaped, then use `DisableIframe()` ⚠️
+
 	var settings = new HTMLEmitterSettings().DisableIframe();
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 	Console.WriteLine(html);
