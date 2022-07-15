@@ -35,8 +35,9 @@ Sample Usage:
 	
 ___
 
-If you want to have pure HTML without Iframe and HTML being escaped, then try this:
-
+```diff
+- ⚠️ If you want to have pure HTML without Iframe and HTML being escaped, then try this:
+```
 	var settings = new HTMLEmitterSettings().DisableIframe();
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 	Console.WriteLine(html);
