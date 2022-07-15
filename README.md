@@ -26,13 +26,25 @@ You can try live demo that's avaliable at: https://csharp-colors.xyz/
 
 Or use it in not so serious projects: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
 
-.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.21`
+.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.22`
 
 Sample Usage:
 
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
 	Console.WriteLine(html);
+	
 ___
+
+If you want to have pure HTML without Iframe and HTML being escaped, then try this:
+
+	var settings = new HTMLEmitterSettings().DisableIframe();
+	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
+	Console.WriteLine(html);
+
+___
+
+Custom CSS:
+
 	var myCustomCSS = "<style>...</style>";
 	var settings = new HTMLEmitterSettings().UseCustomCSS(myCSS);
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));

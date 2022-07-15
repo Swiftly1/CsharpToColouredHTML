@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.22] - 15.07.2022
+**Description:**
+Support for iframe.
+
+Iframe is used to allow users just to copy-paste HTML code onto their website reliably.
+Without that very often site's native CSS messes with the generated one and the result is terrible.
+
 ## [1.0.21] - 14.07.2022
 **Description:**
 Support for delegate and improved heuristics
