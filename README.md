@@ -32,8 +32,6 @@ Sample Usage:
 
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
 	Console.WriteLine(html);
-	
-___
 
 ```diff
 - ⚠️ If you want to have pure HTML without Iframe and HTML being escaped, then try this:
