@@ -1,10 +1,15 @@
+
+# Demo 
+
+You can try live demo that's avaliable at: https://csharp-colors.xyz/ or directly from Nuget linked below
+
 # CsharpToColouredHTML
 
 This library tries to convert C# code into pure HTML with some lines of CSS that
 
 make it look as if that was inside Visual Studio or Visual Studio Code.
-
-MS Docs default code highlighting vs. this project
+________
+MS Docs default code highlighting vs. this project.
 
 ![img](https://user-images.githubusercontent.com/77643169/179602262-a1ab256c-2a21-4368-8f30-5468dc156d4c.png)
 
@@ -24,7 +29,7 @@ Even despite performing [escaping](https://github.com/Swiftly1/CsharpToColouredH
 
 I still recommend to use it only on trusted inputs, at least for now. 
 
-# Demo 
+# Usage 
 
 You can try live demo that's avaliable at: https://csharp-colors.xyz/
 
