@@ -6,7 +6,7 @@ make it look as if that was inside Visual Studio or Visual Studio Code.
 
 MS Docs default code highlighting vs. this project
 
-![img](https://user-images.githubusercontent.com/77643169/179600626-8b08f2f3-0757-4bbe-9683-70e7f2d79f8e.png)
+![img](https://user-images.githubusercontent.com/77643169/179602262-a1ab256c-2a21-4368-8f30-5468dc156d4c.png)
 
 # Why? 
 
