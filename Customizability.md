@@ -98,6 +98,15 @@ Default CSS with line numbers:
 	.parameter {
 	  color: #9cdcfe;
 	}
+	.delegate {
+	  color: #4ec9b0;
+	}
+	.eventName {
+	  color: #dfdfdf;
+	}
+	.excludedCode {
+	  color: #808080;
+	}
 	table {
 	  white-space: pre;
 	}
@@ -108,7 +117,6 @@ Default CSS with line numbers:
 	.code_column {
 	  padding-left: 5px;
 	}
-
 
 Default CSS without line numbers:
 
@@ -204,4 +212,14 @@ Default CSS without line numbers:
 	.parameter {
 	  color: #9cdcfe;
 	}
+	.delegate {
+	  color: #4ec9b0;
+	}
+	.eventName {
+	  color: #dfdfdf;
+	}
+	.excludedCode {
+	  color: #808080;
+	}
+
 	
