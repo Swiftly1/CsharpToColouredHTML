@@ -1,0 +1,16 @@
+﻿#if (TEST)
+    Console.WriteLine("TEST is defined");
+#else
+    Console.WriteLine("TEST is not defined");
+#endif
+
+public class Publisher
+{
+    public delegate void SampleEventHandler(object sender, SampleEventArgs e);
+    public event SampleEventHandler SampleEvent;
+    protected virtual void RaiseSampleEvent()
+    {
+        SampleEvent?.Invoke(this, new SampleEventArgs("Hello"));
+        Console.WriteLine("\"");
+    }
+}

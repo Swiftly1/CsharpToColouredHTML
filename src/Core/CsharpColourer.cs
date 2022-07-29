@@ -44,8 +44,9 @@ public class CsharpColourer
 
                 var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
 
-                if (node.ClassificationType == ClassificationTypeNames.VerbatimStringLiteral &&
-                    node.Text.Contains(Environment.NewLine))
+                var crazyStrings = new List<string> { ClassificationTypeNames.VerbatimStringLiteral, ClassificationTypeNames.ExcludedCode };
+
+                if (crazyStrings.Contains(node.ClassificationType) && node.Text.Contains(Environment.NewLine))
                 {
                     var splitted = node.Text.Split(Environment.NewLine);
 

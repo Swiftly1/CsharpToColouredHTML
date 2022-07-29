@@ -98,6 +98,8 @@ namespace CsharpToColouredHTML.Core
             { InternalHtmlColors.LocalName, "#9CDCFE" },
             { InternalHtmlColors.ParameterName, "#9CDCFE" },
             { InternalHtmlColors.Delegate, "#4EC9B0" },
+            { InternalHtmlColors.EventName, "#dfdfdf" },
+            { InternalHtmlColors.ExcludedCode, "#808080" },
         };
 
         private const string Background_CSS_Template =

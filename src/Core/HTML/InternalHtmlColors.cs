@@ -63,4 +63,8 @@ internal static class InternalHtmlColors
     public const string EnumName = "enumName";
 
     public const string Delegate = "delegate";
+
+    public const string EventName = "eventName";
+
+    public const string ExcludedCode = "excludedCode";
 }

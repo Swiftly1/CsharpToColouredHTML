@@ -449,6 +449,14 @@ public class HTMLEmitter : IEmitter
         {
             colour = InternalHtmlColors.Delegate;
         }
+        else if (node.ClassificationType == ClassificationTypeNames.EventName)
+        {
+            colour = InternalHtmlColors.EventName;
+        }
+        else if (node.ClassificationType == ClassificationTypeNames.ExcludedCode)
+        {
+            colour = InternalHtmlColors.ExcludedCode;
+        }
 
         return colour;
     }
