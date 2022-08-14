@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.23] - 14.08.2022
+**Description:**
+Fix for unclosed iframe tag
+
+Support for ExcludedCode (compiler directive) and EventName
+
 ## [1.0.22] - 15.07.2022
 **Description:**
 Support for iframe.
