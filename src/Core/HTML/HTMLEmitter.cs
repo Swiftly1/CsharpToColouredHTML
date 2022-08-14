@@ -784,7 +784,7 @@ public class HTMLEmitter : IEmitter
     {
         var iframe_start = "<iframe onload=\"this.height=this.contentWindow.document.body.scrollHeight;\" " +
                             "frameborder=0 height=500 width=100% srcdoc=\"";
-        var iframe_end = "\"</iframe>";
+        var iframe_end = "\"></iframe>";
         var escaped = Escape(html);
 
         return iframe_start + escaped + iframe_end;
