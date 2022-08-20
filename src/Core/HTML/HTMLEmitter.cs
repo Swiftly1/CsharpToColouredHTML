@@ -790,7 +790,7 @@ public class HTMLEmitter : IEmitter
 
     private string AddIframe(string html)
     {
-        var iframe_start = "<iframe onload=\"this.height=this.contentWindow.document.body.scrollHeight;\" " +
+        var iframe_start = "<iframe onload=\"this.height=this.contentWindow.document.body.scrollHeight + 40;\" " +
                             "frameborder=0 height=500 width=100% srcdoc=\"";
         var iframe_end = "\"></iframe>";
         var escaped = Escape(html);
