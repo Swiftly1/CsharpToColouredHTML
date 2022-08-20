@@ -91,7 +91,8 @@ public class HTMLEmitter : IEmitter
         "Action",
         "Predicate",
         "EventArgs",
-        "File"
+        "File",
+        "EqualityComparer"
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>

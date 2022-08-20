@@ -35,7 +35,7 @@ You can try live demo that's avaliable at: https://csharp-colors.xyz/
 
 Or use it in not so serious projects: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
 
-.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.23`
+.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.24`
 
 Sample Usage:
 

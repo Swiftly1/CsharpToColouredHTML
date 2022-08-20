@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.24] - 20.08.2022
+**Description:**
+Improved heuristics for cases like `public void Test(Array<int> a)` or `EqualityComparer<T1>.Default.GetHashCode(P1)`
+
+Increased Iframe window by 40px in order to get rid of scroll bar for 1 liners
+
 ## [1.0.23] - 14.08.2022
 **Description:**
 Fix for unclosed iframe tag
