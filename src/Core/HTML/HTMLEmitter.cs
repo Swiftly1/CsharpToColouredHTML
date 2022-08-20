@@ -665,6 +665,11 @@ public class HTMLEmitter : IEmitter
             _IsNew = false;
             return true;
         }
+        // public void Test(Array<int> a)
+        else if (canGoAhead && nodes[currentIndex + 1].Text == "<" && !IsPopularStruct(node.Text))
+        {
+            return true;
+        }
         else if (RightSideOfAssignmentHasTheSameNameAfterNew(currentIndex, nodes))
         {
             return true;
@@ -728,6 +733,9 @@ public class HTMLEmitter : IEmitter
             return false;
 
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.ParameterName)
+            return false;
+
+        if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].Text == ">")
             return false;
 
         // OLEMSGICON.OLEMSGICON_WARNING,
