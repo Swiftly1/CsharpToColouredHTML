@@ -62,7 +62,7 @@ Custom CSS:
 
 Manually affecting heuristics:
 	
-	CsharpColourer exposes "Hints" property which contains various lists that are used when trying to figure out colour for structs/classes/types
+CsharpColourer exposes "Hints" property which contains various lists that are used when trying to figure out colour for structs/classes/types
 	
 	var colourer = new CsharpColourer();
 	colourer.Hints.ReallyPopularStructsSubstrings.Add("SuperStruct");
