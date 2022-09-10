@@ -81,7 +81,7 @@ Creating your own emitter:
 			var sb = new StringBuilder();
 
 			foreach (var node in nodes)
-            sb.Append($"{node.TextWithTrivia} of colour {node.Colour}");
+				sb.Append($"{node.TextWithTrivia} of colour {node.Colour}");
 
 			return sb.ToString();
 		}
