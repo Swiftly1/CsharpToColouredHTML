@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core;
 
@@ -14,12 +13,9 @@ public class ConsoleEmitter : IEmitter
 
     private readonly bool addDiagnosticInfo;
 
-    public string Text { get; private set; }
-
-    public void Emit(List<Node> nodes)
+    public string Emit(List<NodeWithDetails> nodes)
     {
         Console.ResetColor();
-        Text = "";
         _sb.Clear();
 
         foreach (var node in nodes)
@@ -27,62 +23,58 @@ public class ConsoleEmitter : IEmitter
             EmitNode(node);
         }
 
-        Text = _sb.ToString();
+        return _sb.ToString();
     }
 
-    public void EmitNode(Node node)
+    public void EmitNode(NodeWithDetails node)
     {
-        if (node.ClassificationType == ClassificationTypeNames.ClassName)
+        if (node.Colour == NodeColors.Class)
         {
             Console.ForegroundColor = ConsoleColor.Red;
         }
-        else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
+        else if (node.Colour == NodeColors.ParameterName)
         {
             Console.ForegroundColor = ConsoleColor.Green;
         }
-        else if (node.ClassificationType == ClassificationTypeNames.Identifier)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Keyword)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
+        else if (node.Colour == NodeColors.Identifier)
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
         }
-        else if (node.ClassificationType == ClassificationTypeNames.LocalName)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.MethodName)
+        else if (node.Colour == NodeColors.TypeParameterName)
         {
             Console.ForegroundColor = ConsoleColor.Red;
         }
-        else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
+        else if (node.Colour == NodeColors.LocalName)
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+        }
+        else if (node.Colour == NodeColors.Punctuation)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+        }
+        else if (node.Colour == NodeColors.Operator)
         {
             Console.ForegroundColor = ConsoleColor.White;
         }
-        else if (node.ClassificationType == ClassificationTypeNames.Operator)
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.VerbatimStringLiteral)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
+        else if (node.Colour == NodeColors.String)
         {
             Console.ForegroundColor = ConsoleColor.DarkGreen;
         }
-        else if (node.ClassificationType == ClassificationTypeNames.ParameterName)
+        else if (node.Colour == NodeColors.Keyword)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
+        }
+        else if (node.Colour == NodeColors.Comment)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+        }
+        else if (node.Colour == NodeColors.Control)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+        }
+        else if (node.Colour == NodeColors.Method)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
         }
         else
         {

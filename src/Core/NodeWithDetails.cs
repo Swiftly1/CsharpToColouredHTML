@@ -1,8 +1,16 @@
 ﻿namespace CsharpToColouredHTML.Core;
 
-internal record NodeWithDetails
+public record NodeWithDetails
 {
-    public NodeWithDetails(string colour, string text, string trivia, bool hasNewLine, bool isNew, bool isUsing, int parenthesisCounter)
+    public NodeWithDetails(
+        string colour,
+        string text,
+        string trivia,
+        bool hasNewLine,
+        bool isNew,
+        bool isUsing,
+        int parenthesisCounter,
+        string classificationType)
     {
         Colour = colour;
         Text = text;
@@ -12,6 +20,7 @@ internal record NodeWithDetails
         IsUsing = isUsing;
         ParenthesisCounter = parenthesisCounter;
         TextWithTrivia = Trivia + Text;
+        ClassificationType = classificationType;
     }
 
     public string Colour { get; init; }
@@ -29,6 +38,8 @@ internal record NodeWithDetails
     public bool IsUsing { get; init; }
 
     public int ParenthesisCounter { get; init; }
+
+    public string ClassificationType { get; init; }
 
     public bool UsesMostCommonColour { get; set; }
 }

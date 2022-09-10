@@ -8,24 +8,26 @@ namespace CsharpToColouredHTML.Core;
 
 public class CsharpColourer
 {
+    public readonly Hints Hints = new Hints();
+
     public string ProcessSourceCode(string code, IEmitter emitter)
     {
         var nodes = GenerateInternalRepresentation(code);
-        emitter.Emit(nodes);
-        return emitter.Text;
+        var syntaxTree = new SyntaxTreeBuilder(Hints).Build(nodes);
+        return emitter.Emit(syntaxTree);
     }
 
     private List<Node> GenerateInternalRepresentation(string code)
     {
         var nodes = new List<Node>();
-        var (Spans, srcText) = GetClassifiedSpans(code);
+        var (spans, srcText) = GetClassifiedSpans(code);
 
         TextSpan? previous = null;
         var skippedClassifications = new List<string> { ClassificationTypeNames.StringEscapeCharacter };
 
-        for (int i = 0; i < Spans.Count; i++)
+        for (int i = 0; i < spans.Count; i++)
         {
-            var current = Spans[i];
+            var current = spans[i];
             try
             {
                 if (skippedClassifications.Contains(current.ClassificationType))
@@ -33,7 +35,7 @@ public class CsharpColourer
 
                 if (i > 0 && current.ClassificationType == ClassificationTypeNames.StaticSymbol)
                 {
-                    previous = Spans[i - 1].TextSpan;
+                    previous = spans[i - 1].TextSpan;
                     continue;
                 }
 

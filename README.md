@@ -25,7 +25,7 @@ but also I wanted to have server-side rendering, so users aren't required to hav
 
 # Security Considerations
 
-Even despite performing [escaping](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/src/Core/HTML/HTMLEmitter.cs#L32)
+Even despite performing [escaping](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/src/Core/HTML/HTMLEmitter.cs#L35)
 
 I still recommend to use it only on trusted inputs, at least for now. 
 
@@ -35,7 +35,7 @@ You can try live demo that's avaliable at: https://csharp-colors.xyz/
 
 Or use it in not so serious projects: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
 
-.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.24`
+.NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.25`
 
 Sample Usage:
 
@@ -56,6 +56,39 @@ Custom CSS:
 	var settings = new HTMLEmitterSettings().UseCustomCSS(myCSS);
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 	Console.WriteLine(html);
+	
+
+# Advanced Scenerios 
+
+Manually affecting heuristics:
+	
+	CsharpColourer exposes "Hints" property which contains various lists that are used when trying to figure out colour for structs/classes/types
+	
+	var colourer = new CsharpColourer();
+	colourer.Hints.ReallyPopularStructsSubstrings.Add("SuperStruct");
+	colourer.Hints.ReallyPopularClasses.Add("DomainEvent");
+	colourer.Hints.BuiltInTypes.Add("int512");
+	var html = colourer.ProcessSourceCode(code, emitter);
+	
+___
+
+Creating your own emitter:
+
+	public class MyEmitter : IEmitter
+	{
+		public string Emit(List<NodeWithDetails> nodes)
+		{
+			var sb = new StringBuilder();
+
+			foreach (var node in nodes)
+            sb.Append($"{node.TextWithTrivia} of colour {node.Colour}");
+
+			return sb.ToString();
+		}
+	}
+
+	var txt = new CsharpColourer().ProcessSourceCode(code, new MyEmitter());
+	Console.WriteLine(txt);
 
 # [CSS Customizability](https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/Customizability.md)
 

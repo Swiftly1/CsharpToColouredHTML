@@ -1,6 +1,6 @@
 ﻿namespace CsharpToColouredHTML.Core;
 
-internal static class InternalHtmlColors
+public static class NodeColors
 {
     public const string Background = "background";
 

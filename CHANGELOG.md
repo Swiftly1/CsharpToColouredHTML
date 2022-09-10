@@ -1,6 +1,21 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.25] - 10.09.2022
+**Description:**
+
+**Breaking change** was introduced for people writing their own `IEmitter`
+
+The return type was changed from `void` to `string` parameter type of `Emit` method was changed from `List<Node>` to `List<NodeWithDetails>`.
+
+Additionally `IEmitter` no longer exposes property `Text` because now it should return text directly from `Emit` method.
+
+Overall this patch was focused on refactor:
+
+Building list of nodes with heuristics applied and generating HTML from that has been splitted, 
+so if somebody wants to write his own Emitter, 
+then she/he will already have access to the nodes with colors/heuristics applied.
+
 ## [1.0.24] - 20.08.2022
 **Description:**
 Improved heuristics for cases like `public void Test(Array<int> a)` or `EqualityComparer<T1>.Default.GetHashCode(P1)`
