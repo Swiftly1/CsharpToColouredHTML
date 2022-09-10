@@ -2,19 +2,17 @@
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
 ## [1.0.25] - 10.09.2022
-**Description:**
+**Description:** Refactor
 
 **Breaking change** was introduced for people writing their own `IEmitter`
 
-The return type was changed from `void` to `string` parameter type of `Emit` method was changed from `List<Node>` to `List<NodeWithDetails>`.
-
+The return type was changed from `void` to `string` and the parameter type of `Emit` method was changed from `List<Node>` to `List<NodeWithDetails>`.
+The list of `NodeWithDetails` is already processed list of Nodes, so the heuristics are applied.
 Additionally `IEmitter` no longer exposes property `Text` because now it should return text directly from `Emit` method.
 
-Overall this patch was focused on refactor:
-
-Building list of nodes with heuristics applied and generating HTML from that has been splitted, 
-so if somebody wants to write his own Emitter, 
-then she/he will already have access to the nodes with colors/heuristics applied.
+The refactor was mostly about splitting generating HTML and generating list of nodes with heuristics applied,
+so if somebody wants to write his own Emitter,
+then she/he will have access to the nodes with colors/heuristics applied.
 
 ## [1.0.24] - 20.08.2022
 **Description:**
