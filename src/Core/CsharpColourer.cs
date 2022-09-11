@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
-using Microsoft.CodeAnalysis.CSharp;
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Classification;
 
@@ -82,21 +82,23 @@ public class CsharpColourer
         return nodes;
     }
 
+    private static readonly ImmutableArray<MetadataReference> _coreReferences =
+    ImmutableArray.Create<MetadataReference>
+    (
+        MetadataReference.CreateFromFile(typeof(object).Assembly.Location
+    ));
+
     private (List<ClassifiedSpan> ClassifiedSpans, SourceText SourceText) GetClassifiedSpans(string code)
     {
         var host = MefHostServices.Create(MefHostServices.DefaultAssemblies);
-        var workspace = new AdhocWorkspace(host);
         var sourceText = SourceText.From(code);
-        var syntaxTree = CSharpSyntaxTree.ParseText(sourceText);
+        var workspace = new AdhocWorkspace(host);
+        var doc = workspace
+                  .AddProject("Test", LanguageNames.CSharp)
+                  .AddMetadataReferences(_coreReferences)
+                  .AddDocument("TestFile", sourceText);
 
-        var compilation = CSharpCompilation
-                          .Create("Test")
-                          .AddReferences(MetadataReference
-                          .CreateFromFile(typeof(object).Assembly.Location))
-                          .AddSyntaxTrees(syntaxTree);
-
-        var semanticModel = compilation.GetSemanticModel(syntaxTree);
-
-        return (Classifier.GetClassifiedSpans(semanticModel, new TextSpan(0, code.Length), workspace).ToList(), sourceText);
+        var spans = Classifier.GetClassifiedSpansAsync(doc, new TextSpan(0, code.Length)).GetAwaiter().GetResult().ToList();
+        return (spans, sourceText);
     }
 }
