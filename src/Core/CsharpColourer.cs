@@ -93,6 +93,7 @@ public class CsharpColourer
         var host = MefHostServices.Create(MefHostServices.DefaultAssemblies);
         var sourceText = SourceText.From(code);
         var workspace = new AdhocWorkspace(host);
+
         var doc = workspace
                   .AddProject("Test", LanguageNames.CSharp)
                   .AddMetadataReferences(_coreReferences)
