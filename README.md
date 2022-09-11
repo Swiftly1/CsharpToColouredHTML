@@ -33,7 +33,7 @@ I still recommend to use it only on trusted inputs, at least for now.
 
 You can try live demo that's avaliable at: https://csharp-colors.xyz/
 
-Or use it in not so serious projects: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
+Or use it in your projects directly: https://www.nuget.org/packages/CsharpToColouredHTML.Core/
 
 .NET CLI: `dotnet add package CsharpToColouredHTML.Core --version 1.0.26`
 
@@ -57,6 +57,13 @@ Custom CSS:
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 	Console.WriteLine(html);
 	
+___
+
+Disabling Line Numbers
+
+	var settings = new HTMLEmitterSettings().DisableLineNumbers();
+	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
+	Console.WriteLine(html);
 
 # Advanced Scenerios 
 
