@@ -35,7 +35,12 @@ public class Hints
         "Predicate",
         "EventArgs",
         "File",
-        "EqualityComparer"
+        "EqualityComparer",
+        "Path",
+        "GC",
+        "Math",
+        "Random",
+        "String"
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
@@ -53,7 +58,11 @@ public class Hints
     public List<string> ReallyPopularStructs { get; } = new List<string>
     {
         "CancellationToken",
-        "IEnumerable"
+        "IEnumerable",
+        "DateTime",
+        "TimeOnly",
+        "DateOnly",
+        "Char",
     };
 
     public List<string> ReallyPopularStructsSubstrings { get; } = new List<string>
