@@ -1,0 +1,21 @@
+
+<pre class="background">
+<span class="keyword">using</span> <span class="punctuation">(</span><span class="identifier">Measure</span><span class="operator">.</span><span class="identifier">A</span><span class="operator">.</span><span class="identifier">B</span><span class="operator">.</span><span class="class">C</span><span class="operator">.</span><span class="method">ProfilerMarkers</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
+
+<span class="keyword">using</span> <span class="punctuation">(</span><span class="class">Measure</span><span class="operator">.</span><span class="method">ProfilerMarkers</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
+
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Test</span><span class="punctuation">(</span><span class="class">Q</span> <span class="parameter">q</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="keyword">using</span> <span class="punctuation">(</span><span class="parameter">q</span><span class="operator">.</span><span class="method">ProfilerMarkers</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Test2</span><span class="punctuation">(</span><span class="class">Q</span> <span class="parameter">q</span><span class="punctuation">,</span> <span class="class">W</span> <span class="parameter">w</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="keyword">using</span> <span class="punctuation">(</span><span class="parameter">q</span><span class="operator">.</span><span class="method">ProfilerMarkers</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Test3</span><span class="punctuation">(</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="keyword">const</span> <span class="keyword">int</span> <span class="constant">R</span> <span class="operator">=</span> <span class="numericLiteral">5</span><span class="punctuation">;</span>
+    <span class="keyword">using</span> <span class="punctuation">(</span><span class="constant">R</span><span class="operator">.</span><span class="identifier">r</span><span class="operator">.</span><span class="method">ProfilerMarkers</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
+<span class="punctuation">}</span></pre>

@@ -10,7 +10,8 @@ public record NodeWithDetails
         bool isNew,
         bool isUsing,
         int parenthesisCounter,
-        string classificationType)
+        string classificationType
+        )
     {
         Colour = colour;
         Text = text;
@@ -21,9 +22,26 @@ public record NodeWithDetails
         ParenthesisCounter = parenthesisCounter;
         TextWithTrivia = Trivia + Text;
         ClassificationType = classificationType;
+        Id = Guid.NewGuid();
     }
 
-    public string Colour { get; init; }
+    public NodeWithDetails(
+        string colour,
+        string text,
+        string trivia,
+        bool hasNewLine,
+        bool isNew,
+        bool isUsing,
+        int parenthesisCounter,
+        string classificationType,
+        Guid id) : this(colour, text, trivia, hasNewLine, isNew, isUsing, parenthesisCounter, classificationType)
+    {
+        Id = id;
+    }
+
+    public Guid Id { get; init; }
+
+    public string Colour { get; set; }
 
     public string Text { get; init; }
 

@@ -20,6 +20,8 @@ public class Node
         HasNewLine = hasNewLine;
     }
 
+    public Guid Id { get; set; } = Guid.NewGuid();
+
     public string TextWithTrivia { get; }
 
     public string ClassificationType { get; }

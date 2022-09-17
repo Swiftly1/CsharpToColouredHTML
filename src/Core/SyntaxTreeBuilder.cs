@@ -36,7 +36,7 @@ internal class SyntaxTreeBuilder
 
         for (int i = 0; i < nodes.Count; i++)
         {
-            var colour = ExtractColourAndSetMetaData(i, nodes);
+            var colour = ExtractColourAndSetMetaData(i, nodes, list);
             var nodeWithDetails = new NodeWithDetails
             (
                 colour: colour,
@@ -46,7 +46,8 @@ internal class SyntaxTreeBuilder
                 isNew: _IsNew,
                 isUsing: _IsUsing,
                 parenthesisCounter: _ParenthesisCounter,
-                classificationType: nodes[i].ClassificationType
+                classificationType: nodes[i].ClassificationType,
+                id: nodes[i].Id
             );
             list.Add(nodeWithDetails);
         }
@@ -54,7 +55,7 @@ internal class SyntaxTreeBuilder
         return list;
     }
 
-    private string ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
+    private string ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes, List<NodeWithDetails> alreadyProcessed)
     {
         var node = nodes[currentIndex];
         var colour = NodeColors.InternalError;
@@ -109,6 +110,8 @@ internal class SyntaxTreeBuilder
             else if (IsMethod(currentIndex, nodes))
             {
                 colour = NodeColors.Method;
+
+                TryUpdatePreviousIdentifierToClassIfThatWasNamespace(currentIndex, nodes, alreadyProcessed);
             }
             else if (IsClass(currentIndex, nodes))
             {
@@ -387,6 +390,10 @@ internal class SyntaxTreeBuilder
         {
             return true;
         }
+        else if (SeemsLikeParameter(currentIndex, nodes))
+        {
+            return true;
+        }
         else if (RightSideOfAssignmentHasTheSameNameAfterNew(currentIndex, nodes))
         {
             return true;
@@ -395,6 +402,31 @@ internal class SyntaxTreeBuilder
         {
             return false;
         }
+    }
+
+    private bool SeemsLikeParameter(int currentIndex, List<Node> nodes)
+    {
+        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoBehind = currentIndex > 0;
+
+        var node = nodes[currentIndex];
+
+        if (!canGoBehind || !canGoAhead)
+            return false;
+
+        if (!new[] { ",", "(" }.Contains(nodes[currentIndex - 1].Text))
+            return false;
+
+        if (nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.ParameterName)
+            return false;
+
+        if (currentIndex + 2 >= nodes.Count)
+            return false;
+
+        if (new[] { ",", ")" }.Contains(nodes[currentIndex + 2].Text))
+            return true;
+
+        return false;
     }
 
     private bool RightSideOfAssignmentHasTheSameNameAfterNew(int currentIndex, List<Node> nodes)
@@ -505,5 +537,89 @@ internal class SyntaxTreeBuilder
         }
 
         return false;
+    }
+
+    private void TryUpdatePreviousIdentifierToClassIfThatWasNamespace(int currentIndex, List<Node> nodes, List<NodeWithDetails> alreadyProcessed)
+    {
+        if (currentIndex - 2 < 0)
+            return;
+
+        if (nodes[currentIndex - 1].ClassificationType != ClassificationTypeNames.Operator)
+            return;
+
+        var suspectedNode = nodes[currentIndex - 2];
+
+        if (suspectedNode.ClassificationType != ClassificationTypeNames.Identifier)
+            return;
+
+        var alreadyProcessedSuspectedNode = alreadyProcessed.LastOrDefault(x => x.Id == suspectedNode.Id);
+
+        if (alreadyProcessedSuspectedNode == null)
+            return;
+
+        if (alreadyProcessedSuspectedNode.Colour == NodeColors.Identifier)
+        {
+            // 0 = currently at Identifier, expecting Operator
+            // 1 = currently at Operator, expecting Identifier
+
+            var state = 0;
+            var theChainIsMadeOfIdentifiers = true;
+
+            var validTypes = new[]
+            {
+                ClassificationTypeNames.LocalName,
+                ClassificationTypeNames.Identifier,
+                ClassificationTypeNames.ConstantName,
+                ClassificationTypeNames.ParameterName,
+                ClassificationTypeNames.Operator
+            };
+
+            for (int i = currentIndex - 3; i >= 0; i--)
+            {
+                if (i < 0)
+                    return;
+
+                if (!validTypes.Contains(nodes[i].ClassificationType))
+                {
+                    if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ">")
+                        theChainIsMadeOfIdentifiers = false;
+
+                    break;
+                }
+
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Operator && nodes[i].Text != ".")
+                    break;
+
+                if (state == 0)
+                {
+                    if (nodes[i].ClassificationType == ClassificationTypeNames.Operator)
+                    {
+                        state = 1;
+                        continue;
+                    }
+                    else
+                    {
+                        theChainIsMadeOfIdentifiers = false;
+                    }
+                }
+                else if (state == 1)
+                {
+                    if (nodes[i].ClassificationType == ClassificationTypeNames.Identifier)
+                    {
+                        state = 0;
+                        continue;
+                    }
+                    else
+                    {
+                        theChainIsMadeOfIdentifiers = false;
+                    }
+                }
+            }
+
+            if (theChainIsMadeOfIdentifiers)
+            {
+                alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
+            }
+        }
     }
 }
