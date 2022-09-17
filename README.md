@@ -419,5 +419,6 @@ Second Example:
 
 <a name="ex2">Generated HTML inside Browser:</a>
 
-![obraz](https://user-images.githubusercontent.com/77643169/146063126-88da0555-f268-4d8e-9b23-47ce59a9b062.png)
+![img](https://user-images.githubusercontent.com/77643169/190851621-dddb4a7b-bb19-437d-a5b2-1046ea6da8fc.png)
+
 
