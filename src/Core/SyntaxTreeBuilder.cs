@@ -576,9 +576,6 @@ internal class SyntaxTreeBuilder
 
             for (int i = currentIndex - 3; i >= 0; i--)
             {
-                if (i < 0)
-                    return;
-
                 if (!validTypes.Contains(nodes[i].ClassificationType))
                 {
                     if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ">")

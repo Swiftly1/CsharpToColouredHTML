@@ -9,7 +9,7 @@ This library tries to convert C# code into pure HTML with some lines of CSS that
 
 make it look as if that was inside Visual Studio or Visual Studio Code.
 ________
-MS Docs default code highlighting (left) vs. this project (right)
+Microsoft Docs default code highlighting (left) vs. this project (right)
 
 ![img](https://user-images.githubusercontent.com/77643169/179602262-a1ab256c-2a21-4368-8f30-5468dc156d4c.png)
 
