@@ -1,11 +1,14 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.27] - 17.09.2022
+**Description:**
+Improved heuristics 
+
 ## [1.0.26] - 11.09.2022
 **Description:**
 Stopped using obsolete method `Classifier.GetClassifiedSpans` and moved to `Classifier.GetClassifiedSpansAsync`
 & upgraded `Microsoft.CodeAnalysis.CSharp.Workspaces` from `4.2.0` to `4.3.0`
-
 
 ## [1.0.25] - 10.09.2022
 **Description:** Refactor
