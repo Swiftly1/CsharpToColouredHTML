@@ -2,7 +2,7 @@
 
 namespace CsharpToColouredHTML.Core;
 
-internal class SyntaxTreeBuilder
+internal class HeuristicsGenerator
 {
     private bool _IsUsing = false;
 
@@ -12,7 +12,7 @@ internal class SyntaxTreeBuilder
 
     private readonly Hints _Hints;
 
-    public SyntaxTreeBuilder(Hints hints)
+    public HeuristicsGenerator(Hints hints)
     {
         _Hints = hints;
     }

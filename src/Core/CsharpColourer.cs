@@ -13,8 +13,8 @@ public class CsharpColourer
     public string ProcessSourceCode(string code, IEmitter emitter)
     {
         var nodes = GenerateInternalRepresentation(code);
-        var syntaxTree = new SyntaxTreeBuilder(Hints).Build(nodes);
-        return emitter.Emit(syntaxTree);
+        var heuristics = new HeuristicsGenerator(Hints).Build(nodes);
+        return emitter.Emit(heuristics);
     }
 
     private List<Node> GenerateInternalRepresentation(string code)
