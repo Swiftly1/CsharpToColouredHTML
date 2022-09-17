@@ -103,11 +103,11 @@ Creating your own emitter:
 
 # Examples
 
-* [Example 1 - Code from this project](#ex1)
+* [Example 1 - Old code from this project](#ex1)
 
 * [Example 2 - Random code from Roslyn](#ex2)
 
-Example input (`code.txt`):
+Example input:
 
     using System.Text;
     using Microsoft.CodeAnalysis.Classification;
