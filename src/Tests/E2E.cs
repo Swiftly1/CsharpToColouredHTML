@@ -15,7 +15,7 @@ namespace Tests
         public void LinesDisabled_OptimizationsDisabled(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
-            var p2 = Path.Combine(OutputDir, fileName);
+            var p2 = Path.Combine(OutputDir, fileName.Replace(".", "_LinesDisabled_OptimizationsDisabled."));
 
             var code = File.ReadAllText(p1);
             var goodHTML = File.ReadAllText(p2);
@@ -39,11 +39,12 @@ namespace Tests
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_LineNumbers."));
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_LinesEnabled_OptimizationsDisabled."));
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
                                .UseCustomCSS("")
+                               .EnableLineNumbers()
                                .DisableOptimizations()
                                .DisableIframe();
 
@@ -60,13 +61,13 @@ namespace Tests
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_Optimized."));
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_LinesDisabled_OptimizationsEnabled."));
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
                                .UseCustomCSS("")
-                               .EnableOptimizations()
                                .DisableLineNumbers()
+                               .EnableOptimizations()
                                .DisableIframe();
 
             var emitter = new HTMLEmitter(settings);
@@ -82,11 +83,12 @@ namespace Tests
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_LineNumbersOptimized."));
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_LinesEnabled_OptimizationsEnabled."));
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
                                .UseCustomCSS("")
+                               .EnableLineNumbers()
                                .EnableOptimizations()
                                .DisableIframe();
 
@@ -136,7 +138,7 @@ namespace Tests
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_CSS_Optimized."));
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_CSS_LinesEnabled_OptimizationsEnabled."));
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
@@ -178,7 +180,7 @@ namespace Tests
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_CSS_Optimized."));
+            var linesPath = Path.Combine(OutputDir, fileName.Replace(".", "_CSS_LinesEnabled_OptimizationsEnabled."));
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
