@@ -12,7 +12,7 @@ internal class HeuristicsGenerator
 
     private readonly Hints _Hints;
 
-    private List<NodeWithDetails> _alreadyProcessed = new List<NodeWithDetails>();
+    private List<NodeWithDetails> _Output = new List<NodeWithDetails>();
 
     private List<string> _FoundClasses = new List<string>();
     private List<string> _FoundStructs = new List<string>();
@@ -26,7 +26,9 @@ internal class HeuristicsGenerator
     public List<NodeWithDetails> Build(List<Node> input)
     {
         Reset();
-        return Preprocess(input);
+        ProcessData(input);
+        PostProcess(_Output);
+        return _Output;
     }
 
     private void Reset()
@@ -39,7 +41,7 @@ internal class HeuristicsGenerator
         _ParenthesisCounter = 0;
     }
 
-    private List<NodeWithDetails> Preprocess(List<Node> nodes)
+    private void ProcessData(List<Node> nodes)
     {
         for (int i = 0; i < nodes.Count; i++)
         {
@@ -56,12 +58,8 @@ internal class HeuristicsGenerator
                 classificationType: nodes[i].ClassificationType,
                 id: nodes[i].Id
             );
-            _alreadyProcessed.Add(nodeWithDetails);
+            _Output.Add(nodeWithDetails);
         }
-
-        PostProcess(_alreadyProcessed);
-
-        return _alreadyProcessed;
     }
 
     private void PostProcess(List<NodeWithDetails> alreadyProcessed)
@@ -332,7 +330,7 @@ internal class HeuristicsGenerator
             if (currentIndex >= 2)
             {
                 var suspectedId = nodes[currentIndex - 2].Id;
-                var suspected = _alreadyProcessed.FirstOrDefault(x => x.Id == suspectedId);
+                var suspected = _Output.FirstOrDefault(x => x.Id == suspectedId);
                 if (nodes[currentIndex - 1].Text == "." && new[] { NodeColors.LocalName, NodeColors.ParameterName }.Contains(suspected.Colour))
                     return false;
             }
@@ -596,7 +594,7 @@ internal class HeuristicsGenerator
         if (suspectedNode.ClassificationType != ClassificationTypeNames.Identifier)
             return;
 
-        var alreadyProcessedSuspectedNode = _alreadyProcessed.LastOrDefault(x => x.Id == suspectedNode.Id);
+        var alreadyProcessedSuspectedNode = _Output.LastOrDefault(x => x.Id == suspectedNode.Id);
 
         if (alreadyProcessedSuspectedNode == null)
             return;
