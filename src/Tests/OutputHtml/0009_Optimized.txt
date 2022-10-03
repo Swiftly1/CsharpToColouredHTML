@@ -21,8 +21,8 @@ Label:
 
 <span class="keyword">struct</span> <span class="struct">R1</span> : <span class="interface">IEquatable</span>&lt;<span class="struct">R1</span>&gt;
 {
-    <span class="keyword">public</span> T1 P1 { <span class="keyword">get</span>; <span class="keyword">set</span>; }
-    <span class="keyword">public</span> T2 P2 { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public</span> <span class="class">T1</span> P1 { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public</span> <span class="class">T2</span> P2 { <span class="keyword">get</span>; <span class="keyword">set</span>; }
     <span class="keyword">public override bool</span> <span class="method">Equals</span>(<span class="keyword">object</span>? <span class="parameter">obj</span>) =&gt; <span class="parameter">obj</span> <span class="keyword">is</span> <span class="struct">R1</span> <span class="localName">temp</span> &amp;&amp; <span class="method">Equals</span>(<span class="localName">temp</span>);
     <span class="keyword">public bool</span> <span class="method">Equals</span>(<span class="struct">R1</span> <span class="parameter">other</span>)
     {

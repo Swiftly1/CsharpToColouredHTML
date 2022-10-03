@@ -12,6 +12,12 @@ internal class HeuristicsGenerator
 
     private readonly Hints _Hints;
 
+    private List<NodeWithDetails> _alreadyProcessed = new List<NodeWithDetails>();
+
+    private List<string> _FoundClasses = new List<string>();
+    private List<string> _FoundStructs = new List<string>();
+    private List<string> _FoundInterfaces = new List<string>();
+
     public HeuristicsGenerator(Hints hints)
     {
         _Hints = hints;
@@ -25,6 +31,9 @@ internal class HeuristicsGenerator
 
     private void Reset()
     {
+        _FoundClasses.Clear();
+        _FoundInterfaces.Clear();
+        _FoundStructs.Clear();
         _IsUsing = false;
         _IsNew = false;
         _ParenthesisCounter = 0;
@@ -32,11 +41,9 @@ internal class HeuristicsGenerator
 
     private List<NodeWithDetails> Preprocess(List<Node> nodes)
     {
-        var list = new List<NodeWithDetails>();
-
         for (int i = 0; i < nodes.Count; i++)
         {
-            var colour = ExtractColourAndSetMetaData(i, nodes, list);
+            var colour = ExtractColourAndSetMetaData(i, nodes);
             var nodeWithDetails = new NodeWithDetails
             (
                 colour: colour,
@@ -49,13 +56,34 @@ internal class HeuristicsGenerator
                 classificationType: nodes[i].ClassificationType,
                 id: nodes[i].Id
             );
-            list.Add(nodeWithDetails);
+            _alreadyProcessed.Add(nodeWithDetails);
         }
 
-        return list;
+        PostProcess(_alreadyProcessed);
+
+        return _alreadyProcessed;
     }
 
-    private string ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes, List<NodeWithDetails> alreadyProcessed)
+    private void PostProcess(List<NodeWithDetails> alreadyProcessed)
+    {
+        // If some identifiers weren't recognized at first attempt, but later instead
+        // then we may fix the previous ones.
+        var identifiers = alreadyProcessed.Where(x => x.Colour == NodeColors.Identifier).ToList();
+
+        foreach (var entry in identifiers)
+        {
+            if (_FoundClasses.Contains(entry.Text))
+                entry.Colour = NodeColors.Class;
+
+            if (_FoundInterfaces.Contains(entry.Text))
+                entry.Colour = NodeColors.Interface;
+
+            if (_FoundStructs.Contains(entry.Text))
+                entry.Colour = NodeColors.Struct;
+        }
+    }
+
+    private string ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
         var colour = NodeColors.InternalError;
@@ -106,12 +134,13 @@ internal class HeuristicsGenerator
             if (IsInterface(currentIndex, nodes))
             {
                 colour = NodeColors.Interface;
+                _FoundInterfaces.Add(node.Text);
             }
             else if (IsMethod(currentIndex, nodes))
             {
                 colour = NodeColors.Method;
 
-                TryUpdatePreviousIdentifierToClassIfThatWasNamespace(currentIndex, nodes, alreadyProcessed);
+                TryUpdatePreviousIdentifierToClassIfThatWasNamespace(currentIndex, nodes);
             }
             else if (IsClass(currentIndex, nodes))
             {
@@ -122,11 +151,13 @@ internal class HeuristicsGenerator
                 else
                 {
                     colour = NodeColors.Class;
+                    _FoundClasses.Add(node.Text);
                 }
             }
             else if (IsStruct(currentIndex, nodes))
             {
                 colour = NodeColors.Struct;
+                _FoundStructs.Add(node.Text);
             }
             else
             {
@@ -279,6 +310,7 @@ internal class HeuristicsGenerator
     {
         var node = nodes[currentIndex];
         var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoTwoAhead = nodes.Count > currentIndex + 2;
         var canGoBehind = currentIndex > 0;
 
         var startsWithI = node.Text.StartsWith("I");
@@ -291,8 +323,20 @@ internal class HeuristicsGenerator
         {
             return true;
         }
-        else if (startsWithI && canGoAhead && nodes[currentIndex + 1].ClassificationType == ClassificationTypeNames.ParameterName)
+        else if (startsWithI && canGoAhead && new[] { ClassificationTypeNames.ParameterName, ClassificationTypeNames.FieldName }.Contains(nodes[currentIndex + 1].ClassificationType))
         {
+            return true;
+        }
+        else if (startsWithI && canGoTwoAhead && nodes[currentIndex + 1].Text == ")" && nodes[currentIndex + 2].Text != "{")
+        {
+            if (currentIndex >= 2)
+            {
+                var suspectedId = nodes[currentIndex - 2].Id;
+                var suspected = _alreadyProcessed.FirstOrDefault(x => x.Id == suspectedId);
+                if (nodes[currentIndex - 1].Text == "." && new[] { NodeColors.LocalName, NodeColors.ParameterName }.Contains(suspected.Colour))
+                    return false;
+            }
+
             return true;
         }
         else
@@ -539,7 +583,7 @@ internal class HeuristicsGenerator
         return false;
     }
 
-    private void TryUpdatePreviousIdentifierToClassIfThatWasNamespace(int currentIndex, List<Node> nodes, List<NodeWithDetails> alreadyProcessed)
+    private void TryUpdatePreviousIdentifierToClassIfThatWasNamespace(int currentIndex, List<Node> nodes)
     {
         if (currentIndex - 2 < 0)
             return;
@@ -552,7 +596,7 @@ internal class HeuristicsGenerator
         if (suspectedNode.ClassificationType != ClassificationTypeNames.Identifier)
             return;
 
-        var alreadyProcessedSuspectedNode = alreadyProcessed.LastOrDefault(x => x.Id == suspectedNode.Id);
+        var alreadyProcessedSuspectedNode = _alreadyProcessed.LastOrDefault(x => x.Id == suspectedNode.Id);
 
         if (alreadyProcessedSuspectedNode == null)
             return;

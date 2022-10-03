@@ -1,0 +1,18 @@
+
+<pre class="background">
+<span class="keyword">partial</span> <span class="keyword">class</span> <span class="class">Form1</span>
+<span class="punctuation">{</span>
+    <span class="keyword">private</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">ComponentModel</span><span class="operator">.</span><span class="interface">IContainer</span> <span class="fieldName">components</span> <span class="operator">=</span> <span class="keyword">null</span><span class="punctuation">;</span>
+
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="method">InitializeComponent</span><span class="punctuation">(</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="namespace">System</span><span class="operator">.</span><span class="namespace">ComponentModel</span><span class="operator">.</span><span class="class">ComponentResourceManager</span> <span class="localName">resources</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">ComponentModel</span><span class="operator">.</span><span class="class">ComponentResourceManager</span><span class="punctuation">(</span><span class="keyword">typeof</span><span class="punctuation">(</span><span class="class">Form1</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">(</span><span class="punctuation">(</span><span class="namespace">System</span><span class="operator">.</span><span class="namespace">ComponentModel</span><span class="operator">.</span><span class="interface">ISupportInitialize</span><span class="punctuation">)</span><span class="punctuation">(</span><span class="keyword">this</span><span class="operator">.</span><span class="identifier">btnRestaurar</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="operator">.</span><span class="method">BeginInit</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">(</span><span class="punctuation">(</span><span class="namespace">System</span><span class="operator">.</span><span class="namespace">ComponentModel</span><span class="operator">.</span><span class="interface">ISupportInitialize</span><span class="punctuation">)</span><span class="punctuation">(</span><span class="keyword">this</span><span class="operator">.</span><span class="identifier">pictureBox1</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="operator">.</span><span class="method">EndInit</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+        <span class="identifier">ItemSlot</span> <span class="localName">givingItemSlot</span> <span class="operator">=</span> <span class="keyword">this</span><span class="punctuation">;</span>
+
+        <span class="localName">resources</span><span class="operator">.</span><span class="identifier">Itest</span> <span class="operator">=</span> <span class="numericLiteral">5</span><span class="punctuation">;</span>
+        <span class="method">re</span><span class="punctuation">(</span><span class="localName">resources</span><span class="operator">.</span><span class="identifier">Itest</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

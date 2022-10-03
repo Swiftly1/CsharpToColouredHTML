@@ -1,0 +1,16 @@
+﻿partial class Form1
+{
+	private System.ComponentModel.IContainer components = null;
+
+	private void InitializeComponent()
+	{
+	    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+		((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+
+		ItemSlot givingItemSlot = this;
+
+		resources.Itest = 5;
+		re(resources.Itest);
+	}
+}

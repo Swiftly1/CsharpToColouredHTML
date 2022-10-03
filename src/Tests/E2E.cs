@@ -12,7 +12,7 @@ namespace Tests
 
         [Theory]
         [ClassData(typeof(FilesTestData))]
-        public void WithoutLineNumbers(string fileName)
+        public void LinesDisabled_OptimizationsDisabled(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
             var p2 = Path.Combine(OutputDir, fileName);
@@ -34,7 +34,7 @@ namespace Tests
 
         [Theory]
         [ClassData(typeof(FilesTestData))]
-        public void LineNumbers(string fileName)
+        public void LinesEnabled_OptimizationsDisabled(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
@@ -55,7 +55,7 @@ namespace Tests
 
         [Theory]
         [ClassData(typeof(FilesTestData))]
-        public void WithoutLineNumbersOptimized(string fileName)
+        public void LinesDisabled_OptimizationsEnabled(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
@@ -77,7 +77,7 @@ namespace Tests
 
         [Theory]
         [ClassData(typeof(FilesTestData))]
-        public void LineNumbersOptimized(string fileName)
+        public void LinesEnabled_OptimizationsEnabled(string fileName)
         {
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
