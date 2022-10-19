@@ -6,6 +6,8 @@ internal class HeuristicsGenerator
 {
     private bool _IsUsing = false;
 
+    // Simplifies detecting creation of an instance, so we don't have to go behind.
+    // So far it works decent, thus no need for more complex approach.
     private bool _IsNew = false;
 
     private int _ParenthesisCounter = 0;
