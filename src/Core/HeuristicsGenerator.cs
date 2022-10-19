@@ -18,6 +18,39 @@ internal class HeuristicsGenerator
     private List<string> _FoundStructs = new List<string>();
     private List<string> _FoundInterfaces = new List<string>();
 
+    private Dictionary<string, string> _SimpleClassificationToColourMapper { get; } = new()
+    {
+        { ClassificationTypeNames.ClassName, NodeColors.Class },
+        { ClassificationTypeNames.Comment, NodeColors.Comment },
+        { ClassificationTypeNames.PreprocessorKeyword, NodeColors.Preprocessor },
+        { ClassificationTypeNames.PreprocessorText, NodeColors.PreprocessorText },
+        { ClassificationTypeNames.StructName, NodeColors.Struct },
+        { ClassificationTypeNames.InterfaceName, NodeColors.Interface },
+        { ClassificationTypeNames.NamespaceName, NodeColors.Namespace },
+        { ClassificationTypeNames.EnumName, NodeColors.EnumName },
+        { ClassificationTypeNames.EnumMemberName, NodeColors.EnumMemberName },
+        { ClassificationTypeNames.StringLiteral, NodeColors.String },
+        { ClassificationTypeNames.VerbatimStringLiteral, NodeColors.String },
+        { ClassificationTypeNames.LocalName, NodeColors.LocalName },
+        { ClassificationTypeNames.MethodName, NodeColors.Method },
+        { ClassificationTypeNames.Operator, NodeColors.Operator },
+        { ClassificationTypeNames.PropertyName, NodeColors.PropertyName },
+        { ClassificationTypeNames.ParameterName, NodeColors.ParameterName },
+        { ClassificationTypeNames.FieldName, NodeColors.FieldName },
+        { ClassificationTypeNames.NumericLiteral, NodeColors.NumericLiteral },
+        { ClassificationTypeNames.ControlKeyword, NodeColors.Control },
+        { ClassificationTypeNames.LabelName, NodeColors.LabelName },
+        { ClassificationTypeNames.OperatorOverloaded, NodeColors.OperatorOverloaded },
+        { ClassificationTypeNames.RecordStructName, NodeColors.RecordStructName },
+        { ClassificationTypeNames.RecordClassName, NodeColors.Class },
+        { ClassificationTypeNames.TypeParameterName, NodeColors.TypeParameterName },
+        { ClassificationTypeNames.ExtensionMethodName, NodeColors.ExtensionMethodName },
+        { ClassificationTypeNames.ConstantName, NodeColors.ConstantName },
+        { ClassificationTypeNames.DelegateName, NodeColors.Delegate },
+        { ClassificationTypeNames.EventName, NodeColors.EventName },
+        { ClassificationTypeNames.ExcludedCode, NodeColors.ExcludedCode },
+    };
+
     public HeuristicsGenerator(Hints hints)
     {
         _Hints = hints;
@@ -86,43 +119,10 @@ internal class HeuristicsGenerator
         var node = nodes[currentIndex];
         var colour = NodeColors.InternalError;
 
-        if (node.ClassificationType == ClassificationTypeNames.ClassName)
-        {
-            colour = NodeColors.Class;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Comment)
-        {
-            colour = NodeColors.Comment;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.PreprocessorKeyword)
-        {
-            colour = NodeColors.Preprocessor;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.PreprocessorText)
-        {
-            colour = NodeColors.PreprocessorText;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.StructName)
-        {
-            colour = NodeColors.Struct;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.InterfaceName)
-        {
-            colour = NodeColors.Interface;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
-        {
-            colour = NodeColors.Namespace;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.EnumName)
-        {
-            colour = NodeColors.EnumName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.EnumMemberName)
-        {
-            colour = NodeColors.EnumMemberName;
-        }
-        else if (_Hints.BuiltInTypes.Contains(node.Text))
+        if (_SimpleClassificationToColourMapper.TryGetValue(node.ClassificationType, out var simpleColour))
+            return simpleColour;
+
+        if (_Hints.BuiltInTypes.Contains(node.Text))
         {
             _IsNew = false;
             colour = NodeColors.Keyword;
@@ -172,22 +172,6 @@ internal class HeuristicsGenerator
 
             colour = NodeColors.Keyword;
         }
-        else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
-        {
-            colour = NodeColors.String;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.VerbatimStringLiteral)
-        {
-            colour = NodeColors.String;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.LocalName)
-        {
-            colour = NodeColors.LocalName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.MethodName)
-        {
-            colour = NodeColors.Method;
-        }
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
         {
             if (node.Text == "(")
@@ -212,73 +196,9 @@ internal class HeuristicsGenerator
 
             colour = NodeColors.Punctuation;
         }
-        else if (node.ClassificationType == ClassificationTypeNames.Operator)
-        {
-            colour = NodeColors.Operator;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.PropertyName)
-        {
-            colour = NodeColors.PropertyName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ParameterName)
-        {
-            colour = NodeColors.ParameterName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.FieldName)
-        {
-            colour = NodeColors.FieldName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.NumericLiteral)
-        {
-            colour = NodeColors.NumericLiteral;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
-        {
-            colour = NodeColors.Control;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.LabelName)
-        {
-            colour = NodeColors.LabelName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.OperatorOverloaded)
-        {
-            colour = NodeColors.OperatorOverloaded;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.RecordStructName)
-        {
-            colour = NodeColors.RecordStructName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.RecordClassName)
-        {
-            colour = NodeColors.Class;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.TypeParameterName)
-        {
-            colour = NodeColors.TypeParameterName;
-        }
         else if (node.ClassificationType.Contains("xml doc comment"))
         {
             colour = NodeColors.Comment;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ExtensionMethodName)
-        {
-            colour = NodeColors.ExtensionMethodName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ConstantName)
-        {
-            colour = NodeColors.ConstantName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.DelegateName)
-        {
-            colour = NodeColors.Delegate;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.EventName)
-        {
-            colour = NodeColors.EventName;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ExcludedCode)
-        {
-            colour = NodeColors.ExcludedCode;
         }
 
         return colour;
