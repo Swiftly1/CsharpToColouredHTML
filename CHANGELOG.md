@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.29] - 30.10.2022
+**Description:**
+Improved heuristics
+
 ## [1.0.28] - 03.10.2022
 **Description:**
 Improved heuristics and small refactor: tests and input files rename
