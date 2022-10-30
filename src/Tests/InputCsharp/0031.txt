@@ -1,0 +1,3 @@
+﻿dataGridView1.Rows.Clear();
+dataGridView1.Columns.Clear();
+comboBox1.Items.Clear();

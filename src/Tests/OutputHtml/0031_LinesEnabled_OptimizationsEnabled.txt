@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column">dataGridView1.Rows.<span class="method">Clear</span>();</td></tr><tr><td class="line_no" line_no="1"></td><td class="code_column">dataGridView1.Columns.<span class="method">Clear</span>();</td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column">comboBox1.Items.<span class="method">Clear</span>();</td></tr></tbody>
+</table></pre>

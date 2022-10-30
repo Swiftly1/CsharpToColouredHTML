@@ -144,7 +144,7 @@ internal class HeuristicsGenerator
             }
             else if (IsClass(currentIndex, nodes))
             {
-                if (node.Text.Length > 0 && char.IsLower(node.Text[0]))
+                if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
                 {
                     colour = NodeColors.LocalName;
                 }
@@ -454,7 +454,7 @@ internal class HeuristicsGenerator
             return false;
 
         // OLEMSGICON.OLEMSGICON_WARNING,
-        return new string[] { ")", "(", "=", ";", "}", ",", "&", "&&", "|", "||" }.Contains(next.Text);
+        return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||" }.Contains(next.Text);
     }
 
     private bool IsPopularClass(string text)
@@ -516,71 +516,99 @@ internal class HeuristicsGenerator
         if (suspectedNode.ClassificationType != ClassificationTypeNames.Identifier)
             return;
 
-        var alreadyProcessedSuspectedNode = _Output.LastOrDefault(x => x.Id == suspectedNode.Id);
+        var alreadyProcessedSuspectedNode = _Output.LastOrDefault(x => x.Id == suspectedNode.Id && x.Colour == NodeColors.Identifier);
 
         if (alreadyProcessedSuspectedNode == null)
             return;
 
-        if (alreadyProcessedSuspectedNode.Colour == NodeColors.Identifier)
+        // 0 = currently at Identifier, expecting Operator
+        // 1 = currently at Operator, expecting Identifier
+
+        var state = 0;
+        var identifiers = new List<string>();
+
+        var validIdentifiers = new[]
         {
-            // 0 = currently at Identifier, expecting Operator
-            // 1 = currently at Operator, expecting Identifier
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.Identifier,
+            ClassificationTypeNames.ConstantName,
+            ClassificationTypeNames.ParameterName,
+        };
 
-            var state = 0;
-            var theChainIsMadeOfIdentifiers = true;
+        var validTypes = new[]
+        {
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.Identifier,
+            ClassificationTypeNames.ConstantName,
+            ClassificationTypeNames.ParameterName,
+            ClassificationTypeNames.Operator
+        };
 
-            var validTypes = new[]
+        for (int i = currentIndex - 3; i >= 0; i--)
+        {
+            if (!validTypes.Contains(nodes[i].ClassificationType))
             {
-                ClassificationTypeNames.LocalName,
-                ClassificationTypeNames.Identifier,
-                ClassificationTypeNames.ConstantName,
-                ClassificationTypeNames.ParameterName,
-                ClassificationTypeNames.Operator
-            };
-
-            for (int i = currentIndex - 3; i >= 0; i--)
-            {
-                if (!validTypes.Contains(nodes[i].ClassificationType))
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ">")
                 {
-                    if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ">")
-                        theChainIsMadeOfIdentifiers = false;
-
-                    break;
+                    return;
                 }
 
-                if (nodes[i].ClassificationType == ClassificationTypeNames.Operator && nodes[i].Text != ".")
-                    break;
-
-                if (state == 0)
-                {
-                    if (nodes[i].ClassificationType == ClassificationTypeNames.Operator)
-                    {
-                        state = 1;
-                        continue;
-                    }
-                    else
-                    {
-                        theChainIsMadeOfIdentifiers = false;
-                    }
-                }
-                else if (state == 1)
-                {
-                    if (nodes[i].ClassificationType == ClassificationTypeNames.Identifier)
-                    {
-                        state = 0;
-                        continue;
-                    }
-                    else
-                    {
-                        theChainIsMadeOfIdentifiers = false;
-                    }
-                }
+                break;
             }
 
-            if (theChainIsMadeOfIdentifiers)
+            if (state == 0)
+            {
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Operator)
+                {
+                    state = 1;
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else if (state == 1)
+            {
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Identifier)
+                {
+                    identifiers.Add(nodes[i].Text);
+                    state = 0;
+                    continue;
+                }
+                else
+                {
+                    // if it is Local/Constant/Param then halt.
+                    if (validIdentifiers.Contains(nodes[i].ClassificationType))
+                    {
+                        return;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if (identifiers.Count == 0)
+        {
+            var isVariable = IdentifierFirstCharCaseSeemsLikeVariable(alreadyProcessedSuspectedNode.Text);
+
+            if (isVariable)
+            {
+                alreadyProcessedSuspectedNode.Colour = NodeColors.LocalName;
+            }
+            else
             {
                 alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
             }
         }
+
+        if (identifiers.Count > 0 && identifiers.All(x => !IdentifierFirstCharCaseSeemsLikeVariable(x)))
+            alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
+    }
+
+    private bool IdentifierFirstCharCaseSeemsLikeVariable(string s)
+    {
+        return s.Length > 0 && char.IsLower(s[0]);
     }
 }
