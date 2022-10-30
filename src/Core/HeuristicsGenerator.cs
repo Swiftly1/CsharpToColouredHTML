@@ -252,7 +252,8 @@ internal class HeuristicsGenerator
             if (currentIndex >= 2)
             {
                 var suspectedId = nodes[currentIndex - 2].Id;
-                var suspected = _Output.FirstOrDefault(x => x.Id == suspectedId);
+                var suspected = _Output.First(x => x.Id == suspectedId);
+
                 if (nodes[currentIndex - 1].Text == "." && new[] { NodeColors.LocalName, NodeColors.ParameterName }.Contains(suspected.Colour))
                     return false;
             }
