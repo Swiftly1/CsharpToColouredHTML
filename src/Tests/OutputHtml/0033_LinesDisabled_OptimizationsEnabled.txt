@@ -1,0 +1,24 @@
+
+<pre class="background">
+<span class="control">foreach</span> (<span class="class">Field</span> <span class="localName">f</span> <span class="control">in</span> <span class="localName">test</span>.Fields)
+{
+}
+
+<span class="class">List</span>&lt;<span class="struct">DateTime</span>&gt; <span class="localName">dts</span> = <span class="keyword">new</span> <span class="class">List</span>&lt;<span class="struct">DateTime</span>&gt;();
+
+<span class="control">foreach</span> (<span class="struct">DateTime</span> <span class="localName">f</span> <span class="control">in</span> <span class="localName">dts</span>)
+{
+}
+
+<span class="comment">// test</span>
+
+<span class="keyword">public struct</span> <span class="struct">MyTest</span>
+{
+
+}
+
+<span class="class">List</span>&lt;<span class="struct">MyTest</span>&gt; <span class="localName">strs</span> = <span class="keyword">new</span> <span class="class">List</span>&lt;<span class="struct">MyTest</span>&gt;();
+
+<span class="control">foreach</span> (<span class="struct">MyTest</span> <span class="localName">f</span> <span class="control">in</span> <span class="localName">strs</span>)
+{
+}</pre>

@@ -142,9 +142,14 @@ internal class HeuristicsGenerator
 
                 TryUpdatePreviousIdentifierToClassIfThatWasNamespace(currentIndex, nodes);
             }
-            else if (IsClass(currentIndex, nodes))
+            else if (IsClassOrStruct(currentIndex, nodes))
             {
-                if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
+                if (IsPopularStruct(node.Text))
+                {
+                    colour = NodeColors.Struct;
+                    _FoundStructs.Add(node.Text);
+                }
+                else if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
                 {
                     colour = NodeColors.LocalName;
                 }
@@ -153,11 +158,6 @@ internal class HeuristicsGenerator
                     colour = NodeColors.Class;
                     _FoundClasses.Add(node.Text);
                 }
-            }
-            else if (IsStruct(currentIndex, nodes))
-            {
-                colour = NodeColors.Struct;
-                _FoundStructs.Add(node.Text);
             }
             else
             {
@@ -204,26 +204,6 @@ internal class HeuristicsGenerator
         }
 
         return colour;
-    }
-
-    private bool IsStruct(int currentIndex, List<Node> nodes)
-    {
-        var node = nodes[currentIndex];
-        var canGoBehind = currentIndex > 0;
-
-        var isPopularStruct = IsPopularStruct(node.Text);
-
-        if (isPopularStruct && !canGoBehind)
-        {
-            return true;
-        }
-
-        if (isPopularStruct && canGoBehind && nodes[currentIndex - 1].Text != ".")
-        {
-            return true;
-        }
-
-        return false;
     }
 
     private bool IsInterface(int currentIndex, List<Node> nodes)
@@ -298,13 +278,13 @@ internal class HeuristicsGenerator
         }
     }
 
-    private bool IsClass(int currentIndex, List<Node> nodes)
+    private bool IsClassOrStruct(int currentIndex, List<Node> nodes)
     {
         var canGoAhead = nodes.Count > currentIndex + 1;
         var canGoBehind = currentIndex > 0;
 
         var node = nodes[currentIndex];
-        bool isPopularClass = false;
+        bool isPopularClassOrStruct = false;
 
         if (canGoBehind && nodes[currentIndex - 1].Text == ":")
         {
@@ -328,11 +308,11 @@ internal class HeuristicsGenerator
         {
             return true;
         } // be careful, if you remove those parenthesis around that assignment, then it'll change its behaviour
-        else if ((isPopularClass = IsPopularClass(node.Text)) && !canGoBehind)
+        else if ((isPopularClassOrStruct = IsPopularClass(node.Text) || IsPopularStruct(node.Text)) && !canGoBehind)
         {
             return true;
         }
-        else if (isPopularClass && canGoBehind && nodes[currentIndex - 1].Text != ".")
+        else if (isPopularClassOrStruct && canGoBehind && nodes[currentIndex - 1].Text != ".")
         {
             return true;
         }
@@ -351,7 +331,7 @@ internal class HeuristicsGenerator
             return true;
         }
         // public void Test(Array<int> a)
-        else if (canGoAhead && nodes[currentIndex + 1].Text == "<" && !IsPopularStruct(node.Text))
+        else if (canGoAhead && nodes[currentIndex + 1].Text == "<")
         {
             return true;
         }
@@ -363,10 +343,13 @@ internal class HeuristicsGenerator
         {
             return true;
         }
-        else
+        else if (currentIndex >= 2 && nodes.Count >= 3 && nodes[currentIndex -1].ClassificationType == ClassificationTypeNames.Punctuation &&
+            nodes[currentIndex - 1].Text == "(" && nodes[currentIndex - 2].Text == "foreach")
         {
-            return false;
+            return true;
         }
+
+        return false;
     }
 
     private bool SeemsLikeParameter(int currentIndex, List<Node> nodes)
