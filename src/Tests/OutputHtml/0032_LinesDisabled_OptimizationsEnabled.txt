@@ -1,0 +1,4 @@
+
+<pre class="background">
+<span class="keyword">var</span> <span class="localName">reader</span> = <span class="keyword">new</span> <span class="class">PdfReader</span>();
+<span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="localName">reader</span>.Data.Items.Count);</pre>

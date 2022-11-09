@@ -1,0 +1,2 @@
+﻿var reader = new PdfReader();
+Console.WriteLine(reader.Data.Items.Count);

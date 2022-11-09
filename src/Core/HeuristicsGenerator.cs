@@ -454,6 +454,11 @@ internal class HeuristicsGenerator
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].Text == ">")
             return false;
 
+        var comesFromVariable = TheresVariableInTheChainBefore(currentIndex, nodes);
+
+        if (comesFromVariable)
+            return false;
+
         // OLEMSGICON.OLEMSGICON_WARNING,
         return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||" }.Contains(next.Text);
     }
@@ -498,6 +503,56 @@ internal class HeuristicsGenerator
             else
             {
                 return false;
+            }
+        }
+
+        return false;
+    }
+
+    private bool TheresVariableInTheChainBefore(int currentIndex, List<Node> nodes)
+    {
+        var validIdentifiers = new[]
+        {
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.ConstantName,
+            ClassificationTypeNames.ParameterName,
+        };
+
+        // 0 = currently at Identifier, expecting Operator
+        // 1 = currently at Operator, expecting Identifier
+        var state = 0;
+
+        for (int i = currentIndex - 1; i >= 0; i--)
+        {
+            if (state == 0)
+            {
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Operator && nodes[i].Text == ".")
+                {
+                    state = 1;
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (state == 1)
+            {
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Identifier)
+                {
+                    state = 0;
+                    continue;
+                }
+                else
+                {
+                    // if it is Local/Constant/Param then return that there's variable before
+                    if (validIdentifiers.Contains(nodes[i].ClassificationType))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
             }
         }
 
@@ -559,7 +614,7 @@ internal class HeuristicsGenerator
 
             if (state == 0)
             {
-                if (nodes[i].ClassificationType == ClassificationTypeNames.Operator)
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Operator && nodes[i].Text == ".")
                 {
                     state = 1;
                     continue;
