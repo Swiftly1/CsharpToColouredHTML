@@ -348,6 +348,10 @@ internal class HeuristicsGenerator
         {
             return true;
         }
+        else if (IsParameterWithAttribute(currentIndex, nodes))
+        {
+            return true;
+        }
 
         return false;
     }
@@ -492,6 +496,39 @@ internal class HeuristicsGenerator
         return false;
     }
 
+    private bool IsParameterWithAttribute(int currentIndex, List<Node> nodes)
+    {
+        if (currentIndex - 4 < 0)
+            return false;
+
+        var closing = nodes[currentIndex - 1];
+        var name = nodes[currentIndex - 2];
+        var opening = nodes[currentIndex - 3];
+        var commaOrParenthesis = nodes[currentIndex - 4];
+
+        if (closing.Text != "]" && closing.ClassificationType == ClassificationTypeNames.Punctuation)
+            return false;
+
+        if (opening.Text != "[" && opening.ClassificationType == ClassificationTypeNames.Punctuation)
+            return false;
+
+        if (commaOrParenthesis.Text != "(" && commaOrParenthesis.Text != ",")
+            return false;
+
+        return IsValidClassOrStructName(name.Text);
+    }
+
+    private bool IsValidClassOrStructName(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return false;
+
+        if (!char.IsLetter(text[0]) && text[0] != '_')
+            return false;
+
+        return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x));
+    }
+
     private bool TheresVariableInTheChainBefore(int currentIndex, List<Node> nodes)
     {
         var validIdentifiers = new[]
@@ -569,9 +606,10 @@ internal class HeuristicsGenerator
         var validIdentifiers = new[]
         {
             ClassificationTypeNames.LocalName,
-            ClassificationTypeNames.Identifier,
             ClassificationTypeNames.ConstantName,
             ClassificationTypeNames.ParameterName,
+            ClassificationTypeNames.PropertyName,
+            ClassificationTypeNames.FieldName
         };
 
         var validTypes = new[]
@@ -580,7 +618,9 @@ internal class HeuristicsGenerator
             ClassificationTypeNames.Identifier,
             ClassificationTypeNames.ConstantName,
             ClassificationTypeNames.ParameterName,
-            ClassificationTypeNames.Operator
+            ClassificationTypeNames.Operator,
+            ClassificationTypeNames.PropertyName,
+            ClassificationTypeNames.FieldName
         };
 
         for (int i = currentIndex - 3; i >= 0; i--)

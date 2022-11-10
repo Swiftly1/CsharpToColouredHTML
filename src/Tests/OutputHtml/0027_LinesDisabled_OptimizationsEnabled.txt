@@ -106,7 +106,7 @@
             <span class="control">while</span> (<span class="keyword">true</span>)
             {
                 done = <span class="keyword">false</span>;
-                <span class="keyword">var</span> <span class="localName">keys</span> = readyToGo.<span class="class">Keys</span>.<span class="method">GetEnumerator</span>();
+                <span class="keyword">var</span> <span class="localName">keys</span> = readyToGo.Keys.<span class="method">GetEnumerator</span>();
                 <span class="control">while</span> (<span class="localName">keys</span>.<span class="method">MoveNext</span>())
                 {
                     current = <span class="localName">keys</span>.Current;
