@@ -506,27 +506,17 @@ internal class HeuristicsGenerator
         var opening = nodes[currentIndex - 3];
         var commaOrParenthesis = nodes[currentIndex - 4];
 
-        if (closing.Text != "]" && closing.ClassificationType == ClassificationTypeNames.Punctuation)
+        if (closing.Text != "]" || closing.ClassificationType != ClassificationTypeNames.Punctuation)
             return false;
 
-        if (opening.Text != "[" && opening.ClassificationType == ClassificationTypeNames.Punctuation)
+        if (opening.Text != "[" || opening.ClassificationType != ClassificationTypeNames.Punctuation)
             return false;
 
-        if (commaOrParenthesis.Text != "(" && commaOrParenthesis.Text != ",")
+        if ((commaOrParenthesis.Text != "(" && commaOrParenthesis.Text != ",")
+             || commaOrParenthesis.ClassificationType != ClassificationTypeNames.Punctuation)
             return false;
 
         return IsValidClassOrStructName(name.Text);
-    }
-
-    private bool IsValidClassOrStructName(string text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
-            return false;
-
-        if (!char.IsLetter(text[0]) && text[0] != '_')
-            return false;
-
-        return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x));
     }
 
     private bool TheresVariableInTheChainBefore(int currentIndex, List<Node> nodes)
@@ -684,6 +674,17 @@ internal class HeuristicsGenerator
 
         if (identifiers.Count > 0 && identifiers.All(x => !IdentifierFirstCharCaseSeemsLikeVariable(x)))
             alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
+    }
+
+    private bool IsValidClassOrStructName(string text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+            return false;
+
+        if (!char.IsLetter(text[0]) && text[0] != '_')
+            return false;
+
+        return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x));
     }
 
     private bool IdentifierFirstCharCaseSeemsLikeVariable(string s)
