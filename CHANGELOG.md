@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.31] - 10.11.2022
+**Description:**
+Improved heuristics for ASP code fragments, for foreach loop, for parameters with attributes [...] and other.
+
 ## [1.0.30] - 09.11.2022
 **Description:**
 Improved heuristics
