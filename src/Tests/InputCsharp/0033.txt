@@ -1,0 +1,22 @@
+﻿foreach (Field f in test.Fields)
+{
+}
+
+List<DateTime> dts = new List<DateTime>();
+
+foreach (DateTime f in dts)
+{
+}
+
+// test
+
+public struct MyTest
+{
+
+}
+
+List<MyTest> strs = new List<MyTest>();
+
+foreach (MyTest f in strs)
+{
+}

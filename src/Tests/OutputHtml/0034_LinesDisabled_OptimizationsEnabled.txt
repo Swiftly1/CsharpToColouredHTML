@@ -1,0 +1,23 @@
+
+<pre class="background">
+<span class="keyword">using</span> Microsoft.AspNetCore.Mvc;
+
+<span class="keyword">namespace</span> Test
+{
+    [<span class="class">Route</span>(<span class="string">&quot;api/[controller]&quot;</span>)]
+    [<span class="class">ApiController</span>]
+    <span class="keyword">public class</span> <span class="class">TestController</span> : <span class="class">ControllerBase</span>
+    {
+        <span class="keyword">public</span> <span class="interface">IActionResult</span> <span class="method">Post</span>([<span class="class">FromBody</span>] <span class="class">TestRequestModel</span> <span class="parameter">request</span>, [<span class="class">FromBody</span>] <span class="class">TestQQ</span> <span class="parameter">t</span>, <span class="keyword">string</span> <span class="parameter">template</span>)
+        {
+            <span class="control">if</span> (Request.Headers.<span class="method">TryGetValue</span>(<span class="string">&quot;Authorization&quot;</span>, <span class="keyword">out var</span> <span class="localName">token</span>))
+            {
+                <span class="control">return</span> <span class="method">Ok</span>();
+            }
+            <span class="control">else</span>
+            {
+                <span class="control">return</span> <span class="method">Unauthorized</span>();
+            }
+        }
+    }
+}</pre>

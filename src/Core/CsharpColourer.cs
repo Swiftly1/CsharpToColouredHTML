@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Classification;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CsharpToColouredHTML.Core;
 
@@ -85,8 +86,15 @@ public class CsharpColourer
     private static readonly ImmutableArray<MetadataReference> _coreReferences =
     ImmutableArray.Create<MetadataReference>
     (
-        MetadataReference.CreateFromFile(typeof(object).Assembly.Location
-    ));
+        MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
+    );
+
+    private static readonly ImmutableArray<MetadataReference> _coreReferencesWithASP =
+    ImmutableArray.Create<MetadataReference>
+    (
+        MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+        MetadataReference.CreateFromFile(typeof(ControllerBase).Assembly.Location)
+    );
 
     private (List<ClassifiedSpan> ClassifiedSpans, SourceText SourceText) GetClassifiedSpans(string code)
     {
@@ -94,10 +102,18 @@ public class CsharpColourer
         var sourceText = SourceText.From(code);
         var workspace = new AdhocWorkspace(host);
 
-        var doc = workspace
-                  .AddProject("Test", LanguageNames.CSharp)
-                  .AddMetadataReferences(_coreReferences)
-                  .AddDocument("TestFile", sourceText);
+        var proj = workspace.AddProject("Test", LanguageNames.CSharp);
+
+        if (code.Contains("using Microsoft.AspNetCore") && code.Contains("ControllerBase"))
+        {
+            proj = proj.AddMetadataReferences(_coreReferencesWithASP);
+        }
+        else
+        {
+            proj = proj.AddMetadataReferences(_coreReferences);
+        }
+
+        var doc = proj.AddDocument("TestFile", sourceText);
 
         var spans = Classifier.GetClassifiedSpansAsync(doc, new TextSpan(0, code.Length)).GetAwaiter().GetResult().ToList();
         return (spans, sourceText);
