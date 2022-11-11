@@ -114,47 +114,6 @@ internal class HeuristicsGenerator
             if (_FoundStructs.Contains(entry.Text))
                 entry.Colour = NodeColors.Struct;
         }
-
-        for (int i = 2; i < alreadyProcessed.Count; i++)
-        {
-            var current = alreadyProcessed[i];
-            var op = alreadyProcessed[i - 1];
-            var prev = alreadyProcessed[i - 2];
-
-            if (current.Colour != NodeColors.Identifier)
-                continue;
-
-            if (op.Colour != NodeColors.Operator || op.Text != ".")
-                continue;
-
-            if (prev.Colour != NodeColors.Identifier)
-                continue;
-
-            if (i + 1 >= alreadyProcessed.Count)
-                continue;
-
-            var next = alreadyProcessed[i + 1];
-
-            var validColours = new List<string>
-            {
-                NodeColors.FieldName,
-                NodeColors.PropertyName,
-                NodeColors.LocalName,
-                NodeColors.ConstantName,
-                NodeColors.ParameterName,
-            };
-
-            var isValid = (next.Colour == NodeColors.Punctuation && next.Text == ")") || validColours.Contains(next.Colour);
-
-            if (!isValid)
-                continue;
-
-            if (current.IsUsing)
-                continue;
-
-            if (CheckIfChainIsMadeOfIdentifiers(i, alreadyProcessed))
-                alreadyProcessed[i] = current with { Colour = NodeColors.Class };
-        }
     }
 
     private string ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
@@ -203,6 +162,18 @@ internal class HeuristicsGenerator
             else
             {
                 colour = NodeColors.Identifier;
+
+                if (currentIndex + 1 < nodes.Count &&
+                    nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.Operator &&
+                    nodes[currentIndex + 1].Text != "." &&
+                    !_IsUsing)
+                {
+                    if (CheckIfChainIsMadeOfVariablesColors(currentIndex, _Output))
+                    {
+                        colour = NodeColors.Class;
+                        _FoundClasses.Add(node.Text);
+                    }
+                }
             }
         }
         else if (node.ClassificationType == ClassificationTypeNames.Keyword)
@@ -737,7 +708,7 @@ internal class HeuristicsGenerator
             alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
     }
 
-    private bool CheckIfChainIsMadeOfIdentifiers(int currentIndex, List<NodeWithDetails> nodes)
+    private bool CheckIfChainIsMadeOfVariablesColors(int currentIndex, List<NodeWithDetails> nodes)
     {
         // 0 = currently at Identifier, expecting Operator
         // 1 = currently at Operator, expecting Identifier
