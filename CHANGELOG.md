@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.32] - 11.11.2022
+**Description:**
+Improved heuristics for code fragments where namespace names are typed directly instead of using Usings,
+also improvements for typeof and for casts like `var b = (Namespace.Type)a;`.
+
+I've partly fought failed heuristics where two classes are detected in one chain like `localVariable.ClassA.ClassB.MethodCall()`
+
 ## [1.0.31] - 10.11.2022
 **Description:**
 Improved heuristics for ASP code fragments, for foreach loop, for parameters with attributes [...] and other.

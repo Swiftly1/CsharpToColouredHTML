@@ -104,6 +104,7 @@ public class CsharpColourer
 
         var proj = workspace.AddProject("Test", LanguageNames.CSharp);
 
+        // TODO: If possible, then get rid of external ASP nuget.
         if (code.Contains("using Microsoft.AspNetCore") && code.Contains("ControllerBase"))
         {
             proj = proj.AddMetadataReferences(_coreReferencesWithASP);
