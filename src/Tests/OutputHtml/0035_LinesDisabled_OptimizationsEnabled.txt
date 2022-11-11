@@ -13,6 +13,16 @@
         {
             TestQ.<span class="class">SuperHome</span> <span class="localName">h</span> = <span class="keyword">new</span>();
             <span class="keyword">var</span> <span class="localName">q</span> = (TestQ.<span class="class">Home</span>)<span class="localName">h</span>;
+            <span class="keyword">var</span> <span class="localName">s</span> = <span class="keyword">new</span> TestQ.<span class="class">Asd</span>();
+            
+            <span class="keyword">var</span> <span class="localName">found</span> = <span class="method">FindNode</span>(current, item);
+            <span class="keyword">var</span> <span class="localName">value</span> = <span class="localName">found</span>.StoredValue.Value;
+            <span class="keyword">var</span> <span class="localName">data</span> = <span class="keyword">new</span> [] { <span class="numericLiteral">1</span>, <span class="numericLiteral">2</span>, <span class="numericLiteral">3</span> };
+
+            <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span>(<span class="string">$&quot;Value: &#39;</span>{<span class="localName">value</span>}<span class="string">&#39; cannot be saved because there&#39;s already value:&quot;</span> +
+                                    <span class="string">$&quot;</span> {<span class="localName">found</span>.StoredValue.Value}<span class="string">. Key:</span> {<span class="keyword">string</span>.<span class="method">Join</span>(<span class="string">&quot;,&quot;</span>, <span class="localName">data</span>)}<span class="string">&quot;</span>);
+
+            <span class="keyword">new</span> <span class="class">Aasdasd</span>(<span class="string">$&quot;abc</span> {<span class="localName">found</span>.A.B}<span class="string">&quot;</span>);
         }
     }
 }</pre>

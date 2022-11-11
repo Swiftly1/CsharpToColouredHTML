@@ -11,6 +11,16 @@ namespace Rere
 		{
 			TestQ.SuperHome h = new();
 			var q = (TestQ.Home)h;
+			var s = new TestQ.Asd();
+			
+			var found = FindNode(current, item);
+			var value = found.StoredValue.Value;
+			var data = new [] { 1, 2, 3 };
+
+			throw new ArgumentException($"Value: '{value}' cannot be saved because there's already value:" +
+                                    $" {found.StoredValue.Value}. Key: {string.Join(",", data)}");
+
+			new Aasdasd($"abc {found.A.B}");
 		}
 	}
 }

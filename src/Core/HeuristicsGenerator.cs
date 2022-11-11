@@ -417,7 +417,11 @@ internal class HeuristicsGenerator
             if (current.ClassificationType == ClassificationTypeNames.Identifier && current.Text == node.Text
                 && nodes[i - 1].Text == "new")
             {
-                return true;
+                // case like this: = new Test.ABC();
+                // "Test" shouldn't be a class here
+
+                // if next node is "."
+                return (i + 1 < nodes.Count && nodes[i + 1].Text == ".") ? false : true;
             }
         }
 
@@ -491,32 +495,13 @@ internal class HeuristicsGenerator
 
     private bool ThereIsMethodCallAhead(int currentIndex, List<Node> nodes)
     {
-        // there's method call ahead so I guess that's an class, orrr namespace :(
+        if (currentIndex + 1 >= nodes.Count)
+            return false;
 
-        var i = currentIndex;
-        var state = 0;
+        var parenthesis = nodes[currentIndex + 1];
 
-        while (++i < nodes.Count)
-        {
-            var current = nodes[i];
-
-            if (state == 0 && current.ClassificationType == ClassificationTypeNames.Operator)
-            {
-                state = 1;
-            }
-            else if (state == 1 && current.ClassificationType == ClassificationTypeNames.Identifier)
-            {
-                state = 0;
-            }
-            else if (current.Text == "(")
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        if (parenthesis.ClassificationType == ClassificationTypeNames.Punctuation && parenthesis.Text == "(")
+            return true;
 
         return false;
     }
