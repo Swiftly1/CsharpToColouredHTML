@@ -1,0 +1,18 @@
+
+<pre class="background">
+<span class="keyword">using</span> <span class="identifier">TestQ</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="identifier">Test2</span><span class="operator">.</span><span class="identifier">Test</span><span class="punctuation">;</span>
+
+<span class="keyword">namespace</span> <span class="namespace">Rere</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">S</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="identifier">TestQ</span><span class="operator">.</span><span class="class">Home</span> <span class="fieldName">home</span><span class="punctuation">;</span>
+
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Test</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="identifier">TestQ</span><span class="operator">.</span><span class="class">SuperHome</span> <span class="localName">h</span> <span class="operator">=</span> <span class="keyword">new</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="keyword">var</span> <span class="localName">q</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="identifier">TestQ</span><span class="operator">.</span><span class="class">Home</span><span class="punctuation">)</span><span class="localName">h</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

@@ -1,0 +1,18 @@
+
+<pre class="background">
+<span class="keyword">using</span> TestQ;
+<span class="keyword">using</span> Test2.Test;
+
+<span class="keyword">namespace</span> Rere
+{
+    <span class="keyword">public class</span> <span class="class">S</span>
+    {
+        <span class="keyword">public static</span> TestQ.<span class="class">Home</span> home;
+
+        <span class="keyword">public void</span> <span class="method">Test</span>()
+        {
+            TestQ.<span class="class">SuperHome</span> <span class="localName">h</span> = <span class="keyword">new</span>();
+            <span class="keyword">var</span> <span class="localName">q</span> = (TestQ.<span class="class">Home</span>)<span class="localName">h</span>;
+        }
+    }
+}</pre>

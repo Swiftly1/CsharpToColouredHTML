@@ -101,7 +101,7 @@ internal class HeuristicsGenerator
     {
         // If some identifiers weren't recognized at first attempt, but later instead
         // then we may fix the previous ones.
-        var identifiers = alreadyProcessed.Where(x => x.Colour == NodeColors.Identifier).ToList();
+        var identifiers = alreadyProcessed.Where(x => x.Colour == NodeColors.Identifier && x.IsUsing == false).ToList();
 
         foreach (var entry in identifiers)
         {
@@ -113,6 +113,47 @@ internal class HeuristicsGenerator
 
             if (_FoundStructs.Contains(entry.Text))
                 entry.Colour = NodeColors.Struct;
+        }
+
+        for (int i = 2; i < alreadyProcessed.Count; i++)
+        {
+            var current = alreadyProcessed[i];
+            var op = alreadyProcessed[i - 1];
+            var prev = alreadyProcessed[i - 2];
+
+            if (current.Colour != NodeColors.Identifier)
+                continue;
+
+            if (op.Colour != NodeColors.Operator || op.Text != ".")
+                continue;
+
+            if (prev.Colour != NodeColors.Identifier)
+                continue;
+
+            if (i + 1 >= alreadyProcessed.Count)
+                continue;
+
+            var next = alreadyProcessed[i + 1];
+
+            var validColours = new List<string>
+            {
+                NodeColors.FieldName,
+                NodeColors.PropertyName,
+                NodeColors.LocalName,
+                NodeColors.ConstantName,
+                NodeColors.ParameterName,
+            };
+
+            var isValid = (next.Colour == NodeColors.Punctuation && next.Text == ")") || validColours.Contains(next.Colour);
+
+            if (!isValid)
+                continue;
+
+            if (current.IsUsing)
+                continue;
+
+            if (CheckIfChainIsMadeOfIdentifiers(i, alreadyProcessed))
+                alreadyProcessed[i] = current with { Colour = NodeColors.Class };
         }
     }
 
@@ -405,7 +446,14 @@ internal class HeuristicsGenerator
             if (current.ClassificationType == ClassificationTypeNames.Identifier && current.Text == node.Text
                 && nodes[i - 1].Text == "new")
             {
-                return true;
+                if (i + 1 < nodes.Count && nodes[i + 1].Text == ".")
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
 
@@ -444,6 +492,19 @@ internal class HeuristicsGenerator
         var comesFromVariable = TheresVariableInTheChainBefore(currentIndex, nodes);
 
         if (comesFromVariable)
+            return false;
+
+        var validTypes = new List<string>
+        {
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.ParameterName,
+            ClassificationTypeNames.FieldName,
+            ClassificationTypeNames.PropertyName,
+            ClassificationTypeNames.ConstantName
+        };
+
+        // seems like a cast
+        if (currentIndex > 1 && nodes[currentIndex - 1].Text == "(" && currentIndex + 4 < nodes.Count && validTypes.Contains(nodes[currentIndex + 4].ClassificationType))
             return false;
 
         // OLEMSGICON.OLEMSGICON_WARNING,
@@ -674,6 +735,86 @@ internal class HeuristicsGenerator
 
         if (identifiers.Count > 0 && identifiers.All(x => !IdentifierFirstCharCaseSeemsLikeVariable(x)))
             alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
+    }
+
+    private bool CheckIfChainIsMadeOfIdentifiers(int currentIndex, List<NodeWithDetails> nodes)
+    {
+        // 0 = currently at Identifier, expecting Operator
+        // 1 = currently at Operator, expecting Identifier
+
+        var state = 0;
+        var identifiers = new List<string>();
+
+        var validIdentifiers = new[]
+        {
+            NodeColors.LocalName,
+            NodeColors.ConstantName,
+            NodeColors.ParameterName,
+            NodeColors.PropertyName,
+            NodeColors.FieldName
+        };
+
+        var validTypes = new[]
+        {
+            NodeColors.LocalName,
+            NodeColors.ConstantName,
+            NodeColors.ParameterName,
+            NodeColors.PropertyName,
+            NodeColors.FieldName,
+
+            NodeColors.Identifier,
+            NodeColors.Operator,
+        };
+
+        for (int i = currentIndex - 1; i >= 0; i--)
+        {
+            if (!validTypes.Contains(nodes[i].Colour))
+            {
+                if (nodes[i].Colour == NodeColors.Punctuation && nodes[i].Text == ">")
+                {
+                    return false;
+                }
+
+                break;
+            }
+
+            if (state == 0)
+            {
+                if (nodes[i].Colour == NodeColors.Operator && nodes[i].Text == ".")
+                {
+                    state = 1;
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else if (state == 1)
+            {
+                if (nodes[i].Colour == NodeColors.Identifier)
+                {
+                    identifiers.Add(nodes[i].Text);
+                    state = 0;
+                    continue;
+                }
+                else
+                {
+                    // if it is Local/Constant/Param then halt.
+                    if (validIdentifiers.Contains(nodes[i].Colour))
+                    {
+                        return false;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if (identifiers.Count > 0 && identifiers.All(x => !IdentifierFirstCharCaseSeemsLikeVariable(x)))
+            return true;
+
+        return false;
     }
 
     private bool IsValidClassOrStructName(string text)
