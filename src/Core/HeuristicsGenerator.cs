@@ -417,14 +417,7 @@ internal class HeuristicsGenerator
             if (current.ClassificationType == ClassificationTypeNames.Identifier && current.Text == node.Text
                 && nodes[i - 1].Text == "new")
             {
-                if (i + 1 < nodes.Count && nodes[i + 1].Text == ".")
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return true;
             }
         }
 
