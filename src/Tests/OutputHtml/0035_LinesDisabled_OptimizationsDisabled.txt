@@ -1,0 +1,38 @@
+
+<pre class="background">
+<span class="keyword">using</span> <span class="identifier">TestQ</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="identifier">Test2</span><span class="operator">.</span><span class="identifier">Test</span><span class="punctuation">;</span>
+
+<span class="keyword">namespace</span> <span class="namespace">Rere</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="keyword">class</span> <span class="class">S</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">public</span> <span class="keyword">static</span> <span class="identifier">TestQ</span><span class="operator">.</span><span class="class">Home</span> <span class="fieldName">home</span><span class="punctuation">;</span>
+
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Test</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="identifier">TestQ</span><span class="operator">.</span><span class="class">SuperHome</span> <span class="localName">h</span> <span class="operator">=</span> <span class="keyword">new</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="keyword">var</span> <span class="localName">q</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="identifier">TestQ</span><span class="operator">.</span><span class="class">Home</span><span class="punctuation">)</span><span class="localName">h</span><span class="punctuation">;</span>
+            <span class="keyword">var</span> <span class="localName">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="identifier">TestQ</span><span class="operator">.</span><span class="class">Asd</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            
+            <span class="keyword">var</span> <span class="localName">found</span> <span class="operator">=</span> <span class="method">FindNode</span><span class="punctuation">(</span><span class="identifier">current</span><span class="punctuation">,</span> <span class="identifier">item</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="keyword">var</span> <span class="localName">value</span> <span class="operator">=</span> <span class="localName">found</span><span class="operator">.</span><span class="identifier">StoredValue</span><span class="operator">.</span><span class="identifier">Value</span><span class="punctuation">;</span>
+            <span class="keyword">var</span> <span class="localName">data</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="punctuation">[</span><span class="punctuation">]</span> <span class="punctuation">{</span> <span class="numericLiteral">1</span><span class="punctuation">,</span> <span class="numericLiteral">2</span><span class="punctuation">,</span> <span class="numericLiteral">3</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+
+            <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span><span class="punctuation">(</span><span class="string">$&quot;</span><span class="string">Value: &#39;</span><span class="punctuation">{</span><span class="localName">value</span><span class="punctuation">}</span><span class="string">&#39; cannot be saved because there&#39;s already value:</span><span class="string">&quot;</span> <span class="operator">+</span>
+                                    <span class="string">$&quot;</span><span class="string"> </span><span class="punctuation">{</span><span class="localName">found</span><span class="operator">.</span><span class="identifier">StoredValue</span><span class="operator">.</span><span class="identifier">Value</span><span class="punctuation">}</span><span class="string">. Key:</span> <span class="punctuation">{</span><span class="keyword">string</span><span class="operator">.</span><span class="method">Join</span><span class="punctuation">(</span><span class="string">&quot;,&quot;</span><span class="punctuation">,</span> <span class="localName">data</span><span class="punctuation">)</span><span class="punctuation">}</span><span class="string">&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+            <span class="keyword">new</span> <span class="class">Aasdasd</span><span class="punctuation">(</span><span class="string">$&quot;</span><span class="string">abc</span> <span class="punctuation">{</span><span class="localName">found</span><span class="operator">.</span><span class="identifier">A</span><span class="operator">.</span><span class="identifier">B</span><span class="punctuation">}</span><span class="string">&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+            <span class="keyword">var</span> <span class="localName">test</span> <span class="operator">=</span> <span class="method">DoStuff</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="keyword">var</span> <span class="localName">test2</span> <span class="operator">=</span> <span class="localName">test</span><span class="operator">.</span><span class="identifier">Items</span><span class="operator">.</span><span class="method">Item</span><span class="punctuation">(</span><span class="numericLiteral">0</span><span class="punctuation">)</span><span class="operator">.</span><span class="identifier">Value</span><span class="operator">.</span><span class="method">ToString</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+            <span class="control">if</span> <span class="punctuation">(</span><span class="localName">data</span><span class="operator">.</span><span class="method">GetType</span><span class="punctuation">(</span><span class="punctuation">)</span> <span class="operator">==</span> <span class="keyword">typeof</span><span class="punctuation">(</span><span class="identifier">TestQ</span><span class="operator">.</span><span class="class">Cat</span><span class="punctuation">)</span><span class="punctuation">)</span>
+            <span class="punctuation">{</span>
+                <span class="class">Console</span><span class="operator">.</span><span class="method">WriteLine</span><span class="punctuation">(</span><span class="numericLiteral">7</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="punctuation">}</span>
+
+            <span class="identifier">TestQ</span><span class="operator">.</span><span class="class">Cat</span><span class="operator">.</span><span class="propertyName">StaticProperty</span><span class="operator">.</span><span class="method">MethodCall</span><span class="punctuation">(</span><span class="string">&quot;something&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

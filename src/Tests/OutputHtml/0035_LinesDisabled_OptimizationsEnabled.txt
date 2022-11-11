@@ -1,0 +1,38 @@
+
+<pre class="background">
+<span class="keyword">using</span> TestQ;
+<span class="keyword">using</span> Test2.Test;
+
+<span class="keyword">namespace</span> Rere
+{
+    <span class="keyword">public class</span> <span class="class">S</span>
+    {
+        <span class="keyword">public static</span> TestQ.<span class="class">Home</span> home;
+
+        <span class="keyword">public void</span> <span class="method">Test</span>()
+        {
+            TestQ.<span class="class">SuperHome</span> <span class="localName">h</span> = <span class="keyword">new</span>();
+            <span class="keyword">var</span> <span class="localName">q</span> = (TestQ.<span class="class">Home</span>)<span class="localName">h</span>;
+            <span class="keyword">var</span> <span class="localName">s</span> = <span class="keyword">new</span> TestQ.<span class="class">Asd</span>();
+            
+            <span class="keyword">var</span> <span class="localName">found</span> = <span class="method">FindNode</span>(current, item);
+            <span class="keyword">var</span> <span class="localName">value</span> = <span class="localName">found</span>.StoredValue.Value;
+            <span class="keyword">var</span> <span class="localName">data</span> = <span class="keyword">new</span> [] { <span class="numericLiteral">1</span>, <span class="numericLiteral">2</span>, <span class="numericLiteral">3</span> };
+
+            <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentException</span>(<span class="string">$&quot;Value: &#39;</span>{<span class="localName">value</span>}<span class="string">&#39; cannot be saved because there&#39;s already value:&quot;</span> +
+                                    <span class="string">$&quot;</span> {<span class="localName">found</span>.StoredValue.Value}<span class="string">. Key:</span> {<span class="keyword">string</span>.<span class="method">Join</span>(<span class="string">&quot;,&quot;</span>, <span class="localName">data</span>)}<span class="string">&quot;</span>);
+
+            <span class="keyword">new</span> <span class="class">Aasdasd</span>(<span class="string">$&quot;abc</span> {<span class="localName">found</span>.A.B}<span class="string">&quot;</span>);
+
+            <span class="keyword">var</span> <span class="localName">test</span> = <span class="method">DoStuff</span>();
+            <span class="keyword">var</span> <span class="localName">test2</span> = <span class="localName">test</span>.Items.<span class="method">Item</span>(<span class="numericLiteral">0</span>).Value.<span class="method">ToString</span>();
+
+            <span class="control">if</span> (<span class="localName">data</span>.<span class="method">GetType</span>() == <span class="keyword">typeof</span>(TestQ.<span class="class">Cat</span>))
+            {
+                <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="numericLiteral">7</span>);
+            }
+
+            TestQ.<span class="class">Cat</span>.StaticProperty.<span class="method">MethodCall</span>(<span class="string">&quot;something&quot;</span>);
+        }
+    }
+}</pre>

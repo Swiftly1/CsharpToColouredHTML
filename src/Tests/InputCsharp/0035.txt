@@ -29,6 +29,8 @@ namespace Rere
 			{
 				Console.WriteLine(7);
 			}
+
+			TestQ.Cat.StaticProperty.MethodCall("something");
 		}
 	}
 }
