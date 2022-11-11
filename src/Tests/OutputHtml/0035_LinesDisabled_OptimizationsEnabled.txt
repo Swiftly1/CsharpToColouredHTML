@@ -31,6 +31,8 @@
             {
                 <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="numericLiteral">7</span>);
             }
+
+            TestQ.<span class="class">Cat</span>.StaticProperty.<span class="method">MethodCall</span>(<span class="string">&quot;something&quot;</span>);
         }
     }
 }</pre>

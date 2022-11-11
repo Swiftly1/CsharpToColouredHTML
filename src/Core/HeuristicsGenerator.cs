@@ -115,6 +115,33 @@ internal class HeuristicsGenerator
             if (_FoundStructs.Contains(entry.Text))
                 entry.Colour = NodeColors.Struct;
         }
+
+        for (int i = 0; i < alreadyProcessed.Count; i++)
+        {
+            var current = alreadyProcessed[i];
+
+            if (current.Colour != NodeColors.Method)
+                continue;
+
+            if (i < 4)
+                continue;
+
+            var op1 = alreadyProcessed[i - 1];
+            var id1 = alreadyProcessed[i - 2];
+            var op2 = alreadyProcessed[i - 3];
+            var id2 = alreadyProcessed[i - 4];
+
+            if (op1.Colour != NodeColors.Operator || op1.Text != ".")
+                continue;
+
+            if (op2.Colour != NodeColors.Operator || op2.Text != ".")
+                continue;
+
+            if (id1.Colour == NodeColors.Class && id2.Colour == NodeColors.Class)
+            {
+                alreadyProcessed[i - 2] = id1 with { Colour = NodeColors.PropertyName };
+            }
+        }
     }
 
     private string ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
