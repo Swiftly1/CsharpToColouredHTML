@@ -23,6 +23,14 @@
                                     <span class="string">$&quot;</span> {<span class="localName">found</span>.StoredValue.Value}<span class="string">. Key:</span> {<span class="keyword">string</span>.<span class="method">Join</span>(<span class="string">&quot;,&quot;</span>, <span class="localName">data</span>)}<span class="string">&quot;</span>);
 
             <span class="keyword">new</span> <span class="class">Aasdasd</span>(<span class="string">$&quot;abc</span> {<span class="localName">found</span>.A.B}<span class="string">&quot;</span>);
+
+            <span class="keyword">var</span> <span class="localName">test</span> = <span class="method">DoStuff</span>();
+            <span class="keyword">var</span> <span class="localName">test2</span> = <span class="localName">test</span>.Items.<span class="method">Item</span>(<span class="numericLiteral">0</span>).Value.<span class="method">ToString</span>();
+
+            <span class="control">if</span> (<span class="localName">data</span>.<span class="method">GetType</span>() == <span class="keyword">typeof</span>(TestQ.<span class="class">Cat</span>))
+            {
+                <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="numericLiteral">7</span>);
+            }
         }
     }
 }</pre>

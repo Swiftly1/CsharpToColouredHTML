@@ -13,7 +13,7 @@ namespace Rere
 			var q = (TestQ.Home)h;
 			var s = new TestQ.Asd();
 			
-			var found = FindNode(current, item);
+            var found = FindNode(current, item);
 			var value = found.StoredValue.Value;
 			var data = new [] { 1, 2, 3 };
 
@@ -21,6 +21,14 @@ namespace Rere
                                     $" {found.StoredValue.Value}. Key: {string.Join(",", data)}");
 
 			new Aasdasd($"abc {found.A.B}");
+
+			var test = DoStuff();
+			var test2 = test.Items.Item(0).Value.ToString();
+
+			if (data.GetType() == typeof(TestQ.Cat))
+			{
+				Console.WriteLine(7);
+			}
 		}
 	}
 }

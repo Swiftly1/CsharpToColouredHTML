@@ -5,6 +5,7 @@ namespace CsharpToColouredHTML.Core;
 internal class HeuristicsGenerator
 {
     private bool _IsUsing = false;
+    private bool _IsTypeOf = false;
 
     // Simplifies detecting creation of an instance, so we don't have to go behind.
     // So far it works decent, thus no need for more complex approach.
@@ -184,6 +185,9 @@ internal class HeuristicsGenerator
             if (node.Text == "new")
                 _IsNew = true;
 
+            if (node.Text == "typeof")
+                _IsTypeOf = true;
+
             colour = NodeColors.Keyword;
         }
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
@@ -200,12 +204,16 @@ internal class HeuristicsGenerator
 
                 if (_ParenthesisCounter <= 0 && _IsNew)
                     _IsNew = false;
+
+                if (_ParenthesisCounter <= 0 && _IsTypeOf)
+                    _IsTypeOf = false;
             }
 
             if (node.Text == ";")
             {
                 _IsUsing = false;
                 _IsNew = false;
+                _IsTypeOf = false;
             }
 
             colour = NodeColors.Punctuation;
@@ -430,7 +438,7 @@ internal class HeuristicsGenerator
 
     private bool SeemsLikePropertyUsage(int currentIndex, List<Node> nodes)
     {
-        if (_IsUsing)
+        if (_IsUsing || _IsTypeOf)
             return false;
 
         if (currentIndex + 3 >= nodes.Count)
@@ -630,6 +638,25 @@ internal class HeuristicsGenerator
                 if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ">")
                 {
                     return;
+                }
+
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ")")
+                {
+                    var closed_counter = 0;
+
+                    for (; i >= 0 ; i--)
+                    {
+                        if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ")")
+                            closed_counter++;
+
+                        if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == "(")
+                            closed_counter--;
+
+                        if (closed_counter <= 0)
+                            break;
+                    }
+
+                    continue;
                 }
 
                 break;

@@ -21,6 +21,14 @@ namespace Rere
                                     $" {found.StoredValue.Value}. Key: {string.Join(",", data)}");
 
 			new Aasdasd($"abc {found.A.B}");
+
+			var test = DoStuff();
+			var test2 = test.Items.Item(0).Value.ToString();
+
+			if (data.GetType() == typeof(TestQ.Cat))
+			{
+				Console.WriteLine(7);
+			}
 		}
 	}
 }
