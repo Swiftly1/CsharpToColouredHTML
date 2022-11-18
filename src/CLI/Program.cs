@@ -13,7 +13,12 @@ if (!File.Exists(filePath))
 
 var code = File.ReadAllText(filePath);
 
-var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
+var colourer_settings = new ColourerSettings
+{
+    ConvertNewLineEndingsToEnvironmentNewLine = true
+};
+
+var html = new CsharpColourer(colourer_settings).ProcessSourceCode(code, new HTMLEmitter());
 
 // Or:
 //new CsharpColourer().ProcessSourceCode(code, new ConsoleEmitter()); 

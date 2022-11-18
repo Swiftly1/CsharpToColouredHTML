@@ -3,6 +3,8 @@ using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Classification;
+
+// Classifier Helpers
 using Microsoft.AspNetCore.Mvc;
 
 namespace CsharpToColouredHTML.Core;
@@ -11,8 +13,27 @@ public class CsharpColourer
 {
     public readonly Hints Hints = new Hints();
 
+    private readonly ColourerSettings _Settings = new ColourerSettings();
+
+    public CsharpColourer() { }
+
+    public CsharpColourer(ColourerSettings settings)
+    {
+        if (settings is null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
+        _Settings = settings;
+    }
+
     public string ProcessSourceCode(string code, IEmitter emitter)
     {
+        if (_Settings.ConvertNewLineEndingsToEnvironmentNewLine)
+        {
+            code = code.ReplaceLineEndings();
+        }
+
         var nodes = GenerateInternalRepresentation(code);
         var heuristics = new HeuristicsGenerator(Hints).Build(nodes);
         return emitter.Emit(heuristics);

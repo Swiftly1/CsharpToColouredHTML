@@ -235,5 +235,33 @@ namespace Tests
 
             Assert.Equal(p2Lines, linesResult);
         }
+
+        [Fact]
+        public void ConvertEndings()
+        {
+            var other_new_line_ending = Environment.NewLine == "\r\n" ? "\n" : Environment.NewLine;
+
+            var code_with_other_endings = 
+                $"public{other_new_line_ending}static{other_new_line_ending}void{other_new_line_ending}Main()";
+
+            var settings = new HTMLEmitterSettings()
+                               .UseCustomCSS("")
+                               .EnableLineNumbers()
+                               .DisableOptimizations()
+                               .DisableIframe();
+
+            var emitter = new HTMLEmitter(settings);
+
+            var colourer_settings = new ColourerSettings
+            {
+                ConvertNewLineEndingsToEnvironmentNewLine = true
+            };
+
+            var OK_Result = new CsharpColourer(colourer_settings).ProcessSourceCode(code_with_other_endings, emitter);
+            var Wrong_Result = new CsharpColourer().ProcessSourceCode(code_with_other_endings, emitter);
+
+            Assert.Contains("line_no=\"3\"", OK_Result);
+            Assert.DoesNotContain("line_no=\"3\"", Wrong_Result);
+        }
     }
 }

@@ -22,6 +22,11 @@ public class HTMLEmitter : IEmitter
 
     public HTMLEmitter(HTMLEmitterSettings settings)
     {
+        if (settings is null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
