@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.33] - 18.11.2022
+**Description:**
+Update to .NET 7 and increasing version of Microsoft.CodeAnalysis.CSharp libraries to 4.4.0
+
 ## [1.0.32] - 11.11.2022
 **Description:**
 Improved heuristics for code fragments where namespace names are typed directly instead of using Usings,
