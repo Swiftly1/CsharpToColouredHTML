@@ -22,6 +22,11 @@ public class HTMLEmitter : IEmitter
 
     public HTMLEmitter(HTMLEmitterSettings settings)
     {
+        if (settings is null)
+        {
+            throw new ArgumentNullException(nameof(settings));
+        }
+
         _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
@@ -213,6 +218,9 @@ public class HTMLEmitter : IEmitter
 
     private void OptimizeNodes(List<NodeWithDetails> nodes)
     {
+        if (!nodes.Any())
+            return;
+
         var mostCommonColourName = nodes.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
         _MostCommonColourValue = _cssHelper.GetMappedColour(mostCommonColourName);
 
