@@ -218,6 +218,9 @@ public class HTMLEmitter : IEmitter
 
     private void OptimizeNodes(List<NodeWithDetails> nodes)
     {
+        if (!nodes.Any())
+            return;
+
         var mostCommonColourName = nodes.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
         _MostCommonColourValue = _cssHelper.GetMappedColour(mostCommonColourName);
 
