@@ -6,7 +6,6 @@ internal class HeuristicsGenerator
 {
     private bool _IsUsing = false;
     private bool _IsTypeOf = false;
-
     // Simplifies detecting creation of an instance, so we don't have to go behind.
     // So far it works decent, thus no need for more complex approach.
     private bool _IsNew = false;
@@ -61,19 +60,20 @@ internal class HeuristicsGenerator
 
     public List<NodeWithDetails> Build(List<Node> input)
     {
-        Reset();
         ProcessData(input);
         PostProcess(_Output);
         return _Output;
     }
 
-    private void Reset()
+    public void Reset()
     {
         _FoundClasses.Clear();
         _FoundInterfaces.Clear();
         _FoundStructs.Clear();
+        _Output.Clear();
         _IsUsing = false;
         _IsNew = false;
+        _IsTypeOf = false;
         _ParenthesisCounter = 0;
     }
 
