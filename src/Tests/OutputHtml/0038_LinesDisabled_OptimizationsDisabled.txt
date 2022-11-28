@@ -1,0 +1,19 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="class">Test</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="extension">Extension</span><span class="punctuation">(</span><span class="keyword">this</span> <span class="class">TestClass</span> <span class="parameter">q</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">TestClass</span>
+<span class="punctuation">{</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Test</span><span class="punctuation">(</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="keyword">var</span> <span class="localName">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">TestClass</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="localName">test</span><span class="operator">.</span><span class="extension">Extension</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="keyword">var</span> <span class="localName">test2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">TestClass</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="operator">.</span><span class="extension">Extension</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></pre>

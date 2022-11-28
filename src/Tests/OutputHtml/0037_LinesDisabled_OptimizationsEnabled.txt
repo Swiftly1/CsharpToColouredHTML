@@ -1,0 +1,32 @@
+
+<pre class="background">
+<span class="keyword">public class</span> <span class="class">Test</span>
+{
+    <span class="keyword">public void</span> <span class="method">Test</span>(<span class="class">A</span>&lt;<span class="keyword">int</span>&gt; <span class="parameter">a</span>)
+    {
+    }
+
+    <span class="keyword">public void</span> <span class="method">Test2</span>(<span class="class">Array</span>&lt;<span class="keyword">int</span>&gt; <span class="parameter">a</span>, <span class="class">Arr</span>&lt;<span class="keyword">int</span>&gt; <span class="parameter">b</span>)
+    {
+    }
+}
+
+<span class="class">JsonConvert</span>.<span class="method">DeserializeObject</span>&lt;<span class="class">Token</span>&gt;(<span class="string">&quot;asd&quot;</span>);
+<span class="class">JsonConvert</span>.<span class="method">DeserializeObject</span>&lt;<span class="struct">Token2</span>&gt;(<span class="string">&quot;asd&quot;</span>);
+<span class="class">JsonConvert</span>.<span class="method">DeserializeObject</span>&lt;<span class="class">Token3</span>&gt;(<span class="string">&quot;asd&quot;</span>);
+<span class="class">JsonConvert</span>.<span class="method">DeserializeObject</span>&lt;<span class="recordStruct">Token4</span>&gt;(<span class="string">&quot;asd&quot;</span>);
+<span class="class">JsonConvert</span>.<span class="method">DeserializeObject</span>&lt;<span class="class">Token5</span>&gt;(<span class="string">&quot;asd&quot;</span>);
+
+<span class="keyword">public class</span> <span class="class">Token</span>
+{
+
+}
+
+<span class="keyword">public struct</span> <span class="struct">Token2</span>
+{
+
+}
+
+<span class="keyword">public record</span> <span class="class">Token3</span>(<span class="keyword">int</span> <span class="parameter">a</span>)
+
+<span class="keyword">public record struct</span> <span class="recordStruct">Token4</span>(<span class="keyword">int</span> <span class="parameter">a</span>)</pre>

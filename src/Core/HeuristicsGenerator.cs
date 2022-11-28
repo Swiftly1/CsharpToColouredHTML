@@ -319,6 +319,19 @@ internal class HeuristicsGenerator
         {
             return true;
         }
+        // simple generics
+        else if (!_IsNew && currentIndex + 4 < nodes.Count && nodes[currentIndex + 1].Text == "<"
+            && nodes[currentIndex + 3].Text == ">" && nodes[currentIndex + 4].Text == "(")
+        {
+            var validTypes = new[] 
+            {
+                ClassificationTypeNames.ClassName, ClassificationTypeNames.StructName, 
+                ClassificationTypeNames.RecordClassName, ClassificationTypeNames.RecordStructName,
+                ClassificationTypeNames.Identifier 
+            };
+            
+            return validTypes.Contains(nodes[currentIndex + 2].ClassificationType);
+        }
         else
         {
             return false;

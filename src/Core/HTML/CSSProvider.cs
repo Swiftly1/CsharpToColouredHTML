@@ -78,7 +78,7 @@ namespace CsharpToColouredHTML.Core
             { NodeColors.NumericLiteral, "#b8d7a3" },
             { NodeColors.RecordStructName, "#b8d7a3" },
             { NodeColors.TypeParameterName, "#b8d7a3" },
-            { NodeColors.ExtensionMethodName, "#b8d7a3" },
+            { NodeColors.ExtensionMethodName, "#DCDCAA" },
             { NodeColors.Control, "#C586C0" },
             { NodeColors.InternalError, "#FF0D0D" },
             { NodeColors.Comment, "#6A9955" },
