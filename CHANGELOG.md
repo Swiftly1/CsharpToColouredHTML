@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.35] - 28.11.2022
+**Description:**
+Improved heuristics, fixed colour for extension methods and fixed empty input handling
+
 ## [1.0.34] - 21.11.2022
 **Description:**
 Converting new line endings of input code to the new line endings used by OS (Environment.NewLine)
