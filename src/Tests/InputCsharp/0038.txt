@@ -1,0 +1,17 @@
+﻿public static class Test
+{
+	public static void Extension(this TestClass q)
+	{
+	}
+}
+
+public class TestClass
+{
+}
+
+public void Test()
+{
+	var test = new TestClass();
+	test.Extension();
+	var test2 = new TestClass().Extension();
+}

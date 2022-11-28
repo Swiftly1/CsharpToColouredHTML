@@ -1,0 +1,30 @@
+﻿public class Test
+{
+	public void Test(A<int> a)
+	{
+	}
+
+	public void Test2(Array<int> a, Arr<int> b)
+	{
+	}
+}
+
+JsonConvert.DeserializeObject<Token>("asd");
+JsonConvert.DeserializeObject<Token2>("asd");
+JsonConvert.DeserializeObject<Token3>("asd");
+JsonConvert.DeserializeObject<Token4>("asd");
+JsonConvert.DeserializeObject<Token5>("asd");
+
+public class Token
+{
+
+}
+
+public struct Token2
+{
+
+}
+
+public record Token3(int a)
+
+public record struct Token4(int a)

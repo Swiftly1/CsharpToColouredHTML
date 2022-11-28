@@ -40,7 +40,8 @@ public class Hints
         "GC",
         "Math",
         "Random",
-        "String"
+        "String",
+        "JsonConvert",
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
@@ -69,5 +70,4 @@ public class Hints
     {
         "Span",
     };
-
 }
