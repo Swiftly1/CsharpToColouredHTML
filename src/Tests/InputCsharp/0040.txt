@@ -1,0 +1,3 @@
+﻿Test test = new Test();
+
+test.Something = Something.Somewhere;

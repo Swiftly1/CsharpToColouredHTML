@@ -280,12 +280,21 @@ internal class HeuristicsGenerator
     {
         var canGoAhead = nodes.Count > currentIndex + 1;
         var canGoBehind = currentIndex > 0;
+        var classifiers = new[] 
+        {
+            ClassificationTypeNames.LocalName, ClassificationTypeNames.PropertyName, ClassificationTypeNames.FieldName,
+            ClassificationTypeNames.ConstantName, ClassificationTypeNames.ParameterName
+        }; 
 
         if (IsThisBefore(currentIndex, nodes))
         {
             return true;
         }
         else if (SeemsLikePropertyUsage(currentIndex, nodes))
+        {
+            return true;
+        }
+        else if (currentIndex >= 2 && nodes[currentIndex - 1].Text == "." && classifiers.Contains(nodes[currentIndex - 2].ClassificationType))
         {
             return true;
         }
@@ -514,7 +523,7 @@ internal class HeuristicsGenerator
             {
                 ClassificationTypeNames.Keyword, ClassificationTypeNames.LocalName,
                 ClassificationTypeNames.PropertyName, ClassificationTypeNames.FieldName,
-                ClassificationTypeNames.ConstantName
+                ClassificationTypeNames.ConstantName, ClassificationTypeNames.ParameterName
             };
 
             if (classifications.Contains(nodes[currentIndex - 2].ClassificationType))
