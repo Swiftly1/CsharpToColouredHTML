@@ -82,6 +82,7 @@ internal class HeuristicsGenerator
         for (int i = 0; i < nodes.Count; i++)
         {
             var colour = ExtractColourAndSetMetaData(i, nodes);
+
             var nodeWithDetails = new NodeWithDetails
             (
                 colour: colour,
@@ -94,6 +95,16 @@ internal class HeuristicsGenerator
                 classificationType: nodes[i].ClassificationType,
                 id: nodes[i].Id
             );
+
+            if (colour == NodeColors.RealIdentifier)
+            {
+                nodeWithDetails = nodeWithDetails with
+                {
+                    Colour = NodeColors.Identifier,
+                    SkipPostProcess = true
+                };
+            }
+
             _Output.Add(nodeWithDetails);
         }
     }
@@ -106,6 +117,9 @@ internal class HeuristicsGenerator
 
         foreach (var entry in identifiers)
         {
+            if (entry.SkipPostProcess)
+                continue;
+
             if (_FoundClasses.Contains(entry.Text))
                 entry.Colour = NodeColors.Class;
 
@@ -119,6 +133,9 @@ internal class HeuristicsGenerator
         for (int i = 0; i < alreadyProcessed.Count; i++)
         {
             var current = alreadyProcessed[i];
+
+            if (current.SkipPostProcess)
+                continue;
 
             if (current.Colour != NodeColors.Method)
                 continue;
@@ -179,13 +196,19 @@ internal class HeuristicsGenerator
                 }
                 else if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
                 {
-                    colour = NodeColors.LocalName;
+                    colour = IsThisBefore(currentIndex, nodes) ?
+                                NodeColors.RealIdentifier : 
+                                NodeColors.LocalName;
                 }
                 else
                 {
                     colour = NodeColors.Class;
                     _FoundClasses.Add(node.Text);
                 }
+            }
+            else if (IsPropertyOrField(currentIndex, nodes))
+            {
+                colour = NodeColors.RealIdentifier;
             }
             else
             {
@@ -251,6 +274,30 @@ internal class HeuristicsGenerator
         }
 
         return colour;
+    }
+
+    private bool IsPropertyOrField(int currentIndex, List<Node> nodes)
+    {
+        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoBehind = currentIndex > 0;
+
+        if (IsThisBefore(currentIndex, nodes))
+        {
+            return true;
+        }
+        else if (SeemsLikePropertyUsage(currentIndex, nodes))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsThisBefore(int currentIndex, List<Node> nodes)
+    {
+        return currentIndex > 1 && nodes[currentIndex - 1].Text == "." &&
+                    nodes[currentIndex - 1].ClassificationType == ClassificationTypeNames.Operator
+                    && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.Keyword && nodes[currentIndex - 2].Text == "this";
     }
 
     private bool IsInterface(int currentIndex, List<Node> nodes)
@@ -367,7 +414,8 @@ internal class HeuristicsGenerator
         else if (SeemsLikePropertyUsage(currentIndex, nodes))
         {
             return true;
-        } // be careful, if you remove those parenthesis around that assignment, then it'll change its behaviour
+        }
+        // be careful, if you remove those parenthesis around that assignment, then it'll change its behaviour
         else if ((isPopularClassOrStruct = IsPopularClass(node.Text) || IsPopularStruct(node.Text)) && !canGoBehind)
         {
             return true;
@@ -445,6 +493,8 @@ internal class HeuristicsGenerator
     {
         var node = nodes[currentIndex];
 
+        var canGoAhead = nodes.Count > currentIndex + 1;
+
         if (nodes.Count > currentIndex + 4 &&
                     nodes[currentIndex + 2].Text == "=" &&
                     nodes[currentIndex + 3].Text == "new" &&
@@ -458,9 +508,28 @@ internal class HeuristicsGenerator
         if (nodes.Count == 1)
             return true;
 
+        if (currentIndex >= 2 && canGoAhead && nodes[currentIndex + 1].Text == "." && nodes[currentIndex - 1].Text == ".")
+        {
+            var classifications = new[]
+            {
+                ClassificationTypeNames.Keyword, ClassificationTypeNames.LocalName,
+                ClassificationTypeNames.PropertyName, ClassificationTypeNames.FieldName,
+                ClassificationTypeNames.ConstantName
+            };
+
+            if (classifications.Contains(nodes[currentIndex - 2].ClassificationType))
+                return false;
+        }
+
         for (int i = currentIndex + 1; i < nodes.Count; i++)
         {
             var current = nodes[i];
+
+            if (current.ClassificationType == ClassificationTypeNames.Punctuation && current.Text == ";")
+                return false;
+
+            if (current.ClassificationType == ClassificationTypeNames.ClassName && current.Text == node.Text && nodes[i - 1].Text == "new")
+                return true;
 
             if (current.ClassificationType == ClassificationTypeNames.Identifier && current.Text == node.Text
                 && nodes[i - 1].Text == "new")
@@ -479,6 +548,10 @@ internal class HeuristicsGenerator
     private bool SeemsLikePropertyUsage(int currentIndex, List<Node> nodes)
     {
         if (_IsUsing || _IsTypeOf)
+            return false;
+
+        if (currentIndex >= 2 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].Text == "this" &&
+            nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.Keyword)
             return false;
 
         if (currentIndex + 3 >= nodes.Count)
@@ -679,6 +752,9 @@ internal class HeuristicsGenerator
                 {
                     return;
                 }
+
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Keyword && nodes[i].Text == "this")
+                    return;
 
                 if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ")")
                 {

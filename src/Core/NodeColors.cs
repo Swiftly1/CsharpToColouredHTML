@@ -67,4 +67,7 @@ public static class NodeColors
     public const string EventName = "eventName";
 
     public const string ExcludedCode = "excludedCode";
+
+    // Hack
+    internal const string RealIdentifier = "realIdentifier";
 }

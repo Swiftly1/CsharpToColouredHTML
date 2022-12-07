@@ -60,4 +60,6 @@ public record NodeWithDetails
     public string ClassificationType { get; init; }
 
     public bool UsesMostCommonColour { get; set; }
+
+    public bool SkipPostProcess { get; set; }
 }
