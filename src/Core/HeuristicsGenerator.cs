@@ -81,11 +81,11 @@ internal class HeuristicsGenerator
     {
         for (int i = 0; i < nodes.Count; i++)
         {
-            var colour = ExtractColourAndSetMetaData(i, nodes);
+            var result = ExtractColourAndSetMetaData(i, nodes);
 
             var nodeWithDetails = new NodeWithDetails
             (
-                colour: colour,
+                colour: result.Colour,
                 text: nodes[i].Text,
                 trivia: nodes[i].Trivia,
                 hasNewLine: nodes[i].HasNewLine,
@@ -93,17 +93,9 @@ internal class HeuristicsGenerator
                 isUsing: _IsUsing,
                 parenthesisCounter: _ParenthesisCounter,
                 classificationType: nodes[i].ClassificationType,
-                id: nodes[i].Id
+                id: nodes[i].Id,
+                skipPostProcess: result.SkipIdentifierPostProcessing
             );
-
-            if (colour == NodeColors.RealIdentifier)
-            {
-                nodeWithDetails = nodeWithDetails with
-                {
-                    Colour = NodeColors.Identifier,
-                    SkipPostProcess = true
-                };
-            }
 
             _Output.Add(nodeWithDetails);
         }
@@ -117,7 +109,7 @@ internal class HeuristicsGenerator
 
         foreach (var entry in identifiers)
         {
-            if (entry.SkipPostProcess)
+            if (entry.SkipIdentifierPostProcessing)
                 continue;
 
             if (_FoundClasses.Contains(entry.Text))
@@ -134,7 +126,7 @@ internal class HeuristicsGenerator
         {
             var current = alreadyProcessed[i];
 
-            if (current.SkipPostProcess)
+            if (current.SkipIdentifierPostProcessing)
                 continue;
 
             if (current.Colour != NodeColors.Method)
@@ -161,59 +153,60 @@ internal class HeuristicsGenerator
         }
     }
 
-    private string ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
+    private ExtractedColourResult ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
-        var colour = NodeColors.InternalError;
 
         if (_SimpleClassificationToColourMapper.TryGetValue(node.ClassificationType, out var simpleColour))
-            return simpleColour;
+            return new ExtractedColourResult(simpleColour);
 
         if (_Hints.BuiltInTypes.Contains(node.Text))
         {
             _IsNew = false;
-            colour = NodeColors.Keyword;
+            return new ExtractedColourResult(NodeColors.Keyword);
         }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
         {
             if (IsInterface(currentIndex, nodes))
             {
-                colour = NodeColors.Interface;
                 _FoundInterfaces.Add(node.Text);
+                return new ExtractedColourResult(NodeColors.Interface);
             }
             else if (IsMethod(currentIndex, nodes))
             {
-                colour = NodeColors.Method;
-
                 TryUpdatePreviousIdentifierToClassIfThatWasNamespace(currentIndex, nodes);
+                return new ExtractedColourResult(NodeColors.Method);
             }
             else if (IsClassOrStruct(currentIndex, nodes))
             {
                 if (IsPopularStruct(node.Text))
                 {
-                    colour = NodeColors.Struct;
                     _FoundStructs.Add(node.Text);
+                    return new ExtractedColourResult(NodeColors.Struct);
                 }
                 else if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
                 {
-                    colour = IsThisBefore(currentIndex, nodes) ?
-                                NodeColors.RealIdentifier : 
-                                NodeColors.LocalName;
+                    if (IsThisBefore(currentIndex, nodes))
+                    {
+                        return new ExtractedColourResult(NodeColors.Identifier, true);
+                    }
+                    else
+                    {
+                        return new ExtractedColourResult(NodeColors.LocalName);
+                    }
                 }
                 else
                 {
-                    colour = NodeColors.Class;
                     _FoundClasses.Add(node.Text);
+                    return new ExtractedColourResult(NodeColors.Class);
                 }
             }
             else if (IsPropertyOrField(currentIndex, nodes))
             {
-                colour = NodeColors.RealIdentifier;
+                return new ExtractedColourResult(NodeColors.Identifier, true);
             }
             else
             {
-                colour = NodeColors.Identifier;
-
                 if (currentIndex + 1 < nodes.Count &&
                     nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.Operator &&
                     nodes[currentIndex + 1].Text != "." &&
@@ -221,10 +214,11 @@ internal class HeuristicsGenerator
                 {
                     if (CheckIfChainIsMadeOfVariablesColors(currentIndex, _Output))
                     {
-                        colour = NodeColors.Class;
                         _FoundClasses.Add(node.Text);
+                        return new ExtractedColourResult(NodeColors.Class);
                     }
                 }
+                return new ExtractedColourResult(NodeColors.Identifier);
             }
         }
         else if (node.ClassificationType == ClassificationTypeNames.Keyword)
@@ -238,7 +232,7 @@ internal class HeuristicsGenerator
             if (node.Text == "typeof")
                 _IsTypeOf = true;
 
-            colour = NodeColors.Keyword;
+            return new ExtractedColourResult(NodeColors.Keyword);
         }
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
         {
@@ -266,14 +260,14 @@ internal class HeuristicsGenerator
                 _IsTypeOf = false;
             }
 
-            colour = NodeColors.Punctuation;
+            return new ExtractedColourResult(NodeColors.Punctuation);
         }
         else if (node.ClassificationType.Contains("xml doc comment"))
         {
-            colour = NodeColors.Comment;
+            return new ExtractedColourResult(NodeColors.Comment);
         }
 
-        return colour;
+        return new ExtractedColourResult(NodeColors.InternalError);
     }
 
     private bool IsPropertyOrField(int currentIndex, List<Node> nodes)
