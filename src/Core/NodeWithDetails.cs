@@ -36,8 +36,8 @@ public record NodeWithDetails
         bool isUsing,
         int parenthesisCounter,
         string classificationType,
-        bool skipPostProcess,
-        Guid id) : this(colour, text, trivia, hasNewLine, isNew, isUsing, parenthesisCounter, classificationType, skipPostProcess)
+        bool skipIdentifierPostProcessing,
+        Guid id) : this(colour, text, trivia, hasNewLine, isNew, isUsing, parenthesisCounter, classificationType, skipIdentifierPostProcessing)
     {
         Id = id;
     }
