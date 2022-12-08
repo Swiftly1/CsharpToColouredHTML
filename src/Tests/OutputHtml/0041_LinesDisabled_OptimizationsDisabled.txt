@@ -1,0 +1,19 @@
+
+<pre class="background">
+<span class="keyword">using</span> <span class="namespace">System</span><span class="punctuation">;</span>
+
+<span class="keyword">namespace</span> <span class="namespace">Test</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="class">Form1</span> <span class="punctuation">:</span> <span class="class">Form</span>
+    <span class="punctuation">{</span>
+        <span class="class">Bitmap</span> <span class="fieldName">b</span><span class="punctuation">;</span>
+        <span class="class">Graphics</span> <span class="fieldName">g</span><span class="punctuation">;</span>
+        <span class="class">A</span> <span class="fieldName">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">A</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+        <span class="keyword">public</span> <span class="class">Form1</span><span class="punctuation">(</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="fieldName">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Bitmap</span><span class="punctuation">(</span><span class="numericLiteral">1</span><span class="punctuation">,</span> <span class="numericLiteral">1</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="fieldName">g</span> <span class="operator">=</span> <span class="class">Graphics</span><span class="operator">.</span><span class="method">FromImage</span><span class="punctuation">(</span><span class="fieldName">b</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

@@ -261,7 +261,8 @@ public class HTMLEmitter : IEmitter
             isNew: current.IsNew,
             isUsing: current.IsUsing,
             parenthesisCounter: current.ParenthesisCounter,
-            classificationType: $"merged_nodes_invalid"
+            classificationType: $"merged_nodes_invalid",
+            skipIdentifierPostProcessing: false
         );
 
         return details;

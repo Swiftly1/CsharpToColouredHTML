@@ -1,0 +1,7 @@
+
+<pre class="background">
+<span class="keyword">this</span>.Item.Count = <span class="numericLiteral">0</span>;
+<span class="keyword">this</span>.Item.Subitems.<span class="method">Add</span>(<span class="keyword">new</span> <span class="class">Item</span>());
+<span class="keyword">var</span> <span class="localName">test</span> = <span class="keyword">this</span>.List.<span class="method">FindById</span>(<span class="numericLiteral">1</span>);
+
+Tests.<span class="class">Program</span>.p = <span class="keyword">new</span> <span class="class">Program</span>();</pre>

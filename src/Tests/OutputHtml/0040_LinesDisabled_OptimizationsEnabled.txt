@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="class">Test</span> <span class="localName">test</span> = <span class="keyword">new</span> <span class="class">Test</span>();
+
+<span class="localName">test</span>.Something = <span class="class">Something</span>.Somewhere;</pre>

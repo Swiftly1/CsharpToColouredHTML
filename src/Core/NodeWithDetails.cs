@@ -10,7 +10,8 @@ public record NodeWithDetails
         bool isNew,
         bool isUsing,
         int parenthesisCounter,
-        string classificationType
+        string classificationType,
+        bool skipIdentifierPostProcessing
         )
     {
         Colour = colour;
@@ -23,6 +24,7 @@ public record NodeWithDetails
         TextWithTrivia = Trivia + Text;
         ClassificationType = classificationType;
         Id = Guid.NewGuid();
+        SkipIdentifierPostProcessing = skipIdentifierPostProcessing;
     }
 
     public NodeWithDetails(
@@ -34,7 +36,8 @@ public record NodeWithDetails
         bool isUsing,
         int parenthesisCounter,
         string classificationType,
-        Guid id) : this(colour, text, trivia, hasNewLine, isNew, isUsing, parenthesisCounter, classificationType)
+        bool skipIdentifierPostProcessing,
+        Guid id) : this(colour, text, trivia, hasNewLine, isNew, isUsing, parenthesisCounter, classificationType, skipIdentifierPostProcessing)
     {
         Id = id;
     }
@@ -60,4 +63,6 @@ public record NodeWithDetails
     public string ClassificationType { get; init; }
 
     public bool UsesMostCommonColour { get; set; }
+
+    public bool SkipIdentifierPostProcessing { get; set; }
 }
