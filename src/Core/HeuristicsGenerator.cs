@@ -218,6 +218,7 @@ internal class HeuristicsGenerator
                         return new ExtractedColourResult(NodeColors.Class);
                     }
                 }
+
                 return new ExtractedColourResult(NodeColors.Identifier);
             }
         }
@@ -824,12 +825,16 @@ internal class HeuristicsGenerator
             }
             else
             {
+                _FoundClasses.Add(alreadyProcessedSuspectedNode.Text);
                 alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
             }
         }
 
         if (identifiers.Count > 0 && identifiers.All(x => !IdentifierFirstCharCaseSeemsLikeVariable(x)))
+        {
+            _FoundClasses.Add(alreadyProcessedSuspectedNode.Text);
             alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
+        }
     }
 
     private bool CheckIfChainIsMadeOfVariablesColors(int currentIndex, List<NodeWithDetails> nodes)

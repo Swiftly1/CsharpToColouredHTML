@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace Test
+{
+    public partial class Form1 : Form
+    {
+        Bitmap b;
+        Graphics g;
+        A a = new A();
+
+        public Form1()
+        {
+            b = new Bitmap(1, 1);
+            g = Graphics.FromImage(b);
+        }
+    }
+}

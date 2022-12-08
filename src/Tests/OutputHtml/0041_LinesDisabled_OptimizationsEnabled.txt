@@ -1,0 +1,19 @@
+
+<pre class="background">
+<span class="keyword">using</span> System;
+
+<span class="keyword">namespace</span> Test
+{
+    <span class="keyword">public partial class</span> <span class="class">Form1</span> : <span class="class">Form</span>
+    {
+        <span class="class">Bitmap</span> b;
+        <span class="class">Graphics</span> g;
+        <span class="class">A</span> a = <span class="keyword">new</span> <span class="class">A</span>();
+
+        <span class="keyword">public</span> <span class="class">Form1</span>()
+        {
+            b = <span class="keyword">new</span> <span class="class">Bitmap</span>(<span class="numericLiteral">1</span>, <span class="numericLiteral">1</span>);
+            g = <span class="class">Graphics</span>.<span class="method">FromImage</span>(b);
+        }
+    }
+}</pre>
