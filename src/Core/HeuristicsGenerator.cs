@@ -94,7 +94,7 @@ internal class HeuristicsGenerator
                 parenthesisCounter: _ParenthesisCounter,
                 classificationType: nodes[i].ClassificationType,
                 id: nodes[i].Id,
-                skipPostProcess: result.SkipIdentifierPostProcessing
+                skipIdentifierPostProcessing: result.SkipIdentifierPostProcessing
             );
 
             _Output.Add(nodeWithDetails);
@@ -125,9 +125,6 @@ internal class HeuristicsGenerator
         for (int i = 0; i < alreadyProcessed.Count; i++)
         {
             var current = alreadyProcessed[i];
-
-            if (current.SkipIdentifierPostProcessing)
-                continue;
 
             if (current.Colour != NodeColors.Method)
                 continue;
