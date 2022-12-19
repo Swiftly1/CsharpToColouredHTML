@@ -11,7 +11,7 @@ that make it look as if that was inside Visual Studio or Visual Studio Code.
 
 Additionally if this tool colours something incorrectly,
 
-then it is very easily to fix that - just by changing CSS class
+then it is very easy to fix that - just by changing CSS class.
 ________
 Microsoft Docs default code highlighting (left) vs. this project (right)
 
