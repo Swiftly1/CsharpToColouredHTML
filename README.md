@@ -5,13 +5,9 @@ You can try live demo that's avaliable at: https://csharp-colors.xyz/ or directl
 
 # CsharpToColouredHTML
 
-This library tries to convert C# code into pure HTML with some lines of CSS 
+This library tries to convert C# code into pure HTML with some lines of CSS that make it look as if that was inside Visual Studio or Visual Studio Code. 
 
-that make it look as if that was inside Visual Studio or Visual Studio Code. 
-
-Additionally if this tool colours something incorrectly,
-
-then it is very easy to fix that - just by changing CSS class.
+If this tool colours something in an undesired way e.g something should be coloured as a struct instead of a class, but there was no way to figure it out from the code, then it is very easy to change that by changing CSS class name.
 ________
 Microsoft Docs default code highlighting (left) vs. this project (right)
 
