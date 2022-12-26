@@ -194,7 +194,7 @@ internal class HeuristicsGenerator
                 }
                 else
                 {
-                    _FoundClasses.Add(node.Text);
+                    AddClass(node.Text);
                     return new ExtractedColourResult(NodeColors.Class);
                 }
             }
@@ -211,7 +211,7 @@ internal class HeuristicsGenerator
                 {
                     if (CheckIfChainIsMadeOfVariablesColors(currentIndex, _Output))
                     {
-                        _FoundClasses.Add(node.Text);
+                        AddClass(node.Text);
                         return new ExtractedColourResult(NodeColors.Class);
                     }
                 }
@@ -653,6 +653,9 @@ internal class HeuristicsGenerator
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "(" && currentIndex + 4 < nodes.Count && validTypes.Contains(nodes[currentIndex + 4].ClassificationType))
             return false;
 
+        if (_FoundClasses.Contains(nodes[currentIndex - 2].Text))
+            return false;
+
         // OLEMSGICON.OLEMSGICON_WARNING,
         return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||", "+", "-", "*", "/" }.Contains(next.Text);
     }
@@ -895,14 +898,17 @@ internal class HeuristicsGenerator
             }
             else
             {
-                _FoundClasses.Add(alreadyProcessedSuspectedNode.Text);
+                AddClass(alreadyProcessedSuspectedNode.Text);
                 alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
             }
         }
 
         if (identifiers.Count > 0 && identifiers.All(x => !IdentifierFirstCharCaseSeemsLikeVariable(x)))
         {
-            _FoundClasses.Add(alreadyProcessedSuspectedNode.Text);
+            if (identifiers.Any(i => _FoundClasses.Contains(i)))
+                return;
+
+            AddClass(alreadyProcessedSuspectedNode.Text);
             alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
         }
     }
@@ -1002,4 +1008,6 @@ internal class HeuristicsGenerator
     {
         return s.Length > 0 && char.IsLower(s[0]);
     }
+
+    private void AddClass(string s) => _FoundClasses.Add(s);
 }
