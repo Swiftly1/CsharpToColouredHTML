@@ -105,7 +105,7 @@ internal class HeuristicsGenerator
     {
         // If some identifiers weren't recognized at first attempt, but later instead
         // then we may fix the previous ones.
-        var identifiers = alreadyProcessed.Where(x => x.Colour == NodeColors.Identifier && x.IsUsing == false).ToList();
+        var identifiers = alreadyProcessed.Where(x => x.Colour == NodeColors.Identifier).ToList();
 
         foreach (var entry in identifiers)
         {
@@ -183,7 +183,7 @@ internal class HeuristicsGenerator
                 }
                 else if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
                 {
-                    if (IsThisBefore(currentIndex, nodes))
+                    if (ThereIsThisInTheChainBefore(currentIndex, nodes))
                     {
                         return new ExtractedColourResult(NodeColors.Identifier, true);
                     }
@@ -235,7 +235,12 @@ internal class HeuristicsGenerator
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
         {
             if (node.Text == "(")
+            {
                 _ParenthesisCounter++;
+
+                if (_IsNew && _ParenthesisCounter == 1)
+                    _IsNew = false;
+            }
 
             if (node.Text == ")")
             {
@@ -278,7 +283,7 @@ internal class HeuristicsGenerator
             ClassificationTypeNames.ConstantName, ClassificationTypeNames.ParameterName
         }; 
 
-        if (IsThisBefore(currentIndex, nodes))
+        if (ThereIsThisInTheChainBefore(currentIndex, nodes))
         {
             return true;
         }
@@ -292,13 +297,6 @@ internal class HeuristicsGenerator
         }
 
         return false;
-    }
-
-    private static bool IsThisBefore(int currentIndex, List<Node> nodes)
-    {
-        return currentIndex > 1 && nodes[currentIndex - 1].Text == "." &&
-                    nodes[currentIndex - 1].ClassificationType == ClassificationTypeNames.Operator
-                    && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.Keyword && nodes[currentIndex - 2].Text == "this";
     }
 
     private bool IsInterface(int currentIndex, List<Node> nodes)
@@ -394,7 +392,11 @@ internal class HeuristicsGenerator
         var node = nodes[currentIndex];
         bool isPopularClassOrStruct = false;
 
-        if (canGoBehind && nodes[currentIndex - 1].Text == ":")
+        if (ThereIsThisInTheChainBefore(currentIndex, nodes))
+        {
+            return false;
+        }
+        else if (canGoBehind && nodes[currentIndex - 1].Text == ":")
         {
             return true;
         }
@@ -461,6 +463,18 @@ internal class HeuristicsGenerator
         {
             return true;
         }
+        // cast
+        else if (SeemsLikeCast(currentIndex, nodes))
+        {
+            return true;
+        }
+        // WebResponse re;
+        else if (nodes.Count > currentIndex + 2 &&
+            new[] { ClassificationTypeNames.LocalName }.Contains(nodes[currentIndex + 1].ClassificationType) && 
+            new[] { ";", "=" }.Contains(nodes[currentIndex + 2].Text))
+        {
+            return true;
+        }
 
         return false;
     }
@@ -488,6 +502,48 @@ internal class HeuristicsGenerator
             return true;
 
         return false;
+    }
+    
+    private bool SeemsLikeCast(int currentIndex, List<Node> nodes)
+    {
+        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoBehind = currentIndex > 0;
+
+        var node = nodes[currentIndex];
+
+        if (!canGoBehind || !canGoAhead)
+            return false;
+
+        if (nodes[currentIndex - 1].Text != "(")
+            return false;
+
+        if (nodes[currentIndex + 1].Text != ")")
+            return false;
+
+        if (nodes.Count > currentIndex + 2 && nodes[currentIndex + 2].Text == "new" &&
+            nodes[currentIndex + 2].ClassificationType == ClassificationTypeNames.Keyword)
+            return false;
+
+
+        var invalidTypes = new List<string>
+        {
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.ParameterName,
+            ClassificationTypeNames.FieldName,
+            ClassificationTypeNames.PropertyName,
+            ClassificationTypeNames.ConstantName,
+            ClassificationTypeNames.Keyword
+        };
+
+        if (nodes.Count > currentIndex + 2 && !invalidTypes.Contains(nodes[currentIndex + 2].ClassificationType))
+            return false;
+
+        if (nodes.Count > currentIndex + 2 && 
+            nodes[currentIndex + 2].ClassificationType == ClassificationTypeNames.Keyword &&
+            nodes[currentIndex + 2].Text != "this")
+            return false;
+
+        return true;
     }
 
     private bool RightSideOfAssignmentHasTheSameNameAfterNew(int currentIndex, List<Node> nodes)
@@ -579,7 +635,7 @@ internal class HeuristicsGenerator
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].Text == ">")
             return false;
 
-        var comesFromVariable = TheresVariableInTheChainBefore(currentIndex, nodes);
+        var comesFromVariable = ThereIsVariableInTheChainBefore(currentIndex, nodes);
 
         if (comesFromVariable)
             return false;
@@ -598,7 +654,7 @@ internal class HeuristicsGenerator
             return false;
 
         // OLEMSGICON.OLEMSGICON_WARNING,
-        return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||" }.Contains(next.Text);
+        return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||", "+", "-", "*", "/" }.Contains(next.Text);
     }
 
     private bool IsPopularClass(string text)
@@ -651,7 +707,7 @@ internal class HeuristicsGenerator
         return IsValidClassOrStructName(name.Text);
     }
 
-    private bool TheresVariableInTheChainBefore(int currentIndex, List<Node> nodes)
+    private bool ThereIsVariableInTheChainBefore(int currentIndex, List<Node> nodes)
     {
         var validIdentifiers = new[]
         {
@@ -660,6 +716,23 @@ internal class HeuristicsGenerator
             ClassificationTypeNames.ParameterName,
         };
 
+        return ThereIsSpecificItemInTheChainBefore(currentIndex, nodes, x => validIdentifiers.Contains(x.ClassificationType));
+    }
+
+    private bool ThereIsThisInTheChainBefore(int currentIndex, List<Node> nodes)
+    {
+        var validIdentifiers = new[]
+        {
+            ClassificationTypeNames.Keyword,
+        };
+
+        Func<Node, bool> func = x => validIdentifiers.Contains(x.ClassificationType) && x.Text == "this";
+
+        return ThereIsSpecificItemInTheChainBefore(currentIndex, nodes, func);
+    }
+
+    private static bool ThereIsSpecificItemInTheChainBefore(int currentIndex, List<Node> nodes, Func<Node, bool> func)
+    {
         // 0 = currently at Identifier, expecting Operator
         // 1 = currently at Operator, expecting Identifier
         var state = 0;
@@ -688,7 +761,7 @@ internal class HeuristicsGenerator
                 else
                 {
                     // if it is Local/Constant/Param then return that there's variable before
-                    if (validIdentifiers.Contains(nodes[i].ClassificationType))
+                    if (func(nodes[i]))
                     {
                         return true;
                     }

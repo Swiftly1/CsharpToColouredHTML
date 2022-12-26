@@ -10,7 +10,7 @@
         ((System.ComponentModel.<span class="interface">ISupportInitialize</span>)(<span class="keyword">this</span>.btnRestaurar)).<span class="method">BeginInit</span>();
         ((System.ComponentModel.<span class="interface">ISupportInitialize</span>)(<span class="keyword">this</span>.pictureBox1)).<span class="method">EndInit</span>();
 
-        ItemSlot <span class="localName">givingItemSlot</span> = <span class="keyword">this</span>;
+        <span class="class">ItemSlot</span> <span class="localName">givingItemSlot</span> = <span class="keyword">this</span>;
 
         <span class="localName">resources</span>.Itest = <span class="numericLiteral">5</span>;
         <span class="method">re</span>(<span class="localName">resources</span>.Itest);

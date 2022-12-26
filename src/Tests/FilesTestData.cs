@@ -47,6 +47,7 @@ public class FilesTestData : IEnumerable<object[]>
         yield return new object[] { "0039.txt" };
         yield return new object[] { "0040.txt" };
         yield return new object[] { "0041.txt" };
+        yield return new object[] { "0042.txt" };
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
