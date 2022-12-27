@@ -153,12 +153,49 @@ internal class HeuristicsGenerator
         {
             var current = alreadyProcessed[i];
 
-            if (current.Colour != NodeColors.Class || !current.IsUsing)
+            if (current.Colour != NodeColors.Class)
                 continue;
 
             if (ThereIsClassInTheChainBefore(current, alreadyProcessed))
             {
-                alreadyProcessed[i] = current with { Colour = NodeColors.PropertyName };
+                var types = new List<string>
+                {
+                    NodeColors.Identifier,
+                    NodeColors.PropertyName,
+                    NodeColors.FieldName,
+                    NodeColors.ConstantName,
+                };
+
+                if (i + 1 < alreadyProcessed.Count && !types.Contains(alreadyProcessed[i + 1].Colour))
+                {
+                    alreadyProcessed[i] = current with { Colour = NodeColors.PropertyName };
+                }
+                else
+                {
+                    var chainNames = new List<string>
+                    {
+                        NodeColors.Class,
+                        NodeColors.PropertyName,
+                        NodeColors.FieldName,
+                        NodeColors.ConstantName,
+                    };
+
+                    var nodes = new List<NodeWithDetails>();
+                    var tmp = i;
+                    while (tmp-- > 0)
+                    {
+                        var curr = alreadyProcessed[tmp];
+                        if (curr.Colour == NodeColors.Operator || chainNames.Contains(curr.Colour))
+                        {
+                            if (curr.Colour == NodeColors.Class)
+                                alreadyProcessed[tmp] = curr with { Colour = NodeColors.Identifier };
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
             }
         }
     }

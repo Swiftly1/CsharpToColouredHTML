@@ -1,0 +1,10 @@
+﻿public class Name
+{
+	public Test.A t;
+	
+	private void ABC()
+	{
+	    var a = new Other.A();
+	    var b = new Other3.Test();
+	}
+}
