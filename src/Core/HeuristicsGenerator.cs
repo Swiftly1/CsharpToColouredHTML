@@ -178,6 +178,7 @@ internal class HeuristicsGenerator
                         NodeColors.PropertyName,
                         NodeColors.FieldName,
                         NodeColors.ConstantName,
+                        NodeColors.Operator
                     };
 
                     var nodes = new List<NodeWithDetails>();
@@ -185,7 +186,7 @@ internal class HeuristicsGenerator
                     while (tmp-- > 0)
                     {
                         var curr = alreadyProcessed[tmp];
-                        if (curr.Colour == NodeColors.Operator || chainNames.Contains(curr.Colour))
+                        if (chainNames.Contains(curr.Colour))
                         {
                             if (curr.Colour == NodeColors.Class)
                                 alreadyProcessed[tmp] = curr with { Colour = NodeColors.Identifier };
