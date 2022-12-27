@@ -1,0 +1,12 @@
+
+<pre class="background">
+<span class="keyword">public class</span> <span class="class">Name</span>
+{
+    <span class="keyword">public</span> Test.<span class="class">A</span> t;
+    
+    <span class="keyword">private void</span> <span class="method">ABC</span>()
+    {
+        <span class="keyword">var</span> <span class="localName">a</span> = <span class="keyword">new</span> Other.<span class="class">A</span>();
+        <span class="keyword">var</span> <span class="localName">b</span> = <span class="keyword">new</span> Other3.<span class="class">Test</span>();
+    }
+}</pre>

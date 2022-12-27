@@ -1,34 +1,9 @@
 ﻿using TestQ;
-using Test2.Test;
-
-namespace Rere
+	
+	
+if (data.GetType() == typeof(TestQ.Cat))
 {
-	public class S
-	{
-		public static TestQ.Home home;
-
-		public void Test()
-		{
-			TestQ.SuperHome h = new();
-			var q = (TestQ.Home)h;
-			var s = new TestQ.Asd();
-			
-            var found = FindNode(current, item);
-			var value = found.StoredValue.Value;
-			var data = new [] { 1, 2, 3 };
-
-			throw new ArgumentException($"Value: '{value}' cannot be saved because there's already value:" +
-                                    $" {found.StoredValue.Value}. Key: {string.Join(",", data)}");
-
-			new Aasdasd($"abc {found.A.B}");
-
-			var test = DoStuff();
-			var test2 = test.Items.Item(0).Value.ToString();
-
-			if (data.GetType() == typeof(TestQ.Cat))
-			{
-				Console.WriteLine(7);
-			}
-		}
-	}
+	Console.WriteLine(7);
 }
+	
+TestQ.Cat.StaticProperty.MethodCall("something");

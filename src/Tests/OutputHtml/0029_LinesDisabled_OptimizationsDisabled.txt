@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="keyword">using</span> <span class="punctuation">(</span><span class="identifier">Measure</span><span class="operator">.</span><span class="identifier">A</span><span class="operator">.</span><span class="identifier">B</span><span class="operator">.</span><span class="class">C</span><span class="operator">.</span><span class="method">ProfilerMarkers</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
+<span class="keyword">using</span> <span class="punctuation">(</span><span class="class">Measure</span><span class="operator">.</span><span class="identifier">A</span><span class="operator">.</span><span class="identifier">B</span><span class="operator">.</span><span class="propertyName">C</span><span class="operator">.</span><span class="method">ProfilerMarkers</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
 
 <span class="keyword">using</span> <span class="punctuation">(</span><span class="class">Measure</span><span class="operator">.</span><span class="method">ProfilerMarkers</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
 
