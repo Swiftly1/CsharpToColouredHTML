@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.37] - 27.12.2022
+**Description:**
+Improved heuristics for using and cases where two things are marked as class next to each other e.g `Thing.SubThing`
+
 ## [1.0.36] - 08.12.2022
 **Description:**
 Improved heuristics e.g this keyword handling
