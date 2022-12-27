@@ -1,27 +1,9 @@
-﻿using System.IO;
-
-this.asd.Font = new Font("Microsoft Sans Serif", 16.25f, FontStyle.Bold, GraphicsUnit.Point, (byte) 0);
-this.dsa.Controls.Add((Control) this.re);
-
-transform.position += Vector3.left * movementSpeed * Time.deltaTime;
-transform.position += Vector3.left - movementSpeed * Time.deltaTime;
-transform.position += Vector3.left + movementSpeed * Time.deltaTime;
-transform.position += Vector3.left / movementSpeed * Time.deltaTime;
-
-using (SHA256 sha256Hash = SHA256.Create())
+﻿using TestQ;
+	
+	
+if (data.GetType() == typeof(TestQ.Cat))
 {
-	ConsoleKeyInfo key = Console.ReadKey();
+	Console.WriteLine(7);
 }
-
-public class Test
-{
-	private void ABC()
-	{
-		WebRequest r;
-		WebResponse re;
-		r = WebRequest.Create("");
-		re = r.GetResponse();
-
-		var test = new StreamReader(re.GetResponseStream());
-	}
-}
+	
+TestQ.Cat.StaticProperty.MethodCall("something");

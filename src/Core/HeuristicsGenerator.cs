@@ -14,11 +14,11 @@ internal class HeuristicsGenerator
 
     private readonly Hints _Hints;
 
-    private List<NodeWithDetails> _Output = new List<NodeWithDetails>();
+    private List<NodeWithDetails> _Output = new();
 
-    private List<string> _FoundClasses = new List<string>();
-    private List<string> _FoundStructs = new List<string>();
-    private List<string> _FoundInterfaces = new List<string>();
+    private List<string> _FoundClasses = new();
+    private List<string> _FoundStructs = new();
+    private List<string> _FoundInterfaces = new();
 
     private Dictionary<string, string> _SimpleClassificationToColourMapper { get; } = new()
     {
@@ -382,13 +382,13 @@ internal class HeuristicsGenerator
         else if (!_IsNew && currentIndex + 4 < nodes.Count && nodes[currentIndex + 1].Text == "<"
             && nodes[currentIndex + 3].Text == ">" && nodes[currentIndex + 4].Text == "(")
         {
-            var validTypes = new[] 
+            var validTypes = new[]
             {
-                ClassificationTypeNames.ClassName, ClassificationTypeNames.StructName, 
+                ClassificationTypeNames.ClassName, ClassificationTypeNames.StructName,
                 ClassificationTypeNames.RecordClassName, ClassificationTypeNames.RecordStructName,
-                ClassificationTypeNames.Identifier 
+                ClassificationTypeNames.Identifier
             };
-            
+
             return validTypes.Contains(nodes[currentIndex + 2].ClassificationType);
         }
         else
@@ -535,8 +535,9 @@ internal class HeuristicsGenerator
 
         if (nodes.Count > currentIndex + 2 && nodes[currentIndex + 2].Text == "new" &&
             nodes[currentIndex + 2].ClassificationType == ClassificationTypeNames.Keyword)
+        {
             return false;
-
+        }
 
         var invalidTypes = new List<string>
         {
@@ -554,7 +555,9 @@ internal class HeuristicsGenerator
         if (nodes.Count > currentIndex + 2 && 
             nodes[currentIndex + 2].ClassificationType == ClassificationTypeNames.Keyword &&
             nodes[currentIndex + 2].Text != "this")
+        {
             return false;
+        }
 
         return true;
     }
@@ -622,7 +625,9 @@ internal class HeuristicsGenerator
 
         if (currentIndex >= 2 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].Text == "this" &&
             nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.Keyword)
+        {
             return false;
+        }
 
         if (currentIndex + 3 >= nodes.Count)
             return false;
@@ -715,7 +720,9 @@ internal class HeuristicsGenerator
 
         if ((commaOrParenthesis.Text != "(" && commaOrParenthesis.Text != ",")
              || commaOrParenthesis.ClassificationType != ClassificationTypeNames.Punctuation)
+        {
             return false;
+        }
 
         return IsValidClassOrStructName(name.Text);
     }
@@ -774,12 +781,7 @@ internal class HeuristicsGenerator
                 else
                 {
                     // if it is Local/Constant/Param then return that there's variable before
-                    if (func(nodes[i]))
-                    {
-                        return true;
-                    }
-
-                    return false;
+                    return func(nodes[i]);
                 }
             }
         }
@@ -916,7 +918,14 @@ internal class HeuristicsGenerator
         if (identifiers.Count > 0 && identifiers.All(x => !IdentifierFirstCharCaseSeemsLikeVariable(x)))
         {
             if (identifiers.Any(i => _FoundClasses.Contains(i)))
+            {
+                if (alreadyProcessedSuspectedNode.Colour == NodeColors.Identifier)
+                {
+                    alreadyProcessedSuspectedNode.Colour = NodeColors.PropertyName;
+                }
+
                 return;
+            }
 
             AddClass(alreadyProcessedSuspectedNode.Text);
             alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
