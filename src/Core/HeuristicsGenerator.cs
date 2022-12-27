@@ -148,6 +148,19 @@ internal class HeuristicsGenerator
                 alreadyProcessed[i - 2] = id1 with { Colour = NodeColors.PropertyName };
             }
         }
+
+        for (int i = 0; i < alreadyProcessed.Count; i++)
+        {
+            var current = alreadyProcessed[i];
+
+            if (current.Colour != NodeColors.Class || !current.IsUsing)
+                continue;
+
+            if (ThereIsClassInTheChainBefore(current, alreadyProcessed))
+            {
+                alreadyProcessed[i] = current with { Colour = NodeColors.PropertyName };
+            }
+        }
     }
 
     private ExtractedColourResult ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
@@ -277,11 +290,11 @@ internal class HeuristicsGenerator
     {
         var canGoAhead = nodes.Count > currentIndex + 1;
         var canGoBehind = currentIndex > 0;
-        var classifiers = new[] 
+        var classifiers = new[]
         {
             ClassificationTypeNames.LocalName, ClassificationTypeNames.PropertyName, ClassificationTypeNames.FieldName,
             ClassificationTypeNames.ConstantName, ClassificationTypeNames.ParameterName
-        }; 
+        };
 
         if (ThereIsThisInTheChainBefore(currentIndex, nodes))
         {
@@ -653,9 +666,6 @@ internal class HeuristicsGenerator
         if (currentIndex >= 1 && nodes[currentIndex - 1].Text == "(" && currentIndex + 4 < nodes.Count && validTypes.Contains(nodes[currentIndex + 4].ClassificationType))
             return false;
 
-        if (currentIndex >= 2 && _FoundClasses.Contains(nodes[currentIndex - 2].Text))
-            return false;
-
         // OLEMSGICON.OLEMSGICON_WARNING,
         return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||", "+", "-", "*", "/" }.Contains(next.Text);
     }
@@ -1010,4 +1020,57 @@ internal class HeuristicsGenerator
     }
 
     private void AddClass(string s) => _FoundClasses.Add(s);
+
+    private bool ThereIsClassInTheChainBefore(NodeWithDetails entry, List<NodeWithDetails> nodes)
+    {
+        var currentIndex = nodes.IndexOf(entry);
+        // 0 = currently at Identifier, expecting Operator
+        // 1 = currently at Operator, expecting Identifier
+        var state = 0;
+
+        for (int i = currentIndex - 1; i >= 0; i--)
+        {
+            if (state == 0)
+            {
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Operator && nodes[i].Text == ".")
+                {
+                    state = 1;
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else if (state == 1)
+            {
+                var validColors = new List<string>
+                {
+                    NodeColors.FieldName,
+                    NodeColors.PropertyName,
+                    NodeColors.LocalName,
+                    NodeColors.ParameterName,
+                    NodeColors.ConstantName,
+                    NodeColors.Identifier,
+                };
+
+                if (validColors.Contains(nodes[i].Colour))
+                {
+                    state = 0;
+                    continue;
+                }
+                else
+                {
+                    if (nodes[i].Colour == NodeColors.Class)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+            }
+        }
+
+        return false;
+    }
 }

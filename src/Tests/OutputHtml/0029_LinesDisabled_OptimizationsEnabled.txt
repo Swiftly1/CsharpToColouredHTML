@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="keyword">using</span> (Measure.A.B.<span class="class">C</span>.<span class="method">ProfilerMarkers</span>())
+<span class="keyword">using</span> (<span class="class">Measure</span>.A.B.C.<span class="method">ProfilerMarkers</span>())
 
 <span class="keyword">using</span> (<span class="class">Measure</span>.<span class="method">ProfilerMarkers</span>())
 
