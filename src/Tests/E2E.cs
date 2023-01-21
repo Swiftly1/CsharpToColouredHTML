@@ -2,6 +2,7 @@ using Xunit;
 using System;
 using System.IO;
 using CsharpToColouredHTML.Core;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -255,6 +256,45 @@ namespace Tests
             var result = new CsharpColourer().ProcessSourceCode(code_with_other_endings, emitter);
 
             Assert.Contains("line_no=\"3\"", result);
+        }
+
+        [Fact]
+        public void TestExternalPostProcessing()
+        {
+            var linesPath = Path.Combine(OutputDir, "ExternalPostProcessing.txt");
+            var lines = File.ReadAllText(linesPath);
+
+            var code = "Console.OnBecameInvisible(123)";
+
+            var htmlSettings = new HTMLEmitterSettings().UseCustomCSS(string.Empty).DisableIframe().DisableOptimizations();
+
+            Action<List<NodeAfterProcessing>> myAction = (List<NodeAfterProcessing> nodes) =>
+            {
+                var list = new List<string>
+                {
+                    "OnBecameInvisible"
+                };
+
+                foreach (var node in nodes)
+                {
+                    if (list.Contains(node.Text))
+                    {
+                        node.Colour = NodeColors.Keyword;
+                    }
+                    else
+                    {
+                        node.Colour = NodeColors.Control;
+                    }
+                }
+            };
+
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = myAction
+            };
+
+            var resultHTML = new CsharpColourer(colourerSettings).ProcessSourceCode(code, new HTMLEmitter(htmlSettings));
+            Assert.Equal(lines, resultHTML);
         }
     }
 }

@@ -260,7 +260,7 @@ public class HTMLEmitter : IEmitter
             trivia: newTrivia,
             hasNewLine: current.HasNewLine,
             originalClassificationType: $"merged_nodes_invalid",
-            usesMostCommonColour: false
+            usesMostCommonColour: current.UsesMostCommonColour
         );
 
         return details;

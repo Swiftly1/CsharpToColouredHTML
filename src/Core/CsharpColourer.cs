@@ -24,8 +24,12 @@ public class CsharpColourer
     public string ProcessSourceCode(string code, IEmitter emitter)
     {
         code = code.ReplaceLineEndings();
+
         var nodes = GenerateInternalRepresentation(code);
         var heuristics = new HeuristicsGenerator(Hints).Build(nodes);
+
+        Settings.PostProcessingAction?.Invoke(heuristics);
+
         return emitter.Emit(heuristics);
     }
 

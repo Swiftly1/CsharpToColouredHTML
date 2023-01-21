@@ -1,9 +1,1 @@
-﻿using TestQ;
-	
-	
-if (data.GetType() == typeof(TestQ.Cat))
-{
-	Console.WriteLine(7);
-}
-	
-TestQ.Cat.StaticProperty.MethodCall("something");
+﻿Console.OnBecameInvisible(123)
