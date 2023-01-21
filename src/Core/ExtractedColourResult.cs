@@ -18,4 +18,3 @@ internal struct ExtractedColourResult
 
     public bool SkipIdentifierPostProcessing { get; set; }
 }
-

@@ -58,11 +58,20 @@ internal class HeuristicsGenerator
         _Hints = hints;
     }
 
-    public List<NodeWithDetails> Build(List<Node> input)
+    public List<NodeAfterProcessing> Build(List<Node> input)
     {
         ProcessData(input);
         PostProcess(_Output);
-        return _Output;
+        return _Output.Select(x => new NodeAfterProcessing
+        (
+            x.Id,
+            x.Colour,
+            x.Text,
+            x.Trivia,
+            x.HasNewLine,
+            x.ClassificationType,
+            x.UsesMostCommonColour
+        )).ToList();
     }
 
     public void Reset()

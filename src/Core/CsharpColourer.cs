@@ -12,6 +12,14 @@ namespace CsharpToColouredHTML.Core;
 public class CsharpColourer
 {
     public readonly Hints Hints = new Hints();
+    public readonly CsharpColourerSettings Settings = new CsharpColourerSettings();
+
+    public CsharpColourer() { }
+
+    public CsharpColourer(CsharpColourerSettings settings)
+    {
+        Settings = settings;
+    }
 
     public string ProcessSourceCode(string code, IEmitter emitter)
     {

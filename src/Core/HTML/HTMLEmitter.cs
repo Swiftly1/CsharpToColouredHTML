@@ -55,7 +55,7 @@ public class HTMLEmitter : IEmitter
 
     // Public Stuff:
 
-    public string Emit(List<NodeWithDetails> nodes)
+    public string Emit(List<NodeAfterProcessing> nodes)
     {
         Reset();
 
@@ -76,7 +76,7 @@ public class HTMLEmitter : IEmitter
         _LineCounter = 0;
     }
 
-    private string GenerateHtml(List<NodeWithDetails> nodes)
+    private string GenerateHtml(List<NodeAfterProcessing> nodes)
     {
         var sb = new StringBuilder();
 
@@ -100,7 +100,7 @@ public class HTMLEmitter : IEmitter
         return sb.ToString();
     }
 
-    private string GenerateHtmlWithLineNumbers(List<NodeWithDetails> nodes)
+    private string GenerateHtmlWithLineNumbers(List<NodeAfterProcessing> nodes)
     {
         var sb = new StringBuilder();
 
@@ -175,7 +175,7 @@ public class HTMLEmitter : IEmitter
         }
     }
 
-    private (string Before, string Content, string After) PostProcessing(NodeWithDetails node)
+    private (string Before, string Content, string After) PostProcessing(NodeAfterProcessing node)
     {
         var processed_Text = "";
 
@@ -216,7 +216,7 @@ public class HTMLEmitter : IEmitter
         return iframe_start + escaped + iframe_end;
     }
 
-    private void OptimizeNodes(List<NodeWithDetails> nodes)
+    private void OptimizeNodes(List<NodeAfterProcessing> nodes)
     {
         if (!nodes.Any())
             return;
@@ -247,22 +247,20 @@ public class HTMLEmitter : IEmitter
         }
     }
 
-    private NodeWithDetails MergeNodes(NodeWithDetails current, NodeWithDetails next)
+    private NodeAfterProcessing MergeNodes(NodeAfterProcessing current, NodeAfterProcessing next)
     {
         var newText = current.Text + next.TextWithTrivia;
         var newTrivia = current.Trivia;
 
-        var details = new NodeWithDetails
+        var details = new NodeAfterProcessing
         (
+            Guid.NewGuid(),
             colour: current.Colour,
             text: newText,
             trivia: newTrivia,
             hasNewLine: current.HasNewLine,
-            isNew: current.IsNew,
-            isUsing: current.IsUsing,
-            parenthesisCounter: current.ParenthesisCounter,
-            classificationType: $"merged_nodes_invalid",
-            skipIdentifierPostProcessing: false
+            originalClassificationType: $"merged_nodes_invalid",
+            usesMostCommonColour: false
         );
 
         return details;
