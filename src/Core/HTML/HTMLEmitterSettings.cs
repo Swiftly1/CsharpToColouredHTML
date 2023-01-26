@@ -10,6 +10,8 @@ public class HTMLEmitterSettings
 
     public bool UseIframe = true;
 
+    public Func<int, bool> LineHighlightingPredicate = null;
+
     public HTMLEmitterSettings()
     {
     }
@@ -62,6 +64,21 @@ public class HTMLEmitterSettings
     public HTMLEmitterSettings DisableIframe()
     {
         UseIframe = false;
+        return this;
+    }
+
+    public HTMLEmitterSettings HighlightThoseLines(Func<int, bool> func)
+    {
+        if (func == null)
+            throw new ArgumentException(nameof(func));
+
+        LineHighlightingPredicate = func;
+        return this;
+    }
+
+    public HTMLEmitterSettings RemoveHighlighting()
+    {
+        LineHighlightingPredicate = null;
         return this;
     }
 }

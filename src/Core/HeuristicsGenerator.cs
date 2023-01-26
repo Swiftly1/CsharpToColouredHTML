@@ -62,16 +62,35 @@ internal class HeuristicsGenerator
     {
         ProcessData(input);
         PostProcess(_Output);
+        AssignLineNumbers(_Output);
+
         return _Output.Select(x => new NodeAfterProcessing
         (
             x.Id,
             x.Colour,
             x.Text,
             x.Trivia,
-            x.HasNewLine,
             x.ClassificationType,
-            x.UsesMostCommonColour
+            x.UsesMostCommonColour,
+            x.LineNumber,
+            useHighlighting: false // it may be defined later by postprocessor
         )).ToList();
+    }
+
+    private void AssignLineNumbers(List<NodeWithDetails> output)
+    {
+        var currentLineNumber = 0;
+
+        foreach (var node in output)
+        {
+            if (node.HasNewLine)
+            {
+                var newLinesCount = StringHelper.AllIndicesOf(node.Trivia, Environment.NewLine).Count;
+                currentLineNumber += newLinesCount;
+            }
+
+            node.LineNumber = currentLineNumber;
+        }
     }
 
     public void Reset()

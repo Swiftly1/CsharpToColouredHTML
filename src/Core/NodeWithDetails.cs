@@ -65,4 +65,6 @@ public record NodeWithDetails
     public bool UsesMostCommonColour { get; set; }
 
     public bool SkipIdentifierPostProcessing { get; set; }
+
+    public int LineNumber { get; set; }
 }

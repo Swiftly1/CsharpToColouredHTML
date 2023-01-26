@@ -1,1 +1,18 @@
-﻿Console.OnBecameInvisible(123)
+﻿if (A)
+{
+	Console.WriteLine(".");
+	if (B)
+	{
+		if (B2)
+			Console.WriteLine(".");
+		else
+			Result.WriteLine("..");
+
+		if (C)
+		{
+			if (D)
+				if (E)
+					Result.WriteLine(".");
+		}
+	}
+}

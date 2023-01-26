@@ -7,9 +7,10 @@ public record NodeAfterProcessing
         string colour,
         string text,
         string trivia,
-        bool hasNewLine,
         string originalClassificationType,
-        bool usesMostCommonColour
+        bool usesMostCommonColour,
+        int lineNumber,
+        bool useHighlighting
         )
     {
         Id = id;
@@ -17,9 +18,10 @@ public record NodeAfterProcessing
         Text = text;
         Trivia = trivia;
         TextWithTrivia = Trivia + Text;
-        HasNewLine = hasNewLine;
         OriginalClassificationType = originalClassificationType;
         UsesMostCommonColour = usesMostCommonColour;
+        LineNumber = lineNumber;
+        UseHighlighting = useHighlighting;
     }
 
     public Guid Id { get; init; }
@@ -36,5 +38,9 @@ public record NodeAfterProcessing
 
     public string OriginalClassificationType { get; init; }
 
+    public int LineNumber { get; init; }
+
     public bool UsesMostCommonColour { get; set; }
+
+    public bool UseHighlighting { get; set; }
 }

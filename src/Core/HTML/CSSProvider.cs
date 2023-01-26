@@ -113,6 +113,11 @@ namespace CsharpToColouredHTML.Core
 
         private const string LineNumbers_CSS_Template =
         @$"
+        .code_highlight
+        {{
+            background-color: #395929;
+        }}
+
         table
         {{
             white-space: pre;
