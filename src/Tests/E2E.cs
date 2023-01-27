@@ -359,7 +359,7 @@ namespace Tests
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_PredicateAndPostProcess.txt");
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_PredicateAndPostprocess.txt");
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
