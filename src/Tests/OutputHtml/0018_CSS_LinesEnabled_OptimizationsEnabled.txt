@@ -1,4 +1,4 @@
-<style>.background{font-family:monaco,Consolas,LucidaConsole,monospace;background-color:#1E1E1E;overflow:scroll;}.preprocessor{color:#808080;}.preprocessorText{color:#a4a4a4;}table{white-space:pre;}.line_no::before{content:attr(line_no);color:white;}.code_column{padding-left:5px;color:#808080;}</style>
+<style>.background{font-family:monaco,Consolas,LucidaConsole,monospace;background-color:#1E1E1E;overflow:scroll;}.preprocessor{color:#808080;}.preprocessorText{color:#a4a4a4;}.code_highlight{background-color:#395929;}table{white-space:pre;}.line_no::before{content:attr(line_no);color:white;}.code_column{padding-left:5px;color:#808080;}</style>
 <pre class="background">
 <table>
 <tbody>

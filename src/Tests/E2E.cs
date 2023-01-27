@@ -296,5 +296,93 @@ namespace Tests
             var resultHTML = new CsharpColourer(colourerSettings).ProcessSourceCode(code, new HTMLEmitter(htmlSettings));
             Assert.Equal(lines, resultHTML);
         }
+
+        [Fact]
+        public void Highlight_Predicate()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Predicate.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .EnableOptimizations()
+                               .HighlightThoseLines(x => x != 0 && x % 3 == 0)
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Postprocess()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Postprocess.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .EnableOptimizations()
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = (list) =>
+                {
+                    foreach (var item in list)
+                        if (item.Text == "WriteLine")
+                            item.UseHighlighting = true;
+                }
+            };
+
+            var linesResult = new CsharpColourer(colourerSettings).ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Predicate_And_Postprocess()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_PredicateAndPostProcess.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .EnableOptimizations()
+                               .HighlightThoseLines(x => x != 0 && x % 3 == 0)
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = (list) =>
+                {
+                    foreach (var item in list)
+                        if (item.Text == "WriteLine")
+                            item.UseHighlighting = true;
+                }
+            };
+
+            var linesResult = new CsharpColourer(colourerSettings).ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
     }
 }
