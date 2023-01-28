@@ -298,13 +298,13 @@ namespace Tests
         }
 
         [Fact]
-        public void Highlight_Predicate()
+        public void Highlight_Predicate_OptimizationsEnabled()
         {
             var fileName = "0019.txt";
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Predicate.txt");
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Predicate_OptimizationsEnabled.txt");
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
@@ -321,13 +321,13 @@ namespace Tests
         }
 
         [Fact]
-        public void Highlight_Postprocess()
+        public void Highlight_Postprocess_OptimizationsEnabled()
         {
             var fileName = "0019.txt";
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Postprocess.txt");
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Postprocess_OptimizationsEnabled.txt");
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
@@ -353,19 +353,107 @@ namespace Tests
         }
 
         [Fact]
-        public void Highlight_Predicate_And_Postprocess()
+        public void Highlight_Predicate_And_Postprocess_OptimizationsEnabled()
         {
             var fileName = "0019.txt";
             var p1 = Path.Combine(InputDir, fileName);
             var code = File.ReadAllText(p1);
 
-            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_PredicateAndPostprocess.txt");
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_PredicateAndPostprocess_OptimizationsEnabled.txt");
             var p2Lines = File.ReadAllText(linesPath);
 
             var settings = new HTMLEmitterSettings()
                                .DisableIframe()
                                .EnableLineNumbers()
                                .EnableOptimizations()
+                               .HighlightThoseLines(x => x != 0 && x % 3 == 0)
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = (list) =>
+                {
+                    foreach (var item in list)
+                        if (item.Text == "WriteLine")
+                            item.UseHighlighting = true;
+                }
+            };
+
+            var linesResult = new CsharpColourer(colourerSettings).ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Predicate_OptimizationsDisabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Predicate_OptimizationsDisabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .DisableOptimizations()
+                               .HighlightThoseLines(x => x != 0 && x % 3 == 0)
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Postprocess_OptimizationsDisabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Postprocess_OptimizationsDisabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .DisableOptimizations()
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = (list) =>
+                {
+                    foreach (var item in list)
+                        if (item.Text == "WriteLine")
+                            item.UseHighlighting = true;
+                }
+            };
+
+            var linesResult = new CsharpColourer(colourerSettings).ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Predicate_And_Postprocess_OptimizationsDisabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_PredicateAndPostprocess_OptimizationsDisabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .DisableOptimizations()
                                .HighlightThoseLines(x => x != 0 && x % 3 == 0)
                                .UseCustomCSS("");
 
