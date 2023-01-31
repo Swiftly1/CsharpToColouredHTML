@@ -18,19 +18,19 @@ public class HTMLEmitter : IEmitter
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
         UseIframe = settings.UseIframe;
+        HighlightingPredicate = settings.LineHighlightingPredicate;
     }
 
     public HTMLEmitter(HTMLEmitterSettings settings)
     {
         if (settings is null)
-        {
             throw new ArgumentNullException(nameof(settings));
-        }
 
         _cssHelper = new CSSProvider(settings.UserProvidedCSS);
         AddLineNumber = settings.AddLineNumber;
         Optimize = settings.Optimize;
         UseIframe = settings.UseIframe;
+        HighlightingPredicate = settings.LineHighlightingPredicate;
     }
 
     // Internal Stuff:
@@ -49,13 +49,15 @@ public class HTMLEmitter : IEmitter
 
     private readonly bool UseIframe = true;
 
+    private readonly Func<int, bool> HighlightingPredicate = null;
+
     private int _LineCounter = 0;
 
     private string _MostCommonColourValue = string.Empty;
 
     // Public Stuff:
 
-    public string Emit(List<NodeWithDetails> nodes)
+    public string Emit(List<NodeAfterProcessing> nodes)
     {
         Reset();
 
@@ -76,7 +78,7 @@ public class HTMLEmitter : IEmitter
         _LineCounter = 0;
     }
 
-    private string GenerateHtml(List<NodeWithDetails> nodes)
+    private string GenerateHtml(List<NodeAfterProcessing> nodes)
     {
         var sb = new StringBuilder();
 
@@ -100,41 +102,70 @@ public class HTMLEmitter : IEmitter
         return sb.ToString();
     }
 
-    private string GenerateHtmlWithLineNumbers(List<NodeWithDetails> nodes)
+    private string GenerateHtmlWithLineNumbers(List<NodeAfterProcessing> nodes)
     {
         var sb = new StringBuilder();
 
         sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, Optimize, nodes, _MostCommonColourValue));
         sb.AppendLine(@"<pre class=""background"">");
 
-        var isOpened = false;
-
         sb.AppendLine("<table>");
         sb.AppendLine("<tbody>");
+
+        var isOpened = false;
+        var currentLine = 0;
+        var highlightCssName = "code_highlight";
 
         for (int i = 0; i < nodes.Count; i++)
         {
             var current = nodes[i];
-            if (i == 0 || current.HasNewLine)
+
+            if (i == 0 || current.LineNumber != currentLine)
             {
+                var gap = current.LineNumber - currentLine;
+                currentLine = current.LineNumber;
+
+                var highlighWholeRow =
+                    (HighlightingPredicate != null && HighlightingPredicate(currentLine)) ||
+                    nodes.Where(x => x.LineNumber == currentLine).All(x => x.UseHighlighting);
+
                 if (isOpened)
                 {
                     sb.Append("</td></tr>");
                 }
 
-                AddRowsForNewLinesIfNeededToStringBuilder(current.Trivia, sb);
+                while(gap-- > 1)
+                {
+                    sb.Append("<tr>");
+
+                    var higlightCss = string.Empty;
+
+                    if (HighlightingPredicate != null && HighlightingPredicate(_LineCounter))
+                    {
+                        higlightCss = " class=\"code_highlight\"";
+                    }
+
+                    AddNewLineNumberToStringBuilder(sb);
+
+                    sb.Append($"<td{higlightCss}>");
+                    sb.Append("</tr>");
+                }
 
                 sb.Append("<tr>");
                 AddNewLineNumberToStringBuilder(sb);
-                sb.Append("<td class=\"code_column\">");
+
+                var rowClassName = $"code_column{(highlighWholeRow ? $" {highlightCssName}" : string.Empty)}";
+                sb.Append($"<td class=\"{rowClassName}\">");
                 isOpened = true;
             }
 
             var postProcessed = PostProcessing(current);
 
+            var className = $"{current.Colour}{(current.UseHighlighting ? $" {highlightCssName}" : string.Empty)}";
+
             var span = current.UsesMostCommonColour ?
                 $"{postProcessed.Before}{postProcessed.Content}{postProcessed.After}" :
-                @$"{postProcessed.Before}<span class=""{current.Colour}"">{postProcessed.Content}</span>{postProcessed.After}";
+                @$"{postProcessed.Before}<span class=""{className}"">{postProcessed.Content}</span>{postProcessed.After}";
 
             sb.Append(RemoveNewLines(span));
         }
@@ -162,20 +193,7 @@ public class HTMLEmitter : IEmitter
         sb.Append($"<td class=\"line_no\" line_no=\"{value}\"></td>");
     }
 
-    private void AddRowsForNewLinesIfNeededToStringBuilder(string trivia, StringBuilder sb)
-    {
-        var newLinesCount = StringHelper.AllIndicesOf(trivia, Environment.NewLine).Count;
-
-        for (int i = newLinesCount - 1; i > 0; i--)
-        {
-            sb.Append("<tr>");
-            AddNewLineNumberToStringBuilder(sb);
-            sb.Append("<td>");
-            sb.Append("</tr>");
-        }
-    }
-
-    private (string Before, string Content, string After) PostProcessing(NodeWithDetails node)
+    private (string Before, string Content, string After) PostProcessing(NodeAfterProcessing node)
     {
         var processed_Text = "";
 
@@ -216,7 +234,7 @@ public class HTMLEmitter : IEmitter
         return iframe_start + escaped + iframe_end;
     }
 
-    private void OptimizeNodes(List<NodeWithDetails> nodes)
+    private void OptimizeNodes(List<NodeAfterProcessing> nodes)
     {
         if (!nodes.Any())
             return;
@@ -247,22 +265,21 @@ public class HTMLEmitter : IEmitter
         }
     }
 
-    private NodeWithDetails MergeNodes(NodeWithDetails current, NodeWithDetails next)
+    private NodeAfterProcessing MergeNodes(NodeAfterProcessing current, NodeAfterProcessing next)
     {
         var newText = current.Text + next.TextWithTrivia;
         var newTrivia = current.Trivia;
 
-        var details = new NodeWithDetails
+        var details = new NodeAfterProcessing
         (
+            Guid.NewGuid(),
             colour: current.Colour,
             text: newText,
             trivia: newTrivia,
-            hasNewLine: current.HasNewLine,
-            isNew: current.IsNew,
-            isUsing: current.IsUsing,
-            parenthesisCounter: current.ParenthesisCounter,
-            classificationType: $"merged_nodes_invalid",
-            skipIdentifierPostProcessing: false
+            originalClassificationType: $"merged_nodes_invalid",
+            usesMostCommonColour: current.UsesMostCommonColour,
+            lineNumber: current.LineNumber,
+            useHighlighting: current.UseHighlighting || next.UseHighlighting
         );
 
         return details;

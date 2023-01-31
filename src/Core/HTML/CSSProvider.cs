@@ -13,7 +13,7 @@ namespace CsharpToColouredHTML.Core
 
         public string GetMappedColour(string s) => ColorsMap[s];
 
-        public string GetCSS(bool addLineNumber, bool optimize, List<NodeWithDetails> nodes, string mostCommonColourValue)
+        public string GetCSS(bool addLineNumber, bool optimize, List<NodeAfterProcessing> nodes, string mostCommonColourValue)
         {
             if (UserProvidedCSS != null)
             {
@@ -37,7 +37,7 @@ namespace CsharpToColouredHTML.Core
             return new string(_sb.ToString().Where(x => !char.IsWhiteSpace(x)).ToArray());
         }
 
-        private string GenerateDefaultCSSColors(bool optimize, List<NodeWithDetails> nodes)
+        private string GenerateDefaultCSSColors(bool optimize, List<NodeAfterProcessing> nodes)
         {
             var template =
             @".{0}
@@ -113,6 +113,11 @@ namespace CsharpToColouredHTML.Core
 
         private const string LineNumbers_CSS_Template =
         @$"
+        .code_highlight
+        {{
+            background-color: #395929;
+        }}
+
         table
         {{
             white-space: pre;

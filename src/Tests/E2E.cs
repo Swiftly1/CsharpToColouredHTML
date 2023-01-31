@@ -2,6 +2,7 @@ using Xunit;
 using System;
 using System.IO;
 using CsharpToColouredHTML.Core;
+using System.Collections.Generic;
 
 namespace Tests
 {
@@ -255,6 +256,221 @@ namespace Tests
             var result = new CsharpColourer().ProcessSourceCode(code_with_other_endings, emitter);
 
             Assert.Contains("line_no=\"3\"", result);
+        }
+
+        [Fact]
+        public void TestExternalPostProcessing()
+        {
+            var linesPath = Path.Combine(OutputDir, "ExternalPostProcessing.txt");
+            var lines = File.ReadAllText(linesPath);
+
+            var code = "Console.OnBecameInvisible(123)";
+
+            var htmlSettings = new HTMLEmitterSettings().UseCustomCSS(string.Empty).DisableIframe().DisableOptimizations();
+
+            Action<List<NodeAfterProcessing>> myAction = (List<NodeAfterProcessing> nodes) =>
+            {
+                var list = new List<string>
+                {
+                    "OnBecameInvisible"
+                };
+
+                foreach (var node in nodes)
+                {
+                    if (list.Contains(node.Text))
+                    {
+                        node.Colour = NodeColors.Keyword;
+                    }
+                    else
+                    {
+                        node.Colour = NodeColors.Control;
+                    }
+                }
+            };
+
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = myAction
+            };
+
+            var resultHTML = new CsharpColourer(colourerSettings).ProcessSourceCode(code, new HTMLEmitter(htmlSettings));
+            Assert.Equal(lines, resultHTML);
+        }
+
+        [Fact]
+        public void Highlight_Predicate_OptimizationsEnabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Predicate_OptimizationsEnabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .EnableOptimizations()
+                               .HighlightThoseLines(x => x != 0 && x % 3 == 0)
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Postprocess_OptimizationsEnabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Postprocess_OptimizationsEnabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .EnableOptimizations()
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = (list) =>
+                {
+                    foreach (var item in list)
+                        if (item.Text == "WriteLine")
+                            item.UseHighlighting = true;
+                }
+            };
+
+            var linesResult = new CsharpColourer(colourerSettings).ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Predicate_And_Postprocess_OptimizationsEnabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_PredicateAndPostprocess_OptimizationsEnabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .EnableOptimizations()
+                               .HighlightThoseLines(x => x != 0 && x % 3 == 0)
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = (list) =>
+                {
+                    foreach (var item in list)
+                        if (item.Text == "WriteLine")
+                            item.UseHighlighting = true;
+                }
+            };
+
+            var linesResult = new CsharpColourer(colourerSettings).ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Predicate_OptimizationsDisabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Predicate_OptimizationsDisabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .DisableOptimizations()
+                               .HighlightThoseLines(x => x != 0 && x % 3 == 0)
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var linesResult = new CsharpColourer().ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Postprocess_OptimizationsDisabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_Postprocess_OptimizationsDisabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .DisableOptimizations()
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = (list) =>
+                {
+                    foreach (var item in list)
+                        if (item.Text == "WriteLine")
+                            item.UseHighlighting = true;
+                }
+            };
+
+            var linesResult = new CsharpColourer(colourerSettings).ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
+        }
+
+        [Fact]
+        public void Highlight_Predicate_And_Postprocess_OptimizationsDisabled()
+        {
+            var fileName = "0019.txt";
+            var p1 = Path.Combine(InputDir, fileName);
+            var code = File.ReadAllText(p1);
+
+            var linesPath = Path.Combine(OutputDir, "0019_Highlighting_PredicateAndPostprocess_OptimizationsDisabled.txt");
+            var p2Lines = File.ReadAllText(linesPath);
+
+            var settings = new HTMLEmitterSettings()
+                               .DisableIframe()
+                               .EnableLineNumbers()
+                               .DisableOptimizations()
+                               .HighlightThoseLines(x => x != 0 && x % 3 == 0)
+                               .UseCustomCSS("");
+
+            var emitter = new HTMLEmitter(settings);
+            var colourerSettings = new CsharpColourerSettings
+            {
+                PostProcessingAction = (list) =>
+                {
+                    foreach (var item in list)
+                        if (item.Text == "WriteLine")
+                            item.UseHighlighting = true;
+                }
+            };
+
+            var linesResult = new CsharpColourer(colourerSettings).ProcessSourceCode(code, emitter);
+
+            Assert.Equal(p2Lines, linesResult);
         }
     }
 }

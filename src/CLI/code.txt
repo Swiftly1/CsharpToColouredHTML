@@ -1,9 +1,18 @@
-﻿using TestQ;
-	
-	
-if (data.GetType() == typeof(TestQ.Cat))
+﻿if (A)
 {
-	Console.WriteLine(7);
+	Console.WriteLine(".");
+	if (B)
+	{
+		if (B2)
+			Console.WriteLine(".");
+		else
+			Result.WriteLine("..");
+
+		if (C)
+		{
+			if (D)
+				if (E)
+					Result.WriteLine(".");
+		}
+	}
 }
-	
-TestQ.Cat.StaticProperty.MethodCall("something");

@@ -12,12 +12,24 @@ namespace CsharpToColouredHTML.Core;
 public class CsharpColourer
 {
     public readonly Hints Hints = new Hints();
+    public readonly CsharpColourerSettings Settings = new CsharpColourerSettings();
+
+    public CsharpColourer() { }
+
+    public CsharpColourer(CsharpColourerSettings settings)
+    {
+        Settings = settings;
+    }
 
     public string ProcessSourceCode(string code, IEmitter emitter)
     {
         code = code.ReplaceLineEndings();
+
         var nodes = GenerateInternalRepresentation(code);
         var heuristics = new HeuristicsGenerator(Hints).Build(nodes);
+
+        Settings.PostProcessingAction?.Invoke(heuristics);
+
         return emitter.Emit(heuristics);
     }
 

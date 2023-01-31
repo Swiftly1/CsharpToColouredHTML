@@ -13,7 +13,7 @@ public class ConsoleEmitter : IEmitter
 
     private readonly bool addDiagnosticInfo;
 
-    public string Emit(List<NodeWithDetails> nodes)
+    public string Emit(List<NodeAfterProcessing> nodes)
     {
         Console.ResetColor();
         _sb.Clear();
@@ -26,7 +26,7 @@ public class ConsoleEmitter : IEmitter
         return _sb.ToString();
     }
 
-    public void EmitNode(NodeWithDetails node)
+    public void EmitNode(NodeAfterProcessing node)
     {
         if (node.Colour == NodeColors.Class)
         {
@@ -86,8 +86,8 @@ public class ConsoleEmitter : IEmitter
 
         if (addDiagnosticInfo)
         {
-            _sb.Append($"({node.ClassificationType})");
-            Console.Write($"({node.ClassificationType})");
+            _sb.Append($"({node.OriginalClassificationType})");
+            Console.Write($"({node.OriginalClassificationType})");
         }
 
         Console.ResetColor();
