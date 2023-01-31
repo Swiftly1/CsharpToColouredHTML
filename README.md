@@ -13,6 +13,10 @@ Microsoft Docs default code highlighting (left) vs. this project (right)
 
 ![img](https://user-images.githubusercontent.com/77643169/179602262-a1ab256c-2a21-4368-8f30-5468dc156d4c.png)
 
+Highlighting whole lines or just some elements
+
+![obraz](https://user-images.githubusercontent.com/77643169/215877053-0a4a69f0-8e91-4356-ae94-fce0d0f34d44.png)
+
 # Why? 
 
 Motivation for doing it was that I wanted to put C# code fragments on website, 
@@ -53,10 +57,63 @@ ___
 Custom CSS:
 
 	var myCustomCSS = "<style>...</style>";
-	var settings = new HTMLEmitterSettings().UseCustomCSS(myCSS);
+	var settings = new HTMLEmitterSettings().UseCustomCSS(myCustomCSS);
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 	Console.WriteLine(html);
 	
+___
+
+Highlighting Lines - Approach 1
+
+	var settings = new HTMLEmitterSettings().HighlightThoseLines(x => x == 5);
+	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
+	Console.WriteLine(html);
+
+Post-processing / Highlighting Lines - Approach 2
+
+	var colourerSettings = new CsharpColourerSettings
+	{
+	    PostProcessingAction = (list) =>
+	    {
+		foreach (var item in list)
+		    if (item.Text.Contains("localhost"))
+			item.UseHighlighting = true;
+	    }
+	};
+
+	var html = new CsharpColourer(colourerSettings).ProcessSourceCode(code, new HTMLEmitter());	
+	Console.WriteLine(html);
+	
+___
+
+Post-processing - Overriding Colours
+
+	Action<List<NodeAfterProcessing>> myUnityPostprocessor = (List<NodeAfterProcessing> nodes) =>
+	{
+	    var list = new List<string>
+	    {
+		"OnBecameInvisible"
+	    };
+
+	    foreach (var node in nodes)
+	    {
+		if (list.Contains(node.Text))
+		{
+		    node.Colour = NodeColors.Keyword;
+		}
+		else
+		{
+		    node.Colour = NodeColors.Control;
+		}
+	    }
+	};
+
+	var colourerSettings = new CsharpColourerSettings
+	{
+	    PostProcessingAction = myUnityPostprocessor
+	};
+
+	var html = new CsharpColourer(colourerSettings).ProcessSourceCode(code, new HTMLEmitter());
 ___
 
 Disabling Line Numbers
