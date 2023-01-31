@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.38] - 31.01.2023
+**Description:**
+Two new features added as requested by @kwalkerxxi
+
+Lines highlighting - https://github.com/Swiftly1/CsharpToColouredHTML/issues/18
+
+An ability to allow users to provide their own postprocessing - https://github.com/Swiftly1/CsharpToColouredHTML/issues/17
+
 ## [1.0.37] - 27.12.2022
 **Description:**
 Improved heuristics for using and cases where two things are marked as class next to each other e.g `Thing.SubThing`
