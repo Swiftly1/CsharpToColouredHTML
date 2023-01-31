@@ -54,7 +54,7 @@ Sample Usage:
 
 ___
 
-Custom CSS:
+Custom CSS
 
 	var myCustomCSS = "<style>...</style>";
 	var settings = new HTMLEmitterSettings().UseCustomCSS(myCustomCSS);
