@@ -42,6 +42,7 @@ public class Hints
         "Random",
         "String",
         "JsonConvert",
+        "Parallel"
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
