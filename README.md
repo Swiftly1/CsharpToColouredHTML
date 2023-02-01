@@ -122,7 +122,7 @@ Disabling Line Numbers
 	var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter(settings));
 	Console.WriteLine(html);
 
-# Advanced Scenerios 
+# Advanced Scenarios 
 
 Manually affecting heuristics:
 	
@@ -140,7 +140,7 @@ Creating your own emitter:
 
 	public class MyEmitter : IEmitter
 	{
-		public string Emit(List<NodeWithDetails> nodes)
+		public string Emit(List<NodeAfterProcessing> nodes)
 		{
 			var sb = new StringBuilder();
 
