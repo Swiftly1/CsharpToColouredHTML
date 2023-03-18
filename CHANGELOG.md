@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.39] - 18.03.2023
+**Description:**
+Improved heuristics e.g object initializer syntax and consistency betweeen PropertyName/LocalName. 
+
 ## [1.0.38] - 31.01.2023
 **Description:**
 Two new features added as requested by @kwalkerxxi
