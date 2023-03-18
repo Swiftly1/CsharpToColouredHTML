@@ -1,0 +1,19 @@
+﻿public Form1()
+{
+	InitializeComponent();
+
+	int abc = 6;
+	tableLayoutPanel12345.A = abc;
+
+	tableLayoutPanel12345.B.Clear();
+	tableLayoutPanel12345.C.Clear();
+
+	var items1 = GetItems();
+	foreach (var item1 in items1)
+	{
+		foreach (var item2 in item1.Items)
+		{
+			tableLayoutPanel12345.Controls.Add(item2.Name, item2.X, item2.Y);
+		}
+	}
+}

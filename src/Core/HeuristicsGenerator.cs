@@ -9,8 +9,10 @@ internal class HeuristicsGenerator
     // Simplifies detecting creation of an instance, so we don't have to go behind.
     // So far it works decent, thus no need for more complex approach.
     private bool _IsNew = false;
+    private bool _IsWithinMethod = false;
 
     private int _ParenthesisCounter = 0;
+    private int _BracketsCounter = 0;
 
     private readonly Hints _Hints;
 
@@ -268,6 +270,16 @@ internal class HeuristicsGenerator
                     }
                     else
                     {
+                        // If Roslyn does not see it as a local variable because e.g declaration is not in the source code
+                        // Then we have to decide whether this is local variable or property or field, etc.
+                        // Then I think we should default to Property, but if it is top-level-statements like syntax,
+                        // then I'd use LocalName because the result is better to read.
+                        // Basically if we do not see declaration and it starts with lower case and is outside method body,
+                        // then it should be Property due to popularity.
+
+                        if (node.ClassificationType == ClassificationTypeNames.Identifier && _IsWithinMethod)
+                            return new ExtractedColourResult(NodeColors.PropertyName, true);
+
                         return new ExtractedColourResult(NodeColors.LocalName);
                     }
                 }
@@ -279,7 +291,32 @@ internal class HeuristicsGenerator
             }
             else if (IsPropertyOrField(currentIndex, nodes))
             {
-                return new ExtractedColourResult(NodeColors.Identifier, true);
+                if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
+                {
+                    if (ThereIsThisInTheChainBefore(currentIndex, nodes) ||
+                        (currentIndex > 0 && nodes[currentIndex - 1].Text == "."))
+                    {
+                        return new ExtractedColourResult(NodeColors.Identifier, true);
+                    }
+                    else
+                    {
+                        // If Roslyn does not see it as a local variable because e.g declaration is not in the source code
+                        // Then we have to decide whether this is local variable or property or field, etc.
+                        // Then I think we should default to Property, but if it is top-level-statements like syntax,
+                        // then I'd use LocalName because the result is better to read.
+                        // Basically if we do not see declaration and it starts with lower case and is outside method body,
+                        // then it should be Property due to popularity.
+
+                        if (node.ClassificationType == ClassificationTypeNames.Identifier && _IsWithinMethod)
+                            return new ExtractedColourResult(NodeColors.PropertyName, true);
+
+                        return new ExtractedColourResult(NodeColors.LocalName);
+                    }
+                }
+                else
+                {
+                    return new ExtractedColourResult(NodeColors.Identifier, true);
+                }
             }
             else
             {
@@ -313,6 +350,20 @@ internal class HeuristicsGenerator
         }
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
         {
+
+            if (node.Text == "{")
+            {
+                _BracketsCounter++;
+            }
+
+            if (node.Text == "}")
+            {
+                _BracketsCounter--;
+
+                if (_BracketsCounter <= 0)
+                    _IsWithinMethod = false;
+            }
+
             if (node.Text == "(")
             {
                 _ParenthesisCounter++;
@@ -325,13 +376,13 @@ internal class HeuristicsGenerator
             {
                 _ParenthesisCounter--;
 
-                if (_ParenthesisCounter <= 0 && _IsUsing)
+                if (_ParenthesisCounter <= 0)
                     _IsUsing = false;
 
-                if (_ParenthesisCounter <= 0 && _IsNew)
+                if (_ParenthesisCounter <= 0)
                     _IsNew = false;
 
-                if (_ParenthesisCounter <= 0 && _IsTypeOf)
+                if (_ParenthesisCounter <= 0)
                     _IsTypeOf = false;
             }
 
@@ -367,6 +418,11 @@ internal class HeuristicsGenerator
             return true;
         }
         else if (SeemsLikePropertyUsage(currentIndex, nodes))
+        {
+            return true;
+        }
+        else if (!_IsNew && ThereIsMethodCallAhead(currentIndex, nodes) &&
+            IdentifierFirstCharCaseSeemsLikeVariable(nodes[currentIndex].Text))
         {
             return true;
         }
@@ -438,6 +494,14 @@ internal class HeuristicsGenerator
 
         if (!_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
         {
+            var modifiers = new List<string> { "public", "private", "internal", "protected", "static" };
+
+            if (currentIndex > 0 && modifiers.Contains(nodes[currentIndex - 1].Text))
+                _IsWithinMethod = true;
+
+            if (currentIndex > 1 && modifiers.Contains(nodes[currentIndex - 2].Text))
+                _IsWithinMethod = true;
+
             return true;
         }
         else if (_IsUsing && !_IsUsing && canGoAhead && nodes[currentIndex + 1].Text == "(")
@@ -488,7 +552,9 @@ internal class HeuristicsGenerator
         {
             return true;
         }
-        else if (_IsNew && ThereIsMethodCallAhead(currentIndex, nodes))
+        else if (_IsNew && canGoAhead &&
+            nodes[currentIndex + 1].ClassificationType == ClassificationTypeNames.Punctuation &&
+            nodes[currentIndex + 1].Text == "(")
         {
             _IsNew = false;
             return true;
@@ -755,19 +821,6 @@ internal class HeuristicsGenerator
             _Hints.ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }
 
-    private bool ThereIsMethodCallAhead(int currentIndex, List<Node> nodes)
-    {
-        if (currentIndex + 1 >= nodes.Count)
-            return false;
-
-        var parenthesis = nodes[currentIndex + 1];
-
-        if (parenthesis.ClassificationType == ClassificationTypeNames.Punctuation && parenthesis.Text == "(")
-            return true;
-
-        return false;
-    }
-
     private bool IsParameterWithAttribute(int currentIndex, List<Node> nodes)
     {
         if (currentIndex - 4 < 0)
@@ -791,6 +844,27 @@ internal class HeuristicsGenerator
         }
 
         return IsValidClassOrStructName(name.Text);
+    }
+
+    private bool ThereIsMethodCallAhead(int currentIndex, List<Node> nodes)
+    {
+        var validTypes = new List<string>
+        {
+            ClassificationTypeNames.Identifier,
+            ClassificationTypeNames.Operator,
+            ClassificationTypeNames.PropertyName,
+            ClassificationTypeNames.FieldName,
+            ClassificationTypeNames.Punctuation
+        };
+
+        Func<Node, bool> func = x => x.ClassificationType == ClassificationTypeNames.Punctuation && x.Text == "(";
+
+        if (ThereIsSpecificItemInTheChainAhead(currentIndex, nodes, func, validTypes))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private bool ThereIsVariableInTheChainBefore(int currentIndex, List<Node> nodes)
@@ -848,6 +922,44 @@ internal class HeuristicsGenerator
                 {
                     // if it is Local/Constant/Param then return that there's variable before
                     return func(nodes[i]);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static bool ThereIsSpecificItemInTheChainAhead(int currentIndex, List<Node> nodes, Func<Node, bool> func, List<string> validIdentifiers)
+    {
+        // 0 = currently at Identifier, expecting Operator
+        // 1 = currently at Operator, expecting Identifier
+        var state = 0;
+
+        for (int i = currentIndex + 1; i < nodes.Count; i++)
+        {
+            var current = nodes[i];
+            if (state == 0)
+            {
+                if (current.ClassificationType == ClassificationTypeNames.Operator && current.Text == ".")
+                {
+                    state = 1;
+                    continue;
+                }
+                else
+                {
+                    return func(nodes[i]);
+                }
+            }
+            else if (state == 1)
+            {
+                if (validIdentifiers.Contains(current.ClassificationType))
+                {
+                    state = 0;
+                    continue;
+                }
+                else
+                {
+                    return false;
                 }
             }
         }

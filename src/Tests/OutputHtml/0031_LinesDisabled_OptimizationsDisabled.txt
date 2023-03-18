@@ -1,5 +1,5 @@
 
 <pre class="background">
-<span class="identifier">dataGridView1</span><span class="operator">.</span><span class="identifier">Rows</span><span class="operator">.</span><span class="method">Clear</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
-<span class="identifier">dataGridView1</span><span class="operator">.</span><span class="identifier">Columns</span><span class="operator">.</span><span class="method">Clear</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
-<span class="identifier">comboBox1</span><span class="operator">.</span><span class="identifier">Items</span><span class="operator">.</span><span class="method">Clear</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span></pre>
+<span class="localName">dataGridView1</span><span class="operator">.</span><span class="identifier">Rows</span><span class="operator">.</span><span class="method">Clear</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="localName">dataGridView1</span><span class="operator">.</span><span class="identifier">Columns</span><span class="operator">.</span><span class="method">Clear</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="localName">comboBox1</span><span class="operator">.</span><span class="identifier">Items</span><span class="operator">.</span><span class="method">Clear</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span></pre>

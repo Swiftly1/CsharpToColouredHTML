@@ -1,5 +1,5 @@
 
 <pre class="background">
-dataGridView1.Rows.<span class="method">Clear</span>();
-dataGridView1.Columns.<span class="method">Clear</span>();
-comboBox1.Items.<span class="method">Clear</span>();</pre>
+<span class="localName">dataGridView1</span>.Rows.<span class="method">Clear</span>();
+<span class="localName">dataGridView1</span>.Columns.<span class="method">Clear</span>();
+<span class="localName">comboBox1</span>.Items.<span class="method">Clear</span>();</pre>
