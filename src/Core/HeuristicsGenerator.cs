@@ -430,6 +430,10 @@ internal class HeuristicsGenerator
         {
             return true;
         }
+        else if (IsOnInitializationList(currentIndex, nodes))
+        {
+            return true;
+        }
 
         return false;
     }
@@ -447,7 +451,7 @@ internal class HeuristicsGenerator
         {
             return true;
         }
-        else if (startsWithI && canGoBehind && new[] { "public", "private", "internal", "sealed", "protected", "readonly" }.Contains(nodes[currentIndex - 1].Text))
+        else if (startsWithI && canGoBehind && LanguageKeywords.AccessibilityModifiers.Contains(nodes[currentIndex - 1].Text))
         {
             return true;
         }
@@ -494,12 +498,17 @@ internal class HeuristicsGenerator
 
         if (!_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
         {
-            var modifiers = new List<string> { "public", "private", "internal", "protected", "static" };
+            var availableKeywords = new List<string>(LanguageKeywords.AccessibilityModifiers)
+            {
+                "static",
+                "virtual",
+                "override"
+            };
 
-            if (currentIndex > 0 && modifiers.Contains(nodes[currentIndex - 1].Text))
+            if (currentIndex > 0 && availableKeywords.Contains(nodes[currentIndex - 1].Text))
                 _IsWithinMethod = true;
 
-            if (currentIndex > 1 && modifiers.Contains(nodes[currentIndex - 2].Text))
+            if (currentIndex > 1 && availableKeywords.Contains(nodes[currentIndex - 2].Text))
                 _IsWithinMethod = true;
 
             return true;
@@ -613,6 +622,19 @@ internal class HeuristicsGenerator
         {
             return true;
         }
+        else if (canGoBehind && canGoAhead &&
+            LanguageKeywords.AccessibilityModifiers.Contains(nodes[currentIndex - 1].Text) &&
+            new[] { ClassificationTypeNames.FieldName, ClassificationTypeNames.ConstantName, ClassificationTypeNames.PropertyName }
+            .Contains(nodes[currentIndex + 1].ClassificationType))
+        {
+            return true;
+        }
+        else if (canGoBehind && canGoAhead &&
+            LanguageKeywords.AccessibilityModifiers.Contains(nodes[currentIndex - 1].Text) &&
+            nodes[currentIndex + 1].Text == "[")
+        {
+            return true;
+        }
         // WebResponse re;
         else if (nodes.Count > currentIndex + 2 &&
             new[] { ClassificationTypeNames.LocalName }.Contains(nodes[currentIndex + 1].ClassificationType) && 
@@ -694,9 +716,31 @@ internal class HeuristicsGenerator
         return true;
     }
 
+    private bool IsOnInitializationList(int currentIndex, List<Node> nodes)
+    {
+        if (_IsNew)
+        {
+            for (int i = currentIndex - 1; i >= 0; i--)
+            {
+                var suspectedNode = nodes[i];
+
+                if (suspectedNode.Text == "{")
+                    return true;
+
+                if (suspectedNode.Text == "new" && suspectedNode.ClassificationType == ClassificationTypeNames.Keyword)
+                    break;
+            }
+        }
+
+        return false;
+    }
+
     private bool RightSideOfAssignmentHasTheSameNameAfterNew(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
+
+        if (IsOnInitializationList(currentIndex, nodes))
+            return false;
 
         var canGoAhead = nodes.Count > currentIndex + 1;
 

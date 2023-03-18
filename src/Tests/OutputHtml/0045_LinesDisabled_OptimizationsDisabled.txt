@@ -1,0 +1,34 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="class">Form1</span> <span class="punctuation">:</span> <span class="class">Form</span>
+<span class="punctuation">{</span>
+    <span class="keyword">private</span> <span class="keyword">readonly</span> <span class="class">StringBuilder</span> <span class="fieldName">_sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">StringBuilder</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="keyword">private</span> <span class="keyword">const</span> <span class="keyword">int</span> <span class="constant">ASDF</span> <span class="operator">=</span> <span class="numericLiteral">1111</span><span class="punctuation">;</span>
+    <span class="keyword">private</span> <span class="class">Button</span><span class="punctuation">[</span><span class="punctuation">,</span><span class="punctuation">]</span> <span class="fieldName">Hotkeys</span><span class="punctuation">;</span>
+    <span class="keyword">private</span> <span class="class">Point</span> <span class="fieldName">Test2345</span><span class="punctuation">;</span>
+
+    <span class="keyword">public</span> <span class="class">Form1</span><span class="punctuation">(</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="method">InitializeComponent</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+        <span class="fieldName">Hotkeys</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Button</span><span class="punctuation">[</span><span class="constant">ASDF</span><span class="punctuation">,</span> <span class="constant">ASDF</span><span class="punctuation">]</span><span class="punctuation">;</span>
+
+        <span class="control">for</span> <span class="punctuation">(</span><span class="keyword">int</span> <span class="localName">row</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span> <span class="localName">row</span> <span class="operator">&lt;</span> <span class="constant">ASDF</span><span class="punctuation">;</span> <span class="localName">row</span><span class="operator">++</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="control">for</span> <span class="punctuation">(</span><span class="keyword">int</span> <span class="localName">col</span> <span class="operator">=</span> <span class="numericLiteral">0</span><span class="punctuation">;</span> <span class="localName">col</span> <span class="operator">&lt;</span> <span class="constant">ASDF</span><span class="punctuation">;</span> <span class="localName">col</span><span class="operator">++</span><span class="punctuation">)</span>
+            <span class="punctuation">{</span>
+                <span class="fieldName">Hotkeys</span><span class="punctuation">[</span><span class="localName">row</span><span class="punctuation">,</span> <span class="localName">col</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">ButtonExtra</span>
+                <span class="punctuation">{</span>
+                    <span class="identifier">Width</span> <span class="operator">=</span> <span class="numericLiteral">50</span><span class="punctuation">,</span>
+                    <span class="identifier">Height</span> <span class="operator">=</span> <span class="numericLiteral">50</span><span class="punctuation">,</span>
+                    <span class="identifier">Left</span> <span class="operator">=</span> <span class="localName">col</span> <span class="operator">*</span> <span class="numericLiteral">50</span><span class="punctuation">,</span>
+                    <span class="identifier">Top</span> <span class="operator">=</span> <span class="localName">row</span> <span class="operator">*</span> <span class="numericLiteral">50</span><span class="punctuation">,</span>
+                    <span class="identifier">Font</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Font</span><span class="punctuation">(</span><span class="class">FontFamily</span><span class="operator">.</span><span class="identifier">GenericSansSerif</span><span class="punctuation">,</span> <span class="numericLiteral">20</span><span class="punctuation">)</span>
+                <span class="punctuation">}</span><span class="punctuation">;</span>
+
+                <span class="fieldName">Hotkeys</span><span class="punctuation">[</span><span class="localName">row</span><span class="punctuation">,</span> <span class="localName">col</span><span class="punctuation">]</span><span class="operator">.</span><span class="identifier">Click</span> <span class="operator">+=</span> <span class="keyword">new</span> <span class="class">EventHandler</span><span class="punctuation">(</span><span class="identifier">ButtonClick</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                <span class="keyword">this</span><span class="operator">.</span><span class="identifier">Controls</span><span class="operator">.</span><span class="method">Add</span><span class="punctuation">(</span><span class="fieldName">Hotkeys</span><span class="punctuation">[</span><span class="localName">row</span><span class="punctuation">,</span> <span class="localName">col</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">;</span>
+            <span class="punctuation">}</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

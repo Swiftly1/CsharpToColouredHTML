@@ -1,0 +1,32 @@
+﻿public partial class Form1 : Form
+{
+	private readonly StringBuilder _sb = new StringBuilder();
+	private const int ASDF = 1111;
+	private Button[,] Hotkeys;
+	private Point Test2345;
+
+	public Form1()
+	{
+		InitializeComponent();
+
+		Hotkeys = new Button[ASDF, ASDF];
+
+		for (int row = 0; row < ASDF; row++)
+		{
+			for (int col = 0; col < ASDF; col++)
+			{
+				Hotkeys[row, col] = new ButtonExtra
+				{
+					Width = 50,
+					Height = 50,
+					Left = col * 50,
+					Top = row * 50,
+					Font = new Font(FontFamily.GenericSansSerif, 20)
+				};
+
+				Hotkeys[row, col].Click += new EventHandler(ButtonClick);
+				this.Controls.Add(Hotkeys[row, col]);
+			}
+		}
+	}
+}
