@@ -1,0 +1,18 @@
+﻿[Test]
+public void Test()
+{
+	if (_check == null)
+	{
+	    throw new ArgumentOutOfRangeException();
+	}
+	
+	_phone.Dispose();
+	_phone = null!;
+
+	_Service2 = null!;
+
+	_check.Dispose();
+	_check = null!;
+	
+	_service.Delete(null);
+}
