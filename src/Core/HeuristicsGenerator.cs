@@ -854,8 +854,13 @@ internal class HeuristicsGenerator
         };
 
         // seems like a cast
-        if (currentIndex >= 1 && nodes[currentIndex - 1].Text == "(" && currentIndex + 4 < nodes.Count && validTypes.Contains(nodes[currentIndex + 4].ClassificationType))
+        if (currentIndex >= 1 && nodes[currentIndex - 1].Text == "(" &&
+            currentIndex + 4 < nodes.Count &&
+            nodes[currentIndex + 3].Text == ")" &&
+            validTypes.Contains(nodes[currentIndex + 4].ClassificationType))
+        {
             return false;
+        }
 
         // OLEMSGICON.OLEMSGICON_WARNING,
         return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||", "+", "-", "*", "/" }.Contains(next.Text);
