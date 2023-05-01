@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.40] - 01.05.2023
+**Description:**
+Improved heuristics e.g identifiers like "OnEvent" are detected as a method and other messy class/property colouring was improved.
+
 ## [1.0.39] - 18.03.2023
 **Description:**
 Improved heuristics e.g object initializer syntax and consistency betweeen PropertyName/LocalName. 
