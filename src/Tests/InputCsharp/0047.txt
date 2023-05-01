@@ -1,0 +1,13 @@
+﻿namespace Test;
+
+public partial class Form1 : Form
+{
+	public Random rnd = new Random();
+	public Graphics g;
+
+	private void button1_Click(object sender, EventArgs e)
+	{
+	    g = g.CreateGraphics();
+	    g.DrawEllipse(Pens.Blue, rnd.Next(1), rnd.Next(5));
+	}
+}

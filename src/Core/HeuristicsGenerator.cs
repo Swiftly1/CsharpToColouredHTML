@@ -302,7 +302,7 @@ internal class HeuristicsGenerator
                     {
                         // If Roslyn does not see it as a local variable because e.g declaration is not in the source code
                         // Then we have to decide whether this is local variable or property or field, etc.
-                        // Then I think we should default to Property, but if it is top-level-statements like syntax,
+                        // I think we should default to Property, but if it is top-level-statements like syntax,
                         // then I'd use LocalName because the result is better to read.
                         // Basically if we do not see declaration and it starts with lower case and is outside method body,
                         // then it should be Property due to popularity.
@@ -354,6 +354,16 @@ internal class HeuristicsGenerator
             if (node.Text == "{")
             {
                 _BracketsCounter++;
+
+                // void Test() {
+                if (currentIndex > 2 && nodes[currentIndex - 1].Text == ")")
+                {
+                    for (int i = currentIndex - 1; i >= 0; i--)
+                    {
+                        if (i > 0 && nodes[i].Text == "(" && nodes[i - 1].ClassificationType == ClassificationTypeNames.MethodName)
+                            _IsWithinMethod = true;
+                    }
+                }
             }
 
             if (node.Text == "}")
@@ -529,6 +539,14 @@ internal class HeuristicsGenerator
             };
 
             return validTypes.Contains(nodes[currentIndex + 2].ClassificationType);
+        }
+        // db.NotifyHandler = OnNotify;
+        else if (currentIndex > 0 && 
+            currentIndex + 1 < nodes.Count &&
+            nodes[currentIndex - 1].Text == "=" && nodes[currentIndex + 1].Text == ";" &&
+            nodes[currentIndex].Text.StartsWith("On"))
+        {
+            return true;
         }
         else
         {
@@ -826,6 +844,14 @@ internal class HeuristicsGenerator
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.ParameterName)
             return false;
 
+        if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.Identifier)
+        {
+            if (char.IsLower(nodes[currentIndex - 2].Text[0]))
+            {
+                return false;
+            }
+        }
+
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].Text == ">")
             return false;
 
@@ -844,8 +870,13 @@ internal class HeuristicsGenerator
         };
 
         // seems like a cast
-        if (currentIndex >= 1 && nodes[currentIndex - 1].Text == "(" && currentIndex + 4 < nodes.Count && validTypes.Contains(nodes[currentIndex + 4].ClassificationType))
+        if (currentIndex >= 1 && nodes[currentIndex - 1].Text == "(" &&
+            currentIndex + 4 < nodes.Count &&
+            nodes[currentIndex + 3].Text == ")" &&
+            validTypes.Contains(nodes[currentIndex + 4].ClassificationType))
+        {
             return false;
+        }
 
         // OLEMSGICON.OLEMSGICON_WARNING,
         return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||", "+", "-", "*", "/" }.Contains(next.Text);
@@ -1247,7 +1278,13 @@ internal class HeuristicsGenerator
 
     private bool IdentifierFirstCharCaseSeemsLikeVariable(string s)
     {
-        return s.Length > 0 && char.IsLower(s[0]);
+        if (s.Length > 0 && char.IsLower(s[0]))
+            return true;
+
+        if (s.Length > 0 && s[0] == '_')
+            return true;
+
+        return false;
     }
 
     private void AddClass(string s) => _FoundClasses.Add(s);

@@ -1,0 +1,15 @@
+
+<pre class="background">
+<span class="keyword">namespace</span> Test;
+
+<span class="keyword">public partial class</span> <span class="class">Form1</span> : <span class="class">Form</span>
+{
+    <span class="keyword">public</span> <span class="class">Random</span> rnd = <span class="keyword">new</span> <span class="class">Random</span>();
+    <span class="keyword">public</span> <span class="class">Graphics</span> g;
+
+    <span class="keyword">private void</span> <span class="method">button1_Click</span>(<span class="keyword">object</span> <span class="parameter">sender</span>, <span class="class">EventArgs</span> <span class="parameter">e</span>)
+    {
+        g = g.<span class="method">CreateGraphics</span>();
+        g.<span class="method">DrawEllipse</span>(<span class="class">Pens</span>.Blue, rnd.<span class="method">Next</span>(<span class="numericLiteral">1</span>), rnd.<span class="method">Next</span>(<span class="numericLiteral">5</span>));
+    }
+}</pre>

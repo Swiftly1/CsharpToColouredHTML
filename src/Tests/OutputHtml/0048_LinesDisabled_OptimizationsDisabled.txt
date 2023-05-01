@@ -1,0 +1,23 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">bool</span> <span class="method">Initialize</span><span class="punctuation">(</span><span class="interface">IntPtr</span> <span class="parameter">Handle</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="identifier">db</span> <span class="operator">=</span> <span class="class">DbContext</span><span class="operator">.</span><span class="method">GetDb</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="propertyName">db</span><span class="operator">.</span><span class="identifier">NotifyHandler</span> <span class="operator">=</span> <span class="method">OnNotify</span><span class="punctuation">;</span>
+
+    <span class="keyword">bool</span> <span class="localName">result</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="parameter">Handle</span> <span class="operator">==</span> <span class="struct">IntPtr</span><span class="operator">.</span><span class="identifier">Zero</span><span class="punctuation">)</span> <span class="operator">?</span>
+        <span class="propertyName">db</span><span class="operator">.</span><span class="method">Connect</span><span class="punctuation">(</span><span class="parameter">Handle</span><span class="punctuation">,</span> <span class="class">Settings</span><span class="operator">.</span><span class="identifier">Fancy</span><span class="punctuation">,</span> <span class="string">&quot;Test&quot;</span><span class="punctuation">)</span> <span class="operator">:</span>
+        <span class="propertyName">db</span><span class="operator">.</span><span class="method">Connect</span><span class="punctuation">(</span><span class="class">Settings</span><span class="operator">.</span><span class="identifier">Default</span><span class="punctuation">,</span> <span class="string">&quot;Test&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+    <span class="control">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="localName">result</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="class">MessageBox</span><span class="operator">.</span><span class="method">Show</span><span class="punctuation">(</span><span class="class">Const</span><span class="operator">.</span><span class="identifier">DB_ERROR</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="control">throw</span> <span class="keyword">new</span> <span class="class">NotImplementedException</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+
+    <span class="keyword">var</span> <span class="localName">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">DbsService</span><span class="punctuation">(</span><span class="identifier">db</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+    <span class="control">if</span> <span class="punctuation">(</span><span class="parameter">Handle</span> <span class="operator">!=</span> <span class="struct">IntPtr</span><span class="operator">.</span><span class="identifier">Zero</span><span class="punctuation">)</span> <span class="propertyName">db</span><span class="operator">.</span><span class="method">MoveNext</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+    <span class="control">return</span> <span class="keyword">true</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></pre>
