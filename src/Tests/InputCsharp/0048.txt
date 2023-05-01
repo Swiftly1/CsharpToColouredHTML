@@ -1,0 +1,21 @@
+﻿public bool Initialize(IntPtr Handle)
+{
+    db = DbContext.GetDb();
+    db.NotifyHandler = OnNotify;
+
+    bool result = (Handle == IntPtr.Zero) ?
+        db.Connect(Handle, Settings.Fancy, "Test") :
+        db.Connect(Settings.Default, "Test");
+
+    if (!result)
+    {
+        MessageBox.Show(Const.DB_ERROR);
+        throw new NotImplementedException();
+    }
+
+    var test = new DbsService(db);
+
+    if (Handle != IntPtr.Zero) db.MoveNext();
+
+    return true;
+}

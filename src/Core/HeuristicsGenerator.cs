@@ -540,6 +540,14 @@ internal class HeuristicsGenerator
 
             return validTypes.Contains(nodes[currentIndex + 2].ClassificationType);
         }
+        // db.NotifyHandler = OnNotify;
+        else if (currentIndex > 0 && 
+            currentIndex + 1 < nodes.Count &&
+            nodes[currentIndex - 1].Text == "=" && nodes[currentIndex + 1].Text == ";" &&
+            nodes[currentIndex].Text.StartsWith("On"))
+        {
+            return true;
+        }
         else
         {
             return false;
@@ -835,6 +843,14 @@ internal class HeuristicsGenerator
 
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.ParameterName)
             return false;
+
+        if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.Identifier)
+        {
+            if (char.IsLower(nodes[currentIndex - 2].Text[0]))
+            {
+                return false;
+            }
+        }
 
         if (currentIndex > 1 && nodes[currentIndex - 1].Text == "." && nodes[currentIndex - 2].Text == ">")
             return false;
