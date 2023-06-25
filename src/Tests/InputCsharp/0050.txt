@@ -1,0 +1,7 @@
+﻿public void Test()
+{
+    if (ScoreProvider != null)
+    {
+        ScoreProvider.Ratio = 13;
+    }
+}

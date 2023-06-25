@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">public static void</span> <span class="method">Print</span>(</td></tr><tr><td class="line_no" line_no="1"></td><td class="code_column">    <span class="interface">IMessage</span> <span class="parameter">msg</span>,</td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column">    <span class="class">Param</span>[] <span class="parameter">Params</span>,</td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column">    <span class="class">Callback</span> <span class="parameter">func</span>)</td></tr><tr><td class="line_no" line_no="4"></td><td></tr><tr><td class="line_no" line_no="5"></td><td class="code_column"><span class="keyword">public static</span> <span class="method">Print2</span>(<span class="interface">IMessage</span> <span class="parameter">msg</span>, <span class="class">Param</span>[] <span class="parameter">Params</span>,<span class="class">Callback</span> <span class="parameter">func</span>)</td></tr></tbody>
+</table></pre>

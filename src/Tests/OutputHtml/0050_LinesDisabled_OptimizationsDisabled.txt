@@ -1,0 +1,9 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Test</span><span class="punctuation">(</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="control">if</span> <span class="punctuation">(</span><span class="identifier">ScoreProvider</span> <span class="operator">!=</span> <span class="keyword">null</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="propertyName">ScoreProvider</span><span class="operator">.</span><span class="identifier">Ratio</span> <span class="operator">=</span> <span class="numericLiteral">13</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>
