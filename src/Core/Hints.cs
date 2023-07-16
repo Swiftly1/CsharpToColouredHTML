@@ -67,7 +67,8 @@ public class Hints
         "Char",
         "Vector3",
         "ConsoleKeyInfo",
-        "IntPtr"
+        "IntPtr",
+        "Color"
     };
 
     public List<string> ReallyPopularStructsSubstrings { get; } = new List<string>
