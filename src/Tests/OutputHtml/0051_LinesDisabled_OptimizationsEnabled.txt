@@ -1,0 +1,3 @@
+
+<pre class="background">
+<span class="keyword">var</span> <span class="localName">test</span> = <span class="keyword">typeof</span>(<span class="class">Test</span>).Assembly;</pre>

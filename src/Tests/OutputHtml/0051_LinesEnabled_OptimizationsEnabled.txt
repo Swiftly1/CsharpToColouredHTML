@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">var</span> <span class="localName">test</span> = <span class="keyword">typeof</span>(<span class="class">Test</span>).Assembly;</td></tr></tbody>
+</table></pre>

@@ -63,6 +63,7 @@ internal class HeuristicsGenerator
 
     public List<NodeAfterProcessing> Build(List<Node> input)
     {
+        Reset();
         ProcessData(input);
         PostProcess(_Output);
         AssignLineNumbers(_Output);
@@ -80,6 +81,21 @@ internal class HeuristicsGenerator
         )).ToList();
     }
 
+    public void Reset()
+    {
+        _FoundClasses.Clear();
+        _FoundInterfaces.Clear();
+        _FoundStructs.Clear();
+        _FoundPropertiesOrFields.Clear();
+        _Output.Clear();
+        _IsUsing = false;
+        _IsNew = false;
+        _IsTypeOf = false;
+        _IsWithinMethod = false;
+        _ParenthesisCounter = 0;
+        _BracketsCounter = 0;
+    }
+
     private void AssignLineNumbers(List<NodeWithDetails> output)
     {
         var currentLineNumber = 0;
@@ -94,19 +110,6 @@ internal class HeuristicsGenerator
 
             node.LineNumber = currentLineNumber;
         }
-    }
-
-    public void Reset()
-    {
-        _FoundClasses.Clear();
-        _FoundInterfaces.Clear();
-        _FoundStructs.Clear();
-        _FoundPropertiesOrFields.Clear();
-        _Output.Clear();
-        _IsUsing = false;
-        _IsNew = false;
-        _IsTypeOf = false;
-        _ParenthesisCounter = 0;
     }
 
     private void ProcessData(List<Node> nodes)
@@ -689,6 +692,16 @@ internal class HeuristicsGenerator
         else if (nodes.Count > currentIndex + 2 &&
             new[] { ClassificationTypeNames.LocalName }.Contains(nodes[currentIndex + 1].ClassificationType) && 
             new[] { ";", "=" }.Contains(nodes[currentIndex + 2].Text))
+        {
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
+        }
+        // typeof(Test)
+        else if (canGoAhead && 
+            currentIndex > 1 && 
+            nodes[currentIndex + 1].Text == ")" &&
+            nodes[currentIndex - 1].Text == "(" && 
+            nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.Keyword &&
+            nodes[currentIndex - 2].Text == "typeof")
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
