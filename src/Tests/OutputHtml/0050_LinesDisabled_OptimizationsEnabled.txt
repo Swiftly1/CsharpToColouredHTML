@@ -1,0 +1,9 @@
+
+<pre class="background">
+<span class="keyword">public void</span> <span class="method">Test</span>()
+{
+    <span class="control">if</span> (ScoreProvider != <span class="keyword">null</span>)
+    {
+        ScoreProvider.Ratio = <span class="numericLiteral">13</span>;
+    }
+}</pre>

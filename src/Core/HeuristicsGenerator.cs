@@ -18,9 +18,10 @@ internal class HeuristicsGenerator
 
     private List<NodeWithDetails> _Output = new();
 
-    private List<string> _FoundClasses = new();
-    private List<string> _FoundStructs = new();
-    private List<string> _FoundInterfaces = new();
+    private HashSet<string> _FoundClasses = new();
+    private HashSet<string> _FoundStructs = new();
+    private HashSet<string> _FoundInterfaces = new();
+    private HashSet<string> _FoundPropertiesOrFields = new();
 
     private Dictionary<string, string> _SimpleClassificationToColourMapper { get; } = new()
     {
@@ -62,6 +63,7 @@ internal class HeuristicsGenerator
 
     public List<NodeAfterProcessing> Build(List<Node> input)
     {
+        Reset();
         ProcessData(input);
         PostProcess(_Output);
         AssignLineNumbers(_Output);
@@ -79,6 +81,21 @@ internal class HeuristicsGenerator
         )).ToList();
     }
 
+    public void Reset()
+    {
+        _FoundClasses.Clear();
+        _FoundInterfaces.Clear();
+        _FoundStructs.Clear();
+        _FoundPropertiesOrFields.Clear();
+        _Output.Clear();
+        _IsUsing = false;
+        _IsNew = false;
+        _IsTypeOf = false;
+        _IsWithinMethod = false;
+        _ParenthesisCounter = 0;
+        _BracketsCounter = 0;
+    }
+
     private void AssignLineNumbers(List<NodeWithDetails> output)
     {
         var currentLineNumber = 0;
@@ -93,18 +110,6 @@ internal class HeuristicsGenerator
 
             node.LineNumber = currentLineNumber;
         }
-    }
-
-    public void Reset()
-    {
-        _FoundClasses.Clear();
-        _FoundInterfaces.Clear();
-        _FoundStructs.Clear();
-        _Output.Clear();
-        _IsUsing = false;
-        _IsNew = false;
-        _IsTypeOf = false;
-        _ParenthesisCounter = 0;
     }
 
     private void ProcessData(List<Node> nodes)
@@ -245,22 +250,27 @@ internal class HeuristicsGenerator
         }
         else if (node.ClassificationType == ClassificationTypeNames.Identifier)
         {
-            if (IsInterface(currentIndex, nodes))
+            var isInterfaceResult = IsInterface(currentIndex, nodes);
+            if (isInterfaceResult.Detected)
             {
                 _FoundInterfaces.Add(node.Text);
-                return new ExtractedColourResult(NodeColors.Interface);
+                return new ExtractedColourResult(NodeColors.Interface, isInterfaceResult.SkipPostProcessing);
             }
-            else if (IsMethod(currentIndex, nodes))
+
+            var isMethodResult = IsMethod(currentIndex, nodes);
+            if (isMethodResult.Detected)
             {
                 TryUpdatePreviousIdentifierToClassIfThatWasNamespace(currentIndex, nodes);
-                return new ExtractedColourResult(NodeColors.Method);
+                return new ExtractedColourResult(NodeColors.Method, isMethodResult.SkipPostProcessing);
             }
-            else if (IsClassOrStruct(currentIndex, nodes))
+
+            var isClassOrStructResult = IsClassOrStruct(currentIndex, nodes);
+            if (isClassOrStructResult.Detected)
             {
                 if (IsPopularStruct(node.Text))
                 {
                     _FoundStructs.Add(node.Text);
-                    return new ExtractedColourResult(NodeColors.Struct);
+                    return new ExtractedColourResult(NodeColors.Struct, isClassOrStructResult.SkipPostProcessing);
                 }
                 else if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
                 {
@@ -285,11 +295,21 @@ internal class HeuristicsGenerator
                 }
                 else
                 {
-                    AddClass(node.Text);
-                    return new ExtractedColourResult(NodeColors.Class);
+                    if (_FoundPropertiesOrFields.Contains(node.Text))
+                    {
+                        return new ExtractedColourResult(NodeColors.PropertyName);
+                    }
+                    else
+                    {
+                        AddClass(node.Text);
+                        return new ExtractedColourResult(NodeColors.Class, isClassOrStructResult.SkipPostProcessing);
+                    }
                 }
             }
-            else if (IsPropertyOrField(currentIndex, nodes))
+
+
+            var isPropertyOrFieldResult = IsPropertyOrField(currentIndex, nodes);
+            if (isPropertyOrFieldResult.Detected)
             {
                 if (IdentifierFirstCharCaseSeemsLikeVariable(node.Text))
                 {
@@ -310,7 +330,7 @@ internal class HeuristicsGenerator
                         if (node.ClassificationType == ClassificationTypeNames.Identifier && _IsWithinMethod)
                             return new ExtractedColourResult(NodeColors.PropertyName, true);
 
-                        return new ExtractedColourResult(NodeColors.LocalName);
+                        return new ExtractedColourResult(NodeColors.LocalName, isPropertyOrFieldResult.SkipPostProcessing);
                     }
                 }
                 else
@@ -332,6 +352,9 @@ internal class HeuristicsGenerator
                     }
                 }
 
+                if (_FoundPropertiesOrFields.Contains(node.Text))
+                    return new ExtractedColourResult(NodeColors.PropertyName);
+
                 return new ExtractedColourResult(NodeColors.Identifier);
             }
         }
@@ -350,7 +373,6 @@ internal class HeuristicsGenerator
         }
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
         {
-
             if (node.Text == "{")
             {
                 _BracketsCounter++;
@@ -413,8 +435,9 @@ internal class HeuristicsGenerator
         return new ExtractedColourResult(NodeColors.InternalError);
     }
 
-    private bool IsPropertyOrField(int currentIndex, List<Node> nodes)
+    private DetectionStatus IsPropertyOrField(int currentIndex, List<Node> nodes)
     {
+        var node = nodes[currentIndex];
         var canGoAhead = nodes.Count > currentIndex + 1;
         var canGoBehind = currentIndex > 0;
         var classifiers = new[]
@@ -425,30 +448,39 @@ internal class HeuristicsGenerator
 
         if (ThereIsThisInTheChainBefore(currentIndex, nodes))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (SeemsLikePropertyUsage(currentIndex, nodes))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (!_IsNew && ThereIsMethodCallAhead(currentIndex, nodes) &&
             IdentifierFirstCharCaseSeemsLikeVariable(nodes[currentIndex].Text))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (currentIndex >= 2 && nodes[currentIndex - 1].Text == "." && classifiers.Contains(nodes[currentIndex - 2].ClassificationType))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
+        }
+        else if (canGoAhead && currentIndex >= 2
+            && nodes[currentIndex + 1].ClassificationType == ClassificationTypeNames.Operator
+            && nodes[currentIndex + 1].Text != "."
+            && nodes[currentIndex - 1].Text == "("
+            && nodes[currentIndex - 2].Text == "if")
+        {
+            AddVariable(node.Text);
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (IsOnInitializationList(currentIndex, nodes))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
 
-        return false;
+        return DetectionStatus.NotDetected();
     }
 
-    private bool IsInterface(int currentIndex, List<Node> nodes)
+    private DetectionStatus IsInterface(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
         var canGoAhead = nodes.Count > currentIndex + 1;
@@ -459,15 +491,15 @@ internal class HeuristicsGenerator
 
         if (startsWithI && canGoBehind && new[] { ":", "<" }.Contains(nodes[currentIndex - 1].Text))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (startsWithI && canGoBehind && LanguageKeywords.AccessibilityModifiers.Contains(nodes[currentIndex - 1].Text))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (startsWithI && canGoAhead && new[] { ClassificationTypeNames.ParameterName, ClassificationTypeNames.FieldName }.Contains(nodes[currentIndex + 1].ClassificationType))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (startsWithI && canGoTwoAhead && nodes[currentIndex + 1].Text == ")" && nodes[currentIndex + 2].Text != "{")
         {
@@ -477,18 +509,18 @@ internal class HeuristicsGenerator
                 var suspected = _Output.First(x => x.Id == suspectedId);
 
                 if (nodes[currentIndex - 1].Text == "." && new[] { NodeColors.LocalName, NodeColors.ParameterName }.Contains(suspected.Colour))
-                    return false;
+                    return DetectionStatus.NotDetected();
             }
 
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else
         {
-            return false;
+            return DetectionStatus.NotDetected();
         }
     }
 
-    private bool IsMethod(int currentIndex, List<Node> nodes)
+    private DetectionStatus IsMethod(int currentIndex, List<Node> nodes)
     {
         var canGoAhead = nodes.Count > currentIndex + 1;
         var canGoBehind = currentIndex > 0;
@@ -503,7 +535,7 @@ internal class HeuristicsGenerator
                 identifier == ClassificationTypeNames.LocalName;
 
             if (!hasIdentifierBefore)
-                return false;
+                return DetectionStatus.NotDetected();
         }
 
         if (!_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
@@ -521,11 +553,11 @@ internal class HeuristicsGenerator
             if (currentIndex > 1 && availableKeywords.Contains(nodes[currentIndex - 2].Text))
                 _IsWithinMethod = true;
 
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (_IsUsing && !_IsUsing && canGoAhead && nodes[currentIndex + 1].Text == "(")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         // simple generics
         else if (!_IsNew && currentIndex + 4 < nodes.Count && nodes[currentIndex + 1].Text == "<"
@@ -538,7 +570,9 @@ internal class HeuristicsGenerator
                 ClassificationTypeNames.Identifier
             };
 
-            return validTypes.Contains(nodes[currentIndex + 2].ClassificationType);
+            return validTypes.Contains(nodes[currentIndex + 2].ClassificationType) ?
+                DetectionStatus.DetectedAndDontSkipPostProcessing() :
+                DetectionStatus.NotDetected();
         }
         // db.NotifyHandler = OnNotify;
         else if (currentIndex > 0 && 
@@ -546,15 +580,15 @@ internal class HeuristicsGenerator
             nodes[currentIndex - 1].Text == "=" && nodes[currentIndex + 1].Text == ";" &&
             nodes[currentIndex].Text.StartsWith("On"))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else
         {
-            return false;
+            return DetectionStatus.NotDetected();
         }
     }
 
-    private bool IsClassOrStruct(int currentIndex, List<Node> nodes)
+    private DetectionStatus IsClassOrStruct(int currentIndex, List<Node> nodes)
     {
         var canGoAhead = nodes.Count > currentIndex + 1;
         var canGoBehind = currentIndex > 0;
@@ -564,104 +598,114 @@ internal class HeuristicsGenerator
 
         if (ThereIsThisInTheChainBefore(currentIndex, nodes))
         {
-            return false;
+            return DetectionStatus.NotDetected();
         }
         else if (canGoBehind && nodes[currentIndex - 1].Text == ":")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "(")
         {
             _IsNew = false;
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (canGoAhead && nodes[currentIndex + 1].Text == "{")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (_IsNew && canGoAhead &&
             nodes[currentIndex + 1].ClassificationType == ClassificationTypeNames.Punctuation &&
             nodes[currentIndex + 1].Text == "(")
         {
             _IsNew = false;
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (SeemsLikePropertyUsage(currentIndex, nodes))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         // be careful, if you remove those parenthesis around that assignment, then it'll change its behaviour
         else if ((isPopularClassOrStruct = IsPopularClass(node.Text) || IsPopularStruct(node.Text)) && !canGoBehind)
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (isPopularClassOrStruct && canGoBehind && nodes[currentIndex - 1].Text != ".")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (canGoBehind && nodes[currentIndex - 1].Text == "<")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (canGoBehind && nodes[currentIndex - 1].Text == "[")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         // new DictionaryList<int, int>();
         else if (_IsNew && canGoAhead && nodes[currentIndex + 1].Text == "<")
         {
             _IsNew = false;
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         // public void Test(Array<int> a)
         else if (canGoAhead && nodes[currentIndex + 1].Text == "<")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (SeemsLikeParameter(currentIndex, nodes))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (RightSideOfAssignmentHasTheSameNameAfterNew(currentIndex, nodes))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (currentIndex >= 2 && nodes.Count >= 3 && nodes[currentIndex -1].ClassificationType == ClassificationTypeNames.Punctuation &&
             nodes[currentIndex - 1].Text == "(" && nodes[currentIndex - 2].Text == "foreach")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (IsParameterWithAttribute(currentIndex, nodes))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         // cast
         else if (SeemsLikeCast(currentIndex, nodes))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (canGoBehind && canGoAhead &&
             LanguageKeywords.AccessibilityModifiers.Contains(nodes[currentIndex - 1].Text) &&
             new[] { ClassificationTypeNames.FieldName, ClassificationTypeNames.ConstantName, ClassificationTypeNames.PropertyName }
             .Contains(nodes[currentIndex + 1].ClassificationType))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (canGoBehind && canGoAhead &&
             LanguageKeywords.AccessibilityModifiers.Contains(nodes[currentIndex - 1].Text) &&
             nodes[currentIndex + 1].Text == "[")
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         // WebResponse re;
         else if (nodes.Count > currentIndex + 2 &&
             new[] { ClassificationTypeNames.LocalName }.Contains(nodes[currentIndex + 1].ClassificationType) && 
             new[] { ";", "=" }.Contains(nodes[currentIndex + 2].Text))
         {
-            return true;
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
+        }
+        // typeof(Test)
+        else if (canGoAhead && 
+            currentIndex > 1 && 
+            nodes[currentIndex + 1].Text == ")" &&
+            nodes[currentIndex - 1].Text == "(" && 
+            nodes[currentIndex - 2].ClassificationType == ClassificationTypeNames.Keyword &&
+            nodes[currentIndex - 2].Text == "typeof")
+        {
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
 
-        return false;
+        return DetectionStatus.NotDetected();
     }
 
     private bool SeemsLikeParameter(int currentIndex, List<Node> nodes)
@@ -677,13 +721,19 @@ internal class HeuristicsGenerator
         if (!new[] { ",", "(" }.Contains(nodes[currentIndex - 1].Text))
             return false;
 
-        if (nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.ParameterName)
+        if (nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.ParameterName && 
+            nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.Punctuation)
             return false;
 
         if (currentIndex + 2 >= nodes.Count)
             return false;
 
         if (new[] { ",", ")" }.Contains(nodes[currentIndex + 2].Text))
+            return true;
+
+        if (nodes[currentIndex + 1].Text == "[" &&
+            nodes[currentIndex + 2].Text == "]" &&
+            new[] { ",", ")" }.Contains(nodes[currentIndex + 4].Text))
             return true;
 
         return false;
@@ -828,7 +878,7 @@ internal class HeuristicsGenerator
 
         var next = nodes[currentIndex + 1];
 
-        if (next.ClassificationType != ClassificationTypeNames.Operator)
+        if (next.ClassificationType != ClassificationTypeNames.Operator || next.Text == "=")
             return false;
 
         next = nodes[currentIndex + 2];
@@ -1288,6 +1338,7 @@ internal class HeuristicsGenerator
     }
 
     private void AddClass(string s) => _FoundClasses.Add(s);
+    private void AddVariable(string s) => _FoundPropertiesOrFields.Add(s);
 
     private bool ThereIsClassInTheChainBefore(NodeWithDetails entry, List<NodeWithDetails> nodes)
     {

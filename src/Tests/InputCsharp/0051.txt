@@ -1,0 +1,2 @@
+﻿var test = new Test(typeof(OtherT).Value);
+Test.Data("IsRequiredAge").Value = True;

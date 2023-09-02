@@ -1,0 +1,4 @@
+
+<pre class="background">
+<span class="keyword">var</span> <span class="localName">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Test</span><span class="punctuation">(</span><span class="keyword">typeof</span><span class="punctuation">(</span><span class="class">OtherT</span><span class="punctuation">)</span><span class="operator">.</span><span class="identifier">Value</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="class">Test</span><span class="operator">.</span><span class="method">Data</span><span class="punctuation">(</span><span class="string">&quot;IsRequiredAge&quot;</span><span class="punctuation">)</span><span class="operator">.</span><span class="identifier">Value</span> <span class="operator">=</span> <span class="identifier">True</span><span class="punctuation">;</span></pre>

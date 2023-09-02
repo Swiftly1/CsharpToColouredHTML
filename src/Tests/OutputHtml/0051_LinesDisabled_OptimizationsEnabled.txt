@@ -1,0 +1,4 @@
+
+<pre class="background">
+<span class="keyword">var</span> <span class="localName">test</span> = <span class="keyword">new</span> <span class="class">Test</span>(<span class="keyword">typeof</span>(<span class="class">OtherT</span>).Value);
+<span class="class">Test</span>.<span class="method">Data</span>(<span class="string">&quot;IsRequiredAge&quot;</span>).Value = True;</pre>
