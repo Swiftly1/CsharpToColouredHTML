@@ -1,1 +1,2 @@
-﻿var test = typeof(Test).Assembly;
+﻿var test = new Test(typeof(OtherT).Value);
+Test.Data("IsRequiredAge").Value = True;

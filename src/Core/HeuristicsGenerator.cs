@@ -373,7 +373,6 @@ internal class HeuristicsGenerator
         }
         else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
         {
-
             if (node.Text == "{")
             {
                 _BracketsCounter++;
@@ -879,7 +878,7 @@ internal class HeuristicsGenerator
 
         var next = nodes[currentIndex + 1];
 
-        if (next.ClassificationType != ClassificationTypeNames.Operator)
+        if (next.ClassificationType != ClassificationTypeNames.Operator || next.Text == "=")
             return false;
 
         next = nodes[currentIndex + 2];
