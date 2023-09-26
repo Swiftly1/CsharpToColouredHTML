@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="keyword">public bool</span> <span class="method">Initialize</span>(<span class="interface">IntPtr</span> <span class="parameter">Handle</span>)
+<span class="keyword">public bool</span> <span class="method">Initialize</span>(<span class="struct">IntPtr</span> <span class="parameter">Handle</span>, <span class="class">Incident</span> <span class="parameter">inc</span>)
 {
     db = <span class="class">DbContext</span>.<span class="method">GetDb</span>();
     db.NotifyHandler = <span class="method">OnNotify</span>;

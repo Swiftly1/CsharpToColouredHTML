@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="keyword">public</span> <span class="keyword">bool</span> <span class="method">Initialize</span><span class="punctuation">(</span><span class="interface">IntPtr</span> <span class="parameter">Handle</span><span class="punctuation">)</span>
+<span class="keyword">public</span> <span class="keyword">bool</span> <span class="method">Initialize</span><span class="punctuation">(</span><span class="struct">IntPtr</span> <span class="parameter">Handle</span><span class="punctuation">,</span> <span class="class">Incident</span> <span class="parameter">inc</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
     <span class="identifier">db</span> <span class="operator">=</span> <span class="class">DbContext</span><span class="operator">.</span><span class="method">GetDb</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
     <span class="propertyName">db</span><span class="operator">.</span><span class="identifier">NotifyHandler</span> <span class="operator">=</span> <span class="method">OnNotify</span><span class="punctuation">;</span>

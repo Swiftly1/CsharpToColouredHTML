@@ -487,7 +487,7 @@ internal class HeuristicsGenerator
         var canGoTwoAhead = nodes.Count > currentIndex + 2;
         var canGoBehind = currentIndex > 0;
 
-        var startsWithI = node.Text.StartsWith("I");
+        var startsWithI = node.Text.StartsWith("I") && node.Text.Length > 1 && char.IsUpper(node.Text[1]);
 
         if (startsWithI && canGoBehind && new[] { ":", "<" }.Contains(nodes[currentIndex - 1].Text))
         {
