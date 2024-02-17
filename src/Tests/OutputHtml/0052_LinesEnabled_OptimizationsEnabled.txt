@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">string</span> <span class="localName">longMessage</span> <span class="operator">=</span> &quot;&quot;&quot;</td></tr><tr><td class="line_no" line_no="1"></td><td class="code_column">    This is a long message.</td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column">    It has several lines.</td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column">        Some are indented</td></tr><tr><td class="line_no" line_no="4"></td><td class="code_column">                more than others.</td></tr><tr><td class="line_no" line_no="5"></td><td class="code_column">    Some should start at the first column.</td></tr><tr><td class="line_no" line_no="6"></td><td class="code_column">    Some have &quot;quoted text&quot; in them.</td></tr><tr><td class="line_no" line_no="7"></td><td class="code_column">    &quot;&quot;&quot;<span class="punctuation">;</span></td></tr></tbody>
+</table></pre>

@@ -2,5 +2,5 @@
 <pre class="background">
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Form1_Load</span><span class="punctuation">(</span><span class="keyword">object</span> <span class="parameter">sender</span><span class="punctuation">,</span> <span class="class">EventArgs</span> <span class="parameter">e</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
-    <span class="identifier">Test</span><span class="operator">.</span><span class="identifier">Tick</span> <span class="operator">+=</span> <span class="keyword">new</span> <span class="class">EventHandler</span><span class="punctuation">(</span><span class="identifier">Temp</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="class">Test</span><span class="operator">.</span><span class="identifier">Tick</span> <span class="operator">+=</span> <span class="keyword">new</span> <span class="class">EventHandler</span><span class="punctuation">(</span><span class="identifier">Temp</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="punctuation">}</span></pre>

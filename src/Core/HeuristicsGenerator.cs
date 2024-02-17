@@ -147,6 +147,9 @@ internal class HeuristicsGenerator
             if (entry.SkipIdentifierPostProcessing)
                 continue;
 
+            if (IdentifierShouldntBeOverriden(entry, alreadyProcessed))
+                continue;
+
             if (_FoundClasses.Contains(entry.Text))
                 entry.Colour = NodeColors.Class;
 
@@ -234,6 +237,23 @@ internal class HeuristicsGenerator
                 }
             }
         }
+    }
+
+    private bool IdentifierShouldntBeOverriden(NodeWithDetails entry, List<NodeWithDetails> nodes)
+    {
+        var index = nodes.IndexOf(entry);
+
+        if (index == -1)
+            return false;
+
+        var canGoAhead = nodes.CanGoAhead(index);
+
+        if (canGoAhead && 
+            nodes[index + 1].ClassificationType == ClassificationTypeNames.Operator &&
+            nodes[index + 1].Text.Contains("="))
+            return true;
+
+        return false;
     }
 
     private ExtractedColourResult ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
@@ -438,8 +458,10 @@ internal class HeuristicsGenerator
     private DetectionStatus IsPropertyOrField(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
-        var canGoAhead = nodes.Count > currentIndex + 1;
-        var canGoBehind = currentIndex > 0;
+
+        var canGoAhead = nodes.CanGoAhead(currentIndex);
+        var canGoBehind = nodes.CanGoBehind(currentIndex);
+
         var classifiers = new[]
         {
             ClassificationTypeNames.LocalName, ClassificationTypeNames.PropertyName, ClassificationTypeNames.FieldName,
@@ -483,9 +505,10 @@ internal class HeuristicsGenerator
     private DetectionStatus IsInterface(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
-        var canGoAhead = nodes.Count > currentIndex + 1;
-        var canGoTwoAhead = nodes.Count > currentIndex + 2;
-        var canGoBehind = currentIndex > 0;
+
+        var canGoAhead = nodes.CanGoAhead(currentIndex);
+        var canGoBehind = nodes.CanGoBehind(currentIndex);
+        var canGoTwoAhead = nodes.CanGoAhead(currentIndex, 2);
 
         var startsWithI = node.Text.StartsWith("I") && node.Text.Length > 1 && char.IsUpper(node.Text[1]);
 
@@ -522,8 +545,8 @@ internal class HeuristicsGenerator
 
     private DetectionStatus IsMethod(int currentIndex, List<Node> nodes)
     {
-        var canGoAhead = nodes.Count > currentIndex + 1;
-        var canGoBehind = currentIndex > 0;
+        var canGoAhead = nodes.CanGoAhead(currentIndex);
+        var canGoBehind = nodes.CanGoBehind(currentIndex);
 
         // [InlineData("0001.txt")]
         // var a = list[test()];
@@ -590,8 +613,8 @@ internal class HeuristicsGenerator
 
     private DetectionStatus IsClassOrStruct(int currentIndex, List<Node> nodes)
     {
-        var canGoAhead = nodes.Count > currentIndex + 1;
-        var canGoBehind = currentIndex > 0;
+        var canGoAhead = nodes.CanGoAhead(currentIndex);
+        var canGoBehind = nodes.CanGoBehind(currentIndex);
 
         var node = nodes[currentIndex];
         bool isPopularClassOrStruct = false;
@@ -710,8 +733,8 @@ internal class HeuristicsGenerator
 
     private bool SeemsLikeParameter(int currentIndex, List<Node> nodes)
     {
-        var canGoAhead = nodes.Count > currentIndex + 1;
-        var canGoBehind = currentIndex > 0;
+        var canGoAhead = nodes.CanGoAhead(currentIndex);
+        var canGoBehind = nodes.CanGoBehind(currentIndex);
 
         var node = nodes[currentIndex];
 
@@ -741,8 +764,8 @@ internal class HeuristicsGenerator
     
     private bool SeemsLikeCast(int currentIndex, List<Node> nodes)
     {
-        var canGoAhead = nodes.Count > currentIndex + 1;
-        var canGoBehind = currentIndex > 0;
+        var canGoAhead = nodes.CanGoAhead(currentIndex);
+        var canGoBehind = nodes.CanGoBehind(currentIndex);
 
         var node = nodes[currentIndex];
 
@@ -810,7 +833,11 @@ internal class HeuristicsGenerator
         if (IsOnInitializationList(currentIndex, nodes))
             return false;
 
-        var canGoAhead = nodes.Count > currentIndex + 1;
+        var canGoAhead = nodes.CanGoAhead(currentIndex);
+        var canGoBehind = nodes.CanGoBehind(currentIndex);
+
+        if (canGoBehind && nodes[currentIndex - 1].Text == ".")
+            return false;
 
         if (nodes.Count > currentIndex + 4 &&
                     nodes[currentIndex + 2].Text == "=" &&
@@ -929,7 +956,11 @@ internal class HeuristicsGenerator
         }
 
         // OLEMSGICON.OLEMSGICON_WARNING,
-        return new string[] { ")", "=", ";", "}", ",", "&", "&&", "|", "||", "+", "-", "*", "/" }.Contains(next.Text);
+        return new string[] { ")", "=", ";", "}", ",", "&", 
+                              "&&", "|", "||", "+", "-", "*", 
+                              "/", "-=", "+=", "*=", "/=", "%=", 
+                               "&=", "|=", "^=", ">>=", "<<="
+                            }.Contains(next.Text);
     }
 
     private bool IsPopularClass(string text)

@@ -5,10 +5,10 @@
 <span class="keyword">this</span>.asd.Font = <span class="keyword">new</span> <span class="class">Font</span>(<span class="string">&quot;Microsoft Sans Serif&quot;</span>, <span class="numericLiteral">16.25f</span>, <span class="class">FontStyle</span>.Bold, <span class="class">GraphicsUnit</span>.Point, (<span class="keyword">byte</span>) <span class="numericLiteral">0</span>);
 <span class="keyword">this</span>.dsa.Controls.<span class="method">Add</span>((<span class="class">Control</span>) <span class="keyword">this</span>.re);
 
-transform.position += <span class="struct">Vector3</span>.<span class="localName">left</span> * movementSpeed * <span class="class">Time</span>.deltaTime;
-transform.position += <span class="struct">Vector3</span>.<span class="localName">left</span> - movementSpeed * <span class="class">Time</span>.deltaTime;
-transform.position += <span class="struct">Vector3</span>.<span class="localName">left</span> + movementSpeed * <span class="class">Time</span>.deltaTime;
-transform.position += <span class="struct">Vector3</span>.<span class="localName">left</span> / movementSpeed * <span class="class">Time</span>.deltaTime;
+<span class="localName">transform</span>.position += <span class="struct">Vector3</span>.<span class="localName">left</span> * movementSpeed * <span class="class">Time</span>.deltaTime;
+<span class="localName">transform</span>.position += <span class="struct">Vector3</span>.<span class="localName">left</span> - movementSpeed * <span class="class">Time</span>.deltaTime;
+<span class="localName">transform</span>.position += <span class="struct">Vector3</span>.<span class="localName">left</span> + movementSpeed * <span class="class">Time</span>.deltaTime;
+<span class="localName">transform</span>.position += <span class="struct">Vector3</span>.<span class="localName">left</span> / movementSpeed * <span class="class">Time</span>.deltaTime;
 
 <span class="keyword">using</span> (<span class="class">SHA256</span> <span class="localName">sha256Hash</span> = <span class="class">SHA256</span>.<span class="method">Create</span>())
 {

@@ -1,10 +1,14 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.42] - 17.02.2024
+**Description:**
+Added support for raw strings (""") and fixed some incorrect cases like "something.Property = 5" where Property was marked as a class.
+Upgrade of Microsoft.CodeAnalysis.CSharp libs
+
 ## [1.0.41] - 02.09.2023
 **Description:**
 Improved heuristics e.g typeof(), array ([]) as function arg and things incorrectly marked as a classes.
-
 Upgrade of Microsoft.CodeAnalysis.CSharp libs
 
 ## [1.0.40] - 01.05.2023

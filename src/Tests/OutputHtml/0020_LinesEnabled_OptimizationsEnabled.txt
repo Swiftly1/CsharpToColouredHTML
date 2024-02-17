@@ -2,5 +2,5 @@
 <pre class="background">
 <table>
 <tbody>
-<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">public void</span> <span class="method">Form1_Load</span>(<span class="keyword">object</span> <span class="parameter">sender</span>, <span class="class">EventArgs</span> <span class="parameter">e</span>)</td></tr><tr><td class="line_no" line_no="1"></td><td class="code_column">{</td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column">    Test.Tick += <span class="keyword">new</span> <span class="class">EventHandler</span>(Temp);</td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column">}</td></tr></tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">public void</span> <span class="method">Form1_Load</span>(<span class="keyword">object</span> <span class="parameter">sender</span>, <span class="class">EventArgs</span> <span class="parameter">e</span>)</td></tr><tr><td class="line_no" line_no="1"></td><td class="code_column">{</td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column">    <span class="class">Test</span>.Tick += <span class="keyword">new</span> <span class="class">EventHandler</span>(Temp);</td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column">}</td></tr></tbody>
 </table></pre>
