@@ -1,4 +1,4 @@
-﻿public bool Initialize(IntPtr Handle)
+﻿public bool Initialize(IntPtr Handle, Incident inc)
 {
     db = DbContext.GetDb();
     db.NotifyHandler = OnNotify;
