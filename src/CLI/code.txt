@@ -1,18 +1,27 @@
-﻿if (A)
-{
-	Console.WriteLine(".");
-	if (B)
-	{
-		if (B2)
-			Console.WriteLine(".");
-		else
-			Result.WriteLine("..");
+﻿using System.IO;
 
-		if (C)
-		{
-			if (D)
-				if (E)
-					Result.WriteLine(".");
-		}
+this.asd.Font = new Font("Microsoft Sans Serif", 16.25f, FontStyle.Bold, GraphicsUnit.Point, (byte) 0);
+this.dsa.Controls.Add((Control) this.re);
+
+transform.position += Vector3.left * movementSpeed * Time.deltaTime;
+transform.position += Vector3.left - movementSpeed * Time.deltaTime;
+transform.position += Vector3.left + movementSpeed * Time.deltaTime;
+transform.position += Vector3.left / movementSpeed * Time.deltaTime;
+
+using (SHA256 sha256Hash = SHA256.Create())
+{
+	ConsoleKeyInfo key = Console.ReadKey();
+}
+
+public class Test
+{
+	private void ABC()
+	{
+		WebRequest r;
+		WebResponse re;
+		r = WebRequest.Create("");
+		re = r.GetResponse();
+
+		var test = new StreamReader(re.GetResponseStream());
 	}
 }

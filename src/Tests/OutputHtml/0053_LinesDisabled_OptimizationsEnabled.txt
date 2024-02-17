@@ -1,0 +1,6 @@
+
+<pre class="background">
+<span class="localName">label1</span>.Size = <span class="keyword">new</span> <span class="class">Size</span>(<span class="numericLiteral">65</span>, <span class="numericLiteral">14</span>);
+<span class="localName">checkBox2</span>.CheckedChanged += checkBox2_CheckedChanged;
+<span class="localName">checkBox2</span>.CheckedChanged -= checkBox2_CheckedChanged;
+<span class="localName">checkBox2</span>.Abc *= <span class="numericLiteral">5</span>;</pre>

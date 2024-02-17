@@ -1,0 +1,4 @@
+﻿label1.Size = new Size(65, 14);
+checkBox2.CheckedChanged += checkBox2_CheckedChanged;
+checkBox2.CheckedChanged -= checkBox2_CheckedChanged;
+checkBox2.Abc *= 5;
