@@ -1,19 +1,9 @@
 
 <pre class="background">
-<span class="keyword">string</span> <span class="localName">longMessage</span> <span class="operator">=</span> &quot;&quot;&quot;
-    This is a long message.
-    It has several lines.
-        Some are indented
-                more than others.
-    Some should start at the first column.
-    Some have &quot;quoted text&quot; in them.
-    &quot;&quot;&quot;<span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="localName">xml</span> <span class="operator">=</span> $&quot;&quot;&quot;
 
-<span class="keyword">string</span> <span class="localName">longMessage2</span> <span class="operator">=</span> $&quot;&quot;&quot;
-    This is a long message.
-    It has several lines.
-        Some are indented
-                more than others.
-    Some should start at the first column.
-    Some have &quot;quoted text&quot; in them.
-    &quot;&quot;&quot;<span class="punctuation">;</span></pre>
+        &lt;element attr=&quot;<span class="punctuation">{</span><span class="identifier">content</span><span class="punctuation">}</span>&quot;&gt;
+            &lt;body&gt;
+            &lt;/body&gt;
+        &lt;/element&gt;
+        &quot;&quot;&quot;<span class="punctuation">;</span></pre>

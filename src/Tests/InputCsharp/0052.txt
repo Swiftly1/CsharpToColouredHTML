@@ -15,3 +15,11 @@ string longMessage2 = $"""
     Some should start at the first column.
     Some have "quoted text" in them.
     """;
+
+var xml = $"""
+	
+	    <element attr="{content}">
+	        <body>
+	        </body>
+	    </element>
+	    """;
