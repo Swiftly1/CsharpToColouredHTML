@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.Host.Mef;
@@ -63,32 +64,24 @@ public class CsharpColourer
                 var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
 
                 var crazyStrings = new List<string> { ClassificationTypeNames.VerbatimStringLiteral, ClassificationTypeNames.ExcludedCode };
-                var isCrazyStringCandidate = crazyStrings.Contains(node.ClassificationType) ||
-                    (node.ClassificationType == ClassificationTypeNames.StringLiteral && node.Text.StartsWith("\"\"\""));
+                var isRawString = node.Text.StartsWith("\"\"\"") || node.Text.StartsWith("$\"\"\"");
 
-                if (isCrazyStringCandidate && node.Text.Contains(Environment.NewLine))
+                var isCrazyStringCandidate = 
+                    crazyStrings.Contains(node.ClassificationType) ||
+                    (node.ClassificationType == ClassificationTypeNames.StringLiteral && isRawString);
+
+                if (isCrazyStringCandidate)
                 {
-                    var splitted = node.Text.Split(Environment.NewLine);
+                    var result = HandleMultilineStrings(nodes, spans, srcText, i, node);
 
-                    for (int y = 0; y < splitted.Length; y++)
-                    {
-                        var split_node = new Node
-                        (
-                            node.ClassificationType,
-                            splitted[y],
-                            y == 0 ? node.Trivia : Environment.NewLine,
-                            y == 0 ? node.Trivia.Contains(Environment.NewLine) : true
-                        );
-
-                        nodes.Add(split_node);
-                    }
+                    i = result.NewIndex;
+                    previous = result.CurrentTextSpan;
                 }
                 else
                 {
                     nodes.Add(node);
+                    previous = current.TextSpan;
                 }
-
-                previous = current.TextSpan;
             }
             catch
             {
@@ -98,6 +91,59 @@ public class CsharpColourer
         }
 
         return nodes;
+    }
+
+    private (int NewIndex, TextSpan CurrentTextSpan) HandleMultilineStrings(List<Node> nodes, List<ClassifiedSpan> spans, SourceText srcText, int currentIndex, Node node)
+    {
+        var stringText = node.Text;
+        TextSpan currentTextSpan = spans[currentIndex].TextSpan;
+
+        if (stringText.StartsWith("$\"\"\""))
+        {
+            var sb = new StringBuilder();
+
+            for (; currentIndex < spans.Count; currentIndex++)
+            {
+                var currentStringSpan = spans[currentIndex];
+
+                if (currentStringSpan.ClassificationType == ClassificationTypeNames.StringLiteral)
+                {
+                    currentTextSpan = currentStringSpan.TextSpan;
+                    sb.Append(srcText.ToString(currentStringSpan.TextSpan));
+                }
+                else
+                {
+                    currentIndex--;
+                    break;
+                }
+            }
+
+            stringText = sb.ToString();
+        }
+
+        if (stringText.Contains(Environment.NewLine))
+        {
+            var splitted = stringText.Split(Environment.NewLine);
+
+            for (int y = 0; y < splitted.Length; y++)
+            {
+                var split_node = new Node
+                (
+                    node.ClassificationType,
+                    splitted[y],
+                    y == 0 ? node.Trivia : Environment.NewLine,
+                    y == 0 ? node.Trivia.Contains(Environment.NewLine) : true
+                );
+
+                nodes.Add(split_node);
+            }
+        }
+        else
+        {
+            nodes.Add(node);
+        }
+
+        return (currentIndex, currentTextSpan);
     }
 
     private static readonly ImmutableArray<MetadataReference> _coreReferences =

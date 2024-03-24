@@ -7,4 +7,13 @@
                 <span class="string">more than others.</span>
     <span class="string">Some should start at the first column.</span>
     <span class="string">Some have &quot;quoted text&quot; in them.</span>
+    <span class="string">&quot;&quot;&quot;</span><span class="punctuation">;</span>
+
+<span class="keyword">string</span> <span class="localName">longMessage2</span> <span class="operator">=</span> <span class="string">$&quot;&quot;&quot;</span>
+    <span class="string">This is a long message.</span>
+    <span class="string">It has several lines.</span>
+        <span class="string">Some are indented</span>
+                <span class="string">more than others.</span>
+    <span class="string">Some should start at the first column.</span>
+    <span class="string">Some have &quot;quoted text&quot; in them.</span>
     <span class="string">&quot;&quot;&quot;</span><span class="punctuation">;</span></pre>

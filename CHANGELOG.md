@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.43] - 24.03.2024
+**Description:**
+Fix - https://github.com/Swiftly1/CsharpToColouredHTML/issues/24
+
+Upgrade of Microsoft.CodeAnalysis.CSharp libs
+
 ## [1.0.42] - 17.02.2024
 **Description:**
 Added support for raw strings (""") and fixed some incorrect cases like "something.Property = 5" where Property was marked as a class.
