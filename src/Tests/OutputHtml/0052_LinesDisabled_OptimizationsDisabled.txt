@@ -16,4 +16,12 @@
                 <span class="string">more than others.</span>
     <span class="string">Some should start at the first column.</span>
     <span class="string">Some have &quot;quoted text&quot; in them.</span>
-    <span class="string">&quot;&quot;&quot;</span><span class="punctuation">;</span></pre>
+    <span class="string">&quot;&quot;&quot;</span><span class="punctuation">;</span>
+
+<span class="keyword">var</span> <span class="localName">xml</span> <span class="operator">=</span> <span class="string">$&quot;&quot;&quot;</span><span class="string">
+    </span>
+        <span class="string">&lt;element attr=&quot;</span><span class="punctuation">{</span><span class="identifier">content</span><span class="punctuation">}</span><span class="string">&quot;&gt;</span>
+            <span class="string">&lt;body&gt;</span>
+            <span class="string">&lt;/body&gt;</span>
+        <span class="string">&lt;/element&gt;</span><span class="string"></span>
+        <span class="string">&quot;&quot;&quot;</span><span class="punctuation">;</span></pre>

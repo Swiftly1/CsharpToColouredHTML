@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.44] - 24.03.2024
+**Description:**
+Hotfix - https://github.com/Swiftly1/CsharpToColouredHTML/issues/24
+
 ## [1.0.43] - 24.03.2024
 **Description:**
 Fix - https://github.com/Swiftly1/CsharpToColouredHTML/issues/24
