@@ -7,4 +7,13 @@
                 more than others.
     Some should start at the first column.
     Some have &quot;quoted text&quot; in them.
+    &quot;&quot;&quot;<span class="punctuation">;</span>
+
+<span class="keyword">string</span> <span class="localName">longMessage2</span> <span class="operator">=</span> $&quot;&quot;&quot;
+    This is a long message.
+    It has several lines.
+        Some are indented
+                more than others.
+    Some should start at the first column.
+    Some have &quot;quoted text&quot; in them.
     &quot;&quot;&quot;<span class="punctuation">;</span></pre>
