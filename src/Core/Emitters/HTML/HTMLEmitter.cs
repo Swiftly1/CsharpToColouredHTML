@@ -127,7 +127,7 @@ public class HTMLEmitter : IEmitter
                 currentLine = current.LineNumber;
 
                 var highlighWholeRow =
-                    HighlightingPredicate != null && HighlightingPredicate(currentLine) ||
+                    (HighlightingPredicate != null && HighlightingPredicate(currentLine)) ||
                     nodes.Where(x => x.LineNumber == currentLine).All(x => x.UseHighlighting);
 
                 if (isOpened)
