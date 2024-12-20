@@ -62,7 +62,7 @@ internal partial class HeuristicsGenerator
 
         return new ExtractedColourResult(NodeColors.Punctuation);
     }
-        
+
     private ExtractedColourResult HandleIdentifier(int currentIndex, List<Node> nodes)
     {
         var node = nodes[currentIndex];
