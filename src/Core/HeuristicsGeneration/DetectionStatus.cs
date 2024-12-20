@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
 
 internal struct DetectionStatus
 {

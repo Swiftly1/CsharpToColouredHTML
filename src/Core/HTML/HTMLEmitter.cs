@@ -49,7 +49,7 @@ public class HTMLEmitter : IEmitter
 
     private readonly bool UseIframe = true;
 
-    private readonly Func<int, bool> HighlightingPredicate = null;
+    private readonly Func<int, bool>? HighlightingPredicate = null;
 
     private int _LineCounter = 0;
 

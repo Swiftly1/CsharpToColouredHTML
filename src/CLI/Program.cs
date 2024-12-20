@@ -14,8 +14,24 @@ if (!File.Exists(filePath))
 var code = File.ReadAllText(filePath);
 
 var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
+File.WriteAllText(@"C:\Users\User\Desktop\file.html", html);
+var options = new HTMLEmitter();
 
-// Or:
-//new CsharpColourer().ProcessSourceCode(code, new ConsoleEmitter()); 
+int number = 54;
+options = new HTMLEmitter(new HTMLEmitterSettings { AddLineNumber = false, Optimize = false });
+html = new CsharpColourer().ProcessSourceCode(code, options);
+File.WriteAllText($"{number.ToString().PadLeft(4, '0')}_LinesDisabled_OptimizationsDisabled.txt", html);
+
+options = new HTMLEmitter(new HTMLEmitterSettings { AddLineNumber = false, Optimize = true });
+html = new CsharpColourer().ProcessSourceCode(code, options);
+File.WriteAllText($"{number.ToString().PadLeft(4, '0')}_LinesDisabled_OptimizationsEnabled.txt", html);
+
+options = new HTMLEmitter(new HTMLEmitterSettings { AddLineNumber = true, Optimize = false });
+html = new CsharpColourer().ProcessSourceCode(code, options);
+File.WriteAllText($"{number.ToString().PadLeft(4, '0')}_LinesEnabled_OptimizationsDisabled.txt", html);
+
+options = new HTMLEmitter(new HTMLEmitterSettings { AddLineNumber = true, Optimize = true });
+html = new CsharpColourer().ProcessSourceCode(code, options);
+File.WriteAllText($"{number.ToString().PadLeft(4, '0')}_LinesEnabled_OptimizationsEnabled.txt", html);
 
 Console.WriteLine(html);

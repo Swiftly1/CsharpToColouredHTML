@@ -2,5 +2,5 @@
 
 public class CsharpColourerSettings
 {
-    public Action<List<NodeAfterProcessing>> PostProcessingAction { get; set; }
+    public Action<List<NodeAfterProcessing>>? PostProcessingAction { get; set; }
 }
