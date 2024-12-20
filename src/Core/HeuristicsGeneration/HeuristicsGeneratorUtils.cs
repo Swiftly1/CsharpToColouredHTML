@@ -60,7 +60,7 @@ internal partial class HeuristicsGenerator
             nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.Punctuation)
             return false;
 
-        if (currentIndex + 2 >= nodes.Count)
+        if (!nodes.CanGoAhead(currentIndex, 2))
             return false;
 
         if (new[] { ",", ")" }.Contains(nodes[currentIndex + 2].Text))
@@ -141,7 +141,7 @@ internal partial class HeuristicsGenerator
 
     private bool IsParameterWithAttribute(int currentIndex, List<Node> nodes)
     {
-        if (currentIndex - 4 < 0)
+        if (!nodes.CanGoBehind(currentIndex, 4))
             return false;
 
         var closing = nodes[currentIndex - 1];
@@ -238,7 +238,7 @@ internal partial class HeuristicsGenerator
             return false;
         }
 
-        if (currentIndex + 3 >= nodes.Count)
+        if (!nodes.CanGoAhead(currentIndex, 3))
             return false;
 
         var next = nodes[currentIndex + 1];

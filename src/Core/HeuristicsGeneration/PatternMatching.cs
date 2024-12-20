@@ -157,7 +157,7 @@ internal partial class HeuristicsGenerator
         }
         else
         {
-            if (currentIndex + 1 < nodes.Count &&
+            if (nodes.CanGoAhead(currentIndex, 1) &&
                 nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.Operator &&
                 nodes[currentIndex + 1].Text != "." &&
                 !_IsUsing)

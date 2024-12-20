@@ -179,7 +179,7 @@ internal partial class HeuristicsGenerator
 
     private void TryUpdatePreviousIdentifierToClassIfThatWasNamespace(int currentIndex, List<Node> nodes)
     {
-        if (currentIndex - 2 < 0)
+        if (!nodes.CanGoBehind(currentIndex, 2))
             return;
 
         if (nodes[currentIndex - 1].ClassificationType != ClassificationTypeNames.Operator)
