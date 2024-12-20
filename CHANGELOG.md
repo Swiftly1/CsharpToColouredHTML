@@ -7,9 +7,10 @@ All notable changes to this project since version 1.0.14 will be documented in t
 
 Additional heuristics improvements were incorporated.
 
-Refactored codebase a little bit, you will need to adjust namespaces.
-e.g add using such using: `using CsharpToColouredHTML.Core.Emitters.HTML;`
+Refactored codebase a little bit and you will need to adjust namespaces.
+e.g Add such using: `using CsharpToColouredHTML.Core.Emitters.HTML;`
 
+Removed workaround introduced in this commit: https://github.com/Swiftly1/CsharpToColouredHTML/commit/81d467d13fc0518e14f8077d47cf8de2d67fecf9
 
 ## [1.0.44] - 24.03.2024
 **Description:**
