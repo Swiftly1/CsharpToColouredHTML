@@ -11,8 +11,8 @@
     <PackageProjectUrl>https://github.com/Swiftly1/CsharpToColouredHTML</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Swiftly1/CsharpToColouredHTML</RepositoryUrl>
     <PackageId>CsharpToColouredHTML.Core</PackageId>
-    <Version>1.0.44</Version>
-    <Description>Converts C# into HTML with highlighting</Description>
+    <Version>1.0.45</Version>
+    <Description>C# to HTML converter with highlighting</Description>
     <PackageTags>c#;html;converter;syntax;highlighting</PackageTags>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
