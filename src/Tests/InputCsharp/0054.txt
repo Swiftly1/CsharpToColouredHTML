@@ -1,0 +1,14 @@
+﻿public static Thing CreateThing(Thing fab)
+{
+    return fab.Instantiate(InputManager, TestManager, Math.PI);
+}
+
+public void test(List<int> keys, Dictionary<int, int> dictionary)
+{
+    keys
+        .WhereOut<TKey, TItem>(dictionary.TryGetValue)
+        .Each(tuple =>
+        {
+            var (key, item) = tuple;
+        });
+}

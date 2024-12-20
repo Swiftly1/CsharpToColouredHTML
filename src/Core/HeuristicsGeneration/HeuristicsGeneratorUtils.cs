@@ -53,7 +53,7 @@ internal partial class HeuristicsGenerator
         if (!canGoBehind || !canGoAhead)
             return false;
 
-        if (!new[] { ",", "(" }.Contains(nodes[currentIndex - 1].Text))
+        if (!nodes[currentIndex - 1].Text.EqualsAnyOf(",", "("))
             return false;
 
         if (nodes[currentIndex + 1].ClassificationType != ClassificationTypeNames.ParameterName &&
@@ -63,12 +63,12 @@ internal partial class HeuristicsGenerator
         if (!nodes.CanGoAhead(currentIndex, 2))
             return false;
 
-        if (new[] { ",", ")" }.Contains(nodes[currentIndex + 2].Text))
+        if (nodes[currentIndex + 2].Text.EqualsAnyOf(",", ")"))
             return true;
 
         if (nodes[currentIndex + 1].Text == "[" &&
             nodes[currentIndex + 2].Text == "]" &&
-            new[] { ",", ")" }.Contains(nodes[currentIndex + 4].Text))
+            nodes[currentIndex + 4].Text.EqualsAnyOf(",", ")"))
             return true;
 
         return false;
@@ -294,11 +294,10 @@ internal partial class HeuristicsGenerator
         }
 
         // OLEMSGICON.OLEMSGICON_WARNING,
-        return new string[] { ")", "=", ";", "}", ",", "&",
+        return next.Text.EqualsAnyOf(")", "=", ";", "}", ",", "&",
                               "&&", "|", "||", "+", "-", "*",
                               "/", "-=", "+=", "*=", "/=", "%=",
-                               "&=", "|=", "^=", ">>=", "<<="
-                            }.Contains(next.Text);
+                               "&=", "|=", "^=", ">>=", "<<=");
     }
 
 

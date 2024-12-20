@@ -24,13 +24,19 @@ public class Node
 
     public string TextWithTrivia { get; }
 
-    public string ClassificationType { get; }
+    public string ClassificationType { get; private set; }
 
     public string Text { get; }
 
     public string Trivia { get; }
 
     public bool HasNewLine { get;  }
+
+    public bool ModifyClassificationType(string newClassificationType)
+    {
+        ClassificationType = newClassificationType;
+        return true;
+    }
 
     public override string ToString()
     {

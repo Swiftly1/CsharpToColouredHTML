@@ -1,0 +1,16 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="class">Thing</span> <span class="method">CreateThing</span><span class="punctuation">(</span><span class="class">Thing</span> <span class="parameter">fab</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="control">return</span> <span class="parameter">fab</span><span class="operator">.</span><span class="method">Instantiate</span><span class="punctuation">(</span><span class="identifier">InputManager</span><span class="punctuation">,</span> <span class="class">TestManager</span><span class="punctuation">,</span> <span class="class">Math</span><span class="operator">.</span><span class="identifier">PI</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">test</span><span class="punctuation">(</span><span class="class">List</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">&gt;</span> <span class="parameter">keys</span><span class="punctuation">,</span> <span class="class">Dictionary</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="keyword">int</span><span class="punctuation">&gt;</span> <span class="parameter">dictionary</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="parameter">keys</span>
+        <span class="operator">.</span><span class="method">WhereOut</span><span class="punctuation">&lt;</span><span class="class">TKey</span><span class="punctuation">,</span> <span class="class">TItem</span><span class="punctuation">&gt;</span><span class="punctuation">(</span><span class="parameter">dictionary</span><span class="operator">.</span><span class="identifier">TryGetValue</span><span class="punctuation">)</span>
+        <span class="operator">.</span><span class="method">Each</span><span class="punctuation">(</span><span class="parameter">tuple</span> <span class="operator">=&gt;</span>
+        <span class="punctuation">{</span>
+            <span class="keyword">var</span> <span class="punctuation">(</span><span class="localName">key</span><span class="punctuation">,</span> <span class="localName">item</span><span class="punctuation">)</span> <span class="operator">=</span> <span class="parameter">tuple</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="punctuation">}</span></pre>

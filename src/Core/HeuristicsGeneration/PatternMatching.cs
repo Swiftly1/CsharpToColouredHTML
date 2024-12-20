@@ -124,7 +124,6 @@ internal partial class HeuristicsGenerator
             }
         }
 
-
         var isPropertyOrFieldResult = IsPropertyOrField(currentIndex, nodes);
         if (isPropertyOrFieldResult.Detected)
         {
@@ -186,7 +185,7 @@ internal partial class HeuristicsGenerator
 
         var startsWithI = node.Text.StartsWith("I") && node.Text.Length > 1 && char.IsUpper(node.Text[1]);
 
-        if (startsWithI && canGoBehind && new[] { ":", "<" }.Contains(nodes[currentIndex - 1].Text))
+        if (startsWithI && canGoBehind && nodes[currentIndex - 1].Text.EqualsAnyOf(":", "<"))
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
@@ -252,13 +251,14 @@ internal partial class HeuristicsGenerator
 
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
-        else if (_IsUsing && !_IsUsing && canGoAhead && nodes[currentIndex + 1].Text == "(")
+
+        if (_IsUsing && !_IsUsing && canGoAhead && nodes[currentIndex + 1].Text == "(")
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
-        // simple generics
-        else if (!_IsNew && currentIndex + 4 < nodes.Count && nodes[currentIndex + 1].Text == "<"
-            && nodes[currentIndex + 3].Text == ">" && nodes[currentIndex + 4].Text == "(")
+
+        // generics
+        if (!_IsNew && nodes.CanGoAhead(currentIndex, 4) && nodes[currentIndex + 1].Text == "<")
         {
             var validTypes = new[]
             {
@@ -267,22 +267,61 @@ internal partial class HeuristicsGenerator
                 ClassificationTypeNames.Identifier
             };
 
-            return validTypes.Contains(nodes[currentIndex + 2].ClassificationType) ?
-                DetectionStatus.DetectedAndDontSkipPostProcessing() :
-                DetectionStatus.NotDetected();
+            var validCode = true;
+
+            for (var i = currentIndex + 2; i<nodes.Count;i++)
+            {
+                var currentNode = nodes[i];
+
+                if (currentNode.Text == ">")
+                {
+                    if (!nodes.CanGoAhead(i) || nodes[i + 1].Text != "(")
+                        validCode = false;
+
+                    break;
+                }
+
+                var isComma = currentNode.Text == ",";
+                if (!isComma)
+                {
+                    if (validTypes.Contains(currentNode.ClassificationType))
+                    {
+                        // fix types ahead
+                        // .WhereOut<TKey, TItem>(dictionary.TryGetValue)
+                        if (currentNode.ClassificationType == ClassificationTypeNames.Identifier)
+                        {
+                            if (IsPopularStruct(currentNode.Text))
+                            {
+                                currentNode.ModifyClassificationType(ClassificationTypeNames.StructName);
+                            }
+                            else
+                            {
+                                currentNode.ModifyClassificationType(ClassificationTypeNames.ClassName);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        validCode = false;
+                        break;
+                    }
+                }
+            }
+
+            if (validCode)
+                return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
+
         // db.NotifyHandler = OnNotify;
-        else if (currentIndex > 0 &&
+        if (currentIndex > 0 &&
             currentIndex + 1 < nodes.Count &&
             nodes[currentIndex - 1].Text == "=" && nodes[currentIndex + 1].Text == ";" &&
             nodes[currentIndex].Text.StartsWith("On"))
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
-        else
-        {
-            return DetectionStatus.NotDetected();
-        }
+
+        return DetectionStatus.NotDetected();
     }
     private DetectionStatus IsClassOrStruct(int currentIndex, List<Node> nodes)
     {
@@ -325,7 +364,7 @@ internal partial class HeuristicsGenerator
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
-        else if (isPopularClassOrStruct && canGoBehind && nodes[currentIndex - 1].Text != ".")
+        else if (isPopularClassOrStruct && canGoBehind && !nodes[currentIndex - 1].Text.EqualsAnyOf(".", "("))
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
@@ -344,7 +383,7 @@ internal partial class HeuristicsGenerator
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         // public void Test(Array<int> a)
-        else if (canGoAhead && nodes[currentIndex + 1].Text == "<")
+        else if (canGoAhead && canGoBehind && nodes[currentIndex + 1].Text == "<" && nodes[currentIndex - 1].Text != ".")
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
@@ -386,7 +425,7 @@ internal partial class HeuristicsGenerator
         // WebResponse re;
         else if (nodes.Count > currentIndex + 2 &&
             new[] { ClassificationTypeNames.LocalName }.Contains(nodes[currentIndex + 1].ClassificationType) &&
-            new[] { ";", "=" }.Contains(nodes[currentIndex + 2].Text))
+            nodes[currentIndex + 2].Text.EqualsAnyOf(";", "="))
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
@@ -431,6 +470,10 @@ internal partial class HeuristicsGenerator
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
         else if (currentIndex >= 2 && nodes[currentIndex - 1].Text == "." && classifiers.Contains(nodes[currentIndex - 2].ClassificationType))
+        {
+            return DetectionStatus.DetectedAndDontSkipPostProcessing();
+        }
+        else if (IsPopularClass(node.Text) && canGoBehind && !nodes[currentIndex - 1].Text.EqualsAnyOf("."))
         {
             return DetectionStatus.DetectedAndDontSkipPostProcessing();
         }
