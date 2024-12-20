@@ -1,6 +1,21 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [2.0.0] - 20.12.2024
+**Description:**
+Version 2.0.0 of this library was released!
+
+.NET version was increased to .NET 9
+
+Refactored codebase a little bit and you will need to adjust namespaces.
+e.g Add such using: `using CsharpToColouredHTML.Core.Emitters.HTML;`
+
+Additional heuristics improvements were incorporated.
+
+Removed workaround introduced in this commit: https://github.com/Swiftly1/CsharpToColouredHTML/commit/81d467d13fc0518e14f8077d47cf8de2d67fecf9
+
+Happy xmas :-)
+
 ## [1.0.44] - 24.03.2024
 **Description:**
 Hotfix - https://github.com/Swiftly1/CsharpToColouredHTML/issues/24

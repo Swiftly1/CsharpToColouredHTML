@@ -1,6 +1,7 @@
 ﻿using System.Text;
+using CsharpToColouredHTML.Core.Nodes;
 
-namespace CsharpToColouredHTML.Core
+namespace CsharpToColouredHTML.Core.Emitters.HTML
 {
     internal class CSSProvider
     {

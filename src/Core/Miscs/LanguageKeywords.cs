@@ -1,6 +1,6 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core.Miscs;
 
-internal class LanguageKeywords
+internal static class LanguageKeywords
 {
     public static readonly List<string> AccessibilityModifiers = new List<string>
     {

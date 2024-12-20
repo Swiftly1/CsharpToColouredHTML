@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core.Miscs;
 
 public static class StringHelper
 {
@@ -33,5 +33,19 @@ public static class StringHelper
         }
 
         return indexes;
+    }
+
+    public static bool EqualsAnyOf(this string s, params string[] strs)
+    {
+        if (strs == null)
+            return false;
+
+        foreach (var val in strs)
+        {
+            if (s.Equals(val))
+                return true;
+        }
+
+        return false;
     }
 }

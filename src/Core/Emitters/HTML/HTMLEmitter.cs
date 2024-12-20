@@ -1,7 +1,8 @@
 ﻿using System.Web;
 using System.Text;
+using CsharpToColouredHTML.Core.Nodes;
 
-namespace CsharpToColouredHTML.Core;
+namespace CsharpToColouredHTML.Core.Emitters.HTML;
 
 public class HTMLEmitter : IEmitter
 {
@@ -49,7 +50,7 @@ public class HTMLEmitter : IEmitter
 
     private readonly bool UseIframe = true;
 
-    private readonly Func<int, bool> HighlightingPredicate = null;
+    private readonly Func<int, bool>? HighlightingPredicate = null;
 
     private int _LineCounter = 0;
 
@@ -134,7 +135,7 @@ public class HTMLEmitter : IEmitter
                     sb.Append("</td></tr>");
                 }
 
-                while(gap-- > 1)
+                while (gap-- > 1)
                 {
                     sb.Append("<tr>");
 

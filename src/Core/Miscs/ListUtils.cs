@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core.Miscs;
 
 internal static class ListUtils
 {
@@ -13,7 +13,7 @@ internal static class ListUtils
         var adjustedIndex = currentIndex + jumpSize;
         return adjustedIndex >= 0 && adjustedIndex < list.Count;
     }
-    
+
     public static bool CanGoBehind<T>(this List<T> list, int currentIndex, int jumpSize = 1)
     {
         if (list is null)

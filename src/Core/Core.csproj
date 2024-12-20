@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>CsharpToColouredHTML.Core</RootNamespace>
@@ -11,16 +11,15 @@
     <PackageProjectUrl>https://github.com/Swiftly1/CsharpToColouredHTML</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Swiftly1/CsharpToColouredHTML</RepositoryUrl>
     <PackageId>CsharpToColouredHTML.Core</PackageId>
-    <Version>1.0.44</Version>
-    <Description>Converts C# into HTML with highlighting</Description>
+    <Version>2.0.0</Version>
+    <Description>C# to HTML converter with highlighting</Description>
     <PackageTags>c#;html;converter;syntax;highlighting</PackageTags>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="4.9.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.12.0" />
   </ItemGroup>
 
 </Project>

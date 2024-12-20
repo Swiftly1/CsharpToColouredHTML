@@ -5,8 +5,14 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Classification;
 
+using CsharpToColouredHTML.Core.HeuristicsGeneration;
+using CsharpToColouredHTML.Core.Emitters;
+using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.Miscs;
+
 // Classifier Helpers
 using Microsoft.AspNetCore.Mvc;
+//
 
 namespace CsharpToColouredHTML.Core;
 

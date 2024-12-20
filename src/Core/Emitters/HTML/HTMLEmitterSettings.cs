@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core.Emitters.HTML;
 
 public class HTMLEmitterSettings
 {
@@ -10,7 +10,7 @@ public class HTMLEmitterSettings
 
     public bool UseIframe = true;
 
-    public Func<int, bool> LineHighlightingPredicate = null;
+    public Func<int, bool>? LineHighlightingPredicate = null;
 
     public HTMLEmitterSettings()
     {
