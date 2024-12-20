@@ -555,4 +555,147 @@ internal partial class HeuristicsGenerator
 
         return false;
     }
+
+    private void TryUpdatePreviousIdentifierToClassIfThatWasNamespace(int currentIndex, List<Node> nodes)
+    {
+        if (!nodes.CanGoBehind(currentIndex, 2))
+            return;
+
+        if (nodes[currentIndex - 1].ClassificationType != ClassificationTypeNames.Operator)
+            return;
+
+        var suspectedNode = nodes[currentIndex - 2];
+
+        if (suspectedNode.ClassificationType != ClassificationTypeNames.Identifier)
+            return;
+
+        var alreadyProcessedSuspectedNode = _Output.LastOrDefault(x => x.Id == suspectedNode.Id && x.Colour == NodeColors.Identifier);
+
+        if (alreadyProcessedSuspectedNode == null)
+            return;
+
+        // 0 = currently at Identifier, expecting Operator
+        // 1 = currently at Operator, expecting Identifier
+
+        var state = 0;
+        var identifiers = new List<string>();
+
+        var validIdentifiers = new[]
+        {
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.ConstantName,
+            ClassificationTypeNames.ParameterName,
+            ClassificationTypeNames.PropertyName,
+            ClassificationTypeNames.FieldName
+        };
+
+        var validTypes = new[]
+        {
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.Identifier,
+            ClassificationTypeNames.ConstantName,
+            ClassificationTypeNames.ParameterName,
+            ClassificationTypeNames.Operator,
+            ClassificationTypeNames.PropertyName,
+            ClassificationTypeNames.FieldName
+        };
+
+        for (int i = currentIndex - 3; i >= 0; i--)
+        {
+            if (!validTypes.Contains(nodes[i].ClassificationType))
+            {
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ">")
+                {
+                    return;
+                }
+
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Keyword && nodes[i].Text == "this")
+                    return;
+
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ")")
+                {
+                    var closed_counter = 0;
+
+                    for (; i >= 0; i--)
+                    {
+                        if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ")")
+                            closed_counter++;
+
+                        if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == "(")
+                            closed_counter--;
+
+                        if (closed_counter <= 0)
+                            break;
+                    }
+
+                    continue;
+                }
+
+                break;
+            }
+
+            if (state == 0)
+            {
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Operator && nodes[i].Text == ".")
+                {
+                    state = 1;
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else if (state == 1)
+            {
+                if (nodes[i].ClassificationType == ClassificationTypeNames.Identifier)
+                {
+                    identifiers.Add(nodes[i].Text);
+                    state = 0;
+                    continue;
+                }
+                else
+                {
+                    // if it is Local/Constant/Param then halt.
+                    if (validIdentifiers.Contains(nodes[i].ClassificationType))
+                    {
+                        return;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if (identifiers.Count == 0)
+        {
+            var isVariable = IdentifierFirstCharCaseSeemsLikeVariable(alreadyProcessedSuspectedNode.Text);
+
+            if (isVariable)
+            {
+                alreadyProcessedSuspectedNode.Colour = NodeColors.LocalName;
+            }
+            else
+            {
+                AddClass(alreadyProcessedSuspectedNode.Text);
+                alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
+            }
+        }
+
+        if (identifiers.Count > 0 && identifiers.All(x => !IdentifierFirstCharCaseSeemsLikeVariable(x)))
+        {
+            if (identifiers.Any(i => _FoundClasses.Contains(i)))
+            {
+                if (alreadyProcessedSuspectedNode.Colour == NodeColors.Identifier)
+                {
+                    alreadyProcessedSuspectedNode.Colour = NodeColors.PropertyName;
+                }
+
+                return;
+            }
+
+            AddClass(alreadyProcessedSuspectedNode.Text);
+            alreadyProcessedSuspectedNode.Colour = NodeColors.Class;
+        }
+    }
 }
