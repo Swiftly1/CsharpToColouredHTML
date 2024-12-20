@@ -3,6 +3,9 @@ using System;
 using System.IO;
 using CsharpToColouredHTML.Core;
 using System.Collections.Generic;
+using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.Emitters.HTML;
 
 namespace Tests
 {

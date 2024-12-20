@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core.Miscs;
 
 internal static class LanguageKeywords
 {

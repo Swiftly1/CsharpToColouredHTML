@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Classification;
+﻿using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.Nodes;
+using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
 

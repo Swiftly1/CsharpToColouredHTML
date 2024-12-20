@@ -8,6 +8,9 @@ using Microsoft.CodeAnalysis.Classification;
 // Classifier Helpers
 using Microsoft.AspNetCore.Mvc;
 using CsharpToColouredHTML.Core.HeuristicsGeneration;
+using CsharpToColouredHTML.Core.Emitters;
+using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.Miscs;
 
 namespace CsharpToColouredHTML.Core;
 

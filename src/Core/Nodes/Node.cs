@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core.Nodes;
 
 public class Node
 {
@@ -30,7 +30,7 @@ public class Node
 
     public string Trivia { get; }
 
-    public bool HasNewLine { get;  }
+    public bool HasNewLine { get; }
 
     public bool ModifyClassificationType(string newClassificationType)
     {

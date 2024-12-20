@@ -1,4 +1,5 @@
 ﻿using CsharpToColouredHTML.Core;
+using CsharpToColouredHTML.Core.Emitters.HTML;
 
 var filePath = "code.txt";
 

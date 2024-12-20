@@ -1,4 +1,4 @@
-﻿using CsharpToColouredHTML.Core;
+﻿using CsharpToColouredHTML.Core.Nodes;
 
 public class CsharpColourerSettings
 {

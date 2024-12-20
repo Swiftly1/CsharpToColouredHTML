@@ -1,6 +1,16 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [1.0.45] - 20.12.2024
+**Description:**
+.NET version was increased to .NET 9
+
+Additional heuristics improvements were incorporated.
+
+Refactored codebase a little bit, you will need to adjust namespaces.
+e.g add using such using: `using CsharpToColouredHTML.Core.Emitters.HTML;`
+
+
 ## [1.0.44] - 24.03.2024
 **Description:**
 Hotfix - https://github.com/Swiftly1/CsharpToColouredHTML/issues/24

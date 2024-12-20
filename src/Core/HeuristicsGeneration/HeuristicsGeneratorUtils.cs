@@ -1,4 +1,6 @@
-﻿using Microsoft.CodeAnalysis.Classification;
+﻿using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.Nodes;
+using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
 
@@ -604,9 +606,7 @@ internal partial class HeuristicsGenerator
             if (!validTypes.Contains(nodes[i].ClassificationType))
             {
                 if (nodes[i].ClassificationType == ClassificationTypeNames.Punctuation && nodes[i].Text == ">")
-                {
                     return;
-                }
 
                 if (nodes[i].ClassificationType == ClassificationTypeNames.Keyword && nodes[i].Text == "this")
                     return;

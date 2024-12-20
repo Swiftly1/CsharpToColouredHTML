@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
+﻿namespace CsharpToColouredHTML.Core.Miscs;
 
 internal static class ListUtils
 {

@@ -1,4 +1,4 @@
-﻿namespace CsharpToColouredHTML.Core;
+﻿namespace CsharpToColouredHTML.Core.Emitters.HTML;
 
 public class HTMLEmitterSettings
 {

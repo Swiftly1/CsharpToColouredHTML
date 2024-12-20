@@ -1,7 +1,8 @@
 ﻿using System.Web;
 using System.Text;
+using CsharpToColouredHTML.Core.Nodes;
 
-namespace CsharpToColouredHTML.Core;
+namespace CsharpToColouredHTML.Core.Emitters.HTML;
 
 public class HTMLEmitter : IEmitter
 {
@@ -126,7 +127,7 @@ public class HTMLEmitter : IEmitter
                 currentLine = current.LineNumber;
 
                 var highlighWholeRow =
-                    (HighlightingPredicate != null && HighlightingPredicate(currentLine)) ||
+                    HighlightingPredicate != null && HighlightingPredicate(currentLine) ||
                     nodes.Where(x => x.LineNumber == currentLine).All(x => x.UseHighlighting);
 
                 if (isOpened)
@@ -134,7 +135,7 @@ public class HTMLEmitter : IEmitter
                     sb.Append("</td></tr>");
                 }
 
-                while(gap-- > 1)
+                while (gap-- > 1)
                 {
                     sb.Append("<tr>");
 
