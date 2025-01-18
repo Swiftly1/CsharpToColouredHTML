@@ -15,7 +15,7 @@
             <span class="keyword">var</span> <span class="localName">q</span> = (TestQ.<span class="class">Home</span>)<span class="localName">h</span>;
             <span class="keyword">var</span> <span class="localName">s</span> = <span class="keyword">new</span> TestQ.<span class="class">Asd</span>();
             
-            <span class="keyword">var</span> <span class="localName">found</span> = <span class="method">FindNode</span>(current, item);
+            <span class="keyword">var</span> <span class="localName">found</span> = <span class="method">FindNode</span>(<span class="localName">current</span>, <span class="localName">item</span>);
             <span class="keyword">var</span> <span class="localName">value</span> = <span class="localName">found</span>.StoredValue.Value;
             <span class="keyword">var</span> <span class="localName">data</span> = <span class="keyword">new</span> [] { <span class="numericLiteral">1</span>, <span class="numericLiteral">2</span>, <span class="numericLiteral">3</span> };
 

@@ -24,6 +24,11 @@ public class Hints
         "dynamic",
     };
 
+    public List<string> ReallyPopularEnums { get; } = new List<string>
+    {
+        "PictureBoxSizeMode"
+    };
+
     public List<string> ReallyPopularClasses { get; } = new List<string>
     {
         "List",

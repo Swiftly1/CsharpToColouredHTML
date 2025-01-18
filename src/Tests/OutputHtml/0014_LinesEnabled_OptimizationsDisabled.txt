@@ -2,5 +2,5 @@
 <pre class="background">
 <table>
 <tbody>
-<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">typeof</span><span class="punctuation">(</span><span class="keyword">int</span><span class="punctuation">)</span><span class="operator">.</span><span class="method">GetTypeInfo</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="operator">.</span><span class="identifier">Assembly</span></td></tr></tbody>
+<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="keyword">typeof</span><span class="punctuation">(</span><span class="keyword">int</span><span class="punctuation">)</span><span class="operator">.</span><span class="method">GetTypeInfo</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="operator">.</span><span class="propertyName">Assembly</span></td></tr></tbody>
 </table></pre>

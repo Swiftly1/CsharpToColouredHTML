@@ -1,8 +1,8 @@
 
 <pre class="background">
-<span class="keyword">using</span> <span class="identifier">MarkdownSharp</span><span class="punctuation">;</span>
-<span class="keyword">using</span> <span class="namespace">Microsoft</span><span class="operator">.</span><span class="identifier">AspNetCore</span><span class="operator">.</span><span class="identifier">Mvc</span><span class="punctuation">;</span>
-<span class="keyword">using</span> <span class="identifier">Newtonsoft</span><span class="operator">.</span><span class="identifier">Json</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">MarkdownSharp</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">Microsoft</span><span class="operator">.</span><span class="namespace">AspNetCore</span><span class="operator">.</span><span class="namespace">Mvc</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">Newtonsoft</span><span class="operator">.</span><span class="namespace">Json</span><span class="punctuation">;</span>
 
 <span class="keyword">namespace</span> <span class="namespace">Blog</span><span class="operator">.</span><span class="namespace">Controllers</span><span class="punctuation">;</span>
 

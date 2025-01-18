@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="preprocessor">#</span><span class="preprocessor">if</span> <span class="punctuation">(</span><span class="identifier">TEST</span><span class="punctuation">)</span>
+<span class="preprocessor">#</span><span class="preprocessor">if</span> <span class="punctuation">(</span><span class="propertyName">TEST</span><span class="punctuation">)</span>
     <span class="excludedCode">Console.WriteLine(&quot;TEST is defined&quot;);</span><span class="excludedCode">
 </span><span class="preprocessor">#</span><span class="preprocessor">else</span>
     <span class="class">Console</span><span class="operator">.</span><span class="method">WriteLine</span><span class="punctuation">(</span><span class="string">&quot;TEST is not defined&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>

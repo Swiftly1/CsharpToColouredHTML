@@ -1,0 +1,20 @@
+
+<pre class="background">
+<span class="control">if</span> <span class="punctuation">(</span><span class="propertyName">A</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+    <span class="class">Console</span><span class="operator">.</span><span class="method">WriteLine</span><span class="punctuation">(</span><span class="string">&quot;.&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="control">if</span> <span class="punctuation">(</span><span class="propertyName">B</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="control">if</span> <span class="punctuation">(</span><span class="propertyName">B2</span><span class="punctuation">)</span>
+            <span class="class">Console</span><span class="operator">.</span><span class="method">WriteLine</span><span class="punctuation">(</span><span class="string">&quot;.&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="control">else</span>
+            <span class="class">Result</span><span class="operator">.</span><span class="method">WriteLine</span><span class="punctuation">(</span><span class="string">&quot;..&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+
+        <span class="control">if</span> <span class="punctuation">(</span><span class="propertyName">C</span><span class="punctuation">)</span>
+        <span class="punctuation">{</span>
+            <span class="control">if</span> <span class="punctuation">(</span><span class="propertyName">D</span><span class="punctuation">)</span>
+                <span class="control">if</span> <span class="punctuation">(</span><span class="propertyName">E</span> <span class="operator">&amp;</span> <span class="propertyName">B2</span><span class="punctuation">)</span>
+                    <span class="class">Result</span><span class="operator">.</span><span class="method">WriteLine</span><span class="punctuation">(</span><span class="string">&quot;.&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

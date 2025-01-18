@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="keyword">using</span> <span class="identifier">CsharpToColouredHTML</span><span class="operator">.</span><span class="identifier">Core</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">CsharpToColouredHTML</span><span class="operator">.</span><span class="namespace">Core</span><span class="punctuation">;</span>
 
 <span class="keyword">var</span> <span class="localName">code</span> <span class="operator">=</span> <span class="class">File</span><span class="operator">.</span><span class="method">ReadAllText</span><span class="punctuation">(</span><span class="string">&quot;code.txt&quot;</span><span class="punctuation">)</span><span class="punctuation">;</span>
 

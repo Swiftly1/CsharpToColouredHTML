@@ -2,12 +2,12 @@
 <pre class="background">
 <span class="keyword">public bool</span> <span class="method">Initialize</span>(<span class="struct">IntPtr</span> <span class="parameter">Handle</span>, <span class="class">Incident</span> <span class="parameter">inc</span>)
 {
-    db = <span class="class">DbContext</span>.<span class="method">GetDb</span>();
-    db.NotifyHandler = <span class="method">OnNotify</span>;
+    <span class="localName">db</span> = <span class="class">DbContext</span>.<span class="method">GetDb</span>();
+    <span class="localName">db</span>.NotifyHandler = <span class="method">OnNotify</span>;
 
     <span class="keyword">bool</span> <span class="localName">result</span> = (<span class="parameter">Handle</span> == <span class="struct">IntPtr</span>.Zero) ?
-        db.<span class="method">Connect</span>(<span class="parameter">Handle</span>, <span class="class">Settings</span>.Fancy, <span class="string">&quot;Test&quot;</span>) :
-        db.<span class="method">Connect</span>(<span class="class">Settings</span>.Default, <span class="string">&quot;Test&quot;</span>);
+        <span class="localName">db</span>.<span class="method">Connect</span>(<span class="parameter">Handle</span>, <span class="class">Settings</span>.Fancy, <span class="string">&quot;Test&quot;</span>) :
+        <span class="localName">db</span>.<span class="method">Connect</span>(<span class="class">Settings</span>.Default, <span class="string">&quot;Test&quot;</span>);
 
     <span class="control">if</span> (!<span class="localName">result</span>)
     {
@@ -15,9 +15,9 @@
         <span class="control">throw</span> <span class="keyword">new</span> <span class="class">NotImplementedException</span>();
     }
 
-    <span class="keyword">var</span> <span class="localName">test</span> = <span class="keyword">new</span> <span class="class">DbsService</span>(db);
+    <span class="keyword">var</span> <span class="localName">test</span> = <span class="keyword">new</span> <span class="class">DbsService</span>(<span class="localName">db</span>);
 
-    <span class="control">if</span> (<span class="parameter">Handle</span> != <span class="struct">IntPtr</span>.Zero) db.<span class="method">MoveNext</span>();
+    <span class="control">if</span> (<span class="parameter">Handle</span> != <span class="struct">IntPtr</span>.Zero) <span class="localName">db</span>.<span class="method">MoveNext</span>();
 
     <span class="control">return</span> <span class="keyword">true</span>;
 }</pre>

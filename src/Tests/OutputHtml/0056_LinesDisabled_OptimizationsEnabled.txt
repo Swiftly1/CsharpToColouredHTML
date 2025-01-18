@@ -1,0 +1,81 @@
+
+<pre class="background">
+<span class="localName">output</span>.Tags = <span class="localName">_service</span>.<span class="method">GetItem</span>(<span class="localName">person</span>, Channel);
+<span class="keyword">var</span> <span class="localName">searchResult</span> = <span class="keyword">await</span> <span class="localName">_serviceB</span>.<span class="method">FindAsync</span>(Channel.UnderlyingChannel, Channel.<span class="method">GetMainCountry</span>(), <span class="localName">searchQuery</span>, <span class="localName">tags</span>: <span class="localName">searchQuery</span>.Tags);
+
+<span class="keyword">private bool</span> <span class="method">OutsideGrid</span>(<span class="class">Position</span> <span class="parameter">pos</span>)
+{
+    <span class="control">return</span> <span class="parameter">pos</span>.Row &lt; <span class="numericLiteral">0</span> || <span class="parameter">pos</span>.Row &gt;= Rows || <span class="parameter">pos</span>.Col &lt; <span class="numericLiteral">0</span> || <span class="parameter">pos</span>.Col &gt;= Cols;
+}
+
+AutoScaleDimensions = <span class="keyword">new</span> <span class="class">SizeF</span>(<span class="numericLiteral">8F</span>, <span class="numericLiteral">14F</span>);
+AutoScaleMode = AutoScaleMode.Font;
+BackColor = <span class="class">SystemColors</span>.ButtonFace;
+ClientSize = <span class="keyword">new</span> <span class="class">Size</span>(<span class="numericLiteral">759</span>, <span class="numericLiteral">334</span>);
+<span class="class">Controls</span>.<span class="method">Add</span>(<span class="localName">textBox5</span>);
+<span class="class">Controls</span>.<span class="method">Add</span>(<span class="localName">button1</span>);
+Font = <span class="keyword">new</span> <span class="class">Font</span>(<span class="string">&quot;Verdana&quot;</span>, <span class="numericLiteral">9F</span>, <span class="class">FontStyle</span>.Bold, <span class="class">GraphicsUnit</span>.Point, <span class="numericLiteral">0</span>);
+ForeColor = <span class="class">SystemColors</span>.ActiveCaptionText;
+Icon = (Icon)<span class="localName">resources</span>.<span class="method">GetObject</span>(<span class="string">&quot;$this.Icon&quot;</span>);
+Name = <span class="string">&quot;Form1&quot;</span>;
+StartPosition = <span class="class">FormStartPosition</span>.CenterScreen;
+Text = <span class="string">&quot;Factory 6.1&quot;</span>;
+TopMost = <span class="keyword">true</span>;
+TransparencyKey = <span class="struct">Color</span>.Red;
+Load += Form1_Load;
+
+<span class="localName">data</span>.<span class="method">Add</span>(<span class="class">ClaimTypes</span>.Name, <span class="localName">userClaims</span>.<span class="method">Find</span>(<span class="parameter">x</span> =&gt; <span class="parameter">x</span>.AttributeName == <span class="string">&quot;COOKIE&quot;</span>)?.AttributeValue ?? <span class="string">&quot;UNKNOWN&quot;</span>);
+
+
+Google.Structures.Model.<span class="class">Object</span> <span class="localName">obj</span> = <span class="class">Picker</span>.<span class="method">PickObject</span>(Google.Structures.Model.UI.<span class="class">Picker</span>.PickObjectEnum.PICK_ONE_OBJECT);
+Google.Structures.Model.<span class="class">PolyBeam</span> <span class="localName">pb</span> = (<span class="localName">obj</span> <span class="keyword">as</span> <span class="class">PolyBeam</span>);
+<span class="keyword">var</span> <span class="localName">point</span> = (<span class="localName">en</span>.Current <span class="keyword">as</span> <span class="class">MyPoint</span>);
+
+<span class="class">TextBox2</span>.Text = (<span class="string">&quot;abc&quot;</span> + <span class="class">TextBox1</span>.Text);
+
+<span class="localName">application</span>.<span class="method">CreateTab</span>(ModelicalTabName);
+
+[<span class="class">MenuItem</span>(<span class="string">&quot;TESTS/Doc1.xml&quot;</span>)]
+<span class="keyword">public static void</span> <span class="method">ShowWindow</span>()
+{
+}
+
+
+<span class="control">if</span> (ProcessingState != ProcessingState.NoNeed)
+{
+    <span class="control">return</span>;
+}
+
+ProcessingState = ProcessingState.ToBeProcessed;
+
+<span class="keyword">public static</span> System.Windows.Media.Imaging.<span class="class">BitmapSource</span> <span class="method">GetImage</span>(System.Drawing.<span class="class">Bitmap</span> <span class="parameter">bm</span>)
+{
+    <span class="control">return</span> <span class="class">Utilities</span>.<span class="method">GetImage</span>(<span class="parameter">bm</span>.<span class="method">GetHbitmap</span>());
+}
+    
+<span class="keyword">public static</span> System.Windows.Media.Imaging.<span class="class">BitmapSource</span> <span class="method">GetImage</span>(<span class="struct">IntPtr</span> <span class="parameter">bm</span>)
+{
+    System.Windows.Media.<span class="class">Imaging</span>.BitmapSource <span class="localName">bmSource</span> = System.Windows.Interop.<span class="class">Imaging</span>.<span class="method">CreateBitmapSourceFromHBitmap</span>(<span class="parameter">bm</span>,
+            <span class="struct">IntPtr</span>.Zero,
+            System.Windows.<span class="class">Int32Rect</span>.Empty,
+            System.Windows.Media.<span class="class">Imaging</span>.BitmapSizeOptions.<span class="method">FromEmptyOptions</span>());
+    
+    <span class="control">return</span> <span class="localName">bmSource</span>;
+}
+
+<span class="keyword">this</span>.pictureBoxClose.SizeMode = System.Windows.Forms.<span class="enumName">PictureBoxSizeMode</span>.StretchImage;
+
+<span class="keyword">private bool</span> <span class="method">validateQuantityItems</span>()
+{
+    <span class="control">return</span> <span class="keyword">base</span>.UIValidationErrorCount == <span class="numericLiteral">0</span>;
+}
+
+<span class="preprocessor">#pragma warning disable</span> CS0414 <span class="comment">// Remove unread private members</span>
+
+<span class="keyword">var</span> <span class="localName">lScannableList</span> = <span class="localName">myItems</span>?.<span class="method">Where</span>(<span class="parameter">t</span> =&gt; <span class="parameter">t</span>?.Tag <span class="keyword">is</span> <span class="class">IReferenceItem</span> <span class="localName">lItem</span> &amp;&amp; <span class="localName">lItem</span>?.AcceptData == <span class="keyword">true</span>)?.<span class="method">ToList</span>();
+
+Test123.<span class="class">Company</span> <span class="localName">oCompany</span>
+
+<span class="class">NFANode</span> <span class="method">GetOrCreate</span>(<span class="class">ImmutableArray</span>&lt;<span class="class">NFANode</span>&gt; <span class="localName">set</span>)
+{
+}</pre>

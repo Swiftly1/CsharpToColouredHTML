@@ -6,24 +6,28 @@ namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
 
 internal partial class HeuristicsGenerator
 {
-    private bool _IsUsing = false;
-    private bool _IsTypeOf = false;
-    // Simplifies detecting creation of an instance, so we don't have to go behind.
-    // So far it works decent, thus no need for more complex approach.
-    private bool _IsNew = false;
-    private bool _IsWithinMethod = false;
-
     private int _ParenthesisCounter = 0;
-    private int _BracketsCounter = 0;
+    private bool _InsideIfStatement = false;
+    private bool _InsideNewStatement = false;
 
     private readonly Hints _Hints;
 
+    ///
+    private int _CurrentIndex = 0;
+    private List<Node> _OriginalNodes = new();
+    private Node CurrentNode => _OriginalNodes[_CurrentIndex];
+    private string CurrentText => _OriginalNodes[_CurrentIndex].Text;
+    ///
     private List<NodeWithDetails> _Output = new();
 
     private HashSet<string> _FoundClasses = new();
     private HashSet<string> _FoundStructs = new();
     private HashSet<string> _FoundInterfaces = new();
     private HashSet<string> _FoundPropertiesOrFields = new();
+    private HashSet<string> _FoundLocalNames = new();
+
+    private HashSet<string> _FoundNamespaceParts = new();
+    private HashSet<string> _FoundNamespaces = new();
 
     private Dictionary<string, string> _SimpleClassificationToColourMapper { get; } = new()
     {
@@ -66,7 +70,12 @@ internal partial class HeuristicsGenerator
     public List<NodeAfterProcessing> Build(List<Node> input)
     {
         Reset();
-        ProcessData(input);
+
+        if (input == null || input.Count == 0)
+            return new List<NodeAfterProcessing>();
+
+        _OriginalNodes = input;
+        GenerateHeuristics();
         PostProcess(_Output);
         AssignLineNumbers(_Output);
 
@@ -89,13 +98,12 @@ internal partial class HeuristicsGenerator
         _FoundInterfaces.Clear();
         _FoundStructs.Clear();
         _FoundPropertiesOrFields.Clear();
+        _FoundLocalNames.Clear();
         _Output.Clear();
-        _IsUsing = false;
-        _IsNew = false;
-        _IsTypeOf = false;
-        _IsWithinMethod = false;
         _ParenthesisCounter = 0;
-        _BracketsCounter = 0;
+        _CurrentIndex = 0;
+        _InsideIfStatement = false;
+        _InsideNewStatement = false;
     }
 
     private void AssignLineNumbers(List<NodeWithDetails> output)
@@ -112,70 +120,5 @@ internal partial class HeuristicsGenerator
 
             node.LineNumber = currentLineNumber;
         }
-    }
-
-    private void ProcessData(List<Node> nodes)
-    {
-        for (int i = 0; i < nodes.Count; i++)
-        {
-            var result = ExtractColourAndSetMetaData(i, nodes);
-
-            var nodeWithDetails = new NodeWithDetails
-            (
-                colour: result.Colour,
-                text: nodes[i].Text,
-                trivia: nodes[i].Trivia,
-                hasNewLine: nodes[i].HasNewLine,
-                isNew: _IsNew,
-                isUsing: _IsUsing,
-                parenthesisCounter: _ParenthesisCounter,
-                classificationType: nodes[i].ClassificationType,
-                id: nodes[i].Id,
-                skipIdentifierPostProcessing: result.SkipIdentifierPostProcessing
-            );
-
-            _Output.Add(nodeWithDetails);
-        }
-    }
-
-    private ExtractedColourResult ExtractColourAndSetMetaData(int currentIndex, List<Node> nodes)
-    {
-        var node = nodes[currentIndex];
-
-        if (_SimpleClassificationToColourMapper.TryGetValue(node.ClassificationType, out var simpleColour))
-            return new ExtractedColourResult(simpleColour);
-
-        if (_Hints.BuiltInTypes.Contains(node.Text))
-        {
-            _IsNew = false;
-            return new ExtractedColourResult(NodeColors.Keyword);
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Identifier)
-        {
-            return HandleIdentifier(currentIndex, nodes);
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Keyword)
-        {
-            if (node.Text == "using")
-                _IsUsing = true;
-
-            if (node.Text == "new")
-                _IsNew = true;
-
-            if (node.Text == "typeof")
-                _IsTypeOf = true;
-
-            return new ExtractedColourResult(NodeColors.Keyword);
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
-        {
-            return HandlePunctuation(currentIndex, nodes);
-        }
-        else if (node.ClassificationType.Contains("xml doc comment"))
-        {
-            return new ExtractedColourResult(NodeColors.Comment);
-        }
-
-        return new ExtractedColourResult(NodeColors.InternalError);
     }
 }

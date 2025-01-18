@@ -5,17 +5,17 @@
     <span class="method">InitializeComponent</span>();
 
     <span class="keyword">int</span> <span class="localName">abc</span> = <span class="numericLiteral">6</span>;
-    tableLayoutPanel12345.A = <span class="localName">abc</span>;
+    <span class="localName">tableLayoutPanel12345</span>.A = <span class="localName">abc</span>;
 
-    tableLayoutPanel12345.B.<span class="method">Clear</span>();
-    tableLayoutPanel12345.C.<span class="method">Clear</span>();
+    <span class="localName">tableLayoutPanel12345</span>.B.<span class="method">Clear</span>();
+    <span class="localName">tableLayoutPanel12345</span>.C.<span class="method">Clear</span>();
 
     <span class="keyword">var</span> <span class="localName">items1</span> = <span class="method">GetItems</span>();
     <span class="control">foreach</span> (<span class="keyword">var</span> <span class="localName">item1</span> <span class="control">in</span> <span class="localName">items1</span>)
     {
         <span class="control">foreach</span> (<span class="keyword">var</span> <span class="localName">item2</span> <span class="control">in</span> <span class="localName">item1</span>.Items)
         {
-            tableLayoutPanel12345.Controls.<span class="method">Add</span>(<span class="localName">item2</span>.Name, <span class="localName">item2</span>.X, <span class="localName">item2</span>.Y);
+            <span class="localName">tableLayoutPanel12345</span>.Controls.<span class="method">Add</span>(<span class="localName">item2</span>.Name, <span class="localName">item2</span>.X, <span class="localName">item2</span>.Y);
         }
     }
 }</pre>

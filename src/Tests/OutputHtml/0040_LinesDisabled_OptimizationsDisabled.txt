@@ -2,4 +2,4 @@
 <pre class="background">
 <span class="class">Test</span> <span class="localName">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Test</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
 
-<span class="localName">test</span><span class="operator">.</span><span class="identifier">Something</span> <span class="operator">=</span> <span class="class">Something</span><span class="operator">.</span><span class="identifier">Somewhere</span><span class="punctuation">;</span></pre>
+<span class="localName">test</span><span class="operator">.</span><span class="propertyName">Something</span> <span class="operator">=</span> <span class="class">Something</span><span class="operator">.</span><span class="propertyName">Somewhere</span><span class="punctuation">;</span></pre>

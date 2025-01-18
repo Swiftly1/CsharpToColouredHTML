@@ -20,7 +20,7 @@
 
 <span class="keyword">var</span> <span class="localName">xml</span> <span class="operator">=</span> $&quot;&quot;&quot;
     
-        &lt;element attr=&quot;<span class="punctuation">{</span><span class="identifier">content</span><span class="punctuation">}</span>&quot;&gt;
+        &lt;element attr=&quot;<span class="punctuation">{</span><span class="localName">content</span><span class="punctuation">}</span>&quot;&gt;
             &lt;body&gt;
             &lt;/body&gt;
         &lt;/element&gt;

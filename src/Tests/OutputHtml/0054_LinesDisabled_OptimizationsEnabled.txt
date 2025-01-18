@@ -2,7 +2,7 @@
 <pre class="background">
 <span class="keyword">public static</span> <span class="class">Thing</span> <span class="method">CreateThing</span>(<span class="class">Thing</span> <span class="parameter">fab</span>)
 {
-    <span class="control">return</span> <span class="parameter">fab</span>.<span class="method">Instantiate</span>(InputManager, <span class="class">TestManager</span>, <span class="class">Math</span>.PI);
+    <span class="control">return</span> <span class="parameter">fab</span>.<span class="method">Instantiate</span>(InputManager, TestManager, <span class="class">Math</span>.PI);
 }
 
 <span class="keyword">public void</span> <span class="method">test</span>(<span class="class">List</span>&lt;<span class="keyword">int</span>&gt; <span class="parameter">keys</span>, <span class="class">Dictionary</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; <span class="parameter">dictionary</span>)

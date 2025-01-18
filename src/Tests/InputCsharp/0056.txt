@@ -1,0 +1,79 @@
+﻿output.Tags = _service.GetItem(person, Channel);
+var searchResult = await _serviceB.FindAsync(Channel.UnderlyingChannel, Channel.GetMainCountry(), searchQuery, tags: searchQuery.Tags);
+
+private bool OutsideGrid(Position pos)
+{
+	return pos.Row < 0 || pos.Row >= Rows || pos.Col < 0 || pos.Col >= Cols;
+}
+
+AutoScaleDimensions = new SizeF(8F, 14F);
+AutoScaleMode = AutoScaleMode.Font;
+BackColor = SystemColors.ButtonFace;
+ClientSize = new Size(759, 334);
+Controls.Add(textBox5);
+Controls.Add(button1);
+Font = new Font("Verdana", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
+ForeColor = SystemColors.ActiveCaptionText;
+Icon = (Icon)resources.GetObject("$this.Icon");
+Name = "Form1";
+StartPosition = FormStartPosition.CenterScreen;
+Text = "Factory 6.1";
+TopMost = true;
+TransparencyKey = Color.Red;
+Load += Form1_Load;
+
+data.Add(ClaimTypes.Name, userClaims.Find(x => x.AttributeName == "COOKIE")?.AttributeValue ?? "UNKNOWN");
+
+
+Google.Structures.Model.Object obj = Picker.PickObject(Google.Structures.Model.UI.Picker.PickObjectEnum.PICK_ONE_OBJECT);
+Google.Structures.Model.PolyBeam pb = (obj as PolyBeam);
+var point = (en.Current as MyPoint);
+
+TextBox2.Text = ("abc" + TextBox1.Text);
+
+application.CreateTab(ModelicalTabName);
+
+[MenuItem("TESTS/Doc1.xml")]
+public static void ShowWindow()
+{
+}
+
+
+if (ProcessingState != ProcessingState.NoNeed)
+{
+	return;
+}
+
+ProcessingState = ProcessingState.ToBeProcessed;
+
+public static System.Windows.Media.Imaging.BitmapSource GetImage(System.Drawing.Bitmap bm)
+{
+	return Utilities.GetImage(bm.GetHbitmap());
+}
+	
+public static System.Windows.Media.Imaging.BitmapSource GetImage(IntPtr bm)
+{
+	System.Windows.Media.Imaging.BitmapSource bmSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(bm,
+	        IntPtr.Zero,
+	        System.Windows.Int32Rect.Empty,
+	        System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+	
+	return bmSource;
+}
+
+this.pictureBoxClose.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+
+private bool validateQuantityItems()
+{
+	return base.UIValidationErrorCount == 0;
+}
+
+#pragma warning disable CS0414 // Remove unread private members
+
+var lScannableList = myItems?.Where(t => t?.Tag is IReferenceItem lItem && lItem?.AcceptData == true)?.ToList();
+
+Test123.Company oCompany
+
+NFANode GetOrCreate(ImmutableArray<NFANode> set)
+{
+}

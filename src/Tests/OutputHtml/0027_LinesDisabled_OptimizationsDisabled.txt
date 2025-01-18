@@ -106,10 +106,10 @@
             <span class="control">while</span> <span class="punctuation">(</span><span class="keyword">true</span><span class="punctuation">)</span>
             <span class="punctuation">{</span>
                 <span class="fieldName">done</span> <span class="operator">=</span> <span class="keyword">false</span><span class="punctuation">;</span>
-                <span class="keyword">var</span> <span class="localName">keys</span> <span class="operator">=</span> <span class="fieldName">readyToGo</span><span class="operator">.</span><span class="identifier">Keys</span><span class="operator">.</span><span class="method">GetEnumerator</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+                <span class="keyword">var</span> <span class="localName">keys</span> <span class="operator">=</span> <span class="fieldName">readyToGo</span><span class="operator">.</span><span class="propertyName">Keys</span><span class="operator">.</span><span class="method">GetEnumerator</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
                 <span class="control">while</span> <span class="punctuation">(</span><span class="localName">keys</span><span class="operator">.</span><span class="method">MoveNext</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span>
                 <span class="punctuation">{</span>
-                    <span class="fieldName">current</span> <span class="operator">=</span> <span class="localName">keys</span><span class="operator">.</span><span class="identifier">Current</span><span class="punctuation">;</span>
+                    <span class="fieldName">current</span> <span class="operator">=</span> <span class="localName">keys</span><span class="operator">.</span><span class="propertyName">Current</span><span class="punctuation">;</span>
                     <span class="fieldName">helper</span><span class="operator">.</span><span class="method">Switch</span><span class="punctuation">(</span><span class="fieldName">current</span><span class="punctuation">)</span><span class="punctuation">;</span>
                     <span class="control">if</span> <span class="punctuation">(</span><span class="fieldName">done</span><span class="punctuation">)</span>
                     <span class="punctuation">{</span>
@@ -121,7 +121,7 @@
                     <span class="punctuation">}</span>
                 <span class="punctuation">}</span>
  
-                <span class="control">if</span> <span class="punctuation">(</span><span class="fieldName">allJobs</span><span class="operator">.</span><span class="identifier">IsEmpty</span><span class="punctuation">)</span>
+                <span class="control">if</span> <span class="punctuation">(</span><span class="fieldName">allJobs</span><span class="operator">.</span><span class="propertyName">IsEmpty</span><span class="punctuation">)</span>
                 <span class="punctuation">{</span>
                     <span class="control">break</span><span class="punctuation">;</span>
                 <span class="punctuation">}</span>

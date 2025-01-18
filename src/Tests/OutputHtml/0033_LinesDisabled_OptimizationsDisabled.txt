@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="control">foreach</span> <span class="punctuation">(</span><span class="class">Field</span> <span class="localName">f</span> <span class="control">in</span> <span class="localName">test</span><span class="operator">.</span><span class="identifier">Fields</span><span class="punctuation">)</span>
+<span class="control">foreach</span> <span class="punctuation">(</span><span class="class">Field</span> <span class="localName">f</span> <span class="control">in</span> <span class="localName">test</span><span class="operator">.</span><span class="propertyName">Fields</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
 <span class="punctuation">}</span>
 
