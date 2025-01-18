@@ -1,20 +1,20 @@
 
 <pre class="background">
-[<span class="method">Test</span>]
+[<span class="class">Test2</span>]
 <span class="keyword">public void</span> <span class="method">Test</span>()
 {
-    <span class="control">if</span> (_check == <span class="keyword">null</span>)
+    <span class="control">if</span> (<span class="localName">_check</span> == <span class="keyword">null</span>)
     {
         <span class="control">throw</span> <span class="keyword">new</span> <span class="class">ArgumentOutOfRangeException</span>();
     }
     
-    _phone.<span class="method">Dispose</span>();
-    _phone = <span class="keyword">null</span>!;
+    <span class="localName">_phone</span>.<span class="method">Dispose</span>();
+    <span class="localName">_phone</span> = <span class="keyword">null</span>!;
 
-    _Service2 = <span class="keyword">null</span>!;
+    <span class="localName">_Service2</span> = <span class="keyword">null</span>!;
 
-    _check.<span class="method">Dispose</span>();
-    _check = <span class="keyword">null</span>!;
+    <span class="localName">_check</span>.<span class="method">Dispose</span>();
+    <span class="localName">_check</span> = <span class="keyword">null</span>!;
     
-    _service.<span class="method">Delete</span>(<span class="keyword">null</span>);
+    <span class="localName">_service</span>.<span class="method">Delete</span>(<span class="keyword">null</span>);
 }</pre>

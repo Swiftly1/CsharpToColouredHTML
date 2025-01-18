@@ -7,8 +7,6 @@ public record NodeWithDetails
         string text,
         string trivia,
         bool hasNewLine,
-        bool isNew,
-        bool isUsing,
         int parenthesisCounter,
         string classificationType,
         bool skipIdentifierPostProcessing
@@ -18,8 +16,6 @@ public record NodeWithDetails
         Text = text;
         Trivia = trivia;
         HasNewLine = hasNewLine;
-        IsNew = isNew;
-        IsUsing = isUsing;
         ParenthesisCounter = parenthesisCounter;
         TextWithTrivia = Trivia + Text;
         ClassificationType = classificationType;
@@ -32,12 +28,10 @@ public record NodeWithDetails
         string text,
         string trivia,
         bool hasNewLine,
-        bool isNew,
-        bool isUsing,
         int parenthesisCounter,
         string classificationType,
         bool skipIdentifierPostProcessing,
-        Guid id) : this(colour, text, trivia, hasNewLine, isNew, isUsing, parenthesisCounter, classificationType, skipIdentifierPostProcessing)
+        Guid id) : this(colour, text, trivia, hasNewLine, parenthesisCounter, classificationType, skipIdentifierPostProcessing)
     {
         Id = id;
     }
@@ -60,7 +54,7 @@ public record NodeWithDetails
 
     public int ParenthesisCounter { get; init; }
 
-    public string ClassificationType { get; init; }
+    public string ClassificationType { get; set; }
 
     public bool UsesMostCommonColour { get; set; }
 

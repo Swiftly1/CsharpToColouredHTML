@@ -7,7 +7,7 @@
     <span class="keyword">private void</span> <span class="method">InitializeComponent</span>()
     {
         System.ComponentModel.<span class="class">ComponentResourceManager</span> <span class="localName">resources</span> = <span class="keyword">new</span> System.ComponentModel.<span class="class">ComponentResourceManager</span>(<span class="keyword">typeof</span>(<span class="class">Form1</span>));
-        ((System.ComponentModel.<span class="interface">ISupportInitialize</span>)(<span class="keyword">this</span>.btnRestaurar)).<span class="method">BeginInit</span>();
+        ((System.ComponentModel.<span class="interface">ISupportInitialize</span>)(<span class="keyword">this</span>.btnRestaurar.Val1)).<span class="method">BeginInit</span>();
         ((System.ComponentModel.<span class="interface">ISupportInitialize</span>)(<span class="keyword">this</span>.pictureBox1)).<span class="method">EndInit</span>();
 
         <span class="class">ItemSlot</span> <span class="localName">givingItemSlot</span> = <span class="keyword">this</span>;

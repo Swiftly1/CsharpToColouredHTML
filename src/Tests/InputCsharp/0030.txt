@@ -5,7 +5,7 @@
 	private void InitializeComponent()
 	{
 	    System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-		((System.ComponentModel.ISupportInitialize)(this.btnRestaurar)).BeginInit();
+		((System.ComponentModel.ISupportInitialize)(this.btnRestaurar.Val1)).BeginInit();
         ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 
 		ItemSlot givingItemSlot = this;

@@ -18,8 +18,6 @@ public static class NodeColors
 
     public const string Interface = "interface";
 
-    public const string InternalError = "internalError";
-
     public const string Comment = "comment";
 
     public const string Preprocessor = "preprocessor";
@@ -67,4 +65,12 @@ public static class NodeColors
     public const string EventName = "eventName";
 
     public const string ExcludedCode = "excludedCode";
+
+    public const string InternalError = "internalError";
+
+#if DEBUG
+    public const string DefaultColour = NodeColors.InternalError;
+#else
+    public const string DefaultColour = NodeColors.Identifier;
+#endif
 }

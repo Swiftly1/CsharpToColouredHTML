@@ -1,7 +1,10 @@
-﻿namespace CsharpToColouredHTML.Core.Miscs;
+﻿using System.Diagnostics;
+
+namespace CsharpToColouredHTML.Core.Miscs;
 
 public static class StringHelper
 {
+    [DebuggerStepThrough]
     public static List<int> AllIndicesOf(string str, string substr)
     {
         if (str is null)
@@ -35,6 +38,7 @@ public static class StringHelper
         return indexes;
     }
 
+    [DebuggerStepThrough]
     public static bool EqualsAnyOf(this string s, params string[] strs)
     {
         if (strs == null)
@@ -43,6 +47,21 @@ public static class StringHelper
         foreach (var val in strs)
         {
             if (s.Equals(val))
+                return true;
+        }
+
+        return false;
+    }
+
+    [DebuggerStepThrough]
+    public static bool ContainsAnyOf(this string s, params string[] strs)
+    {
+        if (strs == null)
+            return false;
+
+        foreach (var val in strs)
+        {
+            if (s.Contains(val))
                 return true;
         }
 

@@ -6,7 +6,7 @@
 <span class="class">VsShellUtilities</span>.<span class="method">ShowMessageBox</span>
 (
     <span class="keyword">this</span>,
-    msg,
+    <span class="localName">msg</span>,
     <span class="keyword">null</span>,
     <span class="class">OLEMSGICON</span>.OLEMSGICON_WARNING,
     <span class="class">OLEMSGBUTTON</span>.OLEMSGBUTTON_OK,

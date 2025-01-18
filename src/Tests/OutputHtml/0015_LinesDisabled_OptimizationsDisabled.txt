@@ -1,21 +1,21 @@
 
 <pre class="background">
 <span class="struct">TextSpan</span><span class="operator">?</span> <span class="localName">previous</span> <span class="operator">=</span> <span class="keyword">null</span><span class="punctuation">;</span>
-<span class="keyword">var</span> <span class="localName">skippedClassifications</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">List</span><span class="punctuation">&lt;</span><span class="keyword">string</span><span class="punctuation">&gt;</span> <span class="punctuation">{</span> <span class="class">ClassificationTypeNames</span><span class="operator">.</span><span class="identifier">StringEscapeCharacter</span> <span class="punctuation">}</span><span class="punctuation">;</span>
+<span class="keyword">var</span> <span class="localName">skippedClassifications</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">List</span><span class="punctuation">&lt;</span><span class="keyword">string</span><span class="punctuation">&gt;</span> <span class="punctuation">{</span> <span class="class">ClassificationTypeNames</span><span class="operator">.</span><span class="propertyName">StringEscapeCharacter</span> <span class="punctuation">}</span><span class="punctuation">;</span>
 
 <span class="class">VsShellUtilities</span><span class="operator">.</span><span class="method">ShowMessageBox</span>
 <span class="punctuation">(</span>
     <span class="keyword">this</span><span class="punctuation">,</span>
-    <span class="identifier">msg</span><span class="punctuation">,</span>
+    <span class="localName">msg</span><span class="punctuation">,</span>
     <span class="keyword">null</span><span class="punctuation">,</span>
-    <span class="class">OLEMSGICON</span><span class="operator">.</span><span class="identifier">OLEMSGICON_WARNING</span><span class="punctuation">,</span>
-    <span class="class">OLEMSGBUTTON</span><span class="operator">.</span><span class="identifier">OLEMSGBUTTON_OK</span><span class="punctuation">,</span>
-    <span class="class">OLEMSGDEFBUTTON</span><span class="operator">.</span><span class="identifier">OLEMSGDEFBUTTON_FIRST</span>
+    <span class="class">OLEMSGICON</span><span class="operator">.</span><span class="propertyName">OLEMSGICON_WARNING</span><span class="punctuation">,</span>
+    <span class="class">OLEMSGBUTTON</span><span class="operator">.</span><span class="propertyName">OLEMSGBUTTON_OK</span><span class="punctuation">,</span>
+    <span class="class">OLEMSGDEFBUTTON</span><span class="operator">.</span><span class="propertyName">OLEMSGDEFBUTTON_FIRST</span>
 <span class="punctuation">)</span><span class="punctuation">;</span>
 
 <span class="keyword">public</span> <span class="keyword">string</span> <span class="method">ProcessSourceCode</span><span class="punctuation">(</span><span class="keyword">string</span> <span class="parameter">code</span><span class="punctuation">,</span> <span class="interface">IEmitter</span> <span class="parameter">emitter</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
     <span class="keyword">var</span> <span class="localName">nodes</span> <span class="operator">=</span> <span class="method">GenerateInternalRepresentation</span><span class="punctuation">(</span><span class="parameter">code</span><span class="punctuation">)</span><span class="punctuation">;</span>
     <span class="parameter">emitter</span><span class="operator">.</span><span class="method">Emit</span><span class="punctuation">(</span><span class="localName">nodes</span><span class="punctuation">)</span><span class="punctuation">;</span>
-    <span class="control">return</span> <span class="parameter">emitter</span><span class="operator">.</span><span class="identifier">Text</span><span class="punctuation">;</span>
+    <span class="control">return</span> <span class="parameter">emitter</span><span class="operator">.</span><span class="propertyName">Text</span><span class="punctuation">;</span>
 <span class="punctuation">}</span></pre>

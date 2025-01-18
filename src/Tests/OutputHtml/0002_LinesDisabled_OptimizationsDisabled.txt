@@ -1,8 +1,8 @@
 
 <pre class="background">
 <span class="keyword">using</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Text</span><span class="punctuation">;</span>
-<span class="keyword">using</span> <span class="namespace">System</span><span class="operator">.</span><span class="identifier">Web</span><span class="punctuation">;</span>
-<span class="keyword">using</span> <span class="namespace">Microsoft</span><span class="operator">.</span><span class="identifier">CodeAnalysis</span><span class="operator">.</span><span class="identifier">Classification</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Web</span><span class="punctuation">;</span>
+<span class="keyword">using</span> <span class="namespace">Microsoft</span><span class="operator">.</span><span class="namespace">CodeAnalysis</span><span class="operator">.</span><span class="namespace">Classification</span><span class="punctuation">;</span>
 
 <span class="keyword">namespace</span> <span class="namespace">CsharpToColouredHTML</span><span class="operator">.</span><span class="namespace">Core</span><span class="punctuation">;</span>
 

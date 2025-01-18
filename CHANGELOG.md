@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [3.0.0] - 18.01.2025
+**Description:**
+Version 3.0.0 of this library was released! Finally!
+
+I've decided to rewrite the whole thing from almost scratch because previous approach was showing its limits.
+Now with more experience and awareness of the potential issues I think that I will be able to provide better heuristics.
+
+I've fixed many various things that weren't correctly marked, for example the whole "0056.txt" input file had many issues before.
+
 ## [2.0.0] - 20.12.2024
 **Description:**
 Version 2.0.0 of this library was released!

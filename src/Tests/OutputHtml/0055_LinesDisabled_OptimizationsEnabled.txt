@@ -1,0 +1,20 @@
+
+<pre class="background">
+<span class="control">if</span> (A)
+{
+    <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="string">&quot;.&quot;</span>);
+    <span class="control">if</span> (B)
+    {
+        <span class="control">if</span> (B2)
+            <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="string">&quot;.&quot;</span>);
+        <span class="control">else</span>
+            <span class="class">Result</span>.<span class="method">WriteLine</span>(<span class="string">&quot;..&quot;</span>);
+
+        <span class="control">if</span> (C)
+        {
+            <span class="control">if</span> (D)
+                <span class="control">if</span> (E &amp; B2)
+                    <span class="class">Result</span>.<span class="method">WriteLine</span>(<span class="string">&quot;.&quot;</span>);
+        }
+    }
+}</pre>

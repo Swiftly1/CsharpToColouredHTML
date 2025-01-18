@@ -1,4 +1,4 @@
-﻿[Test]
+﻿[Test2]
 public void Test()
 {
 	if (_check == null)
