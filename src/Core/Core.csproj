@@ -15,6 +15,7 @@
     <Description>C# to HTML converter with syntax highlighting</Description>
     <PackageTags>c#;html;converter;syntax;highlighting</PackageTags>
     <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
