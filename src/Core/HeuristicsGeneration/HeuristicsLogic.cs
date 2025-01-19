@@ -585,7 +585,7 @@ internal partial class HeuristicsGenerator
             if (peekedNode0.Text.EqualsAnyOf(":", "<"))
                 isInterface = true;
 
-            if (LanguageKeywords.AccessibilityModifiers.Contains(peekedNode0.Text))
+            if (AccessibilityModifiers.Contains(peekedNode0.Text))
                 isInterface = true;
         }
 

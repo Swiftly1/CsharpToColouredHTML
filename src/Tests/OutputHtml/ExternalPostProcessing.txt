@@ -2,5 +2,5 @@
 <pre class="background">
 <table>
 <tbody>
-<tr><td class="line_no" line_no="0"></td><td class="code_column"><span class="control">Console</span><span class="control">.</span><span class="keyword">OnBecameInvisible</span><span class="control">(</span><span class="control">123</span><span class="control">)</span></td></tr></tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="control">Console</span><span class="control">.</span><span class="keyword">OnBecameInvisible</span><span class="control">(</span><span class="control">123</span><span class="control">)</span></td></tr></tbody>
 </table></pre>

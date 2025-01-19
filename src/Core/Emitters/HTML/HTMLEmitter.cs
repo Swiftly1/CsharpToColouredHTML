@@ -52,7 +52,7 @@ public class HTMLEmitter : IEmitter
 
     private readonly Func<int, bool>? HighlightingPredicate = null;
 
-    private int _LineCounter = 0;
+    private int _LineCounter = 1;
 
     private string _MostCommonColourValue = string.Empty;
 
@@ -76,7 +76,7 @@ public class HTMLEmitter : IEmitter
 
     private void Reset()
     {
-        _LineCounter = 0;
+        _LineCounter = 1;
     }
 
     private string GenerateHtml(List<NodeAfterProcessing> nodes)
