@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [3.0.1] - 19.01.2025
+**Description:**
+Line numbering starts now from 1 instead of 0.
+
 ## [3.0.0] - 18.01.2025
 **Description:**
 Version 3.0.0 of this library was released! Finally!

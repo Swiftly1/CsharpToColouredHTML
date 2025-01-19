@@ -1,6 +1,6 @@
 ﻿namespace CsharpToColouredHTML.Core.Nodes;
 
-public record NodeWithDetails
+internal record NodeWithDetails
 {
     public NodeWithDetails(
         string colour,
@@ -16,8 +16,6 @@ public record NodeWithDetails
         Text = text;
         Trivia = trivia;
         HasNewLine = hasNewLine;
-        ParenthesisCounter = parenthesisCounter;
-        TextWithTrivia = Trivia + Text;
         ClassificationType = classificationType;
         Id = Guid.NewGuid();
         SkipIdentifierPostProcessing = skipIdentifierPostProcessing;
@@ -44,15 +42,7 @@ public record NodeWithDetails
 
     public string Trivia { get; init; }
 
-    public string TextWithTrivia { get; init; }
-
     public bool HasNewLine { get; init; }
-
-    public bool IsNew { get; init; }
-
-    public bool IsUsing { get; init; }
-
-    public int ParenthesisCounter { get; init; }
 
     public string ClassificationType { get; set; }
 
