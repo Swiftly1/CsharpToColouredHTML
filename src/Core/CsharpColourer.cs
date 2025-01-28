@@ -47,6 +47,7 @@ public class CsharpColourer
 
         TextSpan? previous = null;
         var skippedClassifications = new List<string> { ClassificationTypeNames.StringEscapeCharacter };
+        var crazyStrings = new List<string> { ClassificationTypeNames.StringLiteral, ClassificationTypeNames.VerbatimStringLiteral, ClassificationTypeNames.ExcludedCode };
 
         for (int i = 0; i < spans.Count; i++)
         {
@@ -68,8 +69,6 @@ public class CsharpColourer
                 var trivia = srcText.GetSubText(triviaTextSpan);
 
                 var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
-
-                var crazyStrings = new List<string> { ClassificationTypeNames.StringLiteral, ClassificationTypeNames.VerbatimStringLiteral, ClassificationTypeNames.ExcludedCode };
 
                 var isCrazyStringCandidate = crazyStrings.Contains(node.ClassificationType);
 
