@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [3.1.1] - 28.01.2025
+**Description:**
+Add support for .NET 8.
+
 ## [3.0.1] - 19.01.2025
 **Description:**
 Line numbering starts now from 1 instead of 0.
