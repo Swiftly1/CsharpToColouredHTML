@@ -148,7 +148,7 @@ internal partial class HeuristicsGenerator
                     if (current.Text.EqualsAnyOf("namespace", "using"))
                         return false;
 
-                    if (AccessibilityModifiers.Contains(current.Text))
+                    if (CommonKeywordsBeforeTypeName.Contains(current.Text))
                         return false;
 
                     return true;

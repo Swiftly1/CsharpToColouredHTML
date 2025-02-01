@@ -307,7 +307,7 @@ internal partial class HeuristicsGenerator
             _Hints.ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }
 
-    public static readonly List<string> AccessibilityModifiers = new List<string>
+    public static readonly List<string> CommonKeywordsBeforeTypeName = new List<string>
     {
         "public", "private", "internal", "sealed", "protected", "readonly", "static", "override", "event"
     };

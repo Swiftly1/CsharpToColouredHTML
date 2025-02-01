@@ -219,7 +219,7 @@ internal partial class HeuristicsGenerator
             }
         }
 
-        if (TryPeekBehind(out peekedBehindNode) && AccessibilityModifiers.Contains(peekedBehindNode.Text))
+        if (TryPeekBehind(out peekedBehindNode) && CommonKeywordsBeforeTypeName.Contains(peekedBehindNode.Text))
         {
             if (TryPeekAhead(out var aheadNode) && aheadNode.Text == ".")
             {
@@ -540,7 +540,7 @@ internal partial class HeuristicsGenerator
                     MarkNodeAs(NodeColors.Method);
                     return true;
                 }
-                else if (AccessibilityModifiers.Contains(peekBehind.Text))
+                else if (CommonKeywordsBeforeTypeName.Contains(peekBehind.Text))
                 {
                     MarkNodeAs(NodeColors.Method);
                     return true;
@@ -610,7 +610,7 @@ internal partial class HeuristicsGenerator
             if (peekedNode0.Text.EqualsAnyOf(":", "<"))
                 isInterface = true;
 
-            if (AccessibilityModifiers.Contains(peekedNode0.Text))
+            if (CommonKeywordsBeforeTypeName.Contains(peekedNode0.Text))
                 isInterface = true;
         }
 
@@ -748,7 +748,7 @@ internal partial class HeuristicsGenerator
                 MarkNodeAs(nodeAhead, colour);
             }
         }
-        else if (AccessibilityModifiers.Contains(CurrentText))
+        else if (CommonKeywordsBeforeTypeName.Contains(CurrentText))
         {
             // private (int NewIndex, TextSpan CurrentTextSpan) HandleMultilineStrings() {}
             if (CheckAndMarkNamedTupleType())
