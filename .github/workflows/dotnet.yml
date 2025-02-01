@@ -16,23 +16,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Setup .NET 9
+    - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 9.0.x 
-    - name: Setup .NET 8
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 8.0.x
+        dotnet-version: |
+          8.0.x
+          9.0.x
     - name: Restore dependencies
       working-directory: ./src/
       run: dotnet restore
     - name: Build
       working-directory: ./src/
       run: dotnet build --no-restore
-    - name: Test .NET 9.0
+    - name: Test .NET
       working-directory: ./src/
-      run: dotnet test --framework net9.0 --no-build --verbosity normal
-    - name: Test .NET 8.0
-      working-directory: ./src/
-      run: dotnet test --framework net8.0 --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal
