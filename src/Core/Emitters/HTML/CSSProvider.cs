@@ -89,6 +89,7 @@ namespace CsharpToColouredHTML.Core.Emitters.HTML
             { NodeColors.Namespace, "#dfdfdf" },
             { NodeColors.EnumMemberName, "#dfdfdf" },
             { NodeColors.Identifier, "#dfdfdf" },
+            { NodeColors.Default, "#dfdfdf" },
             { NodeColors.Punctuation, "#dfdfdf" },
             { NodeColors.Operator, "#dfdfdf" },
             { NodeColors.PropertyName, "#dfdfdf" },

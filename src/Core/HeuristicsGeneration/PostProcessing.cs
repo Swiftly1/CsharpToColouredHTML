@@ -10,7 +10,7 @@ internal partial class HeuristicsGenerator
     {
         // If some identifiers weren't recognized at first attempt, but later instead
         // then we may fix the previous ones.
-        var identifiers = alreadyProcessed.Where(x => x.Colour == NodeColors.Identifier).ToList();
+        var identifiers = alreadyProcessed.Where(x => x.Colour == NodeColors.DefaultColour).ToList();
 
         foreach (var entry in identifiers)
         {
@@ -259,11 +259,12 @@ internal partial class HeuristicsGenerator
         if (index == -1)
             return false;
 
-        var canGoAhead = CanMoveAhead();
+        if (nodes.IndexIsValid(index + 1, out var node) &&
+            node.ClassificationType == ClassificationTypeNames.Operator &&
+            node.Text.Contains("="))
+            return true;
 
-        if (canGoAhead &&
-            nodes[index + 1].ClassificationType == ClassificationTypeNames.Operator &&
-            nodes[index + 1].Text.Contains("="))
+        if (nodes.IndexIsValid(index + 1, out node) && node.Text == ".")
             return true;
 
         return false;
