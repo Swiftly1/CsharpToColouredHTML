@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [3.0.2] - 01.02.2025
+**Description:**
+Adding support for multiple .NETs.
+
+Now .NET 8 (LTS) and .NET 9 (latest) will be supported.
+
+Thanks @wbaldoumas and @tbolon for ideas for improvements!
+
 ## [3.0.1] - 19.01.2025
 **Description:**
 Line numbering starts now from 1 instead of 0.
