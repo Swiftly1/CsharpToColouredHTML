@@ -276,7 +276,7 @@ internal partial class HeuristicsGenerator
         if (!char.IsLetter(text[0]) && text[0] != '_')
             return false;
 
-        return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x));
+        return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x) || x == '_');
     }
 
     private bool IsPopularEnum(string text)
@@ -307,9 +307,9 @@ internal partial class HeuristicsGenerator
             _Hints.ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }
 
-    public static readonly List<string> AccessibilityModifiers = new List<string>
+    public static readonly List<string> CommonKeywordsBeforeTypeName = new List<string>
     {
-        "public", "private", "internal", "sealed", "protected", "readonly", "static"
+        "public", "private", "internal", "sealed", "protected", "readonly", "static", "override", "event"
     };
 
     public static readonly List<string> Operators = new List<string>

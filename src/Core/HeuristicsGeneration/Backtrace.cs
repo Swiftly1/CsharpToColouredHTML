@@ -1,4 +1,6 @@
-﻿using CsharpToColouredHTML.Core.Nodes;
+﻿using System.Linq;
+using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
@@ -210,7 +212,7 @@ internal partial class HeuristicsGenerator
         return false;
     }
 
-    private bool TryReadTypeOfIdentifierChain()
+    private bool TryMarkTypeOfNamespaceAndClassChain()
     {
         var valid_identifiers = new List<string>
         {
@@ -271,7 +273,7 @@ internal partial class HeuristicsGenerator
                         operators.Count != identifiers.Count - 1)
                         return false;
 
-                    foreach (var node in chainElements)
+                    foreach (var node in chainWithoutLastElement)
                     {
                         if (node.ClassificationType == ClassificationTypeNames.Operator)
                         {
@@ -292,7 +294,7 @@ internal partial class HeuristicsGenerator
                         }
                     }
 
-                    _CurrentIndex = _OriginalNodes.IndexOf(peekedNode);
+                    _CurrentIndex = _OriginalNodes.IndexOf(peekedNode) - 1;
                     return true;
                 }
             }
@@ -720,6 +722,118 @@ internal partial class HeuristicsGenerator
                 else
                 {
                     return false;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private bool CheckAndMarkNamedTupleType()
+    {
+        if (TryPeekAhead(out var peekedAhead) && peekedAhead.Text == "(" && CanMoveAhead(2))
+        {
+            MarkNodeAs(peekedAhead, NodeColors.Punctuation);
+            MoveNext();
+
+            var valid_identifiers = new List<string>
+            {
+                ClassificationTypeNames.Identifier,
+                ClassificationTypeNames.NamespaceName,
+                ClassificationTypeNames.ClassName,
+                ClassificationTypeNames.StructName,
+                ClassificationTypeNames.Keyword,
+            };
+
+            void MarkTupleElements(List<Node> chainElements)
+            {
+                foreach (var node in chainElements)
+                {
+                    if (node.ClassificationType == ClassificationTypeNames.Operator)
+                    {
+                        MarkNodeAs(node, NodeColors.Operator);
+                    }
+                    else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
+                    {
+                        MarkNodeAs(node, NodeColors.Punctuation);
+                    }
+                    else if (node.ClassificationType == ClassificationTypeNames.Keyword)
+                    {
+                        MarkNodeAs(node, NodeColors.Keyword);
+                    }
+                    else if (node.Id == chainElements[^2].Id)
+                    {
+                        MarkNodeAs(node, NodeColors.Identifier);
+                    }
+                    else if (node.Id == chainElements[^3].Id)
+                    {
+                        var color = ResolveClassOrStructName(node.Text);
+                        MarkNodeAs(node, color);
+                    }
+                    else
+                    {
+                        MarkNodeAs(node, NodeColors.Namespace);
+                    }
+                }
+                chainElements.Clear();
+            }
+
+            // 0 = currently at Identifier 1, expecting Identifier 2
+            // 1 = currently at Identifier 2, expecting Punctuation
+            // 2 = currently at Punctuation, expecting Identifier 1
+
+            var state = 0;
+            var indexAhead = 1;
+
+            var chainElements = new List<Node> { };
+
+            while (TryPeekAhead(out var peekedNode, indexAhead))
+            {
+                chainElements.Add(peekedNode);
+                if (state == 0 || state == 1)
+                {
+                    if (valid_identifiers.Contains(peekedNode.ClassificationType))
+                    {
+                        state++;
+                        indexAhead++;
+                        continue;
+                    }
+                    else
+                    {
+                        if (state == 1 && peekedNode.Text.EqualsAnyOf(","))
+                        {
+                            MarkTupleElements(chainElements);
+                            state = 0;
+                            indexAhead++;
+                            continue;
+                        }
+                        _CurrentIndex = _OriginalNodes.IndexOf(chainElements.First()) - 1;
+                        return false;
+                    }
+                }
+                else if (state == 2)
+                {
+                    if (peekedNode.Text == ",")
+                    {
+                        MarkTupleElements(chainElements);
+                        state = 0;
+                        indexAhead++;
+                        continue;
+                    }
+                    else
+                    {
+                        if (peekedNode.Text == ")")
+                        {
+                            MarkTupleElements(chainElements);
+                            _CurrentIndex = _OriginalNodes.IndexOf(peekedNode);
+                            return true;
+                        }
+                        else
+                        {
+                            _CurrentIndex = _OriginalNodes.IndexOf(chainElements.First()) - 1;
+                            return false;
+                        }
+                    }
                 }
             }
         }

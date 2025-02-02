@@ -219,12 +219,19 @@ internal partial class HeuristicsGenerator
             }
         }
 
-        if (TryPeekBehind(out peekedBehindNode) && AccessibilityModifiers.Contains(peekedBehindNode.Text))
+        if (TryPeekBehind(out peekedBehindNode) && CommonKeywordsBeforeTypeName.Contains(peekedBehindNode.Text))
         {
             if (TryPeekAhead(out var aheadNode) && aheadNode.Text == ".")
             {
-                MarkNodeAs(NodeColors.Namespace);
-                return true;
+                if (TryMarkTypeOfNamespaceAndClassChain())
+                {
+                    return true;
+                }
+                else
+                {
+                    MarkNodeAs(NodeColors.Namespace);
+                    return true;
+                }
             }
             else
             {
@@ -280,6 +287,12 @@ internal partial class HeuristicsGenerator
         // public static System.Windows.Media.Imaging.BitmapSource GetImage(IntPtr bm)
         if (TryPeekAhead(out peekedAheadNode) && peekedAheadNode.ClassificationType == ClassificationTypeNames.MethodName &&
             TryPeekBehind(out peekedBehindNode) && peekedBehindNode.Text == ".")
+        {
+            found = true;
+            goto Exit;
+        }
+
+        if (TryPeekAhead(out peekedAheadNode) && peekedAheadNode.ClassificationType == ClassificationTypeNames.MethodName)
         {
             found = true;
             goto Exit;
@@ -341,20 +354,32 @@ internal partial class HeuristicsGenerator
 
     private bool IsProperty()
     {
+        var validVariableIdentifiers = new List<string>
+        {
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.PropertyName,
+            ClassificationTypeNames.ConstantName,
+            ClassificationTypeNames.FieldName,
+            ClassificationTypeNames.ParameterName,
+        };
+
         if (TryPeekBehind(out var peekedOperator) && peekedOperator.Text == "." &&
             TryPeekBehind(out var peekedVariable, 2) &&
             TryPeekAhead(out var peekedAhead) && peekedAhead.Text != "(")
         {
-            var valid_identifiers = new List<string>
+            if (validVariableIdentifiers.Contains(peekedVariable.ClassificationType))
             {
-                ClassificationTypeNames.LocalName,
-                ClassificationTypeNames.PropertyName,
-                ClassificationTypeNames.ConstantName,
-                ClassificationTypeNames.FieldName,
-                ClassificationTypeNames.ParameterName,
-            };
+                MarkNodeAs(NodeColors.PropertyName);
+                return true;
+            }
+        }
 
-            if (valid_identifiers.Contains(peekedVariable.ClassificationType))
+        if (TryPeekBehind(out peekedOperator) && peekedOperator.Text == "." &&
+            TryPeekBehind(out var peekedOperator2, 2) && peekedOperator2.Text == "?" &&
+            TryPeekBehind(out peekedVariable, 3) &&
+            TryPeekAhead(out peekedAhead) && peekedAhead.Text != "(")
+        {
+            if (validVariableIdentifiers.Contains(peekedVariable.ClassificationType))
             {
                 MarkNodeAs(NodeColors.PropertyName);
                 return true;
@@ -515,7 +540,7 @@ internal partial class HeuristicsGenerator
                     MarkNodeAs(NodeColors.Method);
                     return true;
                 }
-                else if (AccessibilityModifiers.Contains(peekBehind.Text))
+                else if (CommonKeywordsBeforeTypeName.Contains(peekBehind.Text))
                 {
                     MarkNodeAs(NodeColors.Method);
                     return true;
@@ -585,7 +610,7 @@ internal partial class HeuristicsGenerator
             if (peekedNode0.Text.EqualsAnyOf(":", "<"))
                 isInterface = true;
 
-            if (AccessibilityModifiers.Contains(peekedNode0.Text))
+            if (CommonKeywordsBeforeTypeName.Contains(peekedNode0.Text))
                 isInterface = true;
         }
 
@@ -660,73 +685,77 @@ internal partial class HeuristicsGenerator
 
     private bool IsKeyword()
     {
-        if (CurrentNode.ClassificationType == ClassificationTypeNames.Keyword)
+        if (CurrentNode.ClassificationType != ClassificationTypeNames.Keyword)
+            return false;
+
+        MarkNodeAs(NodeColors.Keyword);
+
+        if (CurrentText == "using")
         {
-            MarkNodeAs(NodeColors.Keyword);
-
-            if (CurrentText == "using")
+            TryReadNamespaceChain();
+        }
+        else if (CurrentText == "new")
+        {
+            if (TryPeekAhead(out var peekedAhead1) && TryPeekAhead(out var peekedAhead2, 2))
             {
-                TryReadNamespaceChain();
-            }
-            else if (CurrentText == "new")
-            {
-                if (TryPeekAhead(out var peekedAhead1) && TryPeekAhead(out var peekedAhead2, 2))
+                // TODO: Potentially we can use only second list
+                var validIdentifiers1 = new[]
                 {
-                    // TODO: Potentially we can use only second list
-                    var validIdentifiers1 = new[]
-                    {
-                        ClassificationTypeNames.Identifier,
-                        ClassificationTypeNames.ClassName,
-                    };
+                    ClassificationTypeNames.Identifier,
+                    ClassificationTypeNames.ClassName,
+                };
 
-                    var validIdentifiers2 = new[]
+                var validIdentifiers2 = new[]
 {
-                        ClassificationTypeNames.Identifier,
-                        ClassificationTypeNames.ClassName,
-                        ClassificationTypeNames.NamespaceName,
-                    };
+                    ClassificationTypeNames.Identifier,
+                    ClassificationTypeNames.ClassName,
+                    ClassificationTypeNames.NamespaceName,
+                };
 
-                    if (validIdentifiers1.Contains(peekedAhead1.ClassificationType) &&
-                        peekedAhead2.Text.EqualsAnyOf("(", "{", "["))
-                    {
-                        var colour = ResolveClassOrStructName(peekedAhead1.Text);
-                        MarkNodeAs(peekedAhead1, colour);
-                        MoveNext();
-                    }
-                    else if (validIdentifiers2.Contains(peekedAhead1.ClassificationType) &&
-                        peekedAhead2.Text == ".")
-                    {
-                        TryReadIdentifierChain();
-                    }
-                }
-            }
-            else if (CurrentText == "typeof")
-            {
-                if (TryPeekAhead(out var nodeAhead) && nodeAhead.Text == "(")
+                if (validIdentifiers1.Contains(peekedAhead1.ClassificationType) &&
+                    peekedAhead2.Text.EqualsAnyOf("(", "{", "["))
                 {
+                    var colour = ResolveClassOrStructName(peekedAhead1.Text);
+                    MarkNodeAs(peekedAhead1, colour);
                     MoveNext();
-                    MarkNodeAs(nodeAhead, NodeColors.Punctuation);
-                    if (MoveNext())
-                    {
-                        if (!TryReadTypeOfIdentifierChain())
-                            MoveBehind();
-                    }
                 }
-            }
-            else if (CurrentText == "as")
-            {
-                if (TryPeekAhead(out var nodeAhead) && nodeAhead.ClassificationType == ClassificationTypeNames.Identifier)
+                else if (validIdentifiers2.Contains(peekedAhead1.ClassificationType) &&
+                         peekedAhead2.Text == ".")
                 {
-                    MoveNext();
-                    var colour = ResolveClassOrStructName(nodeAhead.Text);
-                    MarkNodeAs(nodeAhead, colour);
+                    TryReadIdentifierChain();
                 }
             }
-
-            return true;
+        }
+        else if (CurrentText == "typeof")
+        {
+            if (TryPeekAhead(out var nodeAhead) && nodeAhead.Text == "(")
+            {
+                MoveNext();
+                MarkNodeAs(nodeAhead, NodeColors.Punctuation);
+                if (MoveNext())
+                {
+                    if (!TryMarkTypeOfNamespaceAndClassChain())
+                        MoveBehind();
+                }
+            }
+        }
+        else if (CurrentText == "as")
+        {
+            if (TryPeekAhead(out var nodeAhead) && nodeAhead.ClassificationType == ClassificationTypeNames.Identifier)
+            {
+                MoveNext();
+                var colour = ResolveClassOrStructName(nodeAhead.Text);
+                MarkNodeAs(nodeAhead, colour);
+            }
+        }
+        else if (CommonKeywordsBeforeTypeName.Contains(CurrentText))
+        {
+            // private (int NewIndex, TextSpan CurrentTextSpan) HandleMultilineStrings() {}
+            if (CheckAndMarkNamedTupleType())
+                return true;
         }
 
-        return false;
+        return true;
     }
 
     private bool IsComment()

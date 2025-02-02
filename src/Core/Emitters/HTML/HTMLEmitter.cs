@@ -54,7 +54,7 @@ public class HTMLEmitter : IEmitter
 
     private int _LineCounter = 1;
 
-    private string _MostCommonColourValue = string.Empty;
+    private string _MostCommonColourHexValue = string.Empty;
 
     // Public Stuff:
 
@@ -83,7 +83,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, Optimize, nodes, _MostCommonColourValue));
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, Optimize, nodes, _MostCommonColourHexValue));
         sb.AppendLine(@"<pre class=""background"">");
 
         for (int i = 0; i < nodes.Count; i++)
@@ -107,7 +107,7 @@ public class HTMLEmitter : IEmitter
     {
         var sb = new StringBuilder();
 
-        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, Optimize, nodes, _MostCommonColourValue));
+        sb.AppendLine(_cssHelper.GetCSS(AddLineNumber, Optimize, nodes, _MostCommonColourHexValue));
         sb.AppendLine(@"<pre class=""background"">");
 
         sb.AppendLine("<table>");
@@ -240,16 +240,24 @@ public class HTMLEmitter : IEmitter
         if (!nodes.Any())
             return;
 
-        var mostCommonColourName = nodes.Select(x => x.Colour).GroupBy(x => x).OrderByDescending(x => x.Count()).First().Key;
-        _MostCommonColourValue = _cssHelper.GetMappedColour(mostCommonColourName);
+        var mostCommonColourName = nodes
+                                   .Select(x => x.Colour)
+                                   .GroupBy(x => x)
+                                   .OrderByDescending(x => x.Count())
+                                   .First()
+                                   .Key;
+
+        _MostCommonColourHexValue = _cssHelper.GetColourHexValue(mostCommonColourName);
+
+        foreach (var node in nodes)
+        {
+            if (_cssHelper.GetColourHexValue(node.Colour) == _MostCommonColourHexValue)
+                node.UsesMostCommonColour = true;
+        }
 
         for (int i = 0; i < nodes.Count; i++)
         {
             var current = nodes[i];
-
-            var mappedColour = _cssHelper.GetMappedColour(current.Colour);
-            if (mappedColour == _MostCommonColourValue)
-                nodes[i].UsesMostCommonColour = true;
 
             if (i + 1 >= nodes.Count)
                 break;

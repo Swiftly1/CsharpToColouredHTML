@@ -1,0 +1,24 @@
+﻿A_b a = new A_b();
+
+string a = "abcd";
+data.Append(a?.Replace("a", "b"));
+data.Append(a?.Text.Replace("a", "b"));
+data.Append($"{sitemap?.RootSitemaps.Replace(".", ",") ?? ""}");
+
+public MyType RequestType0 { get; set; }
+public Helpers.RequestType RequestType { get; set; }
+
+public static System.Windows.Media.Imaging.BitmapSource Abc123() {
+	Imaging img = new Imaging();
+}
+
+public interface IStorage
+{
+    public event Action OnStateChanged;
+    Storage Load();
+    IStorage Load2();
+}
+
+private (double, string A, string) HandleMultilineStrings2();
+private (double, string A, string CurrentTextSpan) HandleMultilineStrings3();
+private (int NewIndex, TextSpan CurrentTextSpan) HandleMultilineStrings1();
