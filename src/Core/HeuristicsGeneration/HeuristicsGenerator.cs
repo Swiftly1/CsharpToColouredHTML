@@ -99,6 +99,9 @@ internal partial class HeuristicsGenerator
         _FoundStructs.Clear();
         _FoundPropertiesOrFields.Clear();
         _FoundLocalNames.Clear();
+        _FoundNamespaces.Clear();
+        _FoundNamespaceParts.Clear();
+        _OriginalNodes.Clear();
         _Output.Clear();
         _ParenthesisCounter = 0;
         _CurrentIndex = 0;
