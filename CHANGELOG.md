@@ -1,6 +1,20 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [3.1.0] - 09.02.2025
+**Description:**
+Improved heuristics for cases like: ValueTuples, override/event keywords, interfaces and other.
+
+Added another colour called "default" which looks exactly like "identifier" (unless in debug mode, where it is red),
+but is used when particular syntax element wasn't resolved/matched to anything.
+It is supposed to make debugging easier.
+
+Further refactors around handling type names and its consistency (normal types like classes, types with namespaces before it, value tuples, etc)
+
+I've updated list of CSS names & their values:
+
+https://github.com/Swiftly1/CsharpToColouredHTML/blob/master/Customizability.md
+
 ## [3.0.2] - 01.02.2025
 **Description:**
 Adding support for multiple .NETs.

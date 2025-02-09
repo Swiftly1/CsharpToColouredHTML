@@ -72,7 +72,7 @@ ProcessingState = ProcessingState.ToBeProcessed;
 
 <span class="preprocessor">#pragma warning disable</span> CS0414 <span class="comment">// Remove unread private members</span>
 
-<span class="keyword">var</span> <span class="localName">lScannableList</span> = <span class="localName">myItems</span>?.<span class="method">Where</span>(<span class="parameter">t</span> =&gt; <span class="parameter">t</span>?.Tag <span class="keyword">is</span> <span class="class">IReferenceItem</span> <span class="localName">lItem</span> &amp;&amp; <span class="localName">lItem</span>?.AcceptData == <span class="keyword">true</span>)?.<span class="method">ToList</span>();
+<span class="keyword">var</span> <span class="localName">lScannableList</span> = <span class="localName">myItems</span>?.<span class="method">Where</span>(<span class="parameter">t</span> =&gt; <span class="parameter">t</span>?.Tag <span class="keyword">is</span> <span class="interface">IReferenceItem</span> <span class="localName">lItem</span> &amp;&amp; <span class="localName">lItem</span>?.AcceptData == <span class="keyword">true</span>)?.<span class="method">ToList</span>();
 
 Test123.<span class="class">Company</span> <span class="localName">oCompany</span>
 

@@ -1,0 +1,26 @@
+
+<pre class="background">
+<span class="class">A_b</span> <span class="localName">a</span> = <span class="keyword">new</span> <span class="class">A_b</span>();
+
+<span class="keyword">string</span> <span class="localName">a</span> = <span class="string">&quot;abcd&quot;</span>;
+<span class="localName">data</span>.<span class="method">Append</span>(<span class="localName">a</span>?.<span class="method">Replace</span>(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>));
+<span class="localName">data</span>.<span class="method">Append</span>(<span class="localName">a</span>?.Text.<span class="method">Replace</span>(<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>));
+<span class="localName">data</span>.<span class="method">Append</span>(<span class="string">$&quot;</span>{<span class="localName">sitemap</span>?.RootSitemaps.<span class="method">Replace</span>(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;,&quot;</span>) ?? <span class="string">&quot;&quot;</span>}<span class="string">&quot;</span>);
+
+<span class="keyword">public</span> <span class="class">MyType</span> RequestType0 { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+<span class="keyword">public</span> Helpers.<span class="class">RequestType</span> RequestType { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+<span class="keyword">public static</span> System.Windows.Media.Imaging.<span class="class">BitmapSource</span> <span class="method">Abc123</span>() {
+    <span class="class">Imaging</span> <span class="localName">img</span> = <span class="keyword">new</span> <span class="class">Imaging</span>();
+}
+
+<span class="keyword">public interface</span> <span class="interface">IStorage</span>
+{
+    <span class="keyword">public event</span> <span class="class">Action</span> OnStateChanged;
+    <span class="class">Storage</span> <span class="method">Load</span>();
+    <span class="interface">IStorage</span> <span class="method">Load2</span>();
+}
+
+<span class="keyword">private</span> (<span class="keyword">double</span>, <span class="keyword">string</span> A, <span class="keyword">string</span>) <span class="method">HandleMultilineStrings2</span>();
+<span class="keyword">private</span> (<span class="keyword">double</span>, <span class="keyword">string</span> A, <span class="keyword">string</span> CurrentTextSpan) <span class="method">HandleMultilineStrings3</span>();
+<span class="keyword">private</span> (<span class="keyword">int</span> NewIndex, <span class="struct">TextSpan</span> CurrentTextSpan) <span class="method">HandleMultilineStrings1</span>();</pre>

@@ -12,7 +12,7 @@ namespace CsharpToColouredHTML.Core.Emitters.HTML
             UserProvidedCSS = userProvidedCSS;
         }
 
-        public string GetMappedColour(string s) => ColorsMap[s];
+        public string GetColourHexValue(string s) => ColorsMap[s];
 
         public string GetCSS(bool addLineNumber, bool optimize, List<NodeAfterProcessing> nodes, string mostCommonColourValue)
         {
@@ -89,6 +89,7 @@ namespace CsharpToColouredHTML.Core.Emitters.HTML
             { NodeColors.Namespace, "#dfdfdf" },
             { NodeColors.EnumMemberName, "#dfdfdf" },
             { NodeColors.Identifier, "#dfdfdf" },
+            { NodeColors.Default, "#dfdfdf" },
             { NodeColors.Punctuation, "#dfdfdf" },
             { NodeColors.Operator, "#dfdfdf" },
             { NodeColors.PropertyName, "#dfdfdf" },

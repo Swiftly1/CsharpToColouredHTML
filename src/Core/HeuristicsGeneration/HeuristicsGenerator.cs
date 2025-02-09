@@ -12,12 +12,11 @@ internal partial class HeuristicsGenerator
 
     private readonly Hints _Hints;
 
-    ///
     private int _CurrentIndex = 0;
-    private List<Node> _OriginalNodes = new();
+    internal List<Node> _OriginalNodes = new();
     private Node CurrentNode => _OriginalNodes[_CurrentIndex];
     private string CurrentText => _OriginalNodes[_CurrentIndex].Text;
-    ///
+
     private List<NodeWithDetails> _Output = new();
 
     private HashSet<string> _FoundClasses = new();
@@ -78,8 +77,12 @@ internal partial class HeuristicsGenerator
         GenerateHeuristics();
         PostProcess(_Output);
         AssignLineNumbers(_Output);
+        return MapOutputToPublicType();
+    }
 
-        return _Output.Select(x => new NodeAfterProcessing
+    internal List<NodeAfterProcessing> MapOutputToPublicType()
+    {
+        return _Output.ConvertAll(x => new NodeAfterProcessing
         (
             x.Id,
             x.Colour,
@@ -89,7 +92,7 @@ internal partial class HeuristicsGenerator
             x.UsesMostCommonColour,
             x.LineNumber,
             useHighlighting: false // it may be defined later by postprocessor
-        )).ToList();
+        ));
     }
 
     public void Reset()
@@ -99,6 +102,9 @@ internal partial class HeuristicsGenerator
         _FoundStructs.Clear();
         _FoundPropertiesOrFields.Clear();
         _FoundLocalNames.Clear();
+        _FoundNamespaces.Clear();
+        _FoundNamespaceParts.Clear();
+        _OriginalNodes.Clear();
         _Output.Clear();
         _ParenthesisCounter = 0;
         _CurrentIndex = 0;
