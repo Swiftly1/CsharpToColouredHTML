@@ -3,6 +3,7 @@ All notable changes to this project since version 1.0.14 will be documented in t
 
 ## [3.1.0] - 09.02.2025
 **Description:**
+
 Improved heuristics for cases like: ValueTuples, override/event keywords, interfaces and other.
 
 Added another colour called "default" which looks exactly like "identifier" (unless in debug mode, where it is red),
