@@ -68,9 +68,11 @@ public static class NodeColors
 
     public const string InternalError = "internalError";
 
+    public const string Default = "default";
+
 #if DEBUG
     public const string DefaultColour = NodeColors.InternalError;
 #else
-    public const string DefaultColour = NodeColors.Identifier;
+    public const string DefaultColour = NodeColors.Default;
 #endif
 }

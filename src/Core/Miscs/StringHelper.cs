@@ -67,4 +67,16 @@ public static class StringHelper
 
         return false;
     }
+
+    [DebuggerStepThrough]
+    public static bool IndexIsValid<T>(this List<T> list, int index, out T entry) where T : class
+    {
+        entry = null;
+
+        if (index < 0) return false;
+        if (index >= list.Count) return false;
+
+        entry = list[index];
+        return true;
+    }
 }

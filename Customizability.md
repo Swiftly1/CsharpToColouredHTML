@@ -8,17 +8,17 @@ Default CSS with line numbers:
 
 	.background {
 	  font-family: monaco, Consolas, LucidaConsole, monospace;
-	  background-color: #1e1e1e;
+	  background-color: #1E1E1E;
 	  overflow: scroll;
 	}
 	.numeric {
 	  color: #b5cea8;
 	}
 	.method {
-	  color: #dcdcaa;
+	  color: #DCDCAA;
 	}
 	.class {
-	  color: #4ec9b0;
+	  color: #4EC9B0;
 	}
 	.keyword {
 	  color: #569cd6;
@@ -42,16 +42,16 @@ Default CSS with line numbers:
 	  color: #b8d7a3;
 	}
 	.extension {
-	  color: #b8d7a3;
+	  color: #DCDCAA;
 	}
 	.control {
-	  color: #c586c0;
+	  color: #C586C0;
 	}
 	.internalError {
-	  color: #ff0d0d;
+	  color: #FF0D0D;
 	}
 	.comment {
-	  color: #6a9955;
+	  color: #6A9955;
 	}
 	.preprocessor {
 	  color: #808080;
@@ -60,7 +60,7 @@ Default CSS with line numbers:
 	  color: #a4a4a4;
 	}
 	.struct {
-	  color: #86c691;
+	  color: #86C691;
 	}
 	.namespace {
 	  color: #dfdfdf;
@@ -69,6 +69,9 @@ Default CSS with line numbers:
 	  color: #dfdfdf;
 	}
 	.identifier {
+	  color: #dfdfdf;
+	}
+	.default {
 	  color: #dfdfdf;
 	}
 	.punctuation {
@@ -93,19 +96,22 @@ Default CSS with line numbers:
 	  color: #dfdfdf;
 	}
 	.localName {
-	  color: #9cdcfe;
+	  color: #9CDCFE;
 	}
 	.parameter {
-	  color: #9cdcfe;
+	  color: #9CDCFE;
 	}
 	.delegate {
-	  color: #4ec9b0;
+	  color: #4EC9B0;
 	}
 	.eventName {
 	  color: #dfdfdf;
 	}
 	.excludedCode {
 	  color: #808080;
+	}
+	.code_highlight {
+	  background-color: #395929;
 	}
 	table {
 	  white-space: pre;
@@ -122,17 +128,17 @@ Default CSS without line numbers:
 
 	.background {
 	  font-family: monaco, Consolas, LucidaConsole, monospace;
-	  background-color: #1e1e1e;
+	  background-color: #1E1E1E;
 	  overflow: scroll;
 	}
 	.numeric {
 	  color: #b5cea8;
 	}
 	.method {
-	  color: #dcdcaa;
+	  color: #DCDCAA;
 	}
 	.class {
-	  color: #4ec9b0;
+	  color: #4EC9B0;
 	}
 	.keyword {
 	  color: #569cd6;
@@ -156,16 +162,16 @@ Default CSS without line numbers:
 	  color: #b8d7a3;
 	}
 	.extension {
-	  color: #b8d7a3;
+	  color: #DCDCAA;
 	}
 	.control {
-	  color: #c586c0;
+	  color: #C586C0;
 	}
 	.internalError {
-	  color: #ff0d0d;
+	  color: #FF0D0D;
 	}
 	.comment {
-	  color: #6a9955;
+	  color: #6A9955;
 	}
 	.preprocessor {
 	  color: #808080;
@@ -174,7 +180,7 @@ Default CSS without line numbers:
 	  color: #a4a4a4;
 	}
 	.struct {
-	  color: #86c691;
+	  color: #86C691;
 	}
 	.namespace {
 	  color: #dfdfdf;
@@ -183,6 +189,9 @@ Default CSS without line numbers:
 	  color: #dfdfdf;
 	}
 	.identifier {
+	  color: #dfdfdf;
+	}
+	.default {
 	  color: #dfdfdf;
 	}
 	.punctuation {
@@ -207,13 +216,13 @@ Default CSS without line numbers:
 	  color: #dfdfdf;
 	}
 	.localName {
-	  color: #9cdcfe;
+	  color: #9CDCFE;
 	}
 	.parameter {
-	  color: #9cdcfe;
+	  color: #9CDCFE;
 	}
 	.delegate {
-	  color: #4ec9b0;
+	  color: #4EC9B0;
 	}
 	.eventName {
 	  color: #dfdfdf;
@@ -221,5 +230,3 @@ Default CSS without line numbers:
 	.excludedCode {
 	  color: #808080;
 	}
-
-	

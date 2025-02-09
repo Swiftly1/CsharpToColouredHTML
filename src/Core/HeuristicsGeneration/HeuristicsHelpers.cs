@@ -218,9 +218,6 @@ internal partial class HeuristicsGenerator
 
     private string ResolveName(string text)
     {
-        if (!IsValidClassOrStructName(text))
-            return NodeColors.Identifier;
-
         if (IsPopularStruct(text))
             return NodeColors.Struct;
 
@@ -242,7 +239,23 @@ internal partial class HeuristicsGenerator
         if (_FoundLocalNames.Contains(text))
             return NodeColors.LocalName;
 
+        bool startsWithI = NameLikeInterface(text);
+
+        if (startsWithI)
+            return NodeColors.Interface;
+
+        if (_Hints.BuiltInTypes.Contains(text))
+            return NodeColors.Keyword;
+
+        if (!IsValidClassOrStructName(text))
+            return NodeColors.Identifier;
+
         return NodeColors.Class;
+    }
+
+    private static bool NameLikeInterface(string text)
+    {
+        return text.StartsWith("I") && text.Length > 1 && char.IsUpper(text[1]);
     }
 
     private string ResolveClassOrStructName(string text)
@@ -262,6 +275,9 @@ internal partial class HeuristicsGenerator
         if (_FoundStructs.Contains(text))
             return NodeColors.Struct;
 
+        if (text.EndsWith("Struct"))
+            return NodeColors.Struct;
+
         return NodeColors.Class;
     }
 
@@ -276,7 +292,7 @@ internal partial class HeuristicsGenerator
         if (!char.IsLetter(text[0]) && text[0] != '_')
             return false;
 
-        return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x));
+        return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x) || x == '_');
     }
 
     private bool IsPopularEnum(string text)
@@ -307,12 +323,12 @@ internal partial class HeuristicsGenerator
             _Hints.ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
     }
 
-    public static readonly List<string> AccessibilityModifiers = new List<string>
+    private static readonly List<string> CommonKeywordsBeforeTypeName = new List<string>
     {
-        "public", "private", "internal", "sealed", "protected", "readonly", "static"
+        "public", "private", "internal", "sealed", "protected", "readonly", "static", "override", "event"
     };
 
-    public static readonly List<string> Operators = new List<string>
+    private static readonly List<string> Operators = new List<string>
     {
         "+", "-", "/", "*", "=", "==", "+=", "-=", "*=", "/=", "!=", "&",
         "^", "|", "&&", "||", "??", "%=", "|=", "^=", "<<=", ">>=", "??=",
