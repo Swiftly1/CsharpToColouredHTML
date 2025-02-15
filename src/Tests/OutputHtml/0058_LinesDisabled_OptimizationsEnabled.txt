@@ -1,0 +1,48 @@
+
+<pre class="background">
+<span class="method">TryParse</span>(<span class="string">&quot;123&quot;</span>, <span class="keyword">int</span>.<span class="method">TryParse</span>, <span class="keyword">out var</span> <span class="localName">intResult</span>);
+
+<span class="keyword">public static int</span> <span class="method">GetLengthAtCoord</span>(<span class="keyword">int</span> <span class="parameter">X</span>, <span class="keyword">int</span> <span class="parameter">Y</span>)
+{
+   <span class="keyword">var</span> <span class="localName">pair</span> = (<span class="parameter">X</span>, <span class="parameter">Y</span>);
+   <span class="control">return</span> Mapper[<span class="localName">pair</span>];
+}
+
+<span class="keyword">public void</span> <span class="method">Test</span>()
+{
+    <span class="comment">// Perform Run</span>
+    <span class="method">RunTest</span>();
+
+    <span class="control">if</span> (<span class="numericLiteral">3</span> &gt; <span class="numericLiteral">4</span>)
+        <span class="method">RunTest2</span>();
+}
+
+<span class="keyword">public void</span> <span class="method">CalculatePublic</span>() =&gt; <span class="method">CalculateInternal</span>(<span class="numericLiteral">5</span>);
+
+<span class="keyword">public void</span> <span class="method">Test4</span>(<span class="keyword">bool</span> <span class="parameter">useAbc</span>)
+{
+    <span class="keyword">var</span> <span class="localName">strategy</span> = = <span class="parameter">useAbc</span> ? <span class="class">Strategies</span>.A : <span class="class">Strategies</span>.B;
+}
+
+<span class="keyword">private readonly float</span>[] Entries = <span class="keyword">new float</span>[]
+{
+    <span class="numericLiteral">1</span>, <span class="numericLiteral">2</span>
+};
+
+<span class="keyword">protected override void</span> <span class="method">OnPageBegin</span>()
+{
+    <span class="class">User</span> <span class="localName">user</span> = <span class="keyword">new</span> <span class="class">User</span>()
+    {
+        Name = <span class="string">&quot;test&quot;</span>,
+        Email = Entries
+    };
+}
+
+<span class="keyword">public static</span> <span class="struct">IEnumerable</span>&lt;(<span class="typeParam">TSource</span> Source, <span class="typeParam">TOut</span> Out)&gt; <span class="method">WhereOut</span>&lt;<span class="typeParam">TSource</span>, <span class="typeParam">TOut</span>&gt;(<span class="keyword">this</span> <span class="struct">IEnumerable</span>&lt;<span class="typeParam">TSource</span>&gt; <span class="parameter">source</span>, <span class="class">TryGet</span>&lt;<span class="typeParam">TSource</span>, <span class="typeParam">TOut</span>&gt; <span class="parameter">tryGet</span>)
+{
+}
+
+<span class="keyword">public void</span> <span class="method">Test7</span>()
+{
+    <span class="keyword">var</span> <span class="localName">id</span> = <span class="localName">home</span>.Areas?.<span class="method">FirstOrDefault</span>()?.HomeId;
+}</pre>

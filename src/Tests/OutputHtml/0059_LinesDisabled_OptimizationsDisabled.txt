@@ -1,0 +1,10 @@
+
+<pre class="background">
+<span class="localName">```csharp</span>
+<span class="keyword">try</span>
+<span class="punctuation">{</span>
+
+<span class="punctuation">}</span>
+<span class="keyword">catch</span> <span class="punctuation">(</span><span class="class">Exception</span> <span class="localName">ex</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+<span class="punctuation">}</span></pre>

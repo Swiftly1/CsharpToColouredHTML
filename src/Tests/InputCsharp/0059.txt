@@ -1,0 +1,9 @@
+﻿```csharp
+try
+{
+
+}
+catch (Exception ex)
+{
+}
+```
