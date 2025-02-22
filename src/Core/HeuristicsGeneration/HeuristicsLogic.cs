@@ -128,9 +128,6 @@ internal partial class HeuristicsGenerator
         if (!IsValidClassOrStructName(CurrentText))
             return false;
 
-        if (IdentifierFirstCharCaseSeemsLikeVariable(CurrentText))
-            return false;
-
         if (TryPeekBehind(out var peekedBehindNode) && TryPeekBehind(out var peekedBehindNode2, 2) &&
             peekedBehindNode.Text == "." &&
             peekedBehindNode2.Text == ">")
@@ -289,6 +286,14 @@ internal partial class HeuristicsGenerator
             }
         }
 
+        // catch (Exception ex)
+        if (TryPeekBehind(out peekedBehindNode) && peekedBehindNode.Text == "(" &&
+            TryPeekBehind(out peekedBehindNode2, 2) && peekedBehindNode2.Text == "catch")
+        {
+            found = true;
+            goto Exit;
+        }
+
         // EqualityComparer<T1>
         // EqualityComparer<T1, T2, T3>
         if (CheckAndMarkGenericParametersChain())
@@ -326,6 +331,10 @@ internal partial class HeuristicsGenerator
             ClassificationTypeNames.ConstantName,
             ClassificationTypeNames.FieldName,
             ClassificationTypeNames.ParameterName,
+            ClassificationTypeNames.StructName,
+            ClassificationTypeNames.ClassName,
+            ClassificationTypeNames.RecordClassName,
+            ClassificationTypeNames.RecordStructName,
         };
 
         if (TryPeekBehind(out var peekedOperator) && peekedOperator.Text == "." &&
@@ -351,8 +360,24 @@ internal partial class HeuristicsGenerator
             }
         }
 
+        // var id = home.Areas?.FirstOrDefault()?.Id;
+        if (TryPeekBehind(out peekedOperator) && peekedOperator.Text == "." &&
+            TryPeekBehind(out peekedOperator2, 2) && peekedOperator2.Text == "?" &&
+            TryPeekBehind(out var peekedParenthesis, 3) && peekedParenthesis.Text == ")" &&
+            TryPeekAhead(out peekedAhead) && peekedAhead.Text != "(")
+        {
+            MarkNodeAs(NodeColors.PropertyName);
+            return true;
+        }
+
         if (TryPeekBehind(out peekedOperator) && peekedOperator.Text == "." &&
             TryPeekBehind(out var peekedIndexer, 2) && peekedIndexer.Text == "]")
+        {
+            MarkNodeAs(NodeColors.PropertyName);
+            return true;
+        }
+
+        if (TryPeekAhead(out peekedIndexer) && peekedIndexer.Text == "[")
         {
             MarkNodeAs(NodeColors.PropertyName);
             return true;
@@ -366,7 +391,7 @@ internal partial class HeuristicsGenerator
         }
 
         if (TryPeekBehind(out peekedOperator) && peekedOperator.Text == "." &&
-            TryPeekBehind(out var peekedParenthesis, 2) && peekedParenthesis.Text == ")")
+            TryPeekBehind(out peekedParenthesis, 2) && peekedParenthesis.Text == ")")
         {
             MarkNodeAs(NodeColors.PropertyName);
             return true;
@@ -412,7 +437,7 @@ internal partial class HeuristicsGenerator
         // return pos.Row < 0 || pos.Row >= Rows || pos.Col < 0 || pos.Col >= Cols;
         if (TryPeekBehind(out peekedOperator) && Operators.Contains(peekedOperator.Text))
         {
-            if (TryPeekAhead(out var nodeAhead1) && nodeAhead1.Text == ";")
+            if (TryPeekAhead(out var nodeAhead1) && nodeAhead1.Text.EqualsAnyOf(";", "}"))
             {
                 MarkNodeLocalNameOrProperty(CurrentNode);
                 return true;
@@ -426,7 +451,8 @@ internal partial class HeuristicsGenerator
             return true;
         }
 
-        if (TryPeekAhead(out var nodeAhead) && nodeAhead.Text == "," &&
+        // public static IEnumerable<(TSource Source, TOut Out)>
+        if (TryPeekAhead(out var nodeAhead) && nodeAhead.Text.EqualsAnyOf(",", ")") &&
             CurrentNode.ClassificationType == ClassificationTypeNames.Identifier)
         {
             MarkNodeLocalNameOrProperty(CurrentNode);
@@ -481,13 +507,19 @@ internal partial class HeuristicsGenerator
     {
         if (TryPeekAhead(out var peekedNode) && peekedNode.Text == "(")
         {
+            if (!CanMoveBehind())
+            {
+                MarkNodeAs(NodeColors.Method);
+                return true;
+            }
+
             if (TryPeekBehind(out var peekBehind))
             {
                 if (peekBehind.Text == "new")
                 {
                     return false;
                 }
-                else if (peekBehind.Text.EqualsAnyOf(".", "return", "await", "="))
+                else if (peekBehind.Text.EqualsAnyOf(".", "return", "await", "=", "=>"))
                 {
                     var newIsUsed = CheckIfThereIsNewBeforeMethodCall();
                     if (newIsUsed)
@@ -532,7 +564,12 @@ internal partial class HeuristicsGenerator
                 }
                 else if (peekBehind.ClassificationType == ClassificationTypeNames.Identifier)
                 {
-                    MarkNodeAs(peekBehind, ResolveClassOrStructName(peekBehind.Text));
+                    MarkNodeAs(peekBehind, ResolveName(peekBehind.Text));
+                    MarkNodeAs(NodeColors.Method);
+                    return true;
+                }
+                else if (peekBehind.ClassificationType.EqualsAnyOf(ClassificationTypeNames.Comment, ClassificationTypeNames.Punctuation))
+                {
                     MarkNodeAs(NodeColors.Method);
                     return true;
                 }
@@ -678,7 +715,7 @@ internal partial class HeuristicsGenerator
                 if (validIdentifiers1.Contains(peekedAhead1.ClassificationType) &&
                     peekedAhead2.Text.EqualsAnyOf("(", "{", "["))
                 {
-                    var colour = ResolveClassOrStructName(peekedAhead1.Text);
+                    var colour = ResolveName(peekedAhead1.Text, true);
                     MarkNodeAs(peekedAhead1, colour);
                     MoveNext();
                 }
@@ -707,7 +744,7 @@ internal partial class HeuristicsGenerator
             if (TryPeekAhead(out var nodeAhead) && nodeAhead.ClassificationType == ClassificationTypeNames.Identifier)
             {
                 MoveNext();
-                var colour = ResolveClassOrStructName(nodeAhead.Text);
+                var colour = ResolveName(nodeAhead.Text);
                 MarkNodeAs(nodeAhead, colour);
             }
         }

@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project since version 1.0.14 will be documented in this file.
 
+## [3.2.0] - 22.02.2025
+**Description:**
+Heuristics improvements in various areas visible in input files: 58 & 59.
+
+Among others: improved methods handling and keywords like: "required", "virtual", "unsafe", "partial", "delegate"
+
 ## [3.1.0] - 09.02.2025
 **Description:**
 

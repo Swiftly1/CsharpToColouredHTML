@@ -1,0 +1,46 @@
+﻿TryParse("123", int.TryParse, out var intResult);
+
+public static int GetLengthAtCoord(int X, int Y)
+{
+   var pair = (X, Y);
+   return Mapper[pair];
+}
+
+public void Test()
+{
+	// Perform Run
+	RunTest();
+
+	if (3 > 4)
+		RunTest2();
+}
+
+public void CalculatePublic() => CalculateInternal(5);
+
+public void Test4(bool useAbc)
+{
+	var strategy = = useAbc ? Strategies.A : Strategies.B;
+}
+
+private readonly float[] Entries = new float[]
+{
+	1, 2
+};
+
+protected override void OnPageBegin()
+{
+	User user = new User()
+	{
+		Name = "test",
+		Email = Entries
+	};
+}
+
+public static IEnumerable<(TSource Source, TOut Out)> WhereOut<TSource, TOut>(this IEnumerable<TSource> source, TryGet<TSource, TOut> tryGet)
+{
+}
+
+public void Test7()
+{
+	var id = home.Areas?.FirstOrDefault()?.HomeId;
+}
