@@ -1,10 +1,31 @@
 
 <pre class="background">
 <span class="localName">```csharp</span>
-<span class="keyword">try</span>
-{
+try
+<span class="punctuation">{</span>
 
-}
-<span class="keyword">catch</span> (<span class="class">Exception</span> <span class="localName">ex</span>)
-{
-}</pre>
+<span class="punctuation">}</span>
+catch <span class="punctuation">(</span><span class="class">Exception</span> <span class="localName">ex</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+<span class="punctuation">}</span>
+```
+
+unsafe partial class <span class="class">LongBoiContainer</span>
+<span class="punctuation">{</span>
+    protected internal required override sealed unsafe partial delegate<span class="operator">*</span> <span class="propertyName">LongBoi</span> <span class="punctuation">{</span> get <span class="operator">=&gt;</span> <span class="localName">field</span><span class="punctuation">;</span> set<span class="punctuation">; }</span>
+<span class="punctuation">}</span>
+
+unsafe partial class <span class="class">LongBoiContainer2</span>
+<span class="punctuation">{</span>
+    protected unsafe <span class="class">LongBoi2</span> <span class="punctuation">{</span> <span class="localName">get</span> <span class="operator">=&gt;</span> <span class="localName">field</span><span class="punctuation">;</span> <span class="localName">set</span><span class="punctuation">; }</span>
+<span class="punctuation">}</span>
+
+unsafe partial class <span class="class">LongBoiContainer3</span>
+<span class="punctuation">{</span>
+    protected partial int <span class="propertyName">LongBoi3</span> <span class="punctuation">{</span> get <span class="operator">=&gt;</span> <span class="localName">field</span><span class="punctuation">;</span> set<span class="punctuation">; }</span>
+<span class="punctuation">}</span>
+
+unsafe partial class <span class="class">LongBoiContainer4</span>
+<span class="punctuation">{</span>
+    protected delegate double <span class="delegate">LongBoi3</span> <span class="punctuation">{</span> <span class="localName">get</span> <span class="operator">=&gt;</span> <span class="localName">field</span><span class="punctuation">;</span> <span class="localName">set</span><span class="punctuation">; }</span>
+<span class="punctuation">}</span></pre>

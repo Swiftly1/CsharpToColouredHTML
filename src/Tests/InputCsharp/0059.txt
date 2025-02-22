@@ -7,3 +7,23 @@ catch (Exception ex)
 {
 }
 ```
+
+unsafe partial class LongBoiContainer
+{
+    protected internal required override sealed unsafe partial delegate* LongBoi { get => field; set; }
+}
+
+unsafe partial class LongBoiContainer2
+{
+    protected unsafe LongBoi2 { get => field; set; }
+}
+
+unsafe partial class LongBoiContainer3
+{
+    protected partial LongBoi3 { get => field; set; }
+}
+
+unsafe partial class LongBoiContainer4
+{
+    protected delegate LongBoi3 { get => field; set; }
+}

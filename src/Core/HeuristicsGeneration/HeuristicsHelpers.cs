@@ -315,7 +315,7 @@ internal partial class HeuristicsGenerator
     private static readonly List<string> CommonKeywordsBeforeTypeName = new List<string>
     {
         "public", "private", "internal", "sealed", "protected", "readonly", "static", "override", "event", "required",
-        "virtual"
+        "virtual", "unsafe", "partial", "delegate"
     };
 
     private static readonly List<string> Operators = new List<string>

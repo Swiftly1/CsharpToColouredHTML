@@ -7,4 +7,25 @@
 <span class="punctuation">}</span>
 <span class="keyword">catch</span> <span class="punctuation">(</span><span class="class">Exception</span> <span class="localName">ex</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
+<span class="punctuation">}</span>
+<span class="keyword">```
+
+unsafe</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="class">LongBoiContainer</span>
+<span class="punctuation">{</span>
+    <span class="keyword">protected</span> <span class="keyword">internal</span> <span class="keyword">required</span> <span class="keyword">override</span> <span class="keyword">sealed</span> <span class="keyword">unsafe</span> <span class="keyword">partial</span> <span class="keyword">delegate</span><span class="operator">*</span> <span class="propertyName">LongBoi</span> <span class="punctuation">{</span> <span class="keyword">get</span> <span class="operator">=&gt;</span> <span class="localName">field</span><span class="punctuation">;</span> <span class="keyword">set</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">unsafe</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="class">LongBoiContainer2</span>
+<span class="punctuation">{</span>
+    <span class="keyword">protected</span> <span class="keyword">unsafe</span> <span class="class">LongBoi2</span> <span class="punctuation">{</span> <span class="localName">get</span> <span class="operator">=&gt;</span> <span class="localName">field</span><span class="punctuation">;</span> <span class="localName">set</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">unsafe</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="class">LongBoiContainer3</span>
+<span class="punctuation">{</span>
+    <span class="keyword">protected</span> <span class="keyword">partial</span> <span class="keyword">int</span> <span class="propertyName">LongBoi3</span> <span class="punctuation">{</span> <span class="keyword">get</span> <span class="operator">=&gt;</span> <span class="localName">field</span><span class="punctuation">;</span> <span class="keyword">set</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">unsafe</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="class">LongBoiContainer4</span>
+<span class="punctuation">{</span>
+    <span class="keyword">protected</span> <span class="keyword">delegate</span> <span class="keyword">double</span> <span class="delegate">LongBoi3</span> <span class="punctuation">{</span> <span class="localName">get</span> <span class="operator">=&gt;</span> <span class="localName">field</span><span class="punctuation">;</span> <span class="localName">set</span><span class="punctuation">;</span> <span class="punctuation">}</span>
 <span class="punctuation">}</span></pre>
