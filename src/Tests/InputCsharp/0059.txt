@@ -20,10 +20,10 @@ unsafe partial class LongBoiContainer2
 
 unsafe partial class LongBoiContainer3
 {
-    protected partial LongBoi3 { get => field; set; }
+    protected partial int LongBoi3 { get => field; set; }
 }
 
 unsafe partial class LongBoiContainer4
 {
-    protected delegate LongBoi3 { get => field; set; }
+    protected delegate double LongBoi3 { get => field; set; }
 }
