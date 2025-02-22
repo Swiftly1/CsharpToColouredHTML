@@ -32,7 +32,7 @@ namespace Tests
             Assert.Equal(NodeColors.Class, output[1].Colour);
             Assert.Equal(NodeColors.Identifier, output[2].Colour);
             Assert.Equal(NodeColors.Punctuation, output[3].Colour);
-            Assert.Equal(NodeColors.Identifier, output[4].Colour);
+            Assert.Equal(NodeColors.Keyword, output[4].Colour);
             Assert.Equal(NodeColors.Punctuation, output[5].Colour);
         }
 

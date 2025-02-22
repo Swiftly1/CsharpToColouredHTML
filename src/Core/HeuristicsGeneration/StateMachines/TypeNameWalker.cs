@@ -286,7 +286,7 @@ internal partial class HeuristicsGenerator
                 }
                 else if (node.Id == identifiers[^2].Id)
                 {
-                    var color = ResolveClassOrStructName(node.Text);
+                    var color = ResolveName(node.Text);
                     MarkNodeAs(node, color);
                 }
                 else
@@ -296,7 +296,7 @@ internal partial class HeuristicsGenerator
             }
             else if (!valueTupleTypeWithName && node.Id == identifiers[^1].Id)
             {
-                var color = ResolveClassOrStructName(node.Text);
+                var color = ResolveName(node.Text);
                 MarkNodeAs(node, color);
             }
             else
@@ -348,6 +348,10 @@ internal partial class HeuristicsGenerator
                                 if (entry.ClassificationType == ClassificationTypeNames.Punctuation)
                                 {
                                     MarkNodeAs(entry, ClassificationTypeNames.Punctuation);
+                                }
+                                else if (entry.ClassificationType == ClassificationTypeNames.Operator)
+                                {
+                                    MarkNodeAs(entry, ClassificationTypeNames.Operator);
                                 }
                                 else
                                 {

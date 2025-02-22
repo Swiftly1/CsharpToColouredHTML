@@ -128,9 +128,6 @@ internal partial class HeuristicsGenerator
         if (!IsValidClassOrStructName(CurrentText))
             return false;
 
-        if (IdentifierFirstCharCaseSeemsLikeVariable(CurrentText))
-            return false;
-
         if (TryPeekBehind(out var peekedBehindNode) && TryPeekBehind(out var peekedBehindNode2, 2) &&
             peekedBehindNode.Text == "." &&
             peekedBehindNode2.Text == ">")
@@ -567,7 +564,7 @@ internal partial class HeuristicsGenerator
                 }
                 else if (peekBehind.ClassificationType == ClassificationTypeNames.Identifier)
                 {
-                    MarkNodeAs(peekBehind, ResolveClassOrStructName(peekBehind.Text));
+                    MarkNodeAs(peekBehind, ResolveName(peekBehind.Text));
                     MarkNodeAs(NodeColors.Method);
                     return true;
                 }
@@ -718,7 +715,7 @@ internal partial class HeuristicsGenerator
                 if (validIdentifiers1.Contains(peekedAhead1.ClassificationType) &&
                     peekedAhead2.Text.EqualsAnyOf("(", "{", "["))
                 {
-                    var colour = ResolveClassOrStructName(peekedAhead1.Text);
+                    var colour = ResolveName(peekedAhead1.Text, true);
                     MarkNodeAs(peekedAhead1, colour);
                     MoveNext();
                 }
@@ -747,7 +744,7 @@ internal partial class HeuristicsGenerator
             if (TryPeekAhead(out var nodeAhead) && nodeAhead.ClassificationType == ClassificationTypeNames.Identifier)
             {
                 MoveNext();
-                var colour = ResolveClassOrStructName(nodeAhead.Text);
+                var colour = ResolveName(nodeAhead.Text);
                 MarkNodeAs(nodeAhead, colour);
             }
         }

@@ -216,8 +216,17 @@ internal partial class HeuristicsGenerator
         return false;
     }
 
-    private string ResolveName(string text)
+    private string ResolveName(string text, bool hint_mustBeClassLike = false)
     {
+        if (!text.Any(x => char.IsLetter(x)))
+            return NodeColors.Default;
+
+        if (hint_mustBeClassLike)
+        {
+            if (!IsValidClassOrStructName(text))
+                return NodeColors.Identifier;
+        }
+
         if (IsPopularStruct(text))
             return NodeColors.Struct;
 
@@ -233,11 +242,14 @@ internal partial class HeuristicsGenerator
         if (_FoundStructs.Contains(text))
             return NodeColors.Struct;
 
-        if (_FoundPropertiesOrFields.Contains(text))
-            return NodeColors.PropertyName;
+        if (!hint_mustBeClassLike)
+        {
+            if (_FoundPropertiesOrFields.Contains(text))
+                return NodeColors.PropertyName;
 
-        if (_FoundLocalNames.Contains(text))
-            return NodeColors.LocalName;
+            if (_FoundLocalNames.Contains(text))
+                return NodeColors.LocalName;
+        }
 
         bool startsWithI = NameLikeInterface(text);
 
@@ -247,8 +259,8 @@ internal partial class HeuristicsGenerator
         if (_Hints.BuiltInTypes.Contains(text))
             return NodeColors.Keyword;
 
-        if (!IsValidClassOrStructName(text))
-            return NodeColors.Identifier;
+        if (text.EndsWith("Struct"))
+            return NodeColors.Struct;
 
         return NodeColors.Class;
     }
@@ -256,29 +268,6 @@ internal partial class HeuristicsGenerator
     private static bool NameLikeInterface(string text)
     {
         return text.StartsWith("I") && text.Length > 1 && char.IsUpper(text[1]);
-    }
-
-    private string ResolveClassOrStructName(string text)
-    {
-        if (!IsValidClassOrStructName(text))
-            return NodeColors.Identifier;
-
-        if (IsPopularStruct(text))
-            return NodeColors.Struct;
-
-        if (IsPopularClass(text))
-            return NodeColors.Class;
-
-        if (_FoundClasses.Contains(text))
-            return NodeColors.Class;
-
-        if (_FoundStructs.Contains(text))
-            return NodeColors.Struct;
-
-        if (text.EndsWith("Struct"))
-            return NodeColors.Struct;
-
-        return NodeColors.Class;
     }
 
     private bool IsValidClassOrStructName(string text)
