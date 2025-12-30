@@ -386,4 +386,54 @@ internal partial class HeuristicsGenerator
 
         return false;
     }
+
+    internal bool TryConsumeInheritanceList()
+    {
+        if (TryPeekBehind(out var peekedBehind) && peekedBehind.Text == ":")
+        {
+            var validIdentifiers = new List<string>()
+            {
+                ClassificationTypeNames.Identifier,
+                ClassificationTypeNames.ClassName,
+                ClassificationTypeNames.StructName,
+                ClassificationTypeNames.RecordClassName,
+                ClassificationTypeNames.RecordStructName
+            };
+
+            if (!validIdentifiers.Contains(CurrentNode.ClassificationType)) {
+                return false;
+            }
+
+            const int STATE_IDENTIFIER = 0;
+            const int STATE_COMMA = 1;
+            var state = STATE_IDENTIFIER;
+
+            do
+            {
+                if (state == STATE_IDENTIFIER)
+                {
+                    if (!validIdentifiers.Contains(CurrentNode.ClassificationType))
+                        return false;
+
+                    var name = ResolveName(CurrentText);
+                    MarkNodeAs(name);
+                    state = STATE_COMMA;
+                    continue;
+                }
+                else
+                {
+                    if (CurrentText == ",")
+                    {
+                        MarkNodeAs(NodeColors.Punctuation);
+                        state = STATE_IDENTIFIER;
+                        continue;
+                    }
+
+                    return false;
+                }
+            } while (MoveNext());
+        }
+
+        return false;
+    }
 }

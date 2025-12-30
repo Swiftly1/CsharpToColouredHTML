@@ -1,0 +1,3 @@
+﻿public class Test : ITest, Test2, ITest3
+{
+}

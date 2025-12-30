@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="keyword">public class</span> <span class="class">Test</span> : <span class="interface">ITest</span>, <span class="class">Test2</span>, <span class="interface">ITest3</span>
+{
+}</pre>

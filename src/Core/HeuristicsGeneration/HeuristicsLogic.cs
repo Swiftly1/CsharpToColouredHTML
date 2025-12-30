@@ -20,6 +20,9 @@ internal partial class HeuristicsGenerator
                 if (IsKeyword())
                     continue;
 
+                if (TryConsumeInheritanceList())
+                    continue;
+
                 if (IsInterface())
                     continue;
 
