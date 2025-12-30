@@ -385,7 +385,7 @@ internal partial class HeuristicsGenerator
             {
                 return false;
             }
-            
+
             if (openAngleCounter == 0)
             {
                 return TryPeekAtIndex(out foundNode, index + 1);

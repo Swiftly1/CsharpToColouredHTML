@@ -176,11 +176,14 @@ internal partial class HeuristicsGenerator
         }
 
         // private readonly Node<T, U> Root = new Node<T, U>(default!, null) { IsRoot = true };
-        if (TryPeekAhead(out peekedAheadNode) && peekedAheadNode.Text == "<" &&
-            TryPeekBehind(out peekedBehindNode) && peekedBehindNode.Text != ".")
+        if (TryPeekAhead(out peekedAheadNode) && peekedAheadNode.Text == "<")
         {
-            found = true;
-            goto Exit;
+            var isNotDot = TryPeekBehind(out peekedBehindNode) && peekedBehindNode.Text != ".";
+            if (!CanMoveBehind(1) || isNotDot)
+            {
+                found = true;
+                goto Exit;
+            }
         }
 
         // Callback func
