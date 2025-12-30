@@ -1,0 +1,6 @@
+
+<pre class="background">
+<span class="class">List</span>&lt;<span class="keyword">int</span>&gt; <span class="localName">numbers</span> = <span class="keyword">new</span> <span class="class">List</span>&lt;<span class="keyword">int</span>&gt; { <span class="numericLiteral">1</span>, <span class="numericLiteral">2</span>, <span class="numericLiteral">3</span>, <span class="numericLiteral">4</span>, <span class="numericLiteral">5</span> };
+<span class="control">foreach</span> (<span class="keyword">int</span> <span class="localName">number</span> <span class="control">in</span> <span class="localName">numbers</span>) {
+    <span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="localName">number</span>);
+}</pre>
