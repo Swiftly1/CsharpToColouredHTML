@@ -216,9 +216,11 @@ internal partial class HeuristicsGenerator
             }
         }
 
+        // cast detection
         if (TryPeekBehind(out peekedBehindNode) && peekedBehindNode.Text == "(" &&
             TryPeekBehind(out peekedBehindNode2, 2) &&
-            TryPeekAhead(out peekedAheadNode) && peekedAheadNode.Text == ")")
+            TryPeekAhead(out peekedAheadNode) && peekedAheadNode.Text == ")" &&
+            TryPeekAhead(out peekedAheadNode2, 2))
         {
             var isIdentifierBefore = peekedBehindNode2.ClassificationType.EqualsAnyOf
             (
@@ -229,7 +231,17 @@ internal partial class HeuristicsGenerator
                 ClassificationTypeNames.RecordStructName
             );
 
-            if (peekedBehindNode2.Text != "if" && !isIdentifierBefore)
+            bool isNotIf = peekedBehindNode2.Text != "if";
+            bool hasIdentifierAfter = peekedAheadNode2.ClassificationType.EqualsAnyOf(
+                ClassificationTypeNames.LocalName,
+                ClassificationTypeNames.PropertyName,
+                ClassificationTypeNames.ConstantName,
+                ClassificationTypeNames.FieldName,
+                ClassificationTypeNames.ParameterName,
+                ClassificationTypeNames.Identifier,
+                ClassificationTypeNames.Keyword);
+
+            if (isNotIf && !isIdentifierBefore && hasIdentifierAfter)
             {
                 var nodeHasValidClassification = CurrentNode.ClassificationType.EqualsAnyOf
                 (
