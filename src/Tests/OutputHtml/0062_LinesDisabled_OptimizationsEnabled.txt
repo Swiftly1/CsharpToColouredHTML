@@ -3,4 +3,9 @@
 [A.B.<span class="class">C</span>.<span class="method">Func</span>(A.B.<span class="class">C</span>.Options.Manual)]
 <span class="keyword">public class</span> <span class="class">Test</span>
 {
-}</pre>
+}
+
+<span class="keyword">int</span> <span class="localName">a</span> = <span class="numericLiteral">5</span>;
+<span class="keyword">int</span> <span class="localName">b</span> = <span class="numericLiteral">7</span>;
+
+<span class="keyword">int</span> <span class="localName">c</span> = <span class="localName">a</span> + (MathPI);</pre>
