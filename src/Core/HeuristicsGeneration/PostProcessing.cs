@@ -35,9 +35,10 @@ internal partial class HeuristicsGenerator
             entry.ClassificationType = MapColourToClassificationType(entry.Colour, entry.ClassificationType);
         }
 
+        // This query is used in two places,
+        // do not materialize it e.g with ToList()
         var identifiersOrDefaults = alreadyProcessed
-            .Where(x => x.Colour == NodeColors.Identifier || x.Colour == NodeColors.DefaultColour)
-            .ToList();
+            .Where(x => x.Colour == NodeColors.Identifier || x.Colour == NodeColors.DefaultColour);
 
         var initialCount = identifiersOrDefaults.Count();
         var newCount = 0;
