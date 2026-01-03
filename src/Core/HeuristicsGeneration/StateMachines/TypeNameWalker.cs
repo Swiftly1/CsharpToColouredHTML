@@ -391,6 +391,9 @@ internal partial class HeuristicsGenerator
     {
         if (TryPeekBehind(out var peekedBehind) && peekedBehind.Text == ":")
         {
+            if (!CheckIfThereIsClassBefore(2))
+                return false;
+
             var validIdentifiers = new List<string>()
             {
                 ClassificationTypeNames.Identifier,

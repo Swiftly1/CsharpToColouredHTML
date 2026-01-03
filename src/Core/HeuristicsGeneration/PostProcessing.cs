@@ -36,7 +36,8 @@ internal partial class HeuristicsGenerator
         }
 
         var identifiersOrDefaults = alreadyProcessed
-            .Where(x => x.Colour == NodeColors.Identifier || x.Colour == NodeColors.DefaultColour);
+            .Where(x => x.Colour == NodeColors.Identifier || x.Colour == NodeColors.DefaultColour)
+            .ToList();
 
         var initialCount = identifiersOrDefaults.Count();
         var newCount = 0;
@@ -221,7 +222,10 @@ internal partial class HeuristicsGenerator
                 if (current.ClassificationType == ClassificationTypeNames.Punctuation)
                     return;
 
-                if (current.ClassificationType == ClassificationTypeNames.Identifier)
+                if (current.ClassificationType.EqualsAnyOf(
+                        ClassificationTypeNames.Identifier,
+                        ClassificationTypeNames.NamespaceName
+                    ))
                 {
                     current.Colour = NodeColors.PropertyName;
                     current.ClassificationType = ClassificationTypeNames.PropertyName;

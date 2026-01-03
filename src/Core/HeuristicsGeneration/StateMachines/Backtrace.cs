@@ -59,6 +59,57 @@ internal partial class HeuristicsGenerator
         return false;
     }
 
+    private bool CheckIfThereIsClassBefore(int indexBehind)
+    {
+        var valid_identifiers = new List<string>
+        {
+            ClassificationTypeNames.Identifier,
+            ClassificationTypeNames.NamespaceName,
+            ClassificationTypeNames.StructName,
+            ClassificationTypeNames.ClassName,
+            ClassificationTypeNames.RecordClassName,
+            ClassificationTypeNames.RecordStructName,
+        };
+
+        // 0 = currently at Identifier, expecting Operator
+        // 1 = currently at Operator, expecting Identifier
+
+        var state = 1;
+
+        while (TryPeekBehind(out var peekedNode, indexBehind))
+        {
+            if (state == 0)
+            {
+                if (peekedNode.Text == ".")
+                {
+                    state = 1;
+                    indexBehind++;
+                    continue;
+                }
+                else
+                {
+                    return peekedNode.Text == "class";
+                }
+            }
+            else if (state == 1)
+            {
+                var outputNode = _Output[_CurrentIndex - indexBehind];
+                if (valid_identifiers.Contains(outputNode.ClassificationType))
+                {
+                    state = 0;
+                    indexBehind++;
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private bool TryReadNamespaceChain()
     {
         var valid_identifiers = new List<string>
