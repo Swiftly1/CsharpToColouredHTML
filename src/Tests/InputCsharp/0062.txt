@@ -1,0 +1,4 @@
+﻿[A.B.C.Func(A.B.C.Options.Manual)]
+public class Test
+{
+}

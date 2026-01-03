@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="punctuation">[</span><span class="namespace">A</span><span class="operator">.</span><span class="namespace">B</span><span class="operator">.</span><span class="class">C</span><span class="operator">.</span><span class="method">Func</span><span class="punctuation">(</span><span class="namespace">A</span><span class="operator">.</span><span class="namespace">B</span><span class="operator">.</span><span class="class">C</span><span class="operator">.</span><span class="propertyName">Options</span><span class="operator">.</span><span class="propertyName">Manual</span><span class="punctuation">)</span><span class="punctuation">]</span></td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column"><span class="keyword">public</span> <span class="keyword">class</span> <span class="class">Test</span></td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column"><span class="punctuation">{</span></td></tr><tr><td class="line_no" line_no="4"></td><td class="code_column"><span class="punctuation">}</span></td></tr></tbody>
+</table></pre>

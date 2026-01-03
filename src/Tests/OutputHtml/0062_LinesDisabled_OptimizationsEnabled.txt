@@ -1,0 +1,6 @@
+
+<pre class="background">
+[A.B.<span class="class">C</span>.<span class="method">Func</span>(A.B.<span class="class">C</span>.Options.Manual)]
+<span class="keyword">public class</span> <span class="class">Test</span>
+{
+}</pre>

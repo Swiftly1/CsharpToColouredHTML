@@ -266,6 +266,7 @@ internal partial class HeuristicsGenerator
             goto Exit;
         }
 
+        // attribute
         if (TryPeekBehind(out peekedBehindNode) && peekedBehindNode.Text == "[")
         {
             if (TryPeekBehind(out peekedBehindNode2, 2))
@@ -279,13 +280,15 @@ internal partial class HeuristicsGenerator
                     ClassificationTypeNames.ParameterName,
                 };
 
+                // if not array access
                 if (!valid_identifiers.Contains(peekedBehindNode2.ClassificationType))
                 {
                     found = true;
                     goto Exit;
                 }
             }
-            else
+
+            if (TryPeekAhead(out var ahead) && ahead.Text == "]")
             {
                 found = true;
                 goto Exit;
