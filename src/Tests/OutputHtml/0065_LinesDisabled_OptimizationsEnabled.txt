@@ -1,0 +1,10 @@
+
+<pre class="background">
+<span class="keyword">partial class</span> <span class="class">Test</span>
+{
+    <span class="keyword">private void</span> <span class="method">InitializeComponent</span>()
+    {
+        System.Windows.Forms.<span class="class">DataGridViewCellStyle</span> <span class="localName">dgv</span> = <span class="keyword">new</span> System.Windows.Forms.<span class="class">DataGridViewCellStyle</span>();
+        <span class="keyword">this</span>.btn.Anchor = ((System.Windows.Forms.<span class="class">AnchorStyles</span>)((System.Windows.Forms.<span class="class">AnchorStyles</span>.Top | System.Windows.Forms.<span class="class">AnchorStyles</span>.Right)));
+    }
+}</pre>

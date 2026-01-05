@@ -1,0 +1,8 @@
+﻿partial class Test
+{
+	private void InitializeComponent()
+	{
+	    System.Windows.Forms.DataGridViewCellStyle dgv = new System.Windows.Forms.DataGridViewCellStyle();
+	    this.btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+	}
+}
