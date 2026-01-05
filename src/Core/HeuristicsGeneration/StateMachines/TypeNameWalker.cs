@@ -389,7 +389,16 @@ internal partial class HeuristicsGenerator
 
     internal bool TryConsumeInheritanceList()
     {
-        if (TryPeekBehind(out var peekedBehind) && peekedBehind.Text == ":")
+        var previousIsSemicolon = TryPeekBehind(out var peekedBehind) && peekedBehind.Text == ":";
+        var currentIsSemicolon = CurrentText == ":";
+
+        if (currentIsSemicolon)
+        {
+            MarkNodeAs(NodeColors.Punctuation);
+            MoveNext();
+        }
+
+        if (previousIsSemicolon || currentIsSemicolon)
         {
             if (!CheckIfThereIsClassBefore(2))
                 return false;
@@ -400,7 +409,8 @@ internal partial class HeuristicsGenerator
                 ClassificationTypeNames.ClassName,
                 ClassificationTypeNames.StructName,
                 ClassificationTypeNames.RecordClassName,
-                ClassificationTypeNames.RecordStructName
+                ClassificationTypeNames.RecordStructName,
+                ClassificationTypeNames.NamespaceName,
             };
 
             if (!validIdentifiers.Contains(CurrentNode.ClassificationType)) {

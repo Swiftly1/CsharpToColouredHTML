@@ -1,0 +1,9 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">Form1</span> <span class="punctuation">:</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Windows</span><span class="operator">.</span><span class="namespace">Forms</span><span class="operator">.</span><span class="class">Form</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="class">Form1</span><span class="punctuation">(</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="keyword">this</span><span class="operator">.</span><span class="propertyName">Controls</span><span class="operator">.</span><span class="method">AddRange</span><span class="punctuation">(</span><span class="keyword">new</span> <span class="namespace">System</span><span class="operator">.</span><span class="namespace">Windows</span><span class="operator">.</span><span class="namespace">Forms</span><span class="operator">.</span><span class="class">Control</span><span class="punctuation">[</span><span class="punctuation">]</span> <span class="punctuation">{</span> <span class="keyword">this</span><span class="operator">.</span><span class="propertyName">textBox1</span><span class="punctuation">,</span> <span class="keyword">this</span><span class="operator">.</span><span class="propertyName">trackBar1</span> <span class="punctuation">}</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

@@ -47,7 +47,8 @@ public class Hints
         "Random",
         "String",
         "JsonConvert",
-        "Parallel"
+        "Parallel",
+        "AppDomain"
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>

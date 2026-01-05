@@ -1,4 +1,5 @@
-﻿using CsharpToColouredHTML.Core.Nodes;
+﻿using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
@@ -213,7 +214,7 @@ internal partial class HeuristicsGenerator
                 }
                 else
                 {
-                    if (peekedNode.Text == "(")
+                    if (peekedNode.Text.EqualsAnyOf("(", "["))
                     {
                         if (chainElements.Count < 2)
                             return false;

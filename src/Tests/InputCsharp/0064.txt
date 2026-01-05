@@ -1,0 +1,7 @@
+﻿public class Form1 : System.Windows.Forms.Form
+{
+	public Form1()
+	{
+	    this.Controls.AddRange(new System.Windows.Forms.Control[] { this.textBox1, this.trackBar1 });
+	}
+}

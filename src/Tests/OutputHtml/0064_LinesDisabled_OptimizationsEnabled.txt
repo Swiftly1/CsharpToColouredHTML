@@ -1,0 +1,9 @@
+
+<pre class="background">
+<span class="keyword">public class</span> <span class="class">Form1</span> : System.Windows.Forms.<span class="class">Form</span>
+{
+    <span class="keyword">public</span> <span class="class">Form1</span>()
+    {
+        <span class="keyword">this</span>.Controls.<span class="method">AddRange</span>(<span class="keyword">new</span> System.Windows.Forms.<span class="class">Control</span>[] { <span class="keyword">this</span>.textBox1, <span class="keyword">this</span>.trackBar1 });
+    }
+}</pre>
