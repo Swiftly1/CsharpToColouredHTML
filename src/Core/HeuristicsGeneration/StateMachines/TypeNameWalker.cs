@@ -389,7 +389,16 @@ internal partial class HeuristicsGenerator
 
     internal bool TryConsumeInheritanceList()
     {
-        var previousIsSemicolon = TryPeekBehind(out var peekedBehind) && peekedBehind.Text == ":";
+        var previousIsSemicolon = false;
+
+        if (TryPeekBehind(out var peekedBehind))
+        {
+            if (peekedBehind.ClassificationType == ClassificationTypeNames.LabelName)
+                return false;
+
+            previousIsSemicolon = peekedBehind.Text == ":";
+        }
+
         var currentIsSemicolon = CurrentText == ":";
 
         if (currentIsSemicolon)
@@ -401,7 +410,16 @@ internal partial class HeuristicsGenerator
         if (previousIsSemicolon || currentIsSemicolon)
         {
             if (!CheckIfThereIsClassBefore(2))
+            {
+                // we already consumed punctuation
+                if (currentIsSemicolon)
+                {
+                    MoveBehind();
+                    return true;
+                }
+
                 return false;
+            }
 
             var validIdentifiers = new List<string>()
             {
