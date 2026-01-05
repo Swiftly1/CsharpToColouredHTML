@@ -548,7 +548,7 @@ internal partial class HeuristicsGenerator
                     if (peekedNode.Text == ")")
                     {
                         if (TryPeekAhead(out var peekAgain, indexAhead + 1) &&
-                            valid_cast_variables.Contains(peekAgain.ClassificationType))
+                            (valid_cast_variables.Contains(peekAgain.ClassificationType) || peekAgain.Text == "("))
                         {
                             var identifiers = chainElements
                                       .Where(x => valid_identifiers.Contains(x.ClassificationType))
