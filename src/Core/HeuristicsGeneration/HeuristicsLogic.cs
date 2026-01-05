@@ -494,13 +494,24 @@ internal partial class HeuristicsGenerator
         }
 
         // $"Hello {Name}!"
-        if (TryPeekBehind(out var bracketBehind) &&
+        if (TryPeekBehind(out var bracketBehind) && bracketBehind.Text == "{" &&
             TryPeekBehind(out var stringNodeBehind, 2) &&
-            TryPeekAhead(out var bracketAhead) &&
+            TryPeekAhead(out var bracketAhead) && bracketAhead.Text == "}" &&
             TryPeekAhead(out var stringNodeAhead, 2))
         {
-            HandlePropertyOrLocalName();
-            return true;
+            var strings = new string[] {
+                ClassificationTypeNames.StringLiteral,
+                ClassificationTypeNames.VerbatimStringLiteral };
+
+            var bothAreStrings =
+                stringNodeBehind.ClassificationType.EqualsAnyOf(strings) &&
+                stringNodeAhead.ClassificationType.EqualsAnyOf(strings);
+
+            if (bothAreStrings)
+            {
+                HandlePropertyOrLocalName();
+                return true;
+            }
         }
 
         if (IdentifierFirstCharCaseSeemsLikeVariable(CurrentText))
