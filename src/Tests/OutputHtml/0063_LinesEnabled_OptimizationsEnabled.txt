@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="string">$&quot;Hello</span> {Name}<span class="string">!&quot;</span>);</td></tr></tbody>
+</table></pre>

@@ -338,7 +338,7 @@ internal partial class HeuristicsGenerator
             NodeColors.Method => ClassificationTypeNames.MethodName,
             NodeColors.Class => ClassificationTypeNames.ClassName,
             NodeColors.Keyword => ClassificationTypeNames.Keyword,
-            NodeColors.String => ClassificationTypeNames.StructName,
+            NodeColors.String => ClassificationTypeNames.StringLiteral,
             NodeColors.Control => ClassificationTypeNames.ControlKeyword,
             NodeColors.Interface => ClassificationTypeNames.InterfaceName,
             NodeColors.Comment => ClassificationTypeNames.Comment,

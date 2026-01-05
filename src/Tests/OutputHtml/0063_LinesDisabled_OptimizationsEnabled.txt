@@ -1,0 +1,3 @@
+
+<pre class="background">
+<span class="class">Console</span>.<span class="method">WriteLine</span>(<span class="string">$&quot;Hello</span> {Name}<span class="string">!&quot;</span>);</pre>

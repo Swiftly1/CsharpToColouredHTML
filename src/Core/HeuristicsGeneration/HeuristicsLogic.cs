@@ -427,17 +427,9 @@ internal partial class HeuristicsGenerator
             }
             else
             {
-                if (IdentifierFirstCharCaseSeemsLikeVariable(CurrentText))
-                {
-                    MarkNodeAs(NodeColors.LocalName);
-                    _FoundLocalNames.Add(CurrentText);
-                }
-                else
-                {
-                    MarkNodeAs(NodeColors.PropertyName);
-                    _FoundPropertiesOrFields.Add(CurrentText);
-                }
+                HandlePropertyOrLocalName();
             }
+
             return true;
         }
 
@@ -501,6 +493,16 @@ internal partial class HeuristicsGenerator
             }
         }
 
+        // $"Hello {Name}!"
+        if (TryPeekBehind(out var bracketBehind) &&
+            TryPeekBehind(out var stringNodeBehind, 2) &&
+            TryPeekAhead(out var bracketAhead) &&
+            TryPeekAhead(out var stringNodeAhead, 2))
+        {
+            HandlePropertyOrLocalName();
+            return true;
+        }
+
         if (IdentifierFirstCharCaseSeemsLikeVariable(CurrentText))
         {
             MarkNodeAs(NodeColors.LocalName);
@@ -508,6 +510,20 @@ internal partial class HeuristicsGenerator
         }
 
         return false;
+    }
+
+    private void HandlePropertyOrLocalName()
+    {
+        if (IdentifierFirstCharCaseSeemsLikeVariable(CurrentText))
+        {
+            MarkNodeAs(NodeColors.LocalName);
+            _FoundLocalNames.Add(CurrentText);
+        }
+        else
+        {
+            MarkNodeAs(NodeColors.PropertyName);
+            _FoundPropertiesOrFields.Add(CurrentText);
+        }
     }
 
     private void MarkNodeLocalNameOrProperty(Node currentNode)
