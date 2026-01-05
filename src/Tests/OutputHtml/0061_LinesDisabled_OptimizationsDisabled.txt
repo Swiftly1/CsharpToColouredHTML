@@ -1,5 +1,5 @@
 
 <pre class="background">
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">Test</span> <span class="punctuation">:</span> <span class="interface">ITest</span><span class="punctuation">,</span> <span class="class">Test2</span><span class="punctuation">,</span> <span class="interface">ITest3</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">Test</span> <span class="punctuation">:</span> <span class="interface">ITest</span><span class="punctuation">,</span> <span class="class">Test2</span><span class="punctuation">,</span> <span class="interface">ITest3</span><span class="punctuation">,</span> <span class="namespace">Tests</span><span class="operator">.</span><span class="class">TestClass</span>
 <span class="punctuation">{</span>
 <span class="punctuation">}</span></pre>

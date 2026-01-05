@@ -418,8 +418,7 @@ internal partial class HeuristicsGenerator
                     if (!validIdentifiers.Contains(CurrentNode.ClassificationType))
                         return false;
 
-                    var name = ResolveName(CurrentText);
-                    MarkNodeAs(name);
+                    HandleTypeNameAhead(true);
                     state = STATE_COMMA;
                     continue;
                 }
