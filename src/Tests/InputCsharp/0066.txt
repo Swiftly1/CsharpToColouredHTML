@@ -1,0 +1,2 @@
+﻿HandleTryParse<int>("123", int.TryParse, out var intResult);
+HandleTryParse<double>("1.23", double.TryParse, out var doubleResult);

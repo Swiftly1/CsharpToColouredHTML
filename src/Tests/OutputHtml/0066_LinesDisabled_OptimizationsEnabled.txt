@@ -1,0 +1,4 @@
+
+<pre class="background">
+<span class="method">HandleTryParse</span>&lt;<span class="keyword">int</span>&gt;(<span class="string">&quot;123&quot;</span>, <span class="keyword">int</span>.<span class="method">TryParse</span>, <span class="keyword">out var</span> <span class="localName">intResult</span>);
+<span class="method">HandleTryParse</span>&lt;<span class="keyword">double</span>&gt;(<span class="string">&quot;1.23&quot;</span>, <span class="keyword">double</span>.<span class="method">TryParse</span>, <span class="keyword">out var</span> <span class="localName">doubleResult</span>);</pre>

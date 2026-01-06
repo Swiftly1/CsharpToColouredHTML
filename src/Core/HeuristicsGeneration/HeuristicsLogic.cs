@@ -655,8 +655,11 @@ internal partial class HeuristicsGenerator
                 return true;
             }
         }
+        // HandleTryParse<int>("123")
+        // Generics + cannot peek behind or can peek ahead and it isnt "new"
         else if (TryPeekAhead(out peekAhead) && peekAhead.Text == "<" &&
-                 TryPeekBehind(out peekedBehind) && peekedBehind.Text != "new")
+                    (!TryPeekBehind(out peekedBehind) ||
+                    (TryPeekBehind(out peekedBehind) && peekedBehind.Text != "new")))
         {
             // .WhereOut<TKey, TItem>(dictionary.TryGetValue)
             if (LookAheadWhatIsAfterGenerics(peekAhead, out var nodeAfter) && nodeAfter.Text == "(")
