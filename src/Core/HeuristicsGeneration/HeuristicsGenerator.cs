@@ -30,7 +30,6 @@ internal partial class HeuristicsGenerator
 
     private Dictionary<string, string> _SimpleClassificationToColourMapper { get; } = new()
     {
-        { ClassificationTypeNames.ClassName, NodeColors.Class },
         { ClassificationTypeNames.Comment, NodeColors.Comment },
         { ClassificationTypeNames.PreprocessorKeyword, NodeColors.Preprocessor },
         { ClassificationTypeNames.PreprocessorText, NodeColors.PreprocessorText },

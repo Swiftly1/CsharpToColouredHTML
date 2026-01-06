@@ -315,6 +315,22 @@ internal partial class HeuristicsGenerator
             goto Exit;
         }
 
+        // public class Xyz
+        if (TryPeekBehind(out peekedBehindNode) && peekedBehindNode.Text.EqualsAnyOf("class", "struct"))
+        {
+            found = true;
+            goto Exit;
+        }
+
+        // ctor public HomeController()
+        if (TryPeekBehind(out peekedBehindNode) &&
+            TryPeekAhead(out peekedAheadNode) && peekedAheadNode.Text == "(" &&
+            peekedBehindNode.Text.EqualsAnyOf(AccessibilityModifiers.ToArray()))
+        {
+            found = true;
+            goto Exit;
+        }
+
         // EqualityComparer<T1>
         // EqualityComparer<T1, T2, T3>
         if (CheckAndMarkGenericParametersChain())
@@ -330,6 +346,12 @@ internal partial class HeuristicsGenerator
         if (CheckClassPropertiesUsageChain())
         {
             return true;
+        }
+
+        if (CurrentNode.ClassificationType == ClassificationTypeNames.ClassName)
+        {
+            found = true;
+            goto Exit;
         }
 
         Exit:
@@ -585,7 +607,8 @@ internal partial class HeuristicsGenerator
                     MarkNodeAs(NodeColors.Method);
                     return true;
                 }
-                else if (CommonKeywordsBeforeTypeName.Contains(peekBehind.Text))
+                else if (CommonKeywordsBeforeTypeName.Contains(peekBehind.Text) &&
+                    TryPeekAhead(out var peekAhead) && peekAhead.Text != "(")
                 {
                     MarkNodeAs(NodeColors.Method);
                     return true;
@@ -740,6 +763,15 @@ internal partial class HeuristicsGenerator
 
         if (CurrentText == "using")
         {
+            if (TryPeekAhead(out var peek2, 2) && peek2.Text == "=")
+            {
+                MoveNext();
+                var color = ResolveName(CurrentText);
+                MarkNodeAs(color);
+                MoveNext();
+                MarkNodeAs(ClassificationTypeNames.Operator);
+            }
+
             TryReadNamespaceChain();
         }
         else if (CurrentText == "new")

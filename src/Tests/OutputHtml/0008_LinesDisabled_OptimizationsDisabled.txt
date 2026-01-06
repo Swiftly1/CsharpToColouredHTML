@@ -21,7 +21,7 @@
 
 <span class="keyword">namespace</span> <span class="namespace">Roslyn</span><span class="operator">.</span><span class="namespace">Compilers</span><span class="operator">.</span><span class="namespace">Extension</span>
 <span class="punctuation">{</span>
-    <span class="punctuation">[</span><span class="class">Guid</span><span class="punctuation">(</span><span class="string">&quot;31C0675E-87A4-4061-A0DD-A4E510FCCF97&quot;</span><span class="punctuation">)</span><span class="punctuation">]</span>
+    <span class="punctuation">[</span><span class="struct">Guid</span><span class="punctuation">(</span><span class="string">&quot;31C0675E-87A4-4061-A0DD-A4E510FCCF97&quot;</span><span class="punctuation">)</span><span class="punctuation">]</span>
     <span class="keyword">public</span> <span class="keyword">sealed</span> <span class="keyword">class</span> <span class="class">CompilerPackage</span> <span class="punctuation">:</span> <span class="class">AsyncPackage</span>
     <span class="punctuation">{</span>
         <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">string</span> <span class="fieldName">RoslynHive</span> <span class="operator">=</span> <span class="keyword">null</span><span class="punctuation">;</span>

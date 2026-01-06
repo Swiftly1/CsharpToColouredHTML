@@ -318,6 +318,11 @@ internal partial class HeuristicsGenerator
         "virtual", "unsafe", "partial", "delegate"
     };
 
+    private static readonly List<string> AccessibilityModifiers = new List<string>
+    {
+        "public", "private", "protected", "internal", "protected internal", "private protected"
+    };
+
     private static readonly List<string> Operators = new List<string>
     {
         "+", "-", "/", "*", "=", "==", "+=", "-=", "*=", "/=", "!=", "&",

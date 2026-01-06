@@ -116,7 +116,8 @@ internal partial class HeuristicsGenerator
         var valid_identifiers = new List<string>
         {
             ClassificationTypeNames.Identifier,
-            ClassificationTypeNames.NamespaceName
+            ClassificationTypeNames.NamespaceName,
+            ClassificationTypeNames.ClassName,
         };
 
         // 0 = currently at Identifier, expecting Operator "." or ";"
@@ -363,13 +364,13 @@ internal partial class HeuristicsGenerator
                                 }
                             }
                             else
-                                MarkNodeAs(node, NodeColors.PropertyName);
+                                SetFieldOrPropertyName(node);
                         }
                         else if (identifiers.Count > 1 && node.Id == identifiers[^2].Id)
                         {
                             if (classAlreadyUsed)
                             {
-                                MarkNodeAs(node, NodeColors.PropertyName);
+                                SetFieldOrPropertyName(node);
                             }
                             else
                             {
@@ -412,6 +413,18 @@ internal partial class HeuristicsGenerator
         }
 
         return false;
+    }
+
+    private void SetFieldOrPropertyName(Node node)
+    {
+        if (node.ClassificationType == ClassificationTypeNames.FieldName)
+        {
+            MarkNodeAs(node, NodeColors.FieldName);
+        }
+        else
+        {
+            MarkNodeAs(node, NodeColors.PropertyName);
+        }
     }
 
     private bool LookAheadWhatIsAfterGenerics(Node peekedNode, out Node foundNode)

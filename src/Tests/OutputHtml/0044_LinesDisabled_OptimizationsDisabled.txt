@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="keyword">public</span> <span class="method">Form1</span><span class="punctuation">(</span><span class="punctuation">)</span>
+<span class="keyword">public</span> <span class="class">Form1</span><span class="punctuation">(</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
     <span class="method">InitializeComponent</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
 

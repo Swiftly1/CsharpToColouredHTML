@@ -21,7 +21,7 @@
 
 <span class="keyword">namespace</span> Roslyn.Compilers.Extension
 {
-    [<span class="class">Guid</span>(<span class="string">&quot;31C0675E-87A4-4061-A0DD-A4E510FCCF97&quot;</span>)]
+    [<span class="struct">Guid</span>(<span class="string">&quot;31C0675E-87A4-4061-A0DD-A4E510FCCF97&quot;</span>)]
     <span class="keyword">public sealed class</span> <span class="class">CompilerPackage</span> : <span class="class">AsyncPackage</span>
     {
         <span class="keyword">public static string</span> RoslynHive = <span class="keyword">null</span>;

@@ -3,4 +3,4 @@
     Param[] Params,
     Callback func)
 
-public static Print2(IMessage msg, Param[] Params,Callback func)
+public static void Print2(IMessage msg, Param[] Params,Callback func)
