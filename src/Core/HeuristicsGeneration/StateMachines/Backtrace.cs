@@ -520,6 +520,12 @@ internal partial class HeuristicsGenerator
 
     private bool TryDetectCastAhead()
     {
+        if (TryPeekBehind(out var parenthesis) && parenthesis.Text == "(" &&
+            TryPeekBehind(out var ifStatement, 2) && ifStatement.Text == "if")
+        {
+            return false;
+        }
+
         var valid_identifiers = new List<string>
         {
             ClassificationTypeNames.NamespaceName,
