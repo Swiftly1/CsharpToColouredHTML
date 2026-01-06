@@ -38,7 +38,7 @@
     };
 }
 
-<span class="keyword">public static</span> <span class="struct">IEnumerable</span>&lt;(<span class="typeParam">TSource</span> Source, <span class="typeParam">TOut</span> Out)&gt; <span class="method">WhereOut</span>&lt;<span class="typeParam">TSource</span>, <span class="typeParam">TOut</span>&gt;(<span class="keyword">this</span> <span class="struct">IEnumerable</span>&lt;<span class="typeParam">TSource</span>&gt; <span class="parameter">source</span>, <span class="class">TryGet</span>&lt;<span class="typeParam">TSource</span>, <span class="typeParam">TOut</span>&gt; <span class="parameter">tryGet</span>)
+<span class="keyword">public static</span> <span class="interface">IEnumerable</span>&lt;(<span class="typeParam">TSource</span> Source, <span class="typeParam">TOut</span> Out)&gt; <span class="method">WhereOut</span>&lt;<span class="typeParam">TSource</span>, <span class="typeParam">TOut</span>&gt;(<span class="keyword">this</span> <span class="struct">IEnumerable</span>&lt;<span class="typeParam">TSource</span>&gt; <span class="parameter">source</span>, <span class="class">TryGet</span>&lt;<span class="typeParam">TSource</span>, <span class="typeParam">TOut</span>&gt; <span class="parameter">tryGet</span>)
 {
 }
 

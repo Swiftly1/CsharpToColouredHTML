@@ -14,7 +14,11 @@ internal partial class HeuristicsGenerator
         ValueTupleType,
         ValueTupleOperator,
         ValueTupleIdentifier,
-        ValueTupleClosing
+        ValueTupleClosing,
+
+        GenericsOpening,
+        GenericsClosing,
+        GenericsComma
     }
 
     public bool TypeHasValidIdentifier(Node node)
@@ -26,7 +30,8 @@ internal partial class HeuristicsGenerator
             ClassificationTypeNames.ClassName,
             ClassificationTypeNames.StructName,
             ClassificationTypeNames.RecordClassName,
-            ClassificationTypeNames.RecordStructName
+            ClassificationTypeNames.RecordStructName,
+            ClassificationTypeNames.InterfaceName,
         };
 
         if (valid_identifiers.Contains(node.ClassificationType))
@@ -85,7 +90,7 @@ internal partial class HeuristicsGenerator
                 }
                 case TypeWalkStates.AtOperator:
                 {
-                        if (peekedNode.Text == ".")
+                        if (peekedNode.Text == "." || peekedNode.Text == "<" || peekedNode.Text == ",")
                         {
                             state = TypeWalkStates.AtIdentifier;
                         }
@@ -196,7 +201,7 @@ internal partial class HeuristicsGenerator
 
         var allElementsAreValid = chainWithoutLastElement.All(x =>
             TypeHasValidIdentifier(x) ||
-            x.ClassificationType == ClassificationTypeNames.Operator
+            x.ClassificationType == ClassificationTypeNames.Operator || x.Text.EqualsAnyOf(",", "<", ">")
         );
 
         if (!allElementsAreValid)
@@ -207,7 +212,7 @@ internal partial class HeuristicsGenerator
                           .ToList();
 
         var operators = chainWithoutLastElement
-                          .Where(x => x.ClassificationType == ClassificationTypeNames.Operator)
+                          .Where(x => x.ClassificationType == ClassificationTypeNames.Operator || x.Text.EqualsAnyOf(",", "<", ">"))
                           .ToList();
 
         if (!identifiers.Any())
@@ -220,15 +225,30 @@ internal partial class HeuristicsGenerator
         if (!markIt)
             return true;
 
-        foreach (var node in chainWithoutLastElement)
+        for (int i = 0; i < chainWithoutLastElement.Count; i++)
         {
+            Node? node = chainWithoutLastElement[i];
             if (node.ClassificationType == ClassificationTypeNames.Operator)
             {
                 MarkNodeAs(node, NodeColors.Operator);
             }
             else if (node.Id == identifiers[^1].Id)
             {
-                var colour = ResolveName(node.Text);
+                var colour = ResolveName(node);
+                MarkNodeAs(node, colour);
+            }
+            else if (node.Text.EqualsAnyOf("<", ">", ","))
+            {
+                MarkNodeAs(node, NodeColors.Punctuation);
+            }
+            else if (i + 1 < chainWithoutLastElement.Count && chainWithoutLastElement[i+1].Text == "<")
+            {
+                var colour = ResolveName(node);
+                MarkNodeAs(node, colour);
+            }
+            else if (i + 1 < chainWithoutLastElement.Count && chainWithoutLastElement[i+1].Text.EqualsAnyOf(",", ">"))
+            {
+                var colour = ResolveName(node);
                 MarkNodeAs(node, colour);
             }
             else
@@ -286,7 +306,7 @@ internal partial class HeuristicsGenerator
                 }
                 else if (node.Id == identifiers[^2].Id)
                 {
-                    var color = ResolveName(node.Text);
+                    var color = ResolveName(node);
                     MarkNodeAs(node, color);
                 }
                 else
@@ -296,7 +316,7 @@ internal partial class HeuristicsGenerator
             }
             else if (!valueTupleTypeWithName && node.Id == identifiers[^1].Id)
             {
-                var color = ResolveName(node.Text);
+                var color = ResolveName(node);
                 MarkNodeAs(node, color);
             }
             else
@@ -355,7 +375,7 @@ internal partial class HeuristicsGenerator
                                 }
                                 else
                                 {
-                                    var colour = ResolveName(entry.Text);
+                                    var colour = ResolveName(entry);
                                     MarkNodeAs(entry, colour);
                                 }
                             }

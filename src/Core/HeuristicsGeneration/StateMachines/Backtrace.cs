@@ -231,7 +231,7 @@ internal partial class HeuristicsGenerator
                         }
 
                         var objIdentifierNode = chainElements[^2];
-                        var objIdentifierNodeColour = ResolveName(objIdentifierNode.Text);
+                        var objIdentifierNodeColour = ResolveName(objIdentifierNode);
 
                         MarkNodeAs(objIdentifierNode, objIdentifierNodeColour);
                         MarkNodeAs(peekedNode, NodeColors.Punctuation);
@@ -374,7 +374,7 @@ internal partial class HeuristicsGenerator
                             }
                             else
                             {
-                                var colour = ResolveName(node.Text);
+                                var colour = ResolveName(node);
                                 MarkNodeAs(node, colour);
                             }
                         }
@@ -382,7 +382,7 @@ internal partial class HeuristicsGenerator
                         {
                             if (IsClassOrStructAlreadyFound(node.Text))
                             {
-                                var colour = ResolveName(node.Text);
+                                var colour = ResolveName(node);
                                 MarkNodeAs(node, colour);
                                 classAlreadyUsed = true;
                             }

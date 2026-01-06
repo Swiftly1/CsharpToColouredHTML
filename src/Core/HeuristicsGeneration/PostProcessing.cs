@@ -110,7 +110,7 @@ internal partial class HeuristicsGenerator
         {
             if (ShouldNamespaceBeAdjusted(ns))
             {
-                ns.Colour = ResolveName(ns.Text);
+                ns.Colour = ResolveName(ns.Text, ns.ClassificationType);
                 MarkNextChainElementsToProperty(ns);
             }
         }

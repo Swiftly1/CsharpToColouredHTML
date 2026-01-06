@@ -216,7 +216,12 @@ internal partial class HeuristicsGenerator
         return false;
     }
 
-    private string ResolveName(string text, bool hint_mustBeClassLike = false)
+    private string ResolveName(Node node, bool hint_mustBeClassLike = false)
+    {
+        return ResolveName(node.Text, node.ClassificationType, hint_mustBeClassLike);
+    }
+
+    private string ResolveName(string text, string classification, bool hint_mustBeClassLike = false)
     {
         if (!text.Any(x => char.IsLetter(x)))
             return NodeColors.Default;
@@ -250,6 +255,9 @@ internal partial class HeuristicsGenerator
             if (_FoundLocalNames.Contains(text))
                 return NodeColors.LocalName;
         }
+
+        if (classification == ClassificationTypeNames.InterfaceName)
+            return NodeColors.Interface;
 
         bool startsWithI = NameLikeInterface(text);
 

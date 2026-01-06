@@ -1,0 +1,7 @@
+
+<pre class="background">
+<span class="keyword">private</span> <span class="class">Dictionary</span>&lt;<span class="class">Type</span>, <span class="interface">IState</span>&gt; _availableStatesDict;
+
+<span class="keyword">public interface</span> <span class="interface">IState</span>
+{
+}</pre>

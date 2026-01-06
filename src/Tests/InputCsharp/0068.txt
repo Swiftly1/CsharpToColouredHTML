@@ -1,0 +1,16 @@
+﻿public class IdBuilder : Builder
+{
+    public override Monad<T> Build<T>()
+    {
+        return null;
+    }
+}
+
+public interface Monad<T>
+{
+}
+
+public abstract class Builder
+{
+    public abstract Monad<T> Build<T>();
+}

@@ -1,0 +1,18 @@
+
+<pre class="background">
+<span class="keyword">public class</span> <span class="class">IdBuilder</span> : <span class="class">Builder</span>
+{
+    <span class="keyword">public override</span> <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt; <span class="method">Build</span>&lt;<span class="typeParam">T</span>&gt;()
+    {
+        <span class="control">return</span> <span class="keyword">null</span>;
+    }
+}
+
+<span class="keyword">public interface</span> <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt;
+{
+}
+
+<span class="keyword">public abstract class</span> <span class="class">Builder</span>
+{
+    <span class="keyword">public abstract</span> <span class="interface">Monad</span>&lt;<span class="typeParam">T</span>&gt; <span class="method">Build</span>&lt;<span class="typeParam">T</span>&gt;();
+}</pre>

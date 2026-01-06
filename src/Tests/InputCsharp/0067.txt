@@ -1,0 +1,5 @@
+﻿private Dictionary<Type, IState> _availableStatesDict;
+
+public interface IState
+{
+}
