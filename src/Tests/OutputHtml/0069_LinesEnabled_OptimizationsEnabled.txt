@@ -2,5 +2,5 @@
 <pre class="background">
 <table>
 <tbody>
-<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">new</span> <span class="class">X</span>&lt;A.<span class="class">B</span>, A.C.<span class="class">D</span>&gt;(<span class="numericLiteral">1</span>)</td></tr></tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">new</span> <span class="class">X</span>&lt;A.<span class="class">B</span>, A.C.<span class="class">D</span>&gt;(<span class="numericLiteral">1</span>)</td></tr><tr><td class="line_no" line_no="2"></td><td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column"><span class="localName">obj</span>.<span class="method">Method</span>&lt;<span class="class">Class1</span>&gt;(<span class="keyword">new</span> <span class="class">Something</span>&lt;<span class="class">Class1</span>.<span class="class">Class3</span>&gt;(<span class="numericLiteral">123</span>));</td></tr></tbody>
 </table></pre>

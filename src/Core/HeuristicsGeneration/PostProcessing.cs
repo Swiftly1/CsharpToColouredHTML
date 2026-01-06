@@ -108,12 +108,59 @@ internal partial class HeuristicsGenerator
     {
         foreach (var ns in namespaces)
         {
-            if (ShouldNamespaceBeAdjusted(ns))
-            {
-                ns.Colour = ResolveName(ns.Text, ns.ClassificationType);
-                MarkNextChainElementsToProperty(ns);
-            }
+            if (!ShouldNamespaceBeAdjusted(ns))
+                continue;
+
+            if (NestedClassEdgeCase(ns))
+                continue;
+
+            ns.Colour = ResolveName(ns.Text, ns.ClassificationType);
+            MarkNextChainElementsToProperty(ns);
         }
+    }
+
+    private bool NestedClassEdgeCase(NodeWithDetails ns)
+    {
+        /*
+         * obj.Method<Class1>(new Something<Class1.Class3>(123));
+         * Class 3 is nested
+         */
+
+        var i = _Output.FindIndex(x => x.Id == ns.Id);
+
+        if (i < 1)
+            return false;
+
+        if (i + 1 >= _Output.Count)
+            return false;
+
+        var current = _Output[i-1];
+        var next = _Output[i+1];
+
+        if (current.Text == "<" && next.Text == ".")
+        {
+            if (_FoundClasses.Contains(ns.Text))
+            {
+                ns.ClassificationType = ClassificationTypeNames.ClassName;
+                ns.Colour = NodeColors.Class;
+            }
+
+            if (_FoundStructs.Contains(ns.Text))
+            {
+                ns.ClassificationType = ClassificationTypeNames.StructName;
+                ns.Colour = NodeColors.Struct;
+            }
+
+            if (_FoundInterfaces.Contains(ns.Text))
+            {
+                ns.ClassificationType = ClassificationTypeNames.InterfaceName;
+                ns.Colour = NodeColors.Interface;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private bool ShouldNamespaceBeAdjusted(NodeWithDetails ns)

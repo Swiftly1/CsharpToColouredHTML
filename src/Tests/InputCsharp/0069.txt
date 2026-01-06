@@ -1,1 +1,3 @@
 ﻿new X<A.B, A.C.D>(1)
+
+obj.Method<Class1>(new Something<Class1.Class3>(123));
