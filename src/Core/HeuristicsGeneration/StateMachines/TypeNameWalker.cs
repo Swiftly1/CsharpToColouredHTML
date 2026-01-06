@@ -340,7 +340,7 @@ internal partial class HeuristicsGenerator
                 ClassificationTypeNames.StructName,
             };
 
-            // 0 = currently at Identifier, expecting Punctuation ","
+            // 0 = currently at Identifier, expecting Punctuation "," or "."
             // 1 = currently at Punctuation, expecting Identifier
 
             var state = 0;
@@ -353,7 +353,7 @@ internal partial class HeuristicsGenerator
                 chainElements.Add(peekedNode);
                 if (state == 0)
                 {
-                    if (peekedNode.Text == ",")
+                    if (peekedNode.Text.EqualsAnyOf(",", "."))
                     {
                         state = 1;
                         indexAhead++;
@@ -363,22 +363,34 @@ internal partial class HeuristicsGenerator
                     {
                         if (peekedNode.Text == ">")
                         {
-                            foreach (var entry in chainElements)
+                            var chainSplit = SplitGenericNodes(chainElements);
+
+                            foreach (var chain in chainSplit)
                             {
-                                if (entry.ClassificationType == ClassificationTypeNames.Punctuation)
+                                var identifiers = chain.Where(TypeHasValidIdentifier).ToList();
+
+                                foreach (var entry in chain)
                                 {
-                                    MarkNodeAs(entry, ClassificationTypeNames.Punctuation);
-                                }
-                                else if (entry.ClassificationType == ClassificationTypeNames.Operator)
-                                {
-                                    MarkNodeAs(entry, ClassificationTypeNames.Operator);
-                                }
-                                else
-                                {
-                                    var colour = ResolveName(entry);
-                                    MarkNodeAs(entry, colour);
+                                    if (entry.ClassificationType == ClassificationTypeNames.Punctuation)
+                                    {
+                                        MarkNodeAs(entry, ClassificationTypeNames.Punctuation);
+                                    }
+                                    else if (entry.ClassificationType == ClassificationTypeNames.Operator)
+                                    {
+                                        MarkNodeAs(entry, ClassificationTypeNames.Operator);
+                                    }
+                                    else if (entry.Id == identifiers[^1].Id)
+                                    {
+                                        var colour = ResolveName(entry);
+                                        MarkNodeAs(entry, colour);
+                                    }
+                                    else
+                                    {
+                                        MarkNodeAs(entry, NodeColors.Namespace);
+                                    }
                                 }
                             }
+
                             _CurrentIndex = _OriginalNodes.IndexOf(peekedNode);
                             return true;
                         }
@@ -405,6 +417,30 @@ internal partial class HeuristicsGenerator
         }
 
         return false;
+    }
+
+    private List<List<Node>> SplitGenericNodes(List<Node> chainElements)
+    {
+        var output = new List<List<Node>>();
+        var tmp = new List<Node>();
+
+        for (int i = 0; i < chainElements.Count; i++)
+        {
+            Node? node = chainElements[i];
+            tmp.Add(node);
+
+            if (node.Text == "," || i == chainElements.Count - 1)
+            {
+                output.Add(tmp);
+                tmp = new();
+            }
+        }
+
+        // just in case
+        if (tmp.Count > 0)
+            output.Add(tmp);
+
+        return output;
     }
 
     internal bool TryConsumeInheritanceList()

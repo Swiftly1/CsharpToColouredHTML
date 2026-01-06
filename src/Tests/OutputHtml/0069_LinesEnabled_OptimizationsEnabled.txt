@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">new</span> <span class="class">X</span>&lt;A.<span class="class">B</span>, A.C.<span class="class">D</span>&gt;(<span class="numericLiteral">1</span>)</td></tr></tbody>
+</table></pre>
