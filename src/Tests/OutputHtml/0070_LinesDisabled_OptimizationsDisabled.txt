@@ -1,0 +1,13 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">Test</span>
+<span class="punctuation">{</span>
+    <span class="keyword">public</span> <span class="class">Drone</span> <span class="propertyName">Drone</span> <span class="punctuation">{</span> <span class="keyword">get</span><span class="punctuation">;</span> <span class="keyword">private</span> <span class="keyword">set</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+    <span class="keyword">public</span> <span class="class">House</span> <span class="propertyName">House</span> <span class="punctuation">{</span> <span class="keyword">get</span><span class="punctuation">;</span> <span class="keyword">private</span> <span class="keyword">set</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="method">Awake</span><span class="punctuation">(</span><span class="punctuation">)</span>
+    <span class="punctuation">{</span>
+        <span class="propertyName">Drone</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">Drone</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+        <span class="propertyName">House</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class">House</span><span class="punctuation">(</span><span class="numericLiteral">5</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="punctuation">}</span>
+<span class="punctuation">}</span></pre>

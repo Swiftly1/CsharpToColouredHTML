@@ -1,0 +1,13 @@
+
+<pre class="background">
+<span class="keyword">public class</span> <span class="class">Test</span>
+{
+    <span class="keyword">public</span> <span class="class">Drone</span> Drone { <span class="keyword">get</span>; <span class="keyword">private set</span>; }
+    <span class="keyword">public</span> <span class="class">House</span> House { <span class="keyword">get</span>; <span class="keyword">private set</span>; }
+
+    <span class="keyword">private void</span> <span class="method">Awake</span>()
+    {
+        Drone = <span class="keyword">new</span> <span class="class">Drone</span>();
+        House = <span class="keyword">new</span> <span class="class">House</span>(<span class="numericLiteral">5</span>);
+    }
+}</pre>

@@ -786,6 +786,7 @@ internal partial class HeuristicsGenerator
                 {
                     ClassificationTypeNames.Identifier,
                     ClassificationTypeNames.ClassName,
+                    ClassificationTypeNames.PropertyName,
                 };
 
                 var validIdentifiers2 = new[]
@@ -793,6 +794,7 @@ internal partial class HeuristicsGenerator
                     ClassificationTypeNames.Identifier,
                     ClassificationTypeNames.ClassName,
                     ClassificationTypeNames.NamespaceName,
+                    ClassificationTypeNames.PropertyName,
                 };
 
                 if (validIdentifiers1.Contains(peekedAhead1.ClassificationType) &&

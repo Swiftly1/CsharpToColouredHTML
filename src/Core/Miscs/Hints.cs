@@ -48,7 +48,8 @@ public class Hints
         "String",
         "JsonConvert",
         "Parallel",
-        "AppDomain"
+        "AppDomain",
+        "Screen"
     };
 
     public List<string> ReallyPopularClassSubstrings { get; } = new List<string>

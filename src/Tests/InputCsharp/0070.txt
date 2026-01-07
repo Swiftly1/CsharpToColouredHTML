@@ -1,0 +1,11 @@
+﻿public class Test
+{
+    public Drone Drone { get; private set; }
+    public House House { get; private set; }
+
+    private void Awake()
+    {
+        Drone = new Drone();
+        House = new House(5);
+    }
+}
