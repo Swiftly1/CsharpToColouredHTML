@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="keyword">public record</span> <span class="class">X</span>(<span class="class">Test</span>? <span class="parameter">test</span>)
+{
+}</pre>

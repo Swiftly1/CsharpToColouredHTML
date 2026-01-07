@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">public record</span> <span class="class">X</span>(<span class="class">Test</span>? <span class="parameter">test</span>)</td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column">{</td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column">}</td></tr></tbody>
+</table></pre>

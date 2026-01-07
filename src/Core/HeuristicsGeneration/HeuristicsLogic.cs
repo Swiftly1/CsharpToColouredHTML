@@ -199,8 +199,20 @@ internal partial class HeuristicsGenerator
             goto Exit;
         }
 
+        // public record X(>>Test? test<<)
+        if (TryPeekAhead(out var peekAheadQuestionMark) && peekAheadQuestionMark.Text == "?" &&
+            TryPeekAhead(out var peekedAheadNode2, 2) &&
+            peekedAheadNode2.ClassificationType.EqualsAnyOf(
+            ClassificationTypeNames.ParameterName,
+            ClassificationTypeNames.LocalName,
+            ClassificationTypeNames.FieldName))
+        {
+            found = true;
+            goto Exit;
+        }
+
         // Param[] Params,
-        if (TryPeekAhead(out peekedAheadNode) && TryPeekAhead(out var peekedAheadNode2, 2))
+        if (TryPeekAhead(out peekedAheadNode) && TryPeekAhead(out peekedAheadNode2, 2))
         {
             if (peekedAheadNode.Text == "[" && peekedAheadNode2.Text == "]")
             {

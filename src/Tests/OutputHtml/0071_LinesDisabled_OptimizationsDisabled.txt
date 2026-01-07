@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">record</span> <span class="class">X</span><span class="punctuation">(</span><span class="class">Test</span><span class="operator">?</span> <span class="parameter">test</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+<span class="punctuation">}</span></pre>
