@@ -5,7 +5,7 @@
 
             <span class="comment">// The props we want to be included as early as possible since we want our tasks to be used and</span>
             <span class="comment">// to ensure our setting of targets path happens early enough</span>
-            <span class="localName">filesToWrite</span>.<span class="method">Add</span>(<span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="localName">hiveName</span>}<span class="string">.props&quot;</span>, <span class="localName">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>),
+            <span class="localName">filesToWrite</span>.<span class="method">Add</span>(<span class="control">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="localName">hiveName</span>}<span class="string">.props&quot;</span>, <span class="localName">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>),
                 <span class="string">$@&quot;&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span>
 <span class="string">&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span>
   <span class="string">&lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{<span class="localName">hiveName</span>}<span class="string">&#39;&quot;&quot;&gt;</span>

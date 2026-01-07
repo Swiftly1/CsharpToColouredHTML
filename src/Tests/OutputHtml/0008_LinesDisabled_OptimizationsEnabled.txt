@@ -28,11 +28,11 @@
 
         <span class="keyword">protected override async</span> <span class="class">Task</span> <span class="method">InitializeAsync</span>(<span class="struct">CancellationToken</span> <span class="parameter">cancellationToken</span>, <span class="interface">IProgress</span>&lt;<span class="class">ServiceProgressData</span>&gt; <span class="parameter">progress</span>)
         {
-            <span class="keyword">await base</span>.<span class="method">InitializeAsync</span>(<span class="parameter">cancellationToken</span>, <span class="parameter">progress</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+            <span class="control">await</span> <span class="keyword">base</span>.<span class="method">InitializeAsync</span>(<span class="parameter">cancellationToken</span>, <span class="parameter">progress</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
 
-            <span class="keyword">await</span> <span class="class">JoinableTaskFactory</span>.<span class="method">SwitchToMainThreadAsync</span>(<span class="parameter">cancellationToken</span>);
+            <span class="control">await</span> <span class="class">JoinableTaskFactory</span>.<span class="method">SwitchToMainThreadAsync</span>(<span class="parameter">cancellationToken</span>);
 
-            <span class="keyword">var</span> <span class="localName">reg</span> = (<span class="interface">ILocalRegistry2</span>)<span class="keyword">await</span> <span class="method">GetServiceAsync</span>(<span class="keyword">typeof</span>(<span class="class">SLocalRegistry</span>)).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+            <span class="keyword">var</span> <span class="localName">reg</span> = (<span class="interface">ILocalRegistry2</span>)<span class="control">await</span> <span class="method">GetServiceAsync</span>(<span class="keyword">typeof</span>(<span class="class">SLocalRegistry</span>)).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
             <span class="parameter">cancellationToken</span>.<span class="method">ThrowIfCancellationRequested</span>();
             <span class="class">Assumes</span>.<span class="method">Present</span>(<span class="localName">reg</span>);
 
@@ -50,7 +50,7 @@
                 <span class="keyword">var</span> <span class="localName">hiveName</span> = <span class="localName">registryParts</span>[<span class="numericLiteral">3</span>];
                 RoslynHive = <span class="keyword">string</span>.<span class="method">Format</span>(<span class="string">@&quot;{0}.{1}&quot;</span>, <span class="localName">registryParts</span>[<span class="numericLiteral">2</span>], <span class="localName">registryParts</span>[<span class="numericLiteral">3</span>]);
 
-                <span class="keyword">await</span> <span class="method">WriteMSBuildFilesAsync</span>(<span class="localName">packagePath</span>, RoslynHive, <span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+                <span class="control">await</span> <span class="method">WriteMSBuildFilesAsync</span>(<span class="localName">packagePath</span>, RoslynHive, <span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
 
                 <span class="control">try</span>
                 {
@@ -71,7 +71,7 @@
 
             <span class="comment">// The props we want to be included as early as possible since we want our tasks to be used and</span>
             <span class="comment">// to ensure our setting of targets path happens early enough</span>
-            <span class="localName">filesToWrite</span>.<span class="method">Add</span>(<span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="parameter">hiveName</span>}<span class="string">.props&quot;</span>, <span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>),
+            <span class="localName">filesToWrite</span>.<span class="method">Add</span>(<span class="control">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Imports\Microsoft.Common.props\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="parameter">hiveName</span>}<span class="string">.props&quot;</span>, <span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>),
                 <span class="string">$@&quot;&lt;?xml version=&quot;&quot;1.0&quot;&quot; encoding=&quot;&quot;utf-8&quot;&quot;?&gt;</span>
 <span class="string">&lt;Project xmlns=&quot;&quot;http://schemas.microsoft.com/developer/msbuild/2003&quot;&quot;&gt;</span>
   <span class="string">&lt;PropertyGroup Condition=&quot;&quot;&#39;$(RoslynHive)&#39; == &#39;</span>{<span class="parameter">hiveName</span>}<span class="string">&#39;&quot;&quot;&gt;</span>
@@ -96,12 +96,12 @@
   <span class="string">&lt;/PropertyGroup&gt;</span>
 <span class="string">&lt;/Project&gt;&quot;</span>;
 
-            <span class="localName">filesToWrite</span>.<span class="method">Add</span>(<span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Microsoft.CSharp.targets\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="parameter">hiveName</span>}<span class="string">.targets&quot;</span>, <span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="localName">targetsContent</span>);
-            <span class="localName">filesToWrite</span>.<span class="method">Add</span>(<span class="keyword">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Microsoft.VisualBasic.targets\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="parameter">hiveName</span>}<span class="string">.targets&quot;</span>, <span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="localName">targetsContent</span>);
+            <span class="localName">filesToWrite</span>.<span class="method">Add</span>(<span class="control">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Microsoft.CSharp.targets\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="parameter">hiveName</span>}<span class="string">.targets&quot;</span>, <span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="localName">targetsContent</span>);
+            <span class="localName">filesToWrite</span>.<span class="method">Add</span>(<span class="control">await</span> <span class="method">GetMSBuildRelativePathAsync</span>(<span class="string">$@&quot;Microsoft.VisualBasic.targets\ImportBefore\Roslyn.Compilers.Extension.</span>{<span class="parameter">hiveName</span>}<span class="string">.targets&quot;</span>, <span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="localName">targetsContent</span>);
 
             <span class="comment">// First we want to ensure any Roslyn files with our hive name that we aren&#39;t writing -- this is probably</span>
             <span class="comment">// leftovers from older extensions</span>
-            <span class="keyword">var</span> <span class="localName">msbuildDirectory</span> = <span class="keyword">new</span> <span class="class">DirectoryInfo</span>(<span class="keyword">await</span> <span class="method">GetMSBuildPathAsync</span>(<span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>));
+            <span class="keyword">var</span> <span class="localName">msbuildDirectory</span> = <span class="keyword">new</span> <span class="class">DirectoryInfo</span>(<span class="control">await</span> <span class="method">GetMSBuildPathAsync</span>(<span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>));
             <span class="control">if</span> (<span class="localName">msbuildDirectory</span>.Exists)
             {
                 <span class="control">foreach</span> (<span class="keyword">var</span> <span class="localName">file</span> <span class="control">in</span> <span class="localName">msbuildDirectory</span>.<span class="method">EnumerateFiles</span>(<span class="string">$&quot;*Roslyn*</span>{<span class="parameter">hiveName</span>}<span class="string">*&quot;</span>, <span class="enumName">SearchOption</span>.AllDirectories))
@@ -149,9 +149,9 @@
 
         <span class="keyword">private async</span> <span class="class">Task</span>&lt;<span class="keyword">string</span>&gt; <span class="method">GetMSBuildVersionStringAsync</span>(<span class="struct">CancellationToken</span> <span class="parameter">cancellationToken</span>)
         {
-            <span class="keyword">await</span> ThreadHelper.<span class="class">JoinableTaskFactory</span>.<span class="method">SwitchToMainThreadAsync</span>(<span class="parameter">cancellationToken</span>);
+            <span class="control">await</span> ThreadHelper.<span class="class">JoinableTaskFactory</span>.<span class="method">SwitchToMainThreadAsync</span>(<span class="parameter">cancellationToken</span>);
 
-            <span class="keyword">var</span> <span class="localName">dte</span> = (<span class="class">DTE</span>)<span class="keyword">await</span> <span class="method">GetServiceAsync</span>(<span class="keyword">typeof</span>(<span class="class">SDTE</span>)).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+            <span class="keyword">var</span> <span class="localName">dte</span> = (<span class="class">DTE</span>)<span class="control">await</span> <span class="method">GetServiceAsync</span>(<span class="keyword">typeof</span>(<span class="class">SDTE</span>)).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
             <span class="keyword">var</span> <span class="localName">parts</span> = <span class="localName">dte</span>.Version.<span class="method">Split</span>(<span class="string">&#39;.&#39;</span>);
             <span class="control">if</span> (<span class="localName">parts</span>.Length != <span class="numericLiteral">2</span>)
             {
@@ -174,14 +174,14 @@
 
         <span class="keyword">private async</span> <span class="class">Task</span>&lt;<span class="keyword">string</span>&gt; <span class="method">GetMSBuildPathAsync</span>(<span class="struct">CancellationToken</span> <span class="parameter">cancellationToken</span>)
         {
-            <span class="keyword">var</span> <span class="localName">version</span> = <span class="keyword">await</span> <span class="method">GetMSBuildVersionStringAsync</span>(<span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
+            <span class="keyword">var</span> <span class="localName">version</span> = <span class="control">await</span> <span class="method">GetMSBuildVersionStringAsync</span>(<span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>);
             <span class="keyword">var</span> <span class="localName">localAppData</span> = <span class="class">Environment</span>.<span class="method">GetFolderPath</span>(<span class="class">Environment</span>.<span class="enumName">SpecialFolder</span>.LocalApplicationData);
             <span class="control">return</span> <span class="class">Path</span>.<span class="method">Combine</span>(<span class="localName">localAppData</span>, <span class="string">$@&quot;Microsoft\MSBuild\</span>{<span class="localName">version</span>}<span class="string">&quot;</span>);
         }
 
         <span class="keyword">private async</span> <span class="class">Task</span>&lt;<span class="keyword">string</span>&gt; <span class="method">GetMSBuildRelativePathAsync</span>(<span class="keyword">string</span> <span class="parameter">relativePath</span>, <span class="struct">CancellationToken</span> <span class="parameter">cancellationToken</span>)
         {
-            <span class="control">return</span> <span class="class">Path</span>.<span class="method">Combine</span>(<span class="keyword">await</span> <span class="method">GetMSBuildPathAsync</span>(<span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="parameter">relativePath</span>);
+            <span class="control">return</span> <span class="class">Path</span>.<span class="method">Combine</span>(<span class="control">await</span> <span class="method">GetMSBuildPathAsync</span>(<span class="parameter">cancellationToken</span>).<span class="method">ConfigureAwait</span>(<span class="keyword">true</span>), <span class="parameter">relativePath</span>);
         }
     }
 }</pre>

@@ -251,6 +251,7 @@ internal partial class HeuristicsGenerator
                 ClassificationTypeNames.FieldName,
                 ClassificationTypeNames.ParameterName,
                 ClassificationTypeNames.Identifier,
+                ClassificationTypeNames.ControlKeyword,
                 ClassificationTypeNames.Keyword);
 
             if (isNotIf && !isIdentifierBefore && hasIdentifierAfter)

@@ -1,7 +1,7 @@
 
 <pre class="background">
 <span class="localName">output</span>.Tags = <span class="localName">_service</span>.<span class="method">GetItem</span>(<span class="localName">person</span>, Channel);
-<span class="keyword">var</span> <span class="localName">searchResult</span> = <span class="keyword">await</span> <span class="localName">_serviceB</span>.<span class="method">FindAsync</span>(Channel.UnderlyingChannel, Channel.<span class="method">GetMainCountry</span>(), <span class="localName">searchQuery</span>, <span class="localName">tags</span>: <span class="localName">searchQuery</span>.Tags);
+<span class="keyword">var</span> <span class="localName">searchResult</span> = <span class="control">await</span> <span class="localName">_serviceB</span>.<span class="method">FindAsync</span>(Channel.UnderlyingChannel, Channel.<span class="method">GetMainCountry</span>(), <span class="localName">searchQuery</span>, <span class="localName">tags</span>: <span class="localName">searchQuery</span>.Tags);
 
 <span class="keyword">private bool</span> <span class="method">OutsideGrid</span>(<span class="class">Position</span> <span class="parameter">pos</span>)
 {
