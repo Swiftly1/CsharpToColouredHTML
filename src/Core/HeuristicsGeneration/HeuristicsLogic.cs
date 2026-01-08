@@ -800,10 +800,11 @@ internal partial class HeuristicsGenerator
                     ClassificationTypeNames.Identifier,
                     ClassificationTypeNames.ClassName,
                     ClassificationTypeNames.PropertyName,
+                    ClassificationTypeNames.LocalName,
                 };
 
                 var validIdentifiers2 = new[]
-{
+                {
                     ClassificationTypeNames.Identifier,
                     ClassificationTypeNames.ClassName,
                     ClassificationTypeNames.NamespaceName,
@@ -813,7 +814,7 @@ internal partial class HeuristicsGenerator
                 if (validIdentifiers1.Contains(peekedAhead1.ClassificationType) &&
                     peekedAhead2.Text.EqualsAnyOf("(", "{", "["))
                 {
-                    var colour = ResolveName(peekedAhead1, true);
+                    var colour = ResolveName(peekedAhead1, true, true);
                     MarkNodeAs(peekedAhead1, colour);
                     MoveNext();
                 }

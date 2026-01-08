@@ -227,7 +227,7 @@ internal partial class HeuristicsGenerator
 
         for (int i = 0; i < chainWithoutLastElement.Count; i++)
         {
-            Node? node = chainWithoutLastElement[i];
+            var node = chainWithoutLastElement[i];
             if (node.ClassificationType == ClassificationTypeNames.Operator)
             {
                 MarkNodeAs(node, NodeColors.Operator);
@@ -280,12 +280,15 @@ internal partial class HeuristicsGenerator
         {
             var last = withoutPunctuation[^1];
             var previous = withoutPunctuation[^2];
-            if (TypeHasValidIdentifier(last) && TypeHasValidIdentifier(previous))
+            var indexLast = chainElements.IndexOf(last);
+            var indexPrev = chainElements.IndexOf(previous);
+            if (TypeHasValidIdentifier(last) && TypeHasValidIdentifier(previous) && (indexLast - indexPrev == 1))
                 valueTupleTypeWithName = true;
         }
 
-        foreach (var node in chainElements)
+        for (int i = 0; i < chainElements.Count; i++)
         {
+            var node = chainElements[i];
             if (node.ClassificationType == ClassificationTypeNames.Operator)
             {
                 MarkNodeAs(node, NodeColors.Operator);
@@ -315,6 +318,11 @@ internal partial class HeuristicsGenerator
                 }
             }
             else if (!valueTupleTypeWithName && node.Id == identifiers[^1].Id)
+            {
+                var color = ResolveName(node);
+                MarkNodeAs(node, color);
+            }
+            else if (i + 1 < chainElements.Count && chainElements[i+1].Text == "<")
             {
                 var color = ResolveName(node);
                 MarkNodeAs(node, color);

@@ -216,19 +216,19 @@ internal partial class HeuristicsGenerator
         return false;
     }
 
-    private string ResolveName(Node node, bool hint_mustBeClassLike = false)
+    private string ResolveName(Node node, bool hint_mustBeClassLike = false, bool ignoreCase = false)
     {
-        return ResolveName(node.Text, node.ClassificationType, hint_mustBeClassLike);
+        return ResolveName(node.Text, node.ClassificationType, hint_mustBeClassLike, ignoreCase);
     }
 
-    private string ResolveName(string text, string classification, bool hint_mustBeClassLike = false)
+    private string ResolveName(string text, string classification, bool hint_mustBeClassLike = false, bool ignoreCase = false)
     {
         if (!text.Any(x => char.IsLetter(x)))
             return NodeColors.Default;
 
         if (hint_mustBeClassLike)
         {
-            if (!IsValidClassOrStructName(text))
+            if (!IsValidClassOrStructName(text, ignoreCase))
                 return NodeColors.Identifier;
         }
 
@@ -278,10 +278,13 @@ internal partial class HeuristicsGenerator
         return text.StartsWith("I") && text.Length > 1 && char.IsUpper(text[1]);
     }
 
-    private bool IsValidClassOrStructName(string text)
+    private bool IsValidClassOrStructName(string text, bool ignoreCase = false)
     {
-        if (IdentifierFirstCharCaseSeemsLikeVariable(text))
-            return false;
+        if (!ignoreCase)
+        {
+            if (IdentifierFirstCharCaseSeemsLikeVariable(text))
+                return false;
+        }
 
         if (string.IsNullOrWhiteSpace(text))
             return false;
