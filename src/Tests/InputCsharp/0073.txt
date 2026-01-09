@@ -1,0 +1,3 @@
+﻿var result = list.Where(type => type is { IsClass: true, IsAbstract: false }).ToList();
+
+test(Id: GLOBAL_ID, value: 5)

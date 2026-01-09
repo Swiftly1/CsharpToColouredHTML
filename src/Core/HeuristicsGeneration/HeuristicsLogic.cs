@@ -146,8 +146,31 @@ internal partial class HeuristicsGenerator
         // HomeController : Controller
         if (TryPeekBehind(out peekedBehindNode) && peekedBehindNode.Text == ":")
         {
-            found = true;
-            goto Exit;
+            var valid_identifiers = new []
+            {
+                ClassificationTypeNames.Identifier,
+                ClassificationTypeNames.PropertyName,
+                ClassificationTypeNames.FieldName,
+            };
+
+            // if not test(Id: GLOBAL_ID, value: 5
+            var isIdentifier = TryPeekBehind(out peekedBehindNode2, 2) &&
+                peekedBehindNode2.ClassificationType.EqualsAnyOf(valid_identifiers);
+
+            var isNamedArg = isIdentifier &&
+                TryPeekBehind(out var peekedBehindNode3, 3) &&
+                peekedBehindNode3.Text.EqualsAnyOf("(", "{", ",");
+
+            if (isNamedArg)
+            {
+                MarkNodeAs(NodeColors.PropertyName);
+                return true;
+            }
+            else
+            {
+                found = true;
+                goto Exit;
+            }
         }
 
         // JsonConvert.SerializeObject(html)
@@ -511,6 +534,15 @@ internal partial class HeuristicsGenerator
             CurrentNode.ClassificationType == ClassificationTypeNames.Identifier)
         {
             MarkNodeLocalNameOrProperty(CurrentNode);
+            return true;
+        }
+
+        if (TryPeekBehind(out nodeBehind) && nodeBehind.Text == "{" &&
+            TryPeekAhead(out nodeAhead) && nodeAhead.Text == ":" &&
+            CurrentNode.ClassificationType == ClassificationTypeNames.Identifier)
+        {
+            MarkNodeAs(NodeColors.PropertyName);
+            _FoundPropertiesOrFields.Add(CurrentText);
             return true;
         }
 

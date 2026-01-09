@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">var</span> <span class="localName">result</span> = <span class="localName">list</span>.<span class="method">Where</span>(<span class="parameter">type</span> =&gt; <span class="parameter">type</span> <span class="keyword">is</span> { IsClass: <span class="keyword">true</span>, IsAbstract: <span class="keyword">false</span> }).<span class="method">ToList</span>();</td></tr><tr><td class="line_no" line_no="2"></td><td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column"><span class="method">test</span>(Id: GLOBAL_ID, <span class="localName">value</span>: <span class="numericLiteral">5</span>)</td></tr></tbody>
+</table></pre>
