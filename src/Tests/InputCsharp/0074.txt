@@ -1,0 +1,8 @@
+﻿public class Test<T>
+{
+    public async Task<List<T>> Test2(
+        Func<Asdf, T> map)
+    {
+      
+    }
+}

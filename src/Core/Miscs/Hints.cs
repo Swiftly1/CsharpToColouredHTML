@@ -67,7 +67,6 @@ public class Hints
     public List<string> ReallyPopularStructs { get; } = new List<string>
     {
         "CancellationToken",
-        "IEnumerable",
         "DateTime",
         "TimeOnly",
         "DateOnly",

@@ -32,6 +32,7 @@ internal partial class HeuristicsGenerator
             ClassificationTypeNames.RecordClassName,
             ClassificationTypeNames.RecordStructName,
             ClassificationTypeNames.InterfaceName,
+            ClassificationTypeNames.TypeParameterName
         };
 
         if (valid_identifiers.Contains(node.ClassificationType))
@@ -322,7 +323,7 @@ internal partial class HeuristicsGenerator
                 var color = ResolveName(node);
                 MarkNodeAs(node, color);
             }
-            else if (i + 1 < chainElements.Count && chainElements[i+1].Text == "<")
+            else if (i + 1 < chainElements.Count && chainElements[i + 1].Text == "<")
             {
                 var color = ResolveName(node);
                 MarkNodeAs(node, color);
@@ -346,6 +347,7 @@ internal partial class HeuristicsGenerator
                 ClassificationTypeNames.NamespaceName,
                 ClassificationTypeNames.ClassName,
                 ClassificationTypeNames.StructName,
+                ClassificationTypeNames.TypeParameterName
             };
 
             // 0 = currently at Identifier, expecting Punctuation "," or "."

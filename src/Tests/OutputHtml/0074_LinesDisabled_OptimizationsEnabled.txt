@@ -1,0 +1,10 @@
+
+<pre class="background">
+<span class="keyword">public class</span> <span class="class">Test</span>&lt;<span class="typeParam">T</span>&gt;
+{
+    <span class="keyword">public async</span> <span class="class">Task</span>&lt;<span class="class">List</span>&lt;<span class="typeParam">T</span>&gt;&gt; <span class="method">Test2</span>(
+        <span class="class">Func</span>&lt;<span class="class">Asdf</span>, <span class="typeParam">T</span>&gt; <span class="parameter">map</span>)
+    {
+      
+    }
+}</pre>

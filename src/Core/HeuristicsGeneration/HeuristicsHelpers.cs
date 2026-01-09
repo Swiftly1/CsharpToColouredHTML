@@ -259,6 +259,9 @@ internal partial class HeuristicsGenerator
         if (classification == ClassificationTypeNames.InterfaceName)
             return NodeColors.Interface;
 
+        if (classification == ClassificationTypeNames.TypeParameterName)
+            return NodeColors.TypeParameterName;
+
         bool startsWithI = NameLikeInterface(text);
 
         if (startsWithI)
