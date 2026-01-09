@@ -151,6 +151,7 @@ internal partial class HeuristicsGenerator
                 ClassificationTypeNames.Identifier,
                 ClassificationTypeNames.PropertyName,
                 ClassificationTypeNames.FieldName,
+                ClassificationTypeNames.LocalName,
             };
 
             // if not test(Id: GLOBAL_ID, value: 5
