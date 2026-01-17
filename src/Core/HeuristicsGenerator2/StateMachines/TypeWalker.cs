@@ -18,7 +18,13 @@ internal partial class HeuristicsGenerator2
         TupleDotOrEnd
     }
 
-    public bool ConsumeTypeAhead(TypeWalkState initialState)
+    public enum TypeWalkMode
+    {
+        MustBeType,
+        Default
+    }
+
+    public bool ConsumeTypeAhead(TypeWalkState initialState, TypeWalkMode mode)
     {
         Logger.Info($"ConsumeTypeAhead '{CurrentText}'", 3);
 
@@ -85,6 +91,15 @@ internal partial class HeuristicsGenerator2
                 else if (CurrentText == "?")
                 {
                     foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    break;
+                }
+                else if (CurrentText == "(")
+                {
+                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+
+                    if (mode != TypeWalkMode.MustBeType)
+                        ChangeLastChainFromClassToMethod(foundColours);
+
                     break;
                 }
                 else
@@ -224,6 +239,19 @@ internal partial class HeuristicsGenerator2
         }
 
         return foundColours.Any();
+    }
+
+    private void ChangeLastChainFromClassToMethod(List<(Node Node, string Colour)> foundColours)
+    {
+        for (int i = foundColours.Count - 1; i >= 0; i--)
+        {
+            var current = foundColours[i];
+
+            if (i == foundColours.Count - 2)
+            {
+
+            }
+        }
     }
 
     private string ResolveClassOrStructName(Node node)

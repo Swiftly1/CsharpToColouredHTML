@@ -1,0 +1,14 @@
+﻿var ns = new Some.Name.Space.And.Class();
+
+var a = new A();
+var b = new B<W>();
+var c = new C<W, W>();
+var d = new D<(W, R)>();
+var e = new E<(W, Q<R, R)>>();
+var f = new F<(W, Y<(R, R)>)>();
+
+TextSpan? previous = null;
+
+private SomeClass<Node> GenerateInternalRepresentation(string code)
+{
+}

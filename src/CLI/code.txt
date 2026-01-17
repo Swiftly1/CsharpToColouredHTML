@@ -1,14 +1,13 @@
-﻿var ns = new Some.Name.Space.And.Class();
+﻿var dict = new DictionaryList<int, int>();
 
-var a = new A();
-var b = new B<W>();
-var c = new C<W, W>();
-var d = new D<(W, R)>();
-var e = new E<(W, Q<R, R)>>();
-var f = new F<(W, Y<(R, R)>)>();
+var list1 = new List<int> { 1, 2, 3, 4, 5 };
+var list2 = new List<int> { 1, 2, 3, 4, 5, 5, 6 };
 
-TextSpan? previous = null;
+dict.Add(list1, 5);
+dict.Add(list2, 10);
 
-private SomeClass<Node> GenerateInternalRepresentation(string code)
-{
-}
+if (dict.TryGet(list1, out var value1))
+	Console.WriteLine(value1);
+
+dict.TryGet(list2, out var value2);
+Console.WriteLine(value2);

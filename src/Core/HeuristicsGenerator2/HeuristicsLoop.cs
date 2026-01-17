@@ -48,10 +48,8 @@ internal partial class HeuristicsGenerator2
 
     private bool IsType()
     {
-        if (ConsumeTypeAhead(TypeWalkState.TypeName))
-        {
+        if (ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.Default))
             return true;
-        }
 
         return false;
     }

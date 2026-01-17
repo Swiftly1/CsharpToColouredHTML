@@ -111,7 +111,7 @@ internal partial class HeuristicsGenerator2
 
             if (MoveNext())
             {
-                if (ConsumeTypeAhead(TypeWalkState.TypeName))
+                if (ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType))
                     return true;
                 else
                     MoveBehind();
