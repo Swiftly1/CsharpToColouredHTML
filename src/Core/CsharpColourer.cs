@@ -33,7 +33,7 @@ public class CsharpColourer
         code = code.ReplaceLineEndings();
 
         var nodes = GenerateInternalRepresentation(code);
-        var heuristics = new HeuristicsGenerator(Hints).Build(nodes);
+        var heuristics = new HeuristicsGenerator2(Hints).Build(nodes);
 
         Settings.PostProcessingAction?.Invoke(heuristics);
 
