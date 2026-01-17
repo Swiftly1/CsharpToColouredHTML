@@ -46,7 +46,7 @@ internal static class Logger
         Console.WriteLine($"[ERROR] {tabs}{s}");
     }
 
-    public static void PrintCurrentText(string s, int tabsDepth = 0)
+    public static void PrintCurrentText(string s, int currentIndex, int tabsDepth = 0)
     {
         if (!LogsEnabled)
             return;
@@ -56,6 +56,6 @@ internal static class Logger
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.Write(s);
         Console.ResetColor();
-        Console.WriteLine($"'");
+        Console.WriteLine($"' at {currentIndex}");
     }
 }

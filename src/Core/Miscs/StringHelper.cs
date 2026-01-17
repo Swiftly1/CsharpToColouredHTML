@@ -79,4 +79,9 @@ public static class StringHelper
         entry = list[index];
         return true;
     }
+
+    public static bool FirstCharIsUpper(this string s)
+    {
+        return s.Length > 0 && char.IsUpper(s[0]);
+    }
 }

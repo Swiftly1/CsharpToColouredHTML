@@ -63,6 +63,7 @@ internal partial class HeuristicsGenerator2
                     {
                         foundColours.Add((CurrentNode, ResolveClassOrStructName(CurrentNode)));
                     }
+
                     currentState = TypeWalkState.TypeNameDotOrEnd;
                 }
                 else if (CurrentText == "(")
@@ -298,19 +299,7 @@ internal partial class HeuristicsGenerator2
 
     public bool TypeHasValidIdentifier(Node node)
     {
-        var validIdentifiers = new List<string>
-        {
-            ClassificationTypeNames.Identifier,
-            ClassificationTypeNames.NamespaceName,
-            ClassificationTypeNames.ClassName,
-            ClassificationTypeNames.StructName,
-            ClassificationTypeNames.RecordClassName,
-            ClassificationTypeNames.RecordStructName,
-            ClassificationTypeNames.InterfaceName,
-            ClassificationTypeNames.TypeParameterName
-        };
-
-        if (validIdentifiers.Contains(node.ClassificationType))
+        if (_validTypeNameClassifications.Contains(node.ClassificationType))
             return true;
 
         if (node.ClassificationType == ClassificationTypeNames.Keyword)

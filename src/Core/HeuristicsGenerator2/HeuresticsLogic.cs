@@ -46,6 +46,7 @@ internal partial class HeuristicsGenerator2
     {
         if (_SimpleClassificationToColourMapper.TryGetValue(CurrentNode.ClassificationType, out var simpleColour))
         {
+            Logger.Info($"Matched: {simpleColour}");
             MarkNodeAs(simpleColour);
             return true;
         }
@@ -173,6 +174,27 @@ internal partial class HeuristicsGenerator2
         {
             Logger.Info("Handling CommonKeyword", 2);
             MarkNodeAs(NodeColors.Keyword);
+        }
+
+        return true;
+    }
+
+    private bool IsControl()
+    {
+        if (CurrentNode.ClassificationType != ClassificationTypeNames.ControlKeyword)
+            return false;
+
+        MarkNodeAs(NodeColors.Control);
+
+        if (CurrentText == "if")
+        {
+            Logger.Info("Handling 'if'", 2);
+
+            if (!MoveNext())
+                return true;
+
+            if (TryWalkIf())
+                return true;
         }
 
         return true;

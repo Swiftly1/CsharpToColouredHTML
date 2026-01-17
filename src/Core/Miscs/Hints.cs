@@ -26,7 +26,8 @@ public class Hints
 
     public List<string> ReallyPopularEnums { get; } =
     [
-        "PictureBoxSizeMode"
+        "PictureBoxSizeMode",
+        "ConsoleColor"
     ];
 
     public List<string> ReallyPopularClasses { get; } =

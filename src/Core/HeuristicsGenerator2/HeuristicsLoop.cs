@@ -20,7 +20,7 @@ internal partial class HeuristicsGenerator2
                 }
 
                 printEndLoopMessages = false;
-                Logger.PrintCurrentText(CurrentText);
+                Logger.PrintCurrentText(CurrentText, _CurrentIndex);
 
                 HandleCounters();
 
@@ -36,9 +36,21 @@ internal partial class HeuristicsGenerator2
                     continue;
                 }
 
+                if (IsControl())
+                {
+                    Logger.Success("Is Control");
+                    continue;
+                }
+
                 if (IsComment())
                 {
                     Logger.Success("Is Comment");
+                    continue;
+                }
+
+                if (IsOperator())
+                {
+                    Logger.Success("Is Operator");
                     continue;
                 }
 
@@ -51,6 +63,12 @@ internal partial class HeuristicsGenerator2
                 if (IsMethod())
                 {
                     Logger.Success("Is Method");
+                    continue;
+                }
+
+                if (IsExpression())
+                {
+                    Logger.Success("Is Expression");
                     continue;
                 }
 
@@ -67,6 +85,31 @@ internal partial class HeuristicsGenerator2
                 MarkNodeAs(NodeColors.InternalError);
             }
         } while (MoveNext());
+    }
+
+    private bool IsOperator()
+    {
+        if (CurrentNode.ClassificationType == ClassificationTypeNames.Operator)
+        {
+            if (CurrentText != "=")
+            {
+                MarkNodeAs(NodeColors.Operator);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsExpression()
+    {
+        if (TryWalkBeforeAssignmentExpression())
+            return true;
+
+        if (TryWalkAssignmentExpression())
+            return true;
+
+        return false;
     }
 
     private bool IsMethod()

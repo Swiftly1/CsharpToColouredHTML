@@ -49,4 +49,9 @@ internal record NodeWithDetails
     public bool SkipIdentifierPostProcessing { get; set; }
 
     public int LineNumber { get; set; }
+
+    public override string ToString()
+    {
+        return $"'{Text}' is {ClassificationType}";
+    }
 }
