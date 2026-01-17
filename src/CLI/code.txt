@@ -1,14 +1,14 @@
-﻿public static Thing CreateThing(Thing fab)
-{
-    return fab.Instantiate(InputManager, TestManager, Math.PI);
-}
+﻿var ns = new Some.Name.Space.And.Class();
 
-public void test(List<int> keys, Dictionary<int, int> dictionary)
+var a = new A();
+var b = new B<W>();
+var c = new C<W, W>();
+var d = new D<(W, R)>();
+var e = new E<(W, Q<R, R)>>();
+var f = new F<(W, Y<(R, R)>)>();
+
+TextSpan? previous = null;
+
+private SomeClass<Node> GenerateInternalRepresentation(string code)
 {
-    keys
-        .WhereOut<TKey, TItem>(dictionary.TryGetValue)
-        .Each(tuple =>
-        {
-            var (key, item) = tuple;
-        });
 }
