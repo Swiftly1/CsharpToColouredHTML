@@ -77,10 +77,16 @@ internal partial class HeuristicsGenerator2
             return new List<NodeAfterProcessing>();
 
         _OriginalNodes = input;
+
+        foreach (var entry in _OriginalNodes)
+        {
+            MarkNodeAs(entry, NodeColors.Default);
+        }
+
         GenerateHeuristics();
 
-        //if (_OriginalNodes.Count != _Output.Count)
-        //    throw new Exception("Something was lost");
+        if (_OriginalNodes.Count != _Output.Count)
+            throw new Exception("Something was lost");
 
         AssignLineNumbers(_Output);
         return MapOutputToPublicType();

@@ -6,34 +6,6 @@ namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
 
 internal partial class HeuristicsGenerator2
 {
-    private void MarkNodeAs(string colour, bool skipIdentifierPostProcess = false)
-    {
-        var found = _Output.FirstOrDefault(x => x.Id == CurrentNode.Id);
-
-        if (found == null)
-        {
-            CurrentNode.ModifyClassificationType(MapColourToClassificationType(colour, CurrentNode.ClassificationType));
-            _Output.Add(new NodeWithDetails
-            (
-                colour: colour,
-                text: CurrentText,
-                trivia: CurrentNode.Trivia,
-                hasNewLine: CurrentNode.HasNewLine,
-                parenthesisCounter: _ParenthesisCounter,
-                classificationType: MapColourToClassificationType(colour, CurrentNode.ClassificationType),
-                skipIdentifierPostProcessing: skipIdentifierPostProcess,
-                id: CurrentNode.Id)
-            );
-        }
-        else
-        {
-            found.Colour = colour;
-            found.ClassificationType = MapColourToClassificationType(colour, CurrentNode.ClassificationType);
-        }
-
-        UpdateStats();
-    }
-
     private void MarkNodeAs(Node node, string colour, bool skipIdentifierPostProcess = false)
     {
         var found = _Output.FirstOrDefault(x => x.Id == node.Id);
@@ -47,7 +19,6 @@ internal partial class HeuristicsGenerator2
                 text: node.Text,
                 trivia: node.Trivia,
                 hasNewLine: node.HasNewLine,
-                parenthesisCounter: _ParenthesisCounter,
                 classificationType: MapColourToClassificationType(colour, node.ClassificationType),
                 skipIdentifierPostProcessing: skipIdentifierPostProcess,
                 id: node.Id
@@ -57,9 +28,14 @@ internal partial class HeuristicsGenerator2
         {
             found.Colour = colour;
             found.ClassificationType = MapColourToClassificationType(colour, node.ClassificationType);
+            found.SkipIdentifierPostProcessing = skipIdentifierPostProcess;
         }
 
         UpdateStats();
+    }
+    private void MarkNodeAs(string colour, bool skipIdentifierPostProcess = false)
+    {
+        MarkNodeAs(CurrentNode, colour, skipIdentifierPostProcess);
     }
 
     [DebuggerStepThrough]

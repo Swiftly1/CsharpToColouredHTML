@@ -7,7 +7,6 @@ internal record NodeWithDetails
         string text,
         string trivia,
         bool hasNewLine,
-        int parenthesisCounter,
         string classificationType,
         bool skipIdentifierPostProcessing
         )
@@ -26,10 +25,9 @@ internal record NodeWithDetails
         string text,
         string trivia,
         bool hasNewLine,
-        int parenthesisCounter,
         string classificationType,
         bool skipIdentifierPostProcessing,
-        Guid id) : this(colour, text, trivia, hasNewLine, parenthesisCounter, classificationType, skipIdentifierPostProcessing)
+        Guid id) : this(colour, text, trivia, hasNewLine, classificationType, skipIdentifierPostProcessing)
     {
         Id = id;
     }

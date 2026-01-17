@@ -19,7 +19,6 @@ internal partial class HeuristicsGenerator
                 text: CurrentText,
                 trivia: CurrentNode.Trivia,
                 hasNewLine: CurrentNode.HasNewLine,
-                parenthesisCounter: _ParenthesisCounter,
                 classificationType: MapColourToClassificationType(colour, CurrentNode.ClassificationType),
                 skipIdentifierPostProcessing: skipIdentifierPostProcess,
                 id: CurrentNode.Id)
@@ -47,7 +46,6 @@ internal partial class HeuristicsGenerator
                 text: node.Text,
                 trivia: node.Trivia,
                 hasNewLine: node.HasNewLine,
-                parenthesisCounter: _ParenthesisCounter,
                 classificationType: MapColourToClassificationType(colour, node.ClassificationType),
                 skipIdentifierPostProcessing: skipIdentifierPostProcess,
                 id: node.Id

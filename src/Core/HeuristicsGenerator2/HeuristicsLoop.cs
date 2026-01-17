@@ -1,4 +1,5 @@
 ﻿using CsharpToColouredHTML.Core.Nodes;
+using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
 
@@ -7,6 +8,7 @@ internal partial class HeuristicsGenerator2
     private void GenerateHeuristics()
     {
         var printEndLoopMessages = true;
+
         do
         {
             try
@@ -18,24 +20,45 @@ internal partial class HeuristicsGenerator2
                 }
 
                 printEndLoopMessages = false;
-                Logger.Info($"Current Text: '{CurrentText}'");
+                Logger.PrintCurrentText(CurrentText);
 
                 HandleCounters();
 
                 if (HintsAndAlreadyClassifiedNodes())
+                {
+                    Logger.Success("Hints & Already Classified");
                     continue;
+                }
 
                 if (IsKeyword())
+                {
+                    Logger.Success("Is Keyword");
                     continue;
+                }
 
                 if (IsComment())
+                {
+                    Logger.Success("Is Comment");
                     continue;
+                }
 
                 if (IsPunctuation())
+                {
+                    Logger.Success("Is Punctuation");
                     continue;
+                }
+
+                if (IsMethod())
+                {
+                    Logger.Success("Is Method");
+                    continue;
+                }
 
                 if (IsType())
+                {
+                    Logger.Success("Is Type");
                     continue;
+                }
 
                 MarkNodeAs(NodeColors.DefaultColour);
             }
@@ -46,11 +69,25 @@ internal partial class HeuristicsGenerator2
         } while (MoveNext());
     }
 
+    private bool IsMethod()
+    {
+        if (_InsideNewStatement)
+            return false;
+
+        // constructor
+        // public HomeController()
+        if (TryPeekBehind(out var modifier) && AccessibilityModifiers.Contains(modifier.Text) &&
+            TryPeekAhead(out var ahead) && ahead.Text == "(")
+        {
+            MarkNodeAs(ResolveClassOrStructName(CurrentNode), true);
+            return true;
+        }
+
+        return TryWalkMethod();
+    }
+
     private bool IsType()
     {
-        if (ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.Default))
-            return true;
-
-        return false;
+        return ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.Default);
     }
 }

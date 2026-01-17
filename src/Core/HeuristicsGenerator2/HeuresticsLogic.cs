@@ -1,4 +1,5 @@
-﻿using CsharpToColouredHTML.Core.Nodes;
+﻿using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
@@ -43,7 +44,6 @@ internal partial class HeuristicsGenerator2
 
     private bool HintsAndAlreadyClassifiedNodes()
     {
-        Logger.Info("Hints & Already Classified");
         if (_SimpleClassificationToColourMapper.TryGetValue(CurrentNode.ClassificationType, out var simpleColour))
         {
             MarkNodeAs(simpleColour);
@@ -61,7 +61,6 @@ internal partial class HeuristicsGenerator2
 
     private bool IsPunctuation()
     {
-        Logger.Info("Is Punctuation");
         if (CurrentNode.ClassificationType == ClassificationTypeNames.Punctuation)
         {
             MarkNodeAs(NodeColors.Punctuation);
@@ -73,8 +72,6 @@ internal partial class HeuristicsGenerator2
 
     private bool IsComment()
     {
-        Logger.Info("Is Comment");
-
         if (CurrentNode.ClassificationType.Contains("xml doc comment"))
         {
             MarkNodeAs(NodeColors.Comment);
@@ -86,8 +83,6 @@ internal partial class HeuristicsGenerator2
 
     private bool IsKeyword()
     {
-        Logger.Info("Is Keyword");
-
         if (CurrentNode.ClassificationType != ClassificationTypeNames.Keyword)
             return false;
 
@@ -104,6 +99,52 @@ internal partial class HeuristicsGenerator2
                 MoveNext();
                 MarkNodeAs(ClassificationTypeNames.Operator);
             }
+            else
+            {
+                // using Microsoft.AspNetCore.Mvc;
+                var validIdentifiers = new[]
+                {
+                    ClassificationTypeNames.NamespaceName,
+                    ClassificationTypeNames.Identifier,
+                };
+
+                const int STATE_IDENTIFIER = 0;
+                const int STATE_DOT = 1;
+                var currentState = STATE_IDENTIFIER;
+
+                while (MoveNext())
+                {
+                    if (currentState == STATE_IDENTIFIER)
+                    {
+                        if (!CC.EqualsAnyOf(validIdentifiers))
+                        {
+                            MoveBehind();
+                            break;
+                        }
+
+                        MarkNodeAs(NodeColors.Namespace, skipIdentifierPostProcess: true);
+                        currentState = STATE_DOT;
+                    }
+                    else if (currentState == STATE_DOT)
+                    {
+                        if (!CC.EqualsAnyOf(ClassificationTypeNames.Punctuation, ClassificationTypeNames.Operator))
+                        {
+                            MoveBehind();
+                            break;
+                        }
+
+                        if (CurrentText == ".")
+                            MarkNodeAs(NodeColors.Operator, skipIdentifierPostProcess: true);
+
+                        if (CurrentText == ";")
+                            MarkNodeAs(NodeColors.Punctuation, skipIdentifierPostProcess: true);
+
+                        currentState = STATE_IDENTIFIER;
+                    }
+                }
+            }
+
+            return true;
         }
         else if (CurrentText == "new")
         {
@@ -112,7 +153,10 @@ internal partial class HeuristicsGenerator2
             if (MoveNext())
             {
                 if (ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType))
+                {
+                    _InsideNewStatement = false;
                     return true;
+                }
                 else
                     MoveBehind();
             }

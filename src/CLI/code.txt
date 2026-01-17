@@ -1,13 +1,24 @@
-﻿var dict = new DictionaryList<int, int>();
+﻿using MarkdownSharp;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
-var list1 = new List<int> { 1, 2, 3, 4, 5 };
-var list2 = new List<int> { 1, 2, 3, 4, 5, 5, 6 };
+namespace Blog.Controllers;
 
-dict.Add(list1, 5);
-dict.Add(list2, 10);
+public class HomeController : Controller
+{
+    public HomeController()
+    {
 
-if (dict.TryGet(list1, out var value1))
-	Console.WriteLine(value1);
+    }
 
-dict.TryGet(list2, out var value2);
-Console.WriteLine(value2);
+    public IActionResult Index()
+    {
+        string contents;
+        using (var wc = new System.Net.WebClient())
+            contents = wc.DownloadString("https://raw.githubusercontent.com/asd");
+
+        var test = new Markdown(new MarkdownOptions { });
+        var html = test.Transform(contents);
+        return View("Index", JsonConvert.SerializeObject(html));
+    }
+}

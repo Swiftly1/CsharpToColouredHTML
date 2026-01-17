@@ -50,7 +50,7 @@ internal partial class HeuristicsGenerator2
 
             if (currentState == TypeWalkState.TypeName)
             {
-                if (CC.EqualsAnyOf(_validTypeNameClassifications))
+                if (CC.EqualsAnyOf(_validTypeNameClassifications) || CurrentText.EqualsAnyOf(_Hints.BuiltInTypes.ToArray()))
                 {
                     if (TryPeekAhead(out var peekedAhead))
                     {
@@ -79,7 +79,7 @@ internal partial class HeuristicsGenerator2
             {
                 if (CurrentText == ".")
                 {
-                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    foundColours.Add((CurrentNode, NodeColors.Operator));
                     currentState = TypeWalkState.TypeName;
                 }
                 else if (CurrentText == "<")
@@ -96,10 +96,6 @@ internal partial class HeuristicsGenerator2
                 else if (CurrentText == "(")
                 {
                     foundColours.Add((CurrentNode, NodeColors.Punctuation));
-
-                    if (mode != TypeWalkMode.MustBeType)
-                        ChangeLastChainFromClassToMethod(foundColours);
-
                     break;
                 }
                 else
@@ -110,7 +106,7 @@ internal partial class HeuristicsGenerator2
             }
             else if (currentState == TypeWalkState.TupleName)
             {
-                if (CC.EqualsAnyOf(_validTypeNameClassifications))
+                if (CC.EqualsAnyOf(_validTypeNameClassifications) || CurrentText.EqualsAnyOf(_Hints.BuiltInTypes.ToArray()))
                 {
                     if (TryPeekAhead(out var peekedAhead))
                     {
@@ -165,7 +161,7 @@ internal partial class HeuristicsGenerator2
             }
             else if (currentState == TypeWalkState.GenericsName)
             {
-                if (CC.EqualsAnyOf(_validTypeNameClassifications))
+                if (CC.EqualsAnyOf(_validTypeNameClassifications) || CurrentText.EqualsAnyOf(_Hints.BuiltInTypes.ToArray()))
                 {
                     if (TryPeekAhead(out var peekedAhead))
                     {
@@ -195,7 +191,7 @@ internal partial class HeuristicsGenerator2
             {
                 if (CurrentText == ".")
                 {
-                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    foundColours.Add((CurrentNode, NodeColors.Operator));
                     currentState = TypeWalkState.GenericsName;
                 }
                 else if (CurrentText == ",")
@@ -225,12 +221,6 @@ internal partial class HeuristicsGenerator2
             {
                 throw new NotImplementedException("State is not handled.");
             }
-
-            var fod = foundColours.FirstOrDefault(x => x.Node == CurrentNode);
-            if (fod == default)
-            {
-                foundColours.Add((CurrentNode, NodeColors.DefaultColour));
-            }
         } while (MoveNext());
 
         foreach (var entry in foundColours)
@@ -241,35 +231,12 @@ internal partial class HeuristicsGenerator2
         return foundColours.Any();
     }
 
-    private void ChangeLastChainFromClassToMethod(List<(Node Node, string Colour)> foundColours)
-    {
-        for (int i = foundColours.Count - 1; i >= 0; i--)
-        {
-            var current = foundColours[i];
-
-            if (i == foundColours.Count - 2)
-            {
-
-            }
-        }
-    }
-
     private string ResolveClassOrStructName(Node node)
     {
-        if (node.ClassificationType == ClassificationTypeNames.StructName)
-            return NodeColors.Struct;
+        var checkResult = IsAlreadyClassOrStruct(node);
 
-        if (node.ClassificationType == ClassificationTypeNames.ClassName)
-            return NodeColors.Class;
-
-        if (node.ClassificationType == ClassificationTypeNames.InterfaceName)
-            return NodeColors.Interface;
-
-        if (node.ClassificationType == ClassificationTypeNames.RecordStructName)
-            return NodeColors.RecordStructName;
-
-        if (node.ClassificationType == ClassificationTypeNames.RecordClassName)
-            return NodeColors.Class;
+        if (checkResult.Success)
+            return checkResult.Value;
 
         var text = node.Text;
 
@@ -297,6 +264,26 @@ internal partial class HeuristicsGenerator2
         return NodeColors.Class;
     }
 
+    private static (bool Success, string Value) IsAlreadyClassOrStruct(Node node)
+    {
+        if (node.ClassificationType == ClassificationTypeNames.StructName)
+            return (Success: true, Value: NodeColors.Struct);
+
+        if (node.ClassificationType == ClassificationTypeNames.ClassName)
+            return (Success: true, Value: NodeColors.Class);
+
+        if (node.ClassificationType == ClassificationTypeNames.InterfaceName)
+            return (Success: true, Value: NodeColors.Interface);
+
+        if (node.ClassificationType == ClassificationTypeNames.RecordStructName)
+            return (Success: true, Value: NodeColors.RecordStructName);
+
+        if (node.ClassificationType == ClassificationTypeNames.RecordClassName)
+            return (Success: true, Value: NodeColors.Class);
+
+        return (Success: false, Value: string.Empty);
+    }
+
     private readonly string[] _validTypeNameClassifications =
     [
         ClassificationTypeNames.Identifier,
@@ -311,7 +298,7 @@ internal partial class HeuristicsGenerator2
 
     public bool TypeHasValidIdentifier(Node node)
     {
-        var valid_identifiers = new List<string>
+        var validIdentifiers = new List<string>
         {
             ClassificationTypeNames.Identifier,
             ClassificationTypeNames.NamespaceName,
@@ -323,7 +310,7 @@ internal partial class HeuristicsGenerator2
             ClassificationTypeNames.TypeParameterName
         };
 
-        if (valid_identifiers.Contains(node.ClassificationType))
+        if (validIdentifiers.Contains(node.ClassificationType))
             return true;
 
         if (node.ClassificationType == ClassificationTypeNames.Keyword)

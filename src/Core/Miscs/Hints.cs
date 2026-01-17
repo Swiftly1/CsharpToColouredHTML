@@ -2,8 +2,8 @@
 
 public class Hints
 {
-    public List<string> BuiltInTypes { get; } = new List<string>
-    {
+    public List<string> BuiltInTypes { get; } =
+    [
         "bool",
         "byte",
         "sbyte",
@@ -22,15 +22,15 @@ public class Hints
         "object",
         "string",
         "dynamic",
-    };
+    ];
 
-    public List<string> ReallyPopularEnums { get; } = new List<string>
-    {
+    public List<string> ReallyPopularEnums { get; } =
+    [
         "PictureBoxSizeMode"
-    };
+    ];
 
-    public List<string> ReallyPopularClasses { get; } = new List<string>
-    {
+    public List<string> ReallyPopularClasses { get; } =
+    [
         "List",
         "Dictionary",
         "Console",
@@ -50,10 +50,10 @@ public class Hints
         "Parallel",
         "AppDomain",
         "Screen"
-    };
+    ];
 
-    public List<string> ReallyPopularClassSubstrings { get; } = new List<string>
-    {
+    public List<string> ReallyPopularClassSubstrings { get; } =
+    [
         "Controller",
         "DTO",
         "User",
@@ -62,10 +62,10 @@ public class Hints
         "Node",
         "Exception",
         "EventHandler"
-    };
+    ];
 
-    public List<string> ReallyPopularStructs { get; } = new List<string>
-    {
+    public List<string> ReallyPopularStructs { get; } =
+    [
         "CancellationToken",
         "DateTime",
         "TimeOnly",
@@ -76,10 +76,10 @@ public class Hints
         "IntPtr",
         "Color",
         "Guid"
-    };
+    ];
 
-    public List<string> ReallyPopularStructsSubstrings { get; } = new List<string>
-    {
+    public List<string> ReallyPopularStructsSubstrings { get; } =
+    [
         "Span",
-    };
+    ];
 }

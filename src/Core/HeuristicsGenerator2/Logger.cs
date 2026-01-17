@@ -8,6 +8,17 @@ internal static class Logger
     public const bool LogsEnabled = false;
 #endif
 
+    public static void Success(string s, int tabsDepth = 0)
+    {
+        if (!LogsEnabled)
+            return;
+
+        var tabs = new string('\t', tabsDepth);
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"[INFO] {tabs}{s}");
+        Console.ResetColor();
+    }
+
     public static void Info(string s, int tabsDepth = 0)
     {
         if (!LogsEnabled)
@@ -33,5 +44,18 @@ internal static class Logger
 
         var tabs = new string('\t', tabsDepth);
         Console.WriteLine($"[ERROR] {tabs}{s}");
+    }
+
+    public static void PrintCurrentText(string s, int tabsDepth = 0)
+    {
+        if (!LogsEnabled)
+            return;
+
+        var tabs = new string('\t', tabsDepth);
+        Console.Write($"{tabs}[INFO] Current Text: '");
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.Write(s);
+        Console.ResetColor();
+        Console.WriteLine($"'");
     }
 }
