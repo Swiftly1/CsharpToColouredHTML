@@ -183,21 +183,21 @@ internal partial class HeuristicsGenerator2
 
     private bool IsPopularEnum(string text)
     {
-        return _Hints.ReallyPopularEnums.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase));
+        return _Hints.ReallyPopularEnums.Any(x => string.Equals(x, text));
     }
 
     private bool IsPopularClass(string text)
     {
-        return _Hints.ReallyPopularClasses.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase))
+        return _Hints.ReallyPopularClasses.Any(x => string.Equals(x, text))
             ||
-            _Hints.ReallyPopularClassSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
+            _Hints.ReallyPopularClassSubstrings.Any(x => text.Contains(x));
     }
 
     private bool IsPopularStruct(string text)
     {
-        return _Hints.ReallyPopularStructs.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase))
+        return _Hints.ReallyPopularStructs.Any(x => string.Equals(x, text))
             ||
-            _Hints.ReallyPopularStructsSubstrings.Any(x => text.Contains(x, StringComparison.OrdinalIgnoreCase));
+            _Hints.ReallyPopularStructsSubstrings.Any(x => text.Contains(x));
     }
 
     private static readonly List<string> CommonKeywordsBeforeTypeName = new List<string>
