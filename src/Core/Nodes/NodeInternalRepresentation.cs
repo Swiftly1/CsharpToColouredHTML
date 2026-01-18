@@ -1,8 +1,8 @@
 ﻿namespace CsharpToColouredHTML.Core.Nodes;
 
-internal record NodeWithDetails
+internal record NodeInternalRepresentation
 {
-    public NodeWithDetails(
+    public NodeInternalRepresentation(
         string colour,
         string text,
         string trivia,
@@ -20,7 +20,7 @@ internal record NodeWithDetails
         SkipIdentifierPostProcessing = skipIdentifierPostProcessing;
     }
 
-    public NodeWithDetails(
+    public NodeInternalRepresentation(
         string colour,
         string text,
         string trivia,

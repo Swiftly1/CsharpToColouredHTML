@@ -1,17 +1,16 @@
-﻿using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
-using System.Collections.Immutable;
-using Microsoft.CodeAnalysis.Host.Mef;
-using Microsoft.CodeAnalysis.Classification;
-
-using CsharpToColouredHTML.Core.HeuristicsGeneration;
+﻿using System.Collections.Immutable;
+using System.Text;
 using CsharpToColouredHTML.Core.Emitters;
-using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.HeuristicsGeneration;
 using CsharpToColouredHTML.Core.Miscs;
-
+using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.PassBasedApproach.CompatibilityLayer;
 // Classifier Helpers
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Classification;
+using Microsoft.CodeAnalysis.Host.Mef;
+using Microsoft.CodeAnalysis.Text;
 //
 
 namespace CsharpToColouredHTML.Core;
@@ -33,7 +32,7 @@ public class CsharpColourer
         code = code.ReplaceLineEndings();
 
         var nodes = GenerateInternalRepresentation(code);
-        var heuristics = new HeuristicsGenerator2(Hints).Build(nodes);
+        var heuristics = new HeuristicsGeneratorWrapper(Hints).Build(nodes);
 
         Settings.PostProcessingAction?.Invoke(heuristics);
 

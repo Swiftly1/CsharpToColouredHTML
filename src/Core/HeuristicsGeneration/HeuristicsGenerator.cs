@@ -17,7 +17,7 @@ internal partial class HeuristicsGenerator
     private Node CurrentNode => _OriginalNodes[_CurrentIndex];
     private string CurrentText => _OriginalNodes[_CurrentIndex].Text;
 
-    private List<NodeWithDetails> _Output = new();
+    private List<NodeInternalRepresentation> _Output = new();
 
     private HashSet<string> _FoundClasses = new();
     private HashSet<string> _FoundStructs = new();
@@ -111,7 +111,7 @@ internal partial class HeuristicsGenerator
         _InsideNewStatement = false;
     }
 
-    private void AssignLineNumbers(List<NodeWithDetails> output)
+    private void AssignLineNumbers(List<NodeInternalRepresentation> output)
     {
         var currentLineNumber = 0;
 

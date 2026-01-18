@@ -13,7 +13,7 @@ internal partial class HeuristicsGenerator2
         if (found == null)
         {
             node.ModifyClassificationType(MapColourToClassificationType(colour, node.ClassificationType));
-            _Output.Add(new NodeWithDetails
+            _Output.Add(new NodeInternalRepresentation
             (
                 colour: colour,
                 text: node.Text,

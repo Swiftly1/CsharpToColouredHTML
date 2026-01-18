@@ -13,7 +13,7 @@ internal partial class HeuristicsGenerator
         if (found == null)
         {
             CurrentNode.ModifyClassificationType(MapColourToClassificationType(colour, CurrentNode.ClassificationType));
-            _Output.Add(new NodeWithDetails
+            _Output.Add(new NodeInternalRepresentation
             (
                 colour: colour,
                 text: CurrentText,
@@ -40,7 +40,7 @@ internal partial class HeuristicsGenerator
         if (found == null)
         {
             node.ModifyClassificationType(MapColourToClassificationType(colour, node.ClassificationType));
-            _Output.Add(new NodeWithDetails
+            _Output.Add(new NodeInternalRepresentation
             (
                 colour: colour,
                 text: node.Text,

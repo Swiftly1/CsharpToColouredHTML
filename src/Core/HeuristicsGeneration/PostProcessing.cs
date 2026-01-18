@@ -6,7 +6,7 @@ namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
 
 internal partial class HeuristicsGenerator
 {
-    private void PostProcess(List<NodeWithDetails> alreadyProcessed)
+    private void PostProcess(List<NodeInternalRepresentation> alreadyProcessed)
     {
         // If some identifiers weren't recognized at first attempt, but later instead
         // then we may fix the previous ones.
@@ -79,7 +79,7 @@ internal partial class HeuristicsGenerator
             FixNamespacesThatAreClasses(namespaces);
     }
 
-    private bool MarkIdentifierAsNamespaceIfThereIsClassAhead(NodeWithDetails entry)
+    private bool MarkIdentifierAsNamespaceIfThereIsClassAhead(NodeInternalRepresentation entry)
     {
         if (entry.ClassificationType != ClassificationTypeNames.Identifier && entry.Colour != NodeColors.DefaultColour)
             return false;
@@ -104,7 +104,7 @@ internal partial class HeuristicsGenerator
         return false;
     }
 
-    private void FixNamespacesThatAreClasses(List<NodeWithDetails> namespaces)
+    private void FixNamespacesThatAreClasses(List<NodeInternalRepresentation> namespaces)
     {
         foreach (var ns in namespaces)
         {
@@ -119,7 +119,7 @@ internal partial class HeuristicsGenerator
         }
     }
 
-    private bool NestedClassEdgeCase(NodeWithDetails ns)
+    private bool NestedClassEdgeCase(NodeInternalRepresentation ns)
     {
         /*
          * obj.Method<Class1>(new Something<Class1.Class3>(123));
@@ -163,7 +163,7 @@ internal partial class HeuristicsGenerator
         return false;
     }
 
-    private bool ShouldNamespaceBeAdjusted(NodeWithDetails ns)
+    private bool ShouldNamespaceBeAdjusted(NodeInternalRepresentation ns)
     {
         var i = _Output.FindIndex(x => x.Id == ns.Id) - 1;
 
@@ -224,7 +224,7 @@ internal partial class HeuristicsGenerator
         return false;
     }
 
-    private void MarkNextChainElementsToProperty(NodeWithDetails ns)
+    private void MarkNextChainElementsToProperty(NodeInternalRepresentation ns)
     {
         var i = _Output.FindIndex(x => x.Id == ns.Id);
 
@@ -304,7 +304,7 @@ internal partial class HeuristicsGenerator
         }
     }
 
-    private bool IdentifierShouldntBeOverriden(NodeWithDetails entry, List<NodeWithDetails> nodes)
+    private bool IdentifierShouldntBeOverriden(NodeInternalRepresentation entry, List<NodeInternalRepresentation> nodes)
     {
         var index = nodes.IndexOf(entry);
 
