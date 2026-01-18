@@ -1,8 +1,24 @@
-﻿if (node.ClassificationType == ClassificationTypeNames.ClassName)
+﻿using MarkdownSharp;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+
+namespace Blog.Controllers;
+
+public class HomeController : Controller
 {
-    Console.ForegroundColor = ConsoleColor.Red;
-}
-else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
-{
-    Console.ForegroundColor = ConsoleColor.Green;
+    public HomeController()
+    {
+
+    }
+
+    public IActionResult Index()
+    {
+        string contents;
+        using (var wc = new System.Net.WebClient())
+            contents = wc.DownloadString("https://raw.githubusercontent.com/asd");
+
+        var test = new Markdown(new MarkdownOptions { });
+        var html = test.Transform(contents);
+        return View("Index", JsonConvert.SerializeObject(html));
+    }
 }
