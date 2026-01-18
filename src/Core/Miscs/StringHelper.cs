@@ -69,7 +69,7 @@ public static class StringHelper
     }
 
     [DebuggerStepThrough]
-    public static bool IndexIsValid<T>(this List<T> list, int index, out T entry) where T : class
+    public static bool IndexIsValid<T>(this List<T> list, int index, out T? entry) where T : class
     {
         entry = null;
 

@@ -2,13 +2,13 @@
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
-namespace CsharpToColouredHTML.Core.PassBasedApproach.CompatibilityLayer;
+namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
 
-internal class HeuristicsGeneratorWrapper
+internal class HeuristicsGenerator
 {
     private readonly Hints _Hints;
 
-    public HeuristicsGeneratorWrapper(Hints hints)
+    public HeuristicsGenerator(Hints hints)
     {
         _Hints = hints;
     }

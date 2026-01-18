@@ -1,4 +1,4 @@
-﻿using CsharpToColouredHTML.Core.HeuristicsGeneration;
+﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using Microsoft.CodeAnalysis.Classification;
@@ -12,7 +12,7 @@ internal class MarkKnownStuffPass : Pass
 
     public override string Name { get => "MarkKnownStuff"; }
 
-    private NodeEnumerationHelper Walker { get; set; }
+    private NodeEnumerationHelper? Walker { get; set; }
 
     public MarkKnownStuffPass(SharedPassContext ctx) : base(ctx)
     {

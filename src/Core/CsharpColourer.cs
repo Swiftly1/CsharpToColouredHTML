@@ -4,7 +4,6 @@ using CsharpToColouredHTML.Core.Emitters;
 using CsharpToColouredHTML.Core.HeuristicsGeneration;
 using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
-using CsharpToColouredHTML.Core.PassBasedApproach.CompatibilityLayer;
 // Classifier Helpers
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
@@ -32,7 +31,7 @@ public class CsharpColourer
         code = code.ReplaceLineEndings();
 
         var nodes = GenerateInternalRepresentation(code);
-        var heuristics = new HeuristicsGeneratorWrapper(Hints).Build(nodes);
+        var heuristics = new HeuristicsGenerator(Hints).Build(nodes);
 
         Settings.PostProcessingAction?.Invoke(heuristics);
 

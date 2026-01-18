@@ -1,5 +1,4 @@
-﻿using CsharpToColouredHTML.Core.HeuristicsGeneration;
-using CsharpToColouredHTML.Core.Miscs;
+﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MarkKnownStuff;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
