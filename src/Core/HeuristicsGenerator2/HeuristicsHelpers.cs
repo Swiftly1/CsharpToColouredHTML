@@ -26,13 +26,17 @@ internal partial class HeuristicsGenerator2
         }
         else
         {
-            found.Colour = colour;
-            found.ClassificationType = MapColourToClassificationType(colour, node.ClassificationType);
-            found.SkipIdentifierPostProcessing = skipIdentifierPostProcess;
+            if (!found.SkipIdentifierPostProcessing)
+            {
+                found.Colour = colour;
+                found.ClassificationType = MapColourToClassificationType(colour, node.ClassificationType);
+                found.SkipIdentifierPostProcessing = skipIdentifierPostProcess;
+            }
         }
 
         UpdateStats();
     }
+
     private void MarkNodeAs(string colour, bool skipIdentifierPostProcess = false)
     {
         MarkNodeAs(CurrentNode, colour, skipIdentifierPostProcess);

@@ -42,18 +42,18 @@ internal partial class HeuristicsGenerator2
         }
     }
 
-    private bool HintsAndAlreadyClassifiedNodes()
+    private bool HintsAndAlreadyClassifiedNodes(Node node)
     {
-        if (_SimpleClassificationToColourMapper.TryGetValue(CurrentNode.ClassificationType, out var simpleColour))
+        if (_SimpleClassificationToColourMapper.TryGetValue(node.ClassificationType, out var simpleColour))
         {
             Logger.Info($"Matched: {simpleColour}");
-            MarkNodeAs(simpleColour);
+            MarkNodeAs(node, simpleColour, true);
             return true;
         }
 
-        if (_Hints.BuiltInTypes.Contains(CurrentNode.Text))
+        if (_Hints.BuiltInTypes.Contains(node.Text))
         {
-            MarkNodeAs(NodeColors.Keyword);
+            MarkNodeAs(node, NodeColors.Keyword, true);
             return true;
         }
 

@@ -9,6 +9,14 @@ internal partial class HeuristicsGenerator2
     {
         var printEndLoopMessages = true;
 
+        foreach (var node in _OriginalNodes)
+        {
+            if (HintsAndAlreadyClassifiedNodes(node))
+            {
+                Logger.Success("Hints & Already Classified");
+            }
+        }
+
         do
         {
             try
@@ -23,12 +31,6 @@ internal partial class HeuristicsGenerator2
                 Logger.PrintCurrentText(CurrentText, _CurrentIndex);
 
                 HandleCounters();
-
-                if (HintsAndAlreadyClassifiedNodes())
-                {
-                    Logger.Success("Hints & Already Classified");
-                    continue;
-                }
 
                 if (IsKeyword())
                 {
@@ -126,11 +128,18 @@ internal partial class HeuristicsGenerator2
             return true;
         }
 
-        return TryWalkMethod();
+        if (TryWalkMethod())
+        {
+            if (TryWalkIf())
+                return true;
+        }
+
+        return false;
     }
 
     private bool IsType()
     {
+        return false;
         return ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.Default);
     }
 }

@@ -41,6 +41,8 @@ internal partial class HeuristicsGenerator2
         { ClassificationTypeNames.InterfaceName, NodeColors.Interface },
         { ClassificationTypeNames.NamespaceName, NodeColors.Namespace },
         { ClassificationTypeNames.EnumName, NodeColors.EnumName },
+        { ClassificationTypeNames.Operator, NodeColors.Operator },
+        { ClassificationTypeNames.ControlKeyword, NodeColors.Control },
         { ClassificationTypeNames.EnumMemberName, NodeColors.EnumMemberName },
         { ClassificationTypeNames.StringLiteral, NodeColors.String },
         { ClassificationTypeNames.VerbatimStringLiteral, NodeColors.String },

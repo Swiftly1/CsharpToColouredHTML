@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using CsharpToColouredHTML.Core.Miscs;
+﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 
@@ -259,7 +258,7 @@ internal partial class HeuristicsGenerator2
                 {
                     MarkNodeAs(entry, NodeColors.Operator);
                 }
-                else if (entry.Id == identifiers[^1].Id)
+                else if (identifiers.Count > 0 && entry.Id == identifiers[^1].Id)
                 {
                     if (i < group.Count - 1)
                     {
@@ -281,7 +280,7 @@ internal partial class HeuristicsGenerator2
                         MarkNodeAs(entry, NodeColors.PropertyName);
                     }
                 }
-                else if (entry.Id == identifiers[^2].Id)
+                else if (identifiers.Count > 1 && entry.Id == identifiers[^2].Id)
                 {
                     var nameResult = ResolveName(entry);
                     if (nameResult.Success)
@@ -302,7 +301,14 @@ internal partial class HeuristicsGenerator2
                 }
                 else
                 {
-                    MarkNodeAs(entry, NodeColors.Namespace);
+                    if (_SimpleClassificationToColourMapper.TryGetValue(entry.ClassificationType, out var simpleColour))
+                    {
+                        MarkNodeAs(entry, simpleColour);
+                    }
+                    else
+                    {
+                        MarkNodeAs(entry, NodeColors.Namespace);
+                    }
                 }
             }
         }

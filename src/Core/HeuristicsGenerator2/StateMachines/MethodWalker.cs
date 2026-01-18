@@ -99,6 +99,8 @@ internal partial class HeuristicsGenerator2
             }
         }
 
+        // last
+        _CurrentIndex = _OriginalNodes.IndexOf(nodesReversed.First());
         return true;
     }
 }
