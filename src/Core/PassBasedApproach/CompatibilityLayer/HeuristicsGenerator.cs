@@ -24,7 +24,7 @@ internal class HeuristicsGenerator
         pm.RunPasses(remapped);
 
         AssignLineNumbers(remapped);
-        return MapOutputToPublicType(remapped);
+        return MapInternalNodesToPublicType(remapped);
     }
 
     private List<NodeInternalRepresentation> MapNodesIntoInternalRepresentation(List<Node> input)
@@ -48,7 +48,7 @@ internal class HeuristicsGenerator
         return output;
     }
 
-    internal List<NodeAfterProcessing> MapOutputToPublicType(List<NodeInternalRepresentation> input)
+    internal List<NodeAfterProcessing> MapInternalNodesToPublicType(List<NodeInternalRepresentation> input)
     {
         return input.ConvertAll(x => new NodeAfterProcessing
         (
@@ -62,7 +62,6 @@ internal class HeuristicsGenerator
             useHighlighting: false // it may be defined later by postprocessor
         ));
     }
-
 
     private void AssignLineNumbers(List<NodeInternalRepresentation> output)
     {
