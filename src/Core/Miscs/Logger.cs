@@ -46,16 +46,17 @@ internal static class Logger
         Console.WriteLine($"[ERROR] {tabs}{s}");
     }
 
-    public static void PrintCurrentText(string s, int currentIndex, int tabsDepth = 0)
+    public static void PrintFancy(string part1, string part2, string part3, ConsoleColor colour, bool addInfo = true, int tabsDepth = 0)
     {
         if (!LogsEnabled)
             return;
 
         var tabs = new string('\t', tabsDepth);
-        Console.Write($"{tabs}[INFO] Current Text: '");
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.Write(s);
+        var info = addInfo ? "[INFO] " : string.Empty;
+        Console.Write(info + tabs + part1);
+        Console.ForegroundColor = colour;
+        Console.Write(part2);
         Console.ResetColor();
-        Console.WriteLine($"' at {currentIndex}");
+        Console.WriteLine(part3);
     }
 }

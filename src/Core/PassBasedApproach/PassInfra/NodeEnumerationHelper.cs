@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
-internal class NodeEnumerationHelper
+internal partial class NodeEnumerationHelper
 {
     private int _CurrentIndex = 0;
 
@@ -39,7 +39,7 @@ internal class NodeEnumerationHelper
             found.SkipIdentifierPostProcessing = skipIdentifierPostProcess;
         }
 
-        UpdateStats();
+        UpdateStats(node);
     }
 
     private string MapColourToClassificationType(string colour, string defaultClassification)
@@ -80,19 +80,19 @@ internal class NodeEnumerationHelper
         };
     }
 
-    [DebuggerStepThrough]
-    private void UpdateStats()
+    private void UpdateStats(NodeInternalRepresentation node)
     {
-        if (Nodes.Count == 0)
-            return;
+        if (node.Colour == NodeColors.Class)
+            Context.FoundClasses.Add(node.Text);
 
-        var latest = Nodes.Last();
+        if (node.Colour == NodeColors.Struct)
+            Context.FoundStructs.Add(node.Text);
 
-        if (latest.Colour == NodeColors.Class)
-            Context.FoundClasses.Add(latest.Text);
+        if (node.Colour == NodeColors.Interface)
+            Context.FoundInterfaces.Add(node.Text);
 
-        if (latest.Colour == NodeColors.Struct)
-            Context.FoundStructs.Add(latest.Text);
+        if (node.Colour == NodeColors.Namespace)
+            Context.FoundNamespaceParts.Add(node.Text);
     }
 
     [DebuggerStepThrough]

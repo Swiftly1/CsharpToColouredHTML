@@ -26,7 +26,6 @@ internal class MarkKnownStuffPass : Pass
         {
             if (_SimpleClassificationToColourMapper.TryGetValue(Walker.CC, out var simpleColour))
             {
-                Logger.Info($"Matched: {simpleColour}");
                 Walker.MarkNodeAs(Walker.CurrentNode, simpleColour, true);
                 continue;
             }
