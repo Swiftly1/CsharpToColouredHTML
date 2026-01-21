@@ -1,24 +1,14 @@
-﻿using MarkdownSharp;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-
-namespace Blog.Controllers;
-
-public class HomeController : Controller
+﻿public IActionResult Index()
 {
-    public HomeController()
-    {
+	return default;
+}
 
-    }
+public Abc<int, (float, double)> Index2()
+{
+	return default;
+}
 
-    public IActionResult Index()
-    {
-        string contents;
-        using (var wc = new System.Net.WebClient())
-            contents = wc.DownloadString("https://raw.githubusercontent.com/asd");
-
-        var test = new Markdown(new MarkdownOptions { });
-        var html = test.Transform(contents);
-        return View("Index", JsonConvert.SerializeObject(html));
-    }
+public Abc<int, (float a, double b)> Index2()
+{
+	return default;
 }
