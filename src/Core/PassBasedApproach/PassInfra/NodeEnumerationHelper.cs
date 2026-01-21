@@ -6,14 +6,14 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 internal partial class NodeEnumerationHelper
 {
-    private int _CurrentIndex = 0;
+    public int CurrentIndex = 0;
 
-    public NodeInternalRepresentation CurrentNode => Nodes[_CurrentIndex];
+    public NodeInternalRepresentation CurrentNode => Nodes[CurrentIndex];
 
-    public string CurrentText => Nodes[_CurrentIndex].Text;
+    public string CurrentText => Nodes[CurrentIndex].Text;
 
     // Current Classification - "CC" in short because it is used very often.
-    public string CC => Nodes[_CurrentIndex].ClassificationType;
+    public string CC => Nodes[CurrentIndex].ClassificationType;
 
     public List<NodeInternalRepresentation> Nodes { get; }
 
@@ -107,10 +107,10 @@ internal partial class NodeEnumerationHelper
         if (Nodes is null)
             return false;
 
-        if (_CurrentIndex < 0)
+        if (CurrentIndex < 0)
             return false;
 
-        var adjustedIndex = _CurrentIndex + jumpSize;
+        var adjustedIndex = CurrentIndex + jumpSize;
         return adjustedIndex >= 0 && adjustedIndex < Nodes.Count;
     }
 
@@ -119,7 +119,7 @@ internal partial class NodeEnumerationHelper
     {
         if (CanMoveAhead(jumpSize))
         {
-            _CurrentIndex += jumpSize;
+            CurrentIndex += jumpSize;
             return true;
         }
 
@@ -131,7 +131,7 @@ internal partial class NodeEnumerationHelper
     {
         if (CanMoveBehind(jumpSize))
         {
-            _CurrentIndex -= jumpSize;
+            CurrentIndex -= jumpSize;
             return true;
         }
 
@@ -162,10 +162,10 @@ internal partial class NodeEnumerationHelper
         if (Nodes is null)
             return false;
 
-        if (_CurrentIndex < 0)
+        if (CurrentIndex < 0)
             return false;
 
-        var adjustedIndex = _CurrentIndex + jumpSize;
+        var adjustedIndex = CurrentIndex + jumpSize;
         var isOk = adjustedIndex >= 0 && adjustedIndex < Nodes.Count;
 
         if (isOk)
@@ -180,10 +180,10 @@ internal partial class NodeEnumerationHelper
         if (Nodes is null)
             return false;
 
-        if (_CurrentIndex < 0)
+        if (CurrentIndex < 0)
             return false;
 
-        var adjustedIndex = _CurrentIndex - jumpSize;
+        var adjustedIndex = CurrentIndex - jumpSize;
         return adjustedIndex >= 0 && adjustedIndex < Nodes.Count;
     }
 
@@ -195,10 +195,10 @@ internal partial class NodeEnumerationHelper
         if (Nodes is null)
             return false;
 
-        if (_CurrentIndex < 0)
+        if (CurrentIndex < 0)
             return false;
 
-        var adjustedIndex = _CurrentIndex - jumpSize;
+        var adjustedIndex = CurrentIndex - jumpSize;
         var isOk = adjustedIndex >= 0 && adjustedIndex < Nodes.Count;
 
         if (isOk)

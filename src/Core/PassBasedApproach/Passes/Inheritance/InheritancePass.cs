@@ -19,7 +19,7 @@ internal class InheritancePass : Pass
     {
         Walker = new NodeEnumerationHelper(input, Context);
 
-        while (Walker.MoveNext())
+        do
         {
             if (Walker.CC != ClassificationTypeNames.Keyword)
                 continue;
@@ -83,7 +83,7 @@ internal class InheritancePass : Pass
                     }
                 }
             } while (Walker.MoveNext());
-        }
+        } while (Walker.MoveNext());
 
         return new InheritanceResult();
     }

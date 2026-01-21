@@ -18,11 +18,11 @@ internal class PassHelpers
         return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x) || x == '_');
     }
 
-    public static readonly List<string> CommonKeywordsBeforeTypeName = new List<string>
-    {
+    public static readonly string[] CommonKeywordsBeforeTypeName =
+    [
         "public", "private", "internal", "sealed", "protected", "readonly", "static", "override", "event", "required",
         "virtual", "unsafe", "partial", "delegate"
-    };
+    ];
 
     public static readonly List<string> AccessibilityModifiers = new List<string>
     {

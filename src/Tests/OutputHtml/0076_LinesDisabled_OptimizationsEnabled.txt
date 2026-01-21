@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="keyword">public class</span> <span class="class">MyClass</span> : <span class="class">A</span>, <span class="class">B</span>, <span class="class">C</span>, <span class="class">D</span>, <span class="interface">IWalkable</span>, <span class="class">Generic</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;
+{
+}</pre>

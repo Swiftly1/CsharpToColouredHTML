@@ -1,5 +1,6 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Inheritance;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MarkKnownStuff;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
@@ -76,6 +77,7 @@ internal class PassManager
         pm.RegisterPass(new PreFlightPass(pm.SharedPassContext));
         pm.RegisterPass(new MarkKnownStuffPass(pm.SharedPassContext));
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));
+        pm.RegisterPass(new FunctionsPass(pm.SharedPassContext));
 
         return pm;
     }

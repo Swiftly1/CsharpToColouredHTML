@@ -232,7 +232,7 @@ internal partial class NodeEnumerationHelper
         return foundColours.Any();
     }
 
-    private string ResolveClassOrStructName(NodeInternalRepresentation node)
+    public string ResolveClassOrStructName(NodeInternalRepresentation node)
     {
         var checkResult = IsAlreadyClassOrStruct(node);
 
