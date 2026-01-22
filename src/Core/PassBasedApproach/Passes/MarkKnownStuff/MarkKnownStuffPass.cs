@@ -18,7 +18,7 @@ internal class MarkKnownStuffPass : Pass
     {
     }
 
-    public override MarkKnownStuffResult Run(List<NodeInternalRepresentation> input)
+    public override PassResult Run(List<NodeInternalRepresentation> input)
     {
         Walker = new NodeEnumerationHelper(input, Context);
 
@@ -38,7 +38,7 @@ internal class MarkKnownStuffPass : Pass
         } while (Walker.MoveNext());
 
 
-        return new MarkKnownStuffResult();
+        return new PassResult();
     }
 
     private Dictionary<string, string> _SimpleClassificationToColourMapper { get; } = new()

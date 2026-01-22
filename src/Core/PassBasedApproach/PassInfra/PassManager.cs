@@ -77,7 +77,9 @@ internal class PassManager
         pm.RegisterPass(new PreFlightPass(pm.SharedPassContext));
         pm.RegisterPass(new MarkKnownStuffPass(pm.SharedPassContext));
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));
-        pm.RegisterPass(new FunctionsPass(pm.SharedPassContext));
+        pm.RegisterPass(new FunctionTypePass(pm.SharedPassContext));
+        pm.RegisterPass(new NewInstancesPass(pm.SharedPassContext));
+        pm.RegisterPass(new ReturnTypePass(pm.SharedPassContext));
 
         return pm;
     }

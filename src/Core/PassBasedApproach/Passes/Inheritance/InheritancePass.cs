@@ -15,7 +15,7 @@ internal class InheritancePass : Pass
     {
     }
 
-    public override InheritanceResult Run(List<NodeInternalRepresentation> input)
+    public override PassResult Run(List<NodeInternalRepresentation> input)
     {
         Walker = new NodeEnumerationHelper(input, Context);
 
@@ -85,6 +85,6 @@ internal class InheritancePass : Pass
             } while (Walker.MoveNext());
         } while (Walker.MoveNext());
 
-        return new InheritanceResult();
+        return new PassResult();
     }
 }
