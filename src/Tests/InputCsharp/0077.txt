@@ -1,0 +1,3 @@
+﻿public class MyClass : A, B, C, D, IWalkable, Generic<int, int>
+{
+}
