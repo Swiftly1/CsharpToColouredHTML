@@ -1,0 +1,7 @@
+﻿test.Transform1();
+
+new Test2.Transform2();
+new A.B.Test2.Transform3();
+new A.BTest2<int>.Transform4();
+
+var q = A.BTest2<int>.Transform5();

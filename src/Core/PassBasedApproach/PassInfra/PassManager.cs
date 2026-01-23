@@ -76,10 +76,12 @@ internal class PassManager
         // Order - unfortunately, matters :(
         pm.RegisterPass(new PreFlightPass(pm.SharedPassContext));
         pm.RegisterPass(new MarkKnownStuffPass(pm.SharedPassContext));
+        pm.RegisterPass(new NamespacesPass(pm.SharedPassContext));
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));
         pm.RegisterPass(new FunctionTypePass(pm.SharedPassContext));
         pm.RegisterPass(new NewInstancesPass(pm.SharedPassContext));
         pm.RegisterPass(new ReturnTypePass(pm.SharedPassContext));
+        pm.RegisterPass(new MethodCallsPass(pm.SharedPassContext));
 
         return pm;
     }

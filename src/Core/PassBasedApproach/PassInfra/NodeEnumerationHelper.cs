@@ -25,6 +25,11 @@ internal partial class NodeEnumerationHelper
         Context = ctx;
     }
 
+    public void MarkNodeAs(string colour, bool skipIdentifierPostProcess = false)
+    {
+        MarkNodeAs(CurrentNode, colour, skipIdentifierPostProcess);
+    }
+
     public void MarkNodeAs(NodeInternalRepresentation node, string colour, bool skipIdentifierPostProcess = false)
     {
         var found = Nodes.FirstOrDefault(x => x.Id == node.Id);

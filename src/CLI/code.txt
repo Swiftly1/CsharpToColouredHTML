@@ -1,21 +1,24 @@
-﻿return 5;
+﻿using MarkdownSharp;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
-return 1 + 1;
+namespace Blog.Controllers;
 
-return "a" + "b";
+public class HomeController : Controller
+{
+    public HomeController()
+    {
 
-return null;
+    }
 
-return "asd";
+    public IActionResult Index()
+    {
+        string contents;
+        using (var wc = new System.Net.WebClient())
+            contents = wc.DownloadString("https://raw.githubusercontent.com/asd");
 
-var a = "asd";
-
-return a;
-
-return a + a;
-
-return A;
-
-return Test();
-
-return new Class();
+        var test = new Markdown(new MarkdownOptions { });
+        var html = test.Transform(contents);
+        return View("Index", JsonConvert.SerializeObject(html));
+    }
+}

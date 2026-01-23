@@ -26,13 +26,13 @@ internal class MarkKnownStuffPass : Pass
         {
             if (_SimpleClassificationToColourMapper.TryGetValue(Walker.CC, out var simpleColour))
             {
-                Walker.MarkNodeAs(Walker.CurrentNode, simpleColour, true);
+                Walker.MarkNodeAs(simpleColour, true);
                 continue;
             }
 
             if (Context.Hints.BuiltInTypes.Contains(Walker.CurrentText))
             {
-                Walker.MarkNodeAs(Walker.CurrentNode, NodeColors.Keyword, true);
+                Walker.MarkNodeAs(NodeColors.Keyword, true);
                 continue;
             }
         } while (Walker.MoveNext());
