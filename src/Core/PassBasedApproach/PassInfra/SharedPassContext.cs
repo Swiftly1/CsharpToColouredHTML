@@ -9,7 +9,8 @@ internal class SharedPassContext
     public HashSet<string> FoundClasses = new();
     public HashSet<string> FoundStructs = new();
     public HashSet<string> FoundInterfaces = new();
-    public HashSet<string> FoundPropertiesOrFields = new();
+    public HashSet<string> FoundProperties = new();
+    public HashSet<string> FoundFields = new();
     public HashSet<string> FoundLocalNames = new();
 
     public HashSet<string> FoundNamespaceParts = new();

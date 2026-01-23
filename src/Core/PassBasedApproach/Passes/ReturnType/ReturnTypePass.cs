@@ -20,7 +20,7 @@ internal class ReturnTypePass : Pass
 
         do
         {
-            if (Walker.CC != ClassificationTypeNames.Keyword)
+            if (Walker.CC != ClassificationTypeNames.ControlKeyword)
                 continue;
 
             if (Walker.CurrentText != "return")
@@ -28,7 +28,7 @@ internal class ReturnTypePass : Pass
 
             if (Walker.MoveNext())
             {
-                Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                Walker.ConsumeExpressionAhhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
             }
         } while (Walker.MoveNext());
 

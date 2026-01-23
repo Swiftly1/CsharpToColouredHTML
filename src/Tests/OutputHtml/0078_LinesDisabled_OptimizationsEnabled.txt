@@ -1,0 +1,23 @@
+
+<pre class="background">
+<span class="control">return</span> <span class="numericLiteral">5</span>;
+
+<span class="control">return</span> <span class="numericLiteral">1</span> + <span class="numericLiteral">1</span>;
+
+<span class="control">return</span> <span class="string">&quot;a&quot;</span> + <span class="string">&quot;b&quot;</span>;
+
+<span class="control">return</span> <span class="keyword">null</span>;
+
+<span class="control">return</span> <span class="string">&quot;asd&quot;</span>;
+
+<span class="keyword">var</span> <span class="localName">a</span> = <span class="string">&quot;asd&quot;</span>;
+
+<span class="control">return</span> <span class="localName">a</span>;
+
+<span class="control">return</span> <span class="localName">a</span> + <span class="localName">a</span>;
+
+<span class="control">return</span> A;
+
+<span class="control">return</span> <span class="method">Test</span>();
+
+<span class="control">return</span> <span class="keyword">new</span> <span class="class">Class</span>();</pre>
