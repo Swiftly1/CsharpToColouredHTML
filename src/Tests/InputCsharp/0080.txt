@@ -1,0 +1,14 @@
+﻿public IActionResult Index()
+{
+    return default;
+}
+
+public Abc<int, (float, double)> Index2()
+{
+    return default;
+}
+
+public Abc<int, (float a, double b)> Index2()
+{
+    return default;
+}

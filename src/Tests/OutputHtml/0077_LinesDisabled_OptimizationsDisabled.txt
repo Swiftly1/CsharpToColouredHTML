@@ -1,16 +1,5 @@
 
 <pre class="background">
-<span class="keyword">public</span> <span class="interface">IActionResult</span> <span class="method">Index</span><span class="punctuation">(</span><span class="punctuation">)</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="class">MyClass</span> <span class="punctuation">:</span> <span class="class">A</span><span class="punctuation">,</span> <span class="class">B</span><span class="punctuation">,</span> <span class="class">C</span><span class="punctuation">,</span> <span class="class">D</span><span class="punctuation">,</span> <span class="interface">IWalkable</span><span class="punctuation">,</span> <span class="class">Generic</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="keyword">int</span><span class="punctuation">&gt;</span>
 <span class="punctuation">{</span>
-    <span class="control">return</span> <span class="keyword">default</span><span class="punctuation">;</span>
-<span class="punctuation">}</span>
-
-<span class="keyword">public</span> <span class="class">Abc</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="punctuation">(</span><span class="keyword">float</span><span class="punctuation">,</span> <span class="keyword">double</span><span class="punctuation">)</span><span class="punctuation">&gt;</span> <span class="method">Index2</span><span class="punctuation">(</span><span class="punctuation">)</span>
-<span class="punctuation">{</span>
-    <span class="control">return</span> <span class="keyword">default</span><span class="punctuation">;</span>
-<span class="punctuation">}</span>
-
-<span class="keyword">public</span> <span class="class">Abc</span><span class="punctuation">&lt;</span><span class="keyword">int</span><span class="punctuation">,</span> <span class="punctuation">(</span><span class="keyword">float</span> <span class="default">a</span><span class="punctuation">,</span> <span class="keyword">double</span> <span class="default">b</span><span class="punctuation">)</span><span class="punctuation">&gt;</span> <span class="method">Index2</span><span class="punctuation">(</span><span class="punctuation">)</span>
-<span class="punctuation">{</span>
-    <span class="control">return</span> <span class="keyword">default</span><span class="punctuation">;</span>
 <span class="punctuation">}</span></pre>

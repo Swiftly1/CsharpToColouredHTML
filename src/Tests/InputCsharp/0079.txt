@@ -4,4 +4,4 @@ new Test2.Transform2();
 new A.B.Test2.Transform3();
 new A.BTest2<int>.Transform4();
 
-var q = A.BTest2<int>.Transform5();
+var q = Test5.BTest3<int>.Transform5();

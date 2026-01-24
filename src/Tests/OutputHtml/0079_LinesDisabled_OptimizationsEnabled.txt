@@ -1,0 +1,9 @@
+
+<pre class="background">
+<span class="class">test</span>.<span class="method">Transform1</span>();
+
+<span class="keyword">new</span> Test2.<span class="class">Transform2</span>();
+<span class="keyword">new</span> A.B.Test2.<span class="class">Transform3</span>();
+<span class="keyword">new</span> A.<span class="class">BTest2</span>&lt;<span class="keyword">int</span>&gt;.<span class="class">Transform4</span>();
+
+<span class="keyword">var</span> <span class="localName">q</span> = <span class="namespace">Test5</span>.<span class="class">BTest3</span>&lt;<span class="keyword">int</span>&gt;.<span class="method">Transform5</span>();</pre>
