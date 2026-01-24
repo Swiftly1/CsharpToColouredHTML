@@ -4,13 +4,13 @@ using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
 
-internal class ReturnTypePass : Pass
+internal class IfStatementPass : Pass
 {
-    public override string Name { get => "ReturnType"; }
+    public override string Name { get => "IfStatement"; }
 
     private NodeEnumerationHelper? Walker { get; set; }
 
-    public ReturnTypePass(SharedPassContext ctx) : base(ctx)
+    public IfStatementPass(SharedPassContext ctx) : base(ctx)
     {
     }
 
@@ -23,10 +23,10 @@ internal class ReturnTypePass : Pass
             if (Walker.CC != ClassificationTypeNames.ControlKeyword)
                 continue;
 
-            if (Walker.CurrentText != "return")
+            if (Walker.CurrentText != "if")
                 continue;
 
-            if (Walker.MoveNext())
+            if (Walker.MoveNext(2))
             {
                 Walker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
             }

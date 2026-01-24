@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="keyword">int</span> <span class="localName">a</span> = <span class="numericLiteral">5</span>;
+<span class="keyword">var</span> <span class="localName">q</span> = <span class="numericLiteral">9</span>;
+<span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Red;</pre>

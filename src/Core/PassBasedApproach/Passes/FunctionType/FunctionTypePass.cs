@@ -1,7 +1,7 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
-using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using Microsoft.CodeAnalysis.Classification;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
 
@@ -19,33 +19,34 @@ internal class FunctionTypePass : Pass
     {
         Walker = new NodeEnumerationHelper(input, Context);
 
+        int anchorIndex = 0;
         do
         {
-            if (Walker.CC != ClassificationTypeNames.MethodName)
+
+            if (Walker.CurrentText.EqualsAnyOf(PassHelpers.CommonKeywordsBeforeTypeName))
+            {
+                if (Walker.CurrentIndex > anchorIndex)
+                    anchorIndex = Walker.CurrentIndex;
+
+                continue;
+            }
+
+            if (Walker.CurrentText.EqualsAnyOf("}", ";"))
+            {
+                if (Walker.CurrentIndex > anchorIndex)
+                    anchorIndex = Walker.CurrentIndex;
+
+                continue;
+            }
+
+            if (!Walker.CC.EqualsAnyOf(ClassificationTypeNames.MethodName, ClassificationTypeNames.PropertyName, ClassificationTypeNames.FieldName))
                 continue;
 
             var methodIndex = Walker.CurrentIndex;
-            bool anyFound = false;
 
-            while (Walker.MoveBehind())
-            {
-                if (Walker.CurrentText.EqualsAnyOf("}", ";"))
-                {
-                    break;
-                }
-
-                if (Walker.CurrentText.EqualsAnyOf(PassHelpers.CommonKeywordsBeforeTypeName))
-                {
-                    break;
-                }
-                anyFound = true;
-            }
-
-            if (anyFound)
-            {
-                Walker.MoveNext();
-                Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-            }
+            Walker.CurrentIndex = anchorIndex;
+            Walker.MoveNext();
+            Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
 
             Walker.CurrentIndex = methodIndex;
         } while (Walker.MoveNext());

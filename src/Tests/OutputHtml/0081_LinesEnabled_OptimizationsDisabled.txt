@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">int</span> <span class="localName">a</span> <span class="operator">=</span> <span class="numericLiteral">5</span><span class="punctuation">;</span></td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column"><span class="keyword">var</span> <span class="localName">q</span> <span class="operator">=</span> <span class="numericLiteral">9</span><span class="punctuation">;</span></td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column"><span class="class">Console</span><span class="operator">.</span><span class="propertyName">ForegroundColor</span> <span class="operator">=</span> <span class="enumName">ConsoleColor</span><span class="operator">.</span><span class="propertyName">Red</span><span class="punctuation">;</span></td></tr></tbody>
+</table></pre>

@@ -18,7 +18,7 @@ public enum ExpressionWalkMode
 
 internal partial class NodeEnumerationHelper
 {
-    public bool ConsumeExpressionAhhead(ExpressionWalkState initialState, ExpressionWalkMode mode)
+    public bool ConsumeExpressionAhead(ExpressionWalkState initialState, ExpressionWalkMode mode)
     {
         Logger.Info($"ConsumeExpressionAhead '{CurrentText}'", 3);
 
@@ -43,7 +43,6 @@ internal partial class NodeEnumerationHelper
                 if (!ExpressionHasValidIdentifier(CurrentNode))
                     break;
 
-
                 currentState = ExpressionWalkState.DotOrEnd;
 
                 if (TryPeekAhead(out var peekedAhead))
@@ -51,7 +50,7 @@ internal partial class NodeEnumerationHelper
                     if (peekedAhead.Text == "(")
                         foundColours.Add((CurrentNode, NodeColors.Method));
                     else if (peekedAhead.Text == ".")
-                        foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode)));
+                        foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode, true)));
                     else if (peekedAhead.ClassificationType == ClassificationTypeNames.Operator)
                     {
                         foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode)));
@@ -110,7 +109,7 @@ internal partial class NodeEnumerationHelper
         return foundColours.Any();
     }
 
-    public string ResolveExpressionElement(NodeInternalRepresentation node)
+    public string ResolveExpressionElement(NodeInternalRepresentation node, bool hint_IsClass = false)
     {
         var checkResult = IsAlreadyClassifiedExpression(node);
 
@@ -129,7 +128,15 @@ internal partial class NodeEnumerationHelper
             return NodeColors.FieldName;
 
         if (text.FirstCharIsUpper())
+        {
+            if (hint_IsClass)
+            {
+                return ResolveClassOrStructName(node);
+            }
             return NodeColors.PropertyName;
+        }
+        else
+            return NodeColors.LocalName;
 
         return NodeColors.Default;
     }

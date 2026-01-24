@@ -5,7 +5,7 @@ using System.Linq;
 namespace Tests;
 public class FilesTestData : IEnumerable<object[]>
 {
-    const int TESTS_COUNT = 80;
+    const int TESTS_COUNT = 81;
     public IEnumerator<object[]> GetEnumerator()
     {
         var disabledTests = new List<int> { 59 };

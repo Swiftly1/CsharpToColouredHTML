@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">int</span> <span class="localName">a</span> = <span class="numericLiteral">5</span>;</td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column"><span class="keyword">var</span> <span class="localName">q</span> = <span class="numericLiteral">9</span>;</td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column"><span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Red;</td></tr></tbody>
+</table></pre>
