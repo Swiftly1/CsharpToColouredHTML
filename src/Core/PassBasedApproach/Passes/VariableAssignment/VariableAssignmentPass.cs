@@ -19,6 +19,7 @@ internal class VariableAssignmentPass : Pass
     {
         Walker = new NodeEnumerationHelper(input, Context);
 
+        var anchors = new string[] { "}", "{", ";" };
         int anchorIndex = 0;
         do
         {
@@ -31,7 +32,7 @@ internal class VariableAssignmentPass : Pass
                 continue;
             }
 
-            if (Walker.CurrentText.EqualsAnyOf("}", ";"))
+            if (Walker.CurrentText.EqualsAnyOf(anchors))
             {
                 if (Walker.CurrentIndex > anchorIndex)
                     anchorIndex = Walker.CurrentIndex;
@@ -64,8 +65,10 @@ internal class VariableAssignmentPass : Pass
             {
                 Walker.CurrentIndex = anchorIndex;
 
-                if (Walker.CurrentText == ";")
+                if (Walker.CurrentText.EqualsAnyOf(anchors))
                     Walker.MoveNext();
+                else
+                    throw new Exception("Illegal state");
 
                 Walker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
                 Walker.CurrentIndex = assignmentSignIndex;

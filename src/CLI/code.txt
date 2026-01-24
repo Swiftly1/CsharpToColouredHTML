@@ -1,3 +1,8 @@
-﻿int a = 5;
-var q = 9;
-Console.ForegroundColor = ConsoleColor.Red;
+﻿if (node.ClassificationType == ClassificationTypeNames.ClassName)
+{
+    Console.ForegroundColor = ConsoleColor.Red;
+}
+else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
+{
+    Console.ForegroundColor = ConsoleColor.Green;
+}
