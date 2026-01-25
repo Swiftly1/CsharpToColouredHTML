@@ -1,3 +1,2 @@
-﻿public void Emit(List<Node> nodes, List<Node> nodes2)
-{
-}
+﻿var node = "test";
+sb.Append($"({node.ClassificationType})");

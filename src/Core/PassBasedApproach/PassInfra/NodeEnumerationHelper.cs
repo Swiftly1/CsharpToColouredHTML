@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 
@@ -32,6 +33,7 @@ internal partial class NodeEnumerationHelper
 
     public void MarkNodeAs(NodeInternalRepresentation node, string colour, bool skipIdentifierPostProcess = false)
     {
+        Logger.Info($"Marking '{node.Text}' as '{colour}'");
         var found = Nodes.FirstOrDefault(x => x.Id == node.Id);
 
         if (found == null)

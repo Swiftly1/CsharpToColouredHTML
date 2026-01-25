@@ -3,17 +3,13 @@ using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using Microsoft.CodeAnalysis.Classification;
 
-namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
+namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.MethodCalls;
 
-internal class MethodCallsPass : Pass
+internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
 {
     public override string Name { get => "MethodCalls"; }
 
     private NodeEnumerationHelper? Walker { get; set; }
-
-    public MethodCallsPass(SharedPassContext ctx) : base(ctx)
-    {
-    }
 
     public override PassResult Run(List<NodeInternalRepresentation> input)
     {
@@ -82,14 +78,14 @@ internal class MethodCallsPass : Pass
             list.Add(current);
 
             if (current.Text.EqualsAnyOf("new"))
-                return (false, new());
+                return (false, []);
 
             // Reject:
             // public IActionResult Index()
             if (current.Text.EqualsAnyOf(PassHelpers.CommonKeywordsBeforeTypeName))
-                return (false, new());
+                return (false, []);
 
-            if (current.Text.EqualsAnyOf(";", "}", "=", ","))
+            if (current.Text.EqualsAnyOf(";", "}", "{", "=", ","))
                 return (true, list);
 
             var validClassification = current.ClassificationType.EqualsAnyOf(ValidClassificationsToCheck);
@@ -100,7 +96,7 @@ internal class MethodCallsPass : Pass
             var result = validClassification || isType || isGeneric || isOperator;
 
             if (!result)
-                return (true, new());
+                return (true, []);
         }
 
         return (true, list);

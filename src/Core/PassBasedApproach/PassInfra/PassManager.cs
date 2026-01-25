@@ -1,16 +1,21 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Inheritance;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MarkKnownStuff;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MethodCalls;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 internal class PassManager
 {
-    private List<Pass> _Passes = new();
-    private SharedPassContext SharedPassContext = new();
+    private readonly List<Pass> _Passes = new();
+    private readonly SharedPassContext SharedPassContext = new();
 
     public void RegisterPass(Pass pass)
     {

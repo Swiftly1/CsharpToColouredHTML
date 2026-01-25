@@ -3,17 +3,13 @@ using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
-namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
+namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
 
-internal class VariableAssignmentPass : Pass
+internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
 {
     public override string Name { get => "VariableAssignment"; }
 
     private NodeEnumerationHelper? Walker { get; set; }
-
-    public VariableAssignmentPass(SharedPassContext ctx) : base(ctx)
-    {
-    }
 
     public override PassResult Run(List<NodeInternalRepresentation> input)
     {
@@ -80,29 +76,5 @@ internal class VariableAssignmentPass : Pass
         } while (Walker.MoveNext());
 
         return new PassResult();
-    }
-
-    private void TryMarkChainBackwards(List<NodeInternalRepresentation> nodesToMark)
-    {
-        var identifiers = nodesToMark
-            .Where(x => x.ClassificationType == ClassificationTypeNames.Identifier)
-            .ToList();
-
-        if (identifiers.Count == 0)
-            return;
-
-        for (int i = 0; i < identifiers.Count; i++)
-        {
-            var current = identifiers[i];
-
-            if (i == identifiers.Count - 1)
-            {
-                Walker.MarkNodeAs(current, Walker.ResolveClassOrStructName(current));
-            }
-            else
-            {
-                Walker.MarkNodeAs(current, NodeColors.Namespace);
-            }
-        }
     }
 }

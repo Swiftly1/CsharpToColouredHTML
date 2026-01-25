@@ -4,19 +4,19 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 internal class SharedPassContext
 {
-    public Hints Hints = new Hints();
+    public Hints Hints = new();
 
-    public HashSet<string> FoundClasses = new();
-    public HashSet<string> FoundStructs = new();
-    public HashSet<string> FoundInterfaces = new();
-    public HashSet<string> FoundProperties = new();
-    public HashSet<string> FoundFields = new();
-    public HashSet<string> FoundLocalNames = new();
+    public HashSet<string> FoundClasses = [];
+    public HashSet<string> FoundStructs = [];
+    public HashSet<string> FoundInterfaces = [];
+    public HashSet<string> FoundProperties = [];
+    public HashSet<string> FoundFields = [];
+    public HashSet<string> FoundLocalNames = [];
 
-    public HashSet<string> FoundNamespaceParts = new();
-    public HashSet<string> FoundNamespaces = new();
+    public HashSet<string> FoundNamespaceParts = [];
+    public HashSet<string> FoundNamespaces = [];
 
-    public HashSet<(string FunctionName, int Index)> FunctionLocations = new();
+    public HashSet<(string FunctionName, int Index)> FunctionLocations = [];
 
     public bool IsPopularEnum(string text)
     {

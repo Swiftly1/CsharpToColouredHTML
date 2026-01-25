@@ -2,17 +2,13 @@
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using Microsoft.CodeAnalysis.Classification;
 
-namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
+namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
 
-internal class ReturnTypePass : Pass
+internal class ReturnTypePass(SharedPassContext ctx) : Pass(ctx)
 {
     public override string Name { get => "ReturnType"; }
 
     private NodeEnumerationHelper? Walker { get; set; }
-
-    public ReturnTypePass(SharedPassContext ctx) : base(ctx)
-    {
-    }
 
     public override PassResult Run(List<NodeInternalRepresentation> input)
     {

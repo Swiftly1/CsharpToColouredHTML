@@ -2,17 +2,13 @@
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
-namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
+namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
 
-internal class FunctionArgsPass : Pass
+internal class FunctionArgsPass(SharedPassContext ctx) : Pass(ctx)
 {
     public override string Name { get => "FunctionArgs"; }
 
     private NodeEnumerationHelper? Walker { get; set; }
-
-    public FunctionArgsPass(SharedPassContext ctx) : base(ctx)
-    {
-    }
 
     public override PassResult Run(List<NodeInternalRepresentation> input)
     {

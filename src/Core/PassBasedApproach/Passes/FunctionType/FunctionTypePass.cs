@@ -3,17 +3,13 @@ using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
-namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
+namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
 
-internal class FunctionTypePass : Pass
+internal class FunctionTypePass(SharedPassContext ctx) : Pass(ctx)
 {
     public override string Name { get => "FunctionType"; }
 
     private NodeEnumerationHelper? Walker { get; set; }
-
-    public FunctionTypePass(SharedPassContext ctx) : base(ctx)
-    {
-    }
 
     public override PassResult Run(List<NodeInternalRepresentation> input)
     {

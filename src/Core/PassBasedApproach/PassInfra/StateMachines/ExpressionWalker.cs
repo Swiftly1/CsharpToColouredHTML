@@ -48,9 +48,13 @@ internal partial class NodeEnumerationHelper
                 if (TryPeekAhead(out var peekedAhead))
                 {
                     if (peekedAhead.Text == "(")
+                    {
                         foundColours.Add((CurrentNode, NodeColors.Method));
+                    }
                     else if (peekedAhead.Text == ".")
+                    {
                         foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode, true)));
+                    }
                     else if (peekedAhead.ClassificationType == ClassificationTypeNames.Operator)
                     {
                         foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode)));
@@ -136,7 +140,9 @@ internal partial class NodeEnumerationHelper
             return NodeColors.PropertyName;
         }
         else
+        {
             return NodeColors.LocalName;
+        }
 
         return NodeColors.Default;
     }
