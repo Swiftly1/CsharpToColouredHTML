@@ -139,12 +139,8 @@ internal partial class NodeEnumerationHelper
             }
             return NodeColors.PropertyName;
         }
-        else
-        {
-            return NodeColors.LocalName;
-        }
 
-        return NodeColors.Default;
+        return NodeColors.LocalName;
     }
 
     private static (bool Success, string Value) IsAlreadyClassifiedExpression(NodeInternalRepresentation node)
