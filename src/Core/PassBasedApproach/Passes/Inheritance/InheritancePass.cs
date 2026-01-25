@@ -41,7 +41,7 @@ internal class InheritancePass : Pass
             {
                 ClassificationTypeNames.ClassName,
                 ClassificationTypeNames.RecordClassName,
-                ClassificationTypeNames.RecordClassName,
+                ClassificationTypeNames.StructName,
                 ClassificationTypeNames.RecordStructName,
                 ClassificationTypeNames.InterfaceName,
                 ClassificationTypeNames.Identifier,
