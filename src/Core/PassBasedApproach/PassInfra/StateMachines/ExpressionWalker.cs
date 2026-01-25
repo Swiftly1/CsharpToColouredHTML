@@ -53,22 +53,22 @@ internal partial class NodeEnumerationHelper
                     }
                     else if (peekedAhead.Text == ".")
                     {
-                        foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode, true)));
+                        foundColours.Add((CurrentNode, ResolveVariable(CurrentNode, true)));
                     }
                     else if (peekedAhead.ClassificationType == ClassificationTypeNames.Operator)
                     {
-                        foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode)));
+                        foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
                         currentState = ExpressionWalkState.Operator;
                     }
                     else
                     {
-                        foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode)));
+                        foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
                         break;
                     }
                 }
                 else
                 {
-                    foundColours.Add((CurrentNode, ResolveExpressionElement(CurrentNode)));
+                    foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
                 }
 
             }
@@ -113,7 +113,7 @@ internal partial class NodeEnumerationHelper
         return foundColours.Any();
     }
 
-    public string ResolveExpressionElement(NodeInternalRepresentation node, bool hint_IsClass = false)
+    public string ResolveVariable(NodeInternalRepresentation node, bool hint_IsClass = false)
     {
         var checkResult = IsAlreadyClassifiedExpression(node);
 
@@ -139,6 +139,9 @@ internal partial class NodeEnumerationHelper
             }
             return NodeColors.PropertyName;
         }
+
+        if (text.StartsWith("_"))
+            return NodeColors.PropertyName;
 
         return NodeColors.LocalName;
     }
@@ -174,6 +177,7 @@ internal partial class NodeEnumerationHelper
         ClassificationTypeNames.PropertyName,
         ClassificationTypeNames.Identifier,
         ClassificationTypeNames.ConstantName,
+        ClassificationTypeNames.ParameterName,
     ];
 
     public bool ExpressionHasValidIdentifier(NodeInternalRepresentation node)

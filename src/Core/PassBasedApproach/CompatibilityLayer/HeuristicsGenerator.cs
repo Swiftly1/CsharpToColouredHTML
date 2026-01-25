@@ -35,7 +35,7 @@ internal class HeuristicsGenerator
         {
             output.Add(new NodeInternalRepresentation
             (
-                colour: NodeColors.Default,
+                colour: NodeColors.DefaultColour,
                 text: node.Text,
                 trivia: node.Trivia,
                 hasNewLine: node.HasNewLine,

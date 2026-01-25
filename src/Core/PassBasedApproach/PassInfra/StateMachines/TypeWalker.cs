@@ -232,6 +232,22 @@ internal partial class NodeEnumerationHelper
         return foundColours.Any();
     }
 
+    public string ResolveUnkownName(NodeInternalRepresentation node)
+    {
+        if (node.Text.StartsWith("_"))
+            return ResolveVariable(node);
+
+        if (!node.Text.FirstCharIsUpper())
+            return ResolveVariable(node);
+
+        var checkResult = IsAlreadyClassifiedExpression(node);
+
+        if (checkResult.Success)
+            return checkResult.Value;
+
+        return ResolveClassOrStructName(node);
+    }
+
     public string ResolveClassOrStructName(NodeInternalRepresentation node)
     {
         var checkResult = IsAlreadyClassOrStruct(node);

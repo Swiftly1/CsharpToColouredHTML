@@ -57,7 +57,7 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
 
             if (i == identifiers.Count - 1)
             {
-                Walker!.MarkNodeAs(current, Walker.ResolveClassOrStructName(current));
+                Walker!.MarkNodeAs(current, Walker.ResolveUnkownName(current));
             }
             else
             {
