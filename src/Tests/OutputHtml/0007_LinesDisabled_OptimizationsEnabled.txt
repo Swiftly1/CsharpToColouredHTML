@@ -37,55 +37,55 @@
     {
         <span class="control">if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ClassName)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Red;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Red;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.NamespaceName)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Green;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Green;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Identifier)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Green;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Green;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Keyword)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Yellow;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Yellow;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.StringLiteral)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Cyan;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Cyan;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.LocalName)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Blue;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Blue;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.MethodName)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Red;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Red;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Punctuation)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.White;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.White;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.Operator)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.White;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.White;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ControlKeyword)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.DarkRed;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.DarkRed;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.VerbatimStringLiteral)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.DarkRed;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.DarkRed;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.StringLiteral)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.DarkGreen;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.DarkGreen;
         }
         <span class="control">else if</span> (<span class="parameter">node</span>.ClassificationType == <span class="class">ClassificationTypeNames</span>.ParameterName)
         {
-            <span class="class">Console</span>.ForegroundColor = <span class="class">ConsoleColor</span>.Yellow;
+            <span class="class">Console</span>.ForegroundColor = <span class="enumName">ConsoleColor</span>.Yellow;
         }
         <span class="control">else</span>
         {
