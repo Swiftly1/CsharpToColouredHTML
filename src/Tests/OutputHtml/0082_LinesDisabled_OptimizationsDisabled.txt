@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Emit</span><span class="punctuation">(</span><span class="class">List</span><span class="punctuation">&lt;</span><span class="class">Node</span><span class="punctuation">&gt;</span> <span class="parameter">nodes</span><span class="punctuation">,</span> <span class="class">List</span><span class="punctuation">&lt;</span><span class="class">Node</span><span class="punctuation">&gt;</span> <span class="parameter">nodes2</span><span class="punctuation">)</span>
+<span class="punctuation">{</span>
+<span class="punctuation">}</span></pre>

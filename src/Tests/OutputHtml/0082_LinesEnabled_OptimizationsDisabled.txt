@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Emit</span><span class="punctuation">(</span><span class="class">List</span><span class="punctuation">&lt;</span><span class="class">Node</span><span class="punctuation">&gt;</span> <span class="parameter">nodes</span><span class="punctuation">,</span> <span class="class">List</span><span class="punctuation">&lt;</span><span class="class">Node</span><span class="punctuation">&gt;</span> <span class="parameter">nodes2</span><span class="punctuation">)</span></td></tr><tr><td class="line_no" line_no="2"></td><td class="code_column"><span class="punctuation">{</span></td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column"><span class="punctuation">}</span></td></tr></tbody>
+</table></pre>

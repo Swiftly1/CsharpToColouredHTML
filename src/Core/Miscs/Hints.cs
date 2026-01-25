@@ -22,6 +22,7 @@ public class Hints
         "object",
         "string",
         "dynamic",
+        "void"
     ];
 
     public List<string> ReallyPopularEnums { get; } =

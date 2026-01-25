@@ -16,6 +16,8 @@ internal class SharedPassContext
     public HashSet<string> FoundNamespaceParts = new();
     public HashSet<string> FoundNamespaces = new();
 
+    public HashSet<(string FunctionName, int Index)> FunctionLocations = new();
+
     public bool IsPopularEnum(string text)
     {
         return Hints.ReallyPopularEnums.Any(x => string.Equals(x, text));

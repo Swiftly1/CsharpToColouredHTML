@@ -20,13 +20,14 @@ internal class VariableAssignmentPass : Pass
         Walker = new NodeEnumerationHelper(input, Context);
 
         var anchors = new string[] { "}", "{", ";" };
-        int anchorIndex = 0;
+
+        int? anchorIndex = null;
         do
         {
 
             if (Walker.CurrentText.EqualsAnyOf("var"))
             {
-                if (Walker.CurrentIndex > anchorIndex)
+                if (anchorIndex == null || Walker.CurrentIndex > anchorIndex.Value)
                     anchorIndex = Walker.CurrentIndex;
 
                 continue;
@@ -34,7 +35,7 @@ internal class VariableAssignmentPass : Pass
 
             if (Walker.CurrentText.EqualsAnyOf(anchors))
             {
-                if (Walker.CurrentIndex > anchorIndex)
+                if (anchorIndex == null || Walker.CurrentIndex > anchorIndex.Value)
                     anchorIndex = Walker.CurrentIndex;
 
                 continue;
@@ -45,6 +46,9 @@ internal class VariableAssignmentPass : Pass
 
             var assignmentSignIndex = Walker.CurrentIndex;
 
+            if (!anchorIndex.HasValue)
+                continue;
+
             if (!Walker.TryPeekBehind(out var localNameCandidate))
                 continue;
 
@@ -52,7 +56,7 @@ internal class VariableAssignmentPass : Pass
             {
                 if (Walker.TryPeekBehind(out var typeOrVar, 2) && typeOrVar.Text != "var")
                 {
-                    Walker.CurrentIndex = anchorIndex;
+                    Walker.CurrentIndex = anchorIndex.Value;
 
                     if (Walker.CurrentText == ";")
                         Walker.MoveNext();
@@ -63,7 +67,7 @@ internal class VariableAssignmentPass : Pass
             }
             else
             {
-                Walker.CurrentIndex = anchorIndex;
+                Walker.CurrentIndex = anchorIndex.Value;
 
                 if (Walker.CurrentText.EqualsAnyOf(anchors))
                     Walker.MoveNext();
@@ -101,52 +105,4 @@ internal class VariableAssignmentPass : Pass
             }
         }
     }
-
-    private (bool Success, List<NodeInternalRepresentation> NodesWalkedOver) IsFunctionCall()
-    {
-        var offset = 1;
-
-        var list = new List<NodeInternalRepresentation>();
-
-        while (Walker!.TryPeekBehind(out var current, offset))
-        {
-            offset++;
-            list.Add(current);
-
-            if (current.Text.EqualsAnyOf("new"))
-                return (false, new());
-
-            // Reject:
-            // public IActionResult Index()
-            if (current.Text.EqualsAnyOf(PassHelpers.CommonKeywordsBeforeTypeName))
-                return (false, new());
-
-            if (current.Text.EqualsAnyOf(";", "}", "=", ","))
-                return (true, list);
-
-            var validClassification = current.ClassificationType.EqualsAnyOf(ValidClassificationsToCheck);
-            var isType = current.Text.EqualsAnyOf(Context.Hints.BuiltInTypes.ToArray());
-            var isGeneric = current.Text.EqualsAnyOf("<", ",", ">");
-            var isOperator = current.Text.EqualsAnyOf(".");
-
-            var result = validClassification || isType || isGeneric || isOperator;
-
-            if (!result)
-                return (true, new());
-        }
-
-        return (true, list);
-    }
-
-    private readonly string[] ValidClassificationsToCheck =
-    [
-        ClassificationTypeNames.Identifier,
-        ClassificationTypeNames.NamespaceName,
-        ClassificationTypeNames.ClassName,
-        ClassificationTypeNames.StructName,
-        ClassificationTypeNames.RecordClassName,
-        ClassificationTypeNames.RecordStructName,
-        ClassificationTypeNames.InterfaceName,
-        ClassificationTypeNames.TypeParameterName
-    ];
 }

@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="keyword">public void</span> <span class="method">Emit</span>(<span class="class">List</span>&lt;<span class="class">Node</span>&gt; <span class="parameter">nodes</span>, <span class="class">List</span>&lt;<span class="class">Node</span>&gt; <span class="parameter">nodes2</span>)
+{
+}</pre>

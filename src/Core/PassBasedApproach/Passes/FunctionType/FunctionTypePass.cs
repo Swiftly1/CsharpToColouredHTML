@@ -19,13 +19,13 @@ internal class FunctionTypePass : Pass
     {
         Walker = new NodeEnumerationHelper(input, Context);
 
-        int anchorIndex = 0;
+        int? anchorIndex = null;
         do
         {
 
             if (Walker.CurrentText.EqualsAnyOf(PassHelpers.CommonKeywordsBeforeTypeName))
             {
-                if (Walker.CurrentIndex > anchorIndex)
+                if (anchorIndex == null || Walker.CurrentIndex > anchorIndex.Value)
                     anchorIndex = Walker.CurrentIndex;
 
                 continue;
@@ -33,7 +33,7 @@ internal class FunctionTypePass : Pass
 
             if (Walker.CurrentText.EqualsAnyOf("}", ";"))
             {
-                if (Walker.CurrentIndex > anchorIndex)
+                if (anchorIndex == null || Walker.CurrentIndex > anchorIndex.Value)
                     anchorIndex = Walker.CurrentIndex;
 
                 continue;
@@ -42,11 +42,18 @@ internal class FunctionTypePass : Pass
             if (!Walker.CC.EqualsAnyOf(ClassificationTypeNames.MethodName, ClassificationTypeNames.PropertyName, ClassificationTypeNames.FieldName))
                 continue;
 
+            var funcName = Walker.CurrentText;
             var methodIndex = Walker.CurrentIndex;
 
-            Walker.CurrentIndex = anchorIndex;
+            if (!anchorIndex.HasValue)
+                continue;
+
+            Walker.CurrentIndex = anchorIndex.Value;
             Walker.MoveNext();
-            Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+            if (Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType))
+            {
+                Context.FunctionLocations.Add((funcName, methodIndex));
+            }
 
             Walker.CurrentIndex = methodIndex;
         } while (Walker.MoveNext());
