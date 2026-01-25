@@ -1,4 +1,5 @@
 ﻿namespace CsharpToColouredHTML.Core.Miscs;
+#pragma warning disable CS0162
 
 internal static class Logger
 {
