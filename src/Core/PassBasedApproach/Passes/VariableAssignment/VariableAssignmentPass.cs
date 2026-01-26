@@ -17,7 +17,7 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
 
         var anchors = new string[] { "}", "{", ";" };
 
-        int? anchorIndex = null;
+        int? anchorIndex = 0;
         do
         {
 
@@ -41,9 +41,6 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
                 continue;
 
             var assignmentSignIndex = Walker.CurrentIndex;
-
-            if (!anchorIndex.HasValue)
-                continue;
 
             if (!Walker.TryPeekBehind(out var localNameCandidate))
                 continue;
