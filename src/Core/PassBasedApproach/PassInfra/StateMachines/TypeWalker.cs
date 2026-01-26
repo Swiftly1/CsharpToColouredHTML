@@ -38,11 +38,20 @@ internal partial class NodeEnumerationHelper
 
         int genericsOpeningCounter = 0;
 
+        if (initialState == TypeWalkState.GenericsName)
+            genericsOpeningCounter = 1;
+
         do
         {
             if (CurrentText == ";")
             {
                 foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                break;
+            }
+
+            if (initialState == TypeWalkState.GenericsName && genericsOpeningCounter <= 0)
+            {
+                MoveBehind();
                 break;
             }
 
@@ -210,7 +219,14 @@ internal partial class NodeEnumerationHelper
                 {
                     foundColours.Add((CurrentNode, NodeColors.Punctuation));
                     genericsOpeningCounter--;
-                    currentState = TypeWalkState.GenericsDotOrEnd;
+                    if (genericsOpeningCounter > 0)
+                    {
+                        currentState = TypeWalkState.GenericsDotOrEnd;
+                    }
+                    else
+                    {
+                        currentState = TypeWalkState.TypeNameDotOrEnd;
+                    }
                 }
                 else
                 {

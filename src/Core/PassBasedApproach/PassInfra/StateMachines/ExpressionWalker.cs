@@ -8,7 +8,8 @@ public enum ExpressionWalkState
 {
     Chain,
     DotOrEnd,
-    Operator
+    Operator,
+    GenericsOpening,
 }
 
 public enum ExpressionWalkMode
@@ -51,14 +52,49 @@ internal partial class NodeEnumerationHelper
                     {
                         foundColours.Add((CurrentNode, NodeColors.Method));
                     }
-                    else if (peekedAhead.Text == ".")
+                    else if (peekedAhead.Text == "<")
                     {
                         foundColours.Add((CurrentNode, ResolveVariable(CurrentNode, true)));
+                        currentState = ExpressionWalkState.GenericsOpening;
+                    }
+                    else if (peekedAhead.Text == ".")
+                    {
+                        if (foundColours.Count >= 2 && foundColours[^1].Node.Text == ".")
+                        {
+                            if (foundColours[^2].Colour == NodeColors.Class)
+                            {
+                                foundColours.Add((CurrentNode, ResolveVariable(CurrentNode, false)));
+                            }
+                        }
+                        else
+                        {
+                            foundColours.Add((CurrentNode, ResolveVariable(CurrentNode, true)));
+                        }
+                        currentState = ExpressionWalkState.Operator;
                     }
                     else if (peekedAhead.ClassificationType == ClassificationTypeNames.Operator)
                     {
                         foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
                         currentState = ExpressionWalkState.Operator;
+                    }
+                    else if (peekedAhead.Text == ",")
+                    {
+                        foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                    }
+                    else if (peekedAhead.Text == ")")
+                    {
+                        foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                    }
+                    else if (peekedAhead.Text.EqualsAnyOf("out", "var", "ref"))
+                    {
+                        if (CurrentNode.ClassificationType == ClassificationTypeNames.Keyword)
+                            foundColours.Add((CurrentNode, NodeColors.Keyword));
+                        else
+                            foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
+
+                        currentState = ExpressionWalkState.Chain;
                     }
                     else
                     {
@@ -79,6 +115,21 @@ internal partial class NodeEnumerationHelper
                     foundColours.Add((CurrentNode, NodeColors.Operator));
                     currentState = ExpressionWalkState.Chain;
                 }
+                else if (CurrentText == "(")
+                {
+                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.Chain;
+                }
+                else if (CurrentText == ")")
+                {
+                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.Operator;
+                }
+                else if (CurrentText == ",")
+                {
+                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.Chain;
+                }
                 else
                 {
                     break;
@@ -90,6 +141,26 @@ internal partial class NodeEnumerationHelper
                 {
                     foundColours.Add((CurrentNode, NodeColors.Operator));
                     currentState = ExpressionWalkState.Chain;
+                }
+                else if (CurrentText == ",")
+                {
+                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.Chain;
+                }
+                else
+                {
+                    MoveBehind();
+                    break;
+                }
+            }
+            else if (currentState == ExpressionWalkState.GenericsOpening)
+            {
+                if (!MoveNext())
+                    break;
+
+                if (ConsumeTypeAhead(TypeWalkState.GenericsName, TypeWalkMode.MustBeType))
+                {
+                    currentState = ExpressionWalkState.DotOrEnd;
                 }
                 else
                 {
@@ -183,6 +254,9 @@ internal partial class NodeEnumerationHelper
     public bool ExpressionHasValidIdentifier(NodeInternalRepresentation node)
     {
         if (_validExpressionNameClassifications.Contains(node.ClassificationType))
+            return true;
+
+        if (node.Text.EqualsAnyOf("out", "var", "ref"))
             return true;
 
         if (node.ClassificationType == ClassificationTypeNames.Keyword)

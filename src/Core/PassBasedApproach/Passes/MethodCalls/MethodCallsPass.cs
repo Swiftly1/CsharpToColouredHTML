@@ -34,6 +34,11 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
                     Walker.MarkNodeAs(NodeColors.Method);
 
                     TryMarkChainBackwards(result.NodesWalkedOver);
+
+                    if (!Walker.MoveNext(2))
+                        continue;
+
+                    Walker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
                 }
             }
 
@@ -85,7 +90,7 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
             if (current.Text.EqualsAnyOf(PassHelpers.CommonKeywordsBeforeTypeName))
                 return (false, []);
 
-            if (current.Text.EqualsAnyOf(";", "}", "{", "=", ","))
+            if (current.Text.EqualsAnyOf(";", "}", "{", "=", ",", ")"))
                 return (true, list);
 
             var validClassification = current.ClassificationType.EqualsAnyOf(ValidClassificationsToCheck);

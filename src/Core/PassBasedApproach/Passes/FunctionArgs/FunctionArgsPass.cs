@@ -14,7 +14,7 @@ internal class FunctionArgsPass(SharedPassContext ctx) : Pass(ctx)
     {
         Walker = new NodeEnumerationHelper(input, Context);
 
-        foreach (var function in Context.FunctionLocations)
+        foreach (var function in Context.FunctionDeclarationLocations)
         {
             Logger.Info($"Function Location: {function.FunctionName} at {function.Index}");
 

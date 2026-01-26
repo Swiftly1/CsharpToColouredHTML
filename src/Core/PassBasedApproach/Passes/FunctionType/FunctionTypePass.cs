@@ -48,7 +48,7 @@ internal class FunctionTypePass(SharedPassContext ctx) : Pass(ctx)
             Walker.MoveNext();
             if (Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType))
             {
-                Context.FunctionLocations.Add((funcName, methodIndex));
+                Context.FunctionDeclarationLocations.Add((funcName, methodIndex));
             }
 
             Walker.CurrentIndex = methodIndex;
