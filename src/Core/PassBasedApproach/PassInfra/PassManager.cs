@@ -9,6 +9,7 @@ using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MethodCalls;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PropertyAccess;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.TypeDiscoveryFallback;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
@@ -92,6 +93,7 @@ internal class PassManager
         pm.RegisterPass(new VariableAssignmentPass(pm.SharedPassContext));
         pm.RegisterPass(new FunctionArgsPass(pm.SharedPassContext));
         pm.RegisterPass(new PropertyAccessPass(pm.SharedPassContext));
+        pm.RegisterPass(new TypeDiscoveryFallbackPass(pm.SharedPassContext));
 
         return pm;
     }

@@ -19,7 +19,7 @@ public enum ExpressionWalkMode
 
 internal partial class NodeEnumerationHelper
 {
-    public bool ConsumeExpressionAhead(ExpressionWalkState initialState, ExpressionWalkMode mode)
+    public bool ConsumeExpressionAhead(ExpressionWalkState initialState, ExpressionWalkMode mode, bool markIt = true)
     {
         Logger.Info($"ConsumeExpressionAhead '{CurrentText}'", 3);
 
@@ -176,9 +176,12 @@ internal partial class NodeEnumerationHelper
             previousStates.Add(currentState);
         } while (MoveNext());
 
-        foreach (var entry in foundColours)
+        if (markIt)
         {
-            MarkNodeAs(entry.Node, entry.Colour);
+            foreach (var entry in foundColours)
+            {
+                MarkNodeAs(entry.Node, entry.Colour);
+            }
         }
 
         return foundColours.Any();

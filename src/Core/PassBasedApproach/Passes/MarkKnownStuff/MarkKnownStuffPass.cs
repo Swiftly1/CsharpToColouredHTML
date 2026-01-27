@@ -43,7 +43,6 @@ internal class MarkKnownStuffPass : Pass
 
     private Dictionary<string, string> _SimpleClassificationToColourMapper { get; } = new()
     {
-        { ClassificationTypeNames.Comment, NodeColors.Comment },
         { ClassificationTypeNames.PreprocessorKeyword, NodeColors.Preprocessor },
         { ClassificationTypeNames.PreprocessorText, NodeColors.PreprocessorText },
         { ClassificationTypeNames.InterfaceName, NodeColors.Interface },
@@ -75,6 +74,20 @@ internal class MarkKnownStuffPass : Pass
         { ClassificationTypeNames.RecordStructName, NodeColors.RecordStructName },
         { ClassificationTypeNames.Keyword, NodeColors.Keyword },
         { ClassificationTypeNames.Punctuation, NodeColors.Punctuation },
+
+        { ClassificationTypeNames.Comment, NodeColors.Comment },
+        { ClassificationTypeNames.RegexComment, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentAttributeName, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentAttributeQuotes, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentAttributeValue, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentCDataSection, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentComment, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentDelimiter, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentEntityReference, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentName, NodeColors.Comment },
+        { ClassificationTypeNames.XmlLiteralProcessingInstruction, NodeColors.Comment },
+        { ClassificationTypeNames.XmlDocCommentText, NodeColors.Comment },
+        { ClassificationTypeNames.XmlLiteralComment, NodeColors.Comment },
 
         //{ ClassificationTypeNames.Identifier, NodeColors.Identifier },
     };
