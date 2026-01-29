@@ -19,7 +19,6 @@ internal class TypeDiscoveryFallbackPass(SharedPassContext ctx) : Pass(ctx)
             if (Walker.CC != ClassificationTypeNames.Identifier)
                 continue;
 
-            Walker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
         } while (Walker.MoveNext());
 
         return new PassResult();

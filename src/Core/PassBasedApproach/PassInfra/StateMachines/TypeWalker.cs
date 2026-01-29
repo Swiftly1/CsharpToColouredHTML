@@ -13,7 +13,7 @@ public enum TypeWalkState
     GenericsDotOrEnd,
 
     TupleName,
-    TupleDotOrEnd
+    TupleDotOrEnd,
 }
 
 public enum TypeWalkMode
@@ -250,11 +250,10 @@ internal partial class NodeEnumerationHelper
 
     public string ResolveUnkownName(NodeInternalRepresentation node)
     {
-        if (node.Text.StartsWith("_"))
-            return ResolveVariable(node);
+        var result = CheckIfLooksLikeVariable(node);
 
-        if (!node.Text.FirstCharIsUpper())
-            return ResolveVariable(node);
+        if (result.IsVariable)
+            return result.Value;
 
         var checkResult = IsAlreadyClassifiedExpression(node);
 
@@ -262,6 +261,17 @@ internal partial class NodeEnumerationHelper
             return checkResult.Value;
 
         return ResolveClassOrStructName(node);
+    }
+
+    public (bool IsVariable, string Value) CheckIfLooksLikeVariable(NodeInternalRepresentation node)
+    {
+        if (node.Text.StartsWith("_"))
+            return (IsVariable: true, Value: ResolveVariable(node));
+
+        if (!node.Text.FirstCharIsUpper())
+            return (IsVariable: true, Value: ResolveVariable(node));
+
+        return (IsVariable: false, Value: string.Empty);
     }
 
     public string ResolveClassOrStructName(NodeInternalRepresentation node)

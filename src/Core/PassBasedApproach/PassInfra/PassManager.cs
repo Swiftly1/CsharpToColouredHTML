@@ -1,5 +1,7 @@
-﻿using CsharpToColouredHTML.Core.Miscs;
+﻿using System.Xml.Linq;
+using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Attributes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
@@ -84,6 +86,7 @@ internal class PassManager
         pm.RegisterPass(new PreFlightPass(pm.SharedPassContext));
         pm.RegisterPass(new MarkKnownStuffPass(pm.SharedPassContext));
         pm.RegisterPass(new NamespacesPass(pm.SharedPassContext));
+        pm.RegisterPass(new AttributesPass(pm.SharedPassContext));
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));
         pm.RegisterPass(new FunctionTypePass(pm.SharedPassContext));
         pm.RegisterPass(new NewInstancesPass(pm.SharedPassContext));

@@ -60,13 +60,20 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
         {
             var current = identifiers[i];
 
+            var identifiersBeforeCurrent = identifiers.Where((x, index) => index > i).ToList();
+            var thereIsVariableBefore = identifiersBeforeCurrent
+                .Any(x => Walker.CheckIfLooksLikeVariable(x).IsVariable);
+
             if (i == identifiers.Count - 1)
             {
                 Walker!.MarkNodeAs(current, Walker.ResolveUnkownName(current));
             }
             else
             {
-                Walker!.MarkNodeAs(current, NodeColors.Namespace);
+                if (thereIsVariableBefore)
+                    Walker!.MarkNodeAs(current, Walker.ResolveVariable(current));
+                else
+                    Walker!.MarkNodeAs(current, NodeColors.Namespace);
             }
         }
     }

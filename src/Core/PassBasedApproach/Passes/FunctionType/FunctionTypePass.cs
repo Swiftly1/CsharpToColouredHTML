@@ -35,7 +35,15 @@ internal class FunctionTypePass(SharedPassContext ctx) : Pass(ctx)
                 continue;
             }
 
-            if (!Walker.CC.EqualsAnyOf(ClassificationTypeNames.MethodName, ClassificationTypeNames.PropertyName, ClassificationTypeNames.FieldName))
+            var validClassifications = new[]
+            {
+                ClassificationTypeNames.MethodName,
+                ClassificationTypeNames.PropertyName,
+                ClassificationTypeNames.FieldName,
+                ClassificationTypeNames.DelegateName
+            };
+
+            if (!Walker.CC.EqualsAnyOf(validClassifications))
                 continue;
 
             var funcName = Walker.CurrentText;

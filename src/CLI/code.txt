@@ -1,2 +1,12 @@
-﻿#region Dynamic
-#endregion Dynamic
+﻿[MethodImpl(MethodImplOptions.AggressiveInlining)]
+private Node<T, U> FindNode(Node<T, U> current, T item)
+{
+    if (AllowNULLsInKeys)
+    {
+        for (int i = 0; i < current.Children.Count; i++)
+        {
+            if (Equals(current.Children[i].ArrayValue, item))
+                return current.Children[i];
+        }
+    }
+}

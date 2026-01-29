@@ -45,7 +45,7 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
             if (!Walker.TryPeekBehind(out var localNameCandidate))
                 continue;
 
-            if (localNameCandidate.ClassificationType == ClassificationTypeNames.LocalName)
+            if (localNameCandidate.ClassificationType.EqualsAnyOf(ClassificationTypeNames.LocalName, ClassificationTypeNames.ConstantName))
             {
                 if (Walker.TryPeekBehind(out var typeOrVar, 2) && typeOrVar.Text != "var")
                 {
