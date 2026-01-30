@@ -19,6 +19,16 @@ internal class TypeDiscoveryFallbackPass(SharedPassContext ctx) : Pass(ctx)
             if (Walker.CC != ClassificationTypeNames.Identifier)
                 continue;
 
+            // typeof(int).GetTypeInfo().Assembly
+            if (Walker.TryPeekBehind(out var dot) && dot.Text == ".")
+            {
+                if (Walker.TryPeekBehind(out var parenthesis, 2) && parenthesis.Text == ")")
+                {
+                    Walker.MarkNodeAs(Walker.FieldOrProperty(Walker.CurrentNode));
+                }
+            }
+
+
         } while (Walker.MoveNext());
 
         return new PassResult();

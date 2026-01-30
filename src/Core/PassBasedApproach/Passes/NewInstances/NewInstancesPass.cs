@@ -30,9 +30,50 @@ internal class NewInstancesPass : Pass
             if (Walker.MoveNext())
             {
                 Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                TrySaveMetadata();
             }
         } while (Walker.MoveNext());
 
         return new PassResult();
+    }
+
+    private void TrySaveMetadata()
+    {
+        if (!Walker.TryPeekAhead(out var bracket) || bracket.Text != "{")
+            return;
+
+        var startIndex = Walker.CurrentIndex + 1;
+        var offset = 2;
+        var bracketsCounter = 1;
+
+        while (Walker.TryPeekAhead(out var current, offset))
+        {
+            if (current.Text == ";")
+            {
+                var endIndex = Walker.CurrentIndex + offset;
+                Context.FoundObjectInitializersRanges.Add((startIndex, endIndex));
+            }
+
+            if (current.Text == "{")
+            {
+                bracketsCounter++;
+            }
+
+            if (current.Text == "}")
+            {
+                bracketsCounter--;
+
+                if (bracketsCounter <= 0)
+                {
+                    var endIndex = Walker.CurrentIndex + offset;
+                    Context.FoundObjectInitializersRanges.Add((startIndex, endIndex));
+                }
+            }
+
+            if (bracketsCounter <= 0)
+                return;
+
+            offset++;
+        }
     }
 }

@@ -1,0 +1,6 @@
+
+<pre class="background">
+<table>
+<tbody>
+<tr><td class="line_no" line_no="1"></td><td class="code_column"><span class="keyword">var</span> <span class="localName">a</span> = <span class="keyword">new</span> <span class="class">List</span>&lt;<span class="keyword">string</span>&gt; { <span class="class">ClassificationTypeNames</span>.StringEscapeCharacter };</td></tr><tr><td class="line_no" line_no="2"></td><td></tr><tr><td class="line_no" line_no="3"></td><td class="code_column"><span class="keyword">var</span> <span class="localName">b</span> = <span class="keyword">new</span> <span class="class">List</span>&lt;<span class="class">Test</span>&gt; { <span class="keyword">new</span> <span class="class">Test</span> { A = <span class="numericLiteral">5</span> } };</td></tr></tbody>
+</table></pre>

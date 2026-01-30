@@ -18,6 +18,10 @@ internal class SharedPassContext
 
     public HashSet<(string FunctionName, int Index)> FunctionDeclarationLocations = [];
 
+    //new List<string> { ClassificationTypeNames.StringEscapeCharacter };
+
+    public HashSet<(int StartIndex, int EndIndex)> FoundObjectInitializersRanges = [];
+
     public bool IsPopularEnum(string text)
     {
         return Hints.ReallyPopularEnums.Any(x => string.Equals(x, text));

@@ -220,7 +220,7 @@ internal partial class NodeEnumerationHelper
         return NodeColors.LocalName;
     }
 
-    private static (bool Success, string Value) IsAlreadyClassifiedExpression(NodeInternalRepresentation node)
+    private (bool Success, string Value) IsAlreadyClassifiedExpression(NodeInternalRepresentation node)
     {
         if (node.ClassificationType == ClassificationTypeNames.LocalName)
             return (Success: true, Value: NodeColors.LocalName);
@@ -241,6 +241,16 @@ internal partial class NodeEnumerationHelper
             return (Success: true, Value: NodeColors.String);
 
         return (Success: false, Value: string.Empty);
+    }
+
+    public string FieldOrProperty(NodeInternalRepresentation node)
+    {
+        var result = IsAlreadyClassifiedExpression(node);
+
+        if (result.Success)
+            return result.Value;
+
+        return NodeColors.PropertyName;
     }
 
     private readonly string[] _validExpressionNameClassifications =
