@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="class">test</span>.<span class="method">Transform1</span>();
+<span class="localName">test</span>.<span class="method">Transform1</span>();
 
 <span class="keyword">new</span> Test2.<span class="class">Transform2</span>();
 <span class="keyword">new</span> A.B.Test2.<span class="class">Transform3</span>();

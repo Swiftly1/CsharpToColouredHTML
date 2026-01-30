@@ -1,6 +1,6 @@
 
 <pre class="background">
-<span class="class">test</span><span class="operator">.</span><span class="method">Transform1</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
+<span class="localName">test</span><span class="operator">.</span><span class="method">Transform1</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
 
 <span class="keyword">new</span> <span class="namespace">Test2</span><span class="operator">.</span><span class="class">Transform2</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="keyword">new</span> <span class="namespace">A</span><span class="operator">.</span><span class="namespace">B</span><span class="operator">.</span><span class="namespace">Test2</span><span class="operator">.</span><span class="class">Transform3</span><span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">;</span>

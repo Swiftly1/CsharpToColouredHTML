@@ -64,7 +64,7 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
             var thereIsVariableBefore = identifiersBeforeCurrent
                 .Any(x => Walker.CheckIfLooksLikeVariable(x).IsVariable);
 
-            if (i == identifiers.Count - 1)
+            if (i == 0)
             {
                 Walker!.MarkNodeAs(current, Walker.ResolveUnkownName(current));
             }

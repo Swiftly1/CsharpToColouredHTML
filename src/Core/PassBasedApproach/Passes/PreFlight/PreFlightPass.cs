@@ -14,8 +14,8 @@ internal class PreFlightPass : Pass
     {
     }
 
-    public override PreFlightResult Run(List<NodeInternalRepresentation> input)
+    public override PassResult Run(List<NodeInternalRepresentation> input)
     {
-        return new PreFlightResult();
+        return new PassResult();
     }
 }

@@ -163,6 +163,11 @@ internal partial class NodeEnumerationHelper
                     genericsOpeningCounter++;
                     currentState = TypeWalkState.GenericsName;
                 }
+                else if (CC == ClassificationTypeNames.Identifier)
+                {
+                    foundColours.Add((CurrentNode, NodeColors.PropertyName));
+                    currentState = TypeWalkState.TupleDotOrEnd;
+                }
                 else
                 {
                     MoveBehind();

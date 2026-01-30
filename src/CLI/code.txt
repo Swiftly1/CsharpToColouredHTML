@@ -1,3 +1,1 @@
-﻿var a = new List<string> { ClassificationTypeNames.StringEscapeCharacter };
-
-var b = new List<Test> { new Test { A = 5 } };
+﻿var q = Test5.BTest3<int>.Transform5();
