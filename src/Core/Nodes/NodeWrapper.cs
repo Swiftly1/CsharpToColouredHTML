@@ -2,11 +2,11 @@
 
 internal record NodeWrapper
 {
-    public List<NodeInternalRepresentation> Nodes { get; set; } = new();
+    public List<Node> Nodes { get; set; } = new();
 
     public bool IsChain => Nodes.Count > 1;
 
-    public NodeInternalRepresentation Node
+    public Node Node
     {
         get
         {

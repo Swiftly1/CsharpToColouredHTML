@@ -1,8 +1,8 @@
 ﻿namespace CsharpToColouredHTML.Core.Nodes;
 
-internal record NodeInternalRepresentation
+internal record Node
 {
-    public NodeInternalRepresentation(string currentClassificationType, string text, string trivia)
+    public Node(string currentClassificationType, string text, string trivia)
     {
         ClassificationType = currentClassificationType;
         Text = text;
@@ -10,7 +10,7 @@ internal record NodeInternalRepresentation
         HasNewLine = (trivia + text).Contains(Environment.NewLine);
     }
 
-    public NodeInternalRepresentation(string currentClassificationType, string text, string trivia, bool hasNewLine)
+    public Node(string currentClassificationType, string text, string trivia, bool hasNewLine)
     {
         ClassificationType = currentClassificationType;
         Text = text;
@@ -18,7 +18,7 @@ internal record NodeInternalRepresentation
         HasNewLine = hasNewLine;
     }
 
-    public NodeInternalRepresentation(
+    public Node(
         string colour,
         string text,
         string trivia,
@@ -36,7 +36,7 @@ internal record NodeInternalRepresentation
         SkipIdentifierPostProcessing = skipIdentifierPostProcessing;
     }
 
-    public NodeInternalRepresentation(
+    public Node(
         string colour,
         string text,
         string trivia,
@@ -50,7 +50,7 @@ internal record NodeInternalRepresentation
 
     public Guid Id { get; init; }
 
-    public string Colour { get; set; }
+    public string Colour { get; set; } = NodeColors.DefaultColour;
 
     public string Text { get; init; }
 

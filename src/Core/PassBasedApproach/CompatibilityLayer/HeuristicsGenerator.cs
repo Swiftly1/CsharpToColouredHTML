@@ -13,7 +13,7 @@ internal class HeuristicsGenerator
         _Hints = hints;
     }
 
-    public List<NodeAfterProcessing> Build(List<NodeInternalRepresentation> input)
+    public List<NodeAfterProcessing> Build(List<Node> input)
     {
         if (input == null || input.Count == 0)
             return new List<NodeAfterProcessing>();

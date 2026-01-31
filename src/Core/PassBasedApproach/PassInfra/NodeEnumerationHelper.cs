@@ -31,7 +31,7 @@ internal partial class NodeEnumerationHelper
         MarkNodeAs(CurrentNode.Node, colour, skipIdentifierPostProcess);
     }
 
-    public void MarkNodeAs(NodeInternalRepresentation node, string colour, bool skipIdentifierPostProcess = false)
+    public void MarkNodeAs(Node node, string colour, bool skipIdentifierPostProcess = false)
     {
         Logger.Info($"Marking '{node.Text}' as '{colour}'");
         var found = Nodes.FirstOrDefault(x => x.Id == node.Id)?.Node;
@@ -87,7 +87,7 @@ internal partial class NodeEnumerationHelper
         };
     }
 
-    private void UpdateStats(NodeInternalRepresentation node)
+    private void UpdateStats(Node node)
     {
         if (node.Colour == NodeColors.Class)
             Context.FoundClasses.Add(node.Text);

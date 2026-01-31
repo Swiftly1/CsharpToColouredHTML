@@ -5,7 +5,7 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
 {
     internal class NodeChaining
     {
-        public static List<NodeWrapper> ChainNodes(List<NodeInternalRepresentation> nodes)
+        public static List<NodeWrapper> ChainNodes(List<Node> nodes)
         {
             var list = new List<NodeWrapper>();
 
