@@ -1,31 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-
-namespace DictionaryList
+﻿
+try
 {
-    public class DictionaryList<T, U>
-    {
-        private Node<T, U> FindNode(Node<T, U> current, T item)
-        {
-            if (AllowNULLsInKeys)
-            {
-                for (int i = 0; i < current.Children.Count; i++)
-                {
-                    if (Equals(current.Children[i].ArrayValue, item))
-                        return current.Children[i];
-                }
-            }
-            else
-            {
-                for (int i = 0; i < current.Children.Count; i++)
-                {
-                    if (current.Children[i].ArrayValue!.Equals(item))
-                        return current.Children[i];
-                }
-            }
-
-            return null;
-        }
-    }
+    Microsoft.Build.Evaluation.ProjectCollection.GlobalProjectCollection.DisableMarkDirty = true;
+    Microsoft.Build.Evaluation.ProjectCollection.GlobalProjectCollection.SetGlobalProperty("RoslynHive", RoslynHive);
+}
+finally
+{
+    Microsoft.Build.Evaluation.ProjectCollection.GlobalProjectCollection.DisableMarkDirty = false;
 }

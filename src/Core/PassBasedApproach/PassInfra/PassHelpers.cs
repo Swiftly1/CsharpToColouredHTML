@@ -21,7 +21,7 @@ internal class PassHelpers
     public static readonly string[] CommonKeywordsBeforeTypeName =
     [
         "public", "private", "internal", "sealed", "protected", "readonly", "static", "override", "event", "required",
-        "virtual", "unsafe", "partial", "delegate"
+        "virtual", "unsafe", "partial", "delegate", "async"
     ];
 
     public static readonly List<string> AccessibilityModifiers = new List<string>
