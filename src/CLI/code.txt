@@ -1,18 +1,31 @@
-﻿if (A)
-{
-	Console.WriteLine(".");
-	if (B)
-	{
-		if (B2)
-			Console.WriteLine(".");
-		else
-			Result.WriteLine123("..");
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
-		if (C)
-		{
-			if (D)
-				if (E)
-					Result.WriteLine(".");
-		}
-	}
+namespace DictionaryList
+{
+    public class DictionaryList<T, U>
+    {
+        private Node<T, U> FindNode(Node<T, U> current, T item)
+        {
+            if (AllowNULLsInKeys)
+            {
+                for (int i = 0; i < current.Children.Count; i++)
+                {
+                    if (Equals(current.Children[i].ArrayValue, item))
+                        return current.Children[i];
+                }
+            }
+            else
+            {
+                for (int i = 0; i < current.Children.Count; i++)
+                {
+                    if (current.Children[i].ArrayValue!.Equals(item))
+                        return current.Children[i];
+                }
+            }
+
+            return null;
+        }
+    }
 }

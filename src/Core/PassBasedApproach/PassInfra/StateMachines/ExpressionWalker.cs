@@ -87,6 +87,11 @@ internal partial class NodeEnumerationHelper
                         foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
                         currentState = ExpressionWalkState.DotOrEnd;
                     }
+                    else if (peekedAhead.Text.EqualsAnyOf("[", "]"))
+                    {
+                        foundColours.Add((CurrentNode, ResolveVariable(CurrentNode)));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                    }
                     else if (peekedAhead.Text.EqualsAnyOf("out", "var", "ref"))
                     {
                         if (CurrentNode.ClassificationType == ClassificationTypeNames.Keyword)
@@ -129,6 +134,16 @@ internal partial class NodeEnumerationHelper
                 {
                     foundColours.Add((CurrentNode, NodeColors.Punctuation));
                     currentState = ExpressionWalkState.Chain;
+                }
+                else if (CurrentText == "[")
+                {
+                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.Chain;
+                }
+                else if (CurrentText == "]")
+                {
+                    foundColours.Add((CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.DotOrEnd;
                 }
                 else
                 {
@@ -262,6 +277,7 @@ internal partial class NodeEnumerationHelper
         ClassificationTypeNames.Identifier,
         ClassificationTypeNames.ConstantName,
         ClassificationTypeNames.ParameterName,
+        ClassificationTypeNames.MethodName,
     ];
 
     public bool ExpressionHasValidIdentifier(NodeInternalRepresentation node)
