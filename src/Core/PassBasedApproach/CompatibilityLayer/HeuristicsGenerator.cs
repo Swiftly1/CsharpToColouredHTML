@@ -28,7 +28,7 @@ internal class HeuristicsGenerator
         return MapInternalNodesToPublicType(chained);
     }
 
-    internal List<NodeAfterProcessing> MapInternalNodesToPublicType(List<NodeWrapper> input)
+    private List<NodeAfterProcessing> MapInternalNodesToPublicType(List<NodeWrapper> input)
     {
         return input.ConvertAll(x => new NodeAfterProcessing
         (
