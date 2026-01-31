@@ -1,4 +1,6 @@
-﻿namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+﻿using CsharpToColouredHTML.Core.Nodes;
+
+namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 internal abstract class Pass
 {

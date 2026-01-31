@@ -38,9 +38,9 @@ public class CsharpColourer
         return emitter.Emit(heuristics);
     }
 
-    private List<Node> GenerateInternalRepresentation(string code)
+    private List<NodeInternalRepresentation> GenerateInternalRepresentation(string code)
     {
-        var nodes = new List<Node>();
+        var nodes = new List<NodeInternalRepresentation>();
         var (spans, srcText) = GetClassifiedSpans(code);
 
         TextSpan? previous = null;
@@ -66,7 +66,7 @@ public class CsharpColourer
                 var triviaTextSpan = new TextSpan(index, length);
                 var trivia = srcText.GetSubText(triviaTextSpan);
 
-                var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
+                var node = new NodeInternalRepresentation(current.ClassificationType, srcText.ToString(current.TextSpan), trivia.ToString());
 
                 var isCrazyStringCandidate = crazyStrings.Contains(node.ClassificationType);
 
@@ -85,7 +85,7 @@ public class CsharpColourer
             }
             catch
             {
-                var node = new Node(current.ClassificationType, srcText.ToString(current.TextSpan), "");
+                var node = new NodeInternalRepresentation(current.ClassificationType, srcText.ToString(current.TextSpan), "");
                 nodes.Add(node);
             }
         }
@@ -93,7 +93,7 @@ public class CsharpColourer
         return nodes;
     }
 
-    private (int NewIndex, TextSpan CurrentTextSpan) HandleMultilineStrings(List<Node> nodes, List<ClassifiedSpan> spans, SourceText srcText, int currentIndex, Node node)
+    private (int NewIndex, TextSpan CurrentTextSpan) HandleMultilineStrings(List<NodeInternalRepresentation> nodes, List<ClassifiedSpan> spans, SourceText srcText, int currentIndex, NodeInternalRepresentation node)
     {
         var stringText = node.Text;
         TextSpan currentTextSpan = spans[currentIndex].TextSpan;
@@ -127,7 +127,7 @@ public class CsharpColourer
 
             for (int y = 0; y < splitted.Length; y++)
             {
-                var split_node = new Node
+                var split_node = new NodeInternalRepresentation
                 (
                     node.ClassificationType,
                     splitted[y],

@@ -1,6 +1,5 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
-using CsharpToColouredHTML.Core.PassBasedApproach;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
@@ -14,39 +13,18 @@ internal class HeuristicsGenerator
         _Hints = hints;
     }
 
-    public List<NodeAfterProcessing> Build(List<Node> input)
+    public List<NodeAfterProcessing> Build(List<NodeInternalRepresentation> input)
     {
         if (input == null || input.Count == 0)
             return new List<NodeAfterProcessing>();
 
-        var remapped = MapNodesIntoInternalRepresentation(input);
+        var chained = NodeChaining.ChainNodes(input);
         var pm = PassManager.CreateDefault(_Hints);
 
-        pm.RunPasses(remapped);
+        pm.RunPasses(chained);
 
-        AssignLineNumbers(remapped);
-        return MapInternalNodesToPublicType(remapped);
-    }
-
-    private List<NodeInternalRepresentation> MapNodesIntoInternalRepresentation(List<Node> input)
-    {
-        var output = new List<NodeInternalRepresentation>();
-
-        foreach (var node in input)
-        {
-            output.Add(new NodeInternalRepresentation
-            (
-                colour: NodeColors.DefaultColour,
-                text: node.Text,
-                trivia: node.Trivia,
-                hasNewLine: node.HasNewLine,
-                classificationType: node.ClassificationType,
-                skipIdentifierPostProcessing: false,
-                id: node.Id
-            ));
-        }
-
-        return output;
+        AssignLineNumbers(chained);
+        return MapInternalNodesToPublicType(chained);
     }
 
     internal List<NodeAfterProcessing> MapInternalNodesToPublicType(List<NodeWrapper> input)
@@ -54,12 +32,12 @@ internal class HeuristicsGenerator
         return input.ConvertAll(x => new NodeAfterProcessing
         (
             x.Id,
-            x.Colour,
+            x.Node.Colour,
             x.Text,
-            x.Trivia,
+            x.Node.Trivia,
             x.ClassificationType,
-            x.UsesMostCommonColour,
-            x.LineNumber,
+            x.Node.UsesMostCommonColour,
+            x.Node.LineNumber,
             useHighlighting: false // it may be defined later by postprocessor
         ));
     }
@@ -70,13 +48,13 @@ internal class HeuristicsGenerator
 
         foreach (var node in output)
         {
-            if (node.HasNewLine)
+            if (node.Node.HasNewLine)
             {
-                var newLinesCount = StringHelper.AllIndicesOf(node.Trivia, Environment.NewLine).Count;
+                var newLinesCount = StringHelper.AllIndicesOf(node.Node.Trivia, Environment.NewLine).Count;
                 currentLineNumber += newLinesCount;
             }
 
-            node.LineNumber = currentLineNumber;
+            node.Node.LineNumber = currentLineNumber;
         }
     }
 }

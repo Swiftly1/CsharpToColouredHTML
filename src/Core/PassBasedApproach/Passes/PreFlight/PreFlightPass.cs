@@ -57,7 +57,7 @@ internal class PreFlightPass : Pass
             if (isInterface)
                 colour = NodeColors.Interface;
 
-            Walker.MarkNodeAs(identifier, colour);
+            Walker.MarkNodeAs(identifier.Node, colour);
         } while (Walker.MoveNext());
 
         return new PassResult();

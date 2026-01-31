@@ -28,13 +28,13 @@ internal partial class NodeEnumerationHelper
 
     public void MarkNodeAs(string colour, bool skipIdentifierPostProcess = false)
     {
-        MarkNodeAs(CurrentNode, colour, skipIdentifierPostProcess);
+        MarkNodeAs(CurrentNode.Node, colour, skipIdentifierPostProcess);
     }
 
-    public void MarkNodeAs(NodeWrapper node, string colour, bool skipIdentifierPostProcess = false)
+    public void MarkNodeAs(NodeInternalRepresentation node, string colour, bool skipIdentifierPostProcess = false)
     {
         Logger.Info($"Marking '{node.Text}' as '{colour}'");
-        var found = Nodes.FirstOrDefault(x => x.Id == node.Id);
+        var found = Nodes.FirstOrDefault(x => x.Id == node.Id)?.Node;
 
         if (found == null)
             return;
@@ -87,7 +87,7 @@ internal partial class NodeEnumerationHelper
         };
     }
 
-    private void UpdateStats(NodeWrapper node)
+    private void UpdateStats(NodeInternalRepresentation node)
     {
         if (node.Colour == NodeColors.Class)
             Context.FoundClasses.Add(node.Text);

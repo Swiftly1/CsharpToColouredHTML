@@ -29,9 +29,8 @@ internal class PassManager
         _Passes.Add(pass);
     }
 
-    public void RunPasses(List<NodeInternalRepresentation> nodes)
+    public void RunPasses(List<NodeWrapper> nodes)
     {
-        var chainedNodes = ChainNodes(nodes);
         foreach (var pass in _Passes)
         {
             Logger.PrintFancy("Running Pass: '", pass.Name, "'", ConsoleColor.Green);
@@ -39,11 +38,6 @@ internal class PassManager
 
             PrintFoundStuff();
         }
-    }
-
-    private List<NodeWrapper> ChainNodes(List<NodeInternalRepresentation> nodes)
-    {
-        throw new NotImplementedException();
     }
 
     private void PrintFoundStuff()

@@ -2,6 +2,22 @@
 
 internal record NodeInternalRepresentation
 {
+    public NodeInternalRepresentation(string currentClassificationType, string text, string trivia)
+    {
+        ClassificationType = currentClassificationType;
+        Text = text;
+        Trivia = trivia;
+        HasNewLine = (trivia + text).Contains(Environment.NewLine);
+    }
+
+    public NodeInternalRepresentation(string currentClassificationType, string text, string trivia, bool hasNewLine)
+    {
+        ClassificationType = currentClassificationType;
+        Text = text;
+        Trivia = trivia;
+        HasNewLine = hasNewLine;
+    }
+
     public NodeInternalRepresentation(
         string colour,
         string text,

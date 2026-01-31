@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+using CsharpToColouredHTML.Core.Nodes;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.ObjectInitializer;
 

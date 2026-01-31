@@ -1,4 +1,5 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
