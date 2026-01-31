@@ -269,7 +269,7 @@ internal partial class NodeEnumerationHelper
         if (_validExpressionNameClassifications.Contains(node.ClassificationType))
             return true;
 
-        if (node.Text.EqualsAnyOf("out", "var", "ref"))
+        if (node.Text.EqualsAnyOf("out", "var", "ref", "this", "null"))
             return true;
 
         if (node.ClassificationType == ClassificationTypeNames.Keyword)
