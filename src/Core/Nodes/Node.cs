@@ -32,23 +32,8 @@ internal record Node
         Trivia = trivia;
         HasNewLine = hasNewLine;
         ClassificationType = classificationType;
-        Id = Guid.NewGuid();
         SkipIdentifierPostProcessing = skipIdentifierPostProcessing;
     }
-
-    public Node(
-        string colour,
-        string text,
-        string trivia,
-        bool hasNewLine,
-        string classificationType,
-        bool skipIdentifierPostProcessing,
-        Guid id) : this(colour, text, trivia, hasNewLine, classificationType, skipIdentifierPostProcessing)
-    {
-        Id = id;
-    }
-
-    public Guid Id { get; init; }
 
     public string Colour { get; set; } = NodeColors.DefaultColour;
 

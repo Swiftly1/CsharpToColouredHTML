@@ -23,6 +23,7 @@ internal class HeuristicsGenerator
 
         pm.RunPasses(chained);
 
+        chained = NodeChaining.FlattenNodes(chained);
         AssignLineNumbers(chained);
         return MapInternalNodesToPublicType(chained);
     }

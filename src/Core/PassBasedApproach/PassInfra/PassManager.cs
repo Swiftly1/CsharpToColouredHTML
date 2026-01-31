@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using CsharpToColouredHTML.Core.Miscs;
+﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Attributes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;

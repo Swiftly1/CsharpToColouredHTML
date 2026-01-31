@@ -2,6 +2,19 @@
 
 internal record NodeWrapper
 {
+    public Guid Id = Guid.NewGuid();
+
+    public NodeWrapper(Node node)
+    {
+        Node = node;
+    }
+
+    public NodeWrapper(List<Node> node)
+    {
+        // copy content
+        Nodes = new List<Node>(node);
+    }
+
     public List<Node> Nodes { get; set; } = new();
 
     public bool IsChain => Nodes.Count > 1;
@@ -17,18 +30,9 @@ internal record NodeWrapper
 
             return Nodes[0];
         }
-    }
-
-    public Guid Id
-    {
-        get
+        private set
         {
-            if (Nodes.Count > 1)
-            {
-                throw new Exception("Accessing .Id when there are many nodes is invalid");
-            }
-
-            return Node.Id;
+            Nodes = new List<Node> { value };
         }
     }
 
@@ -56,5 +60,10 @@ internal record NodeWrapper
 
             return Node.ClassificationType;
         }
+    }
+
+    public override string ToString()
+    {
+        return $"Text? '{(IsChain ? "Chain" : Text)}' CC '{(IsChain ? "Chain" : ClassificationType)}' Colour '{(IsChain ? "Chain" : Node.Colour)}'";
     }
 }

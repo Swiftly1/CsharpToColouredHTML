@@ -26,7 +26,7 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
             if (!Walker.CC.EqualsAnyOf(validClassifications))
                 continue;
 
-            if (!Walker.TryPeekAhead(out var parenthesis) && parenthesis.Text == "(")
+            if (!Walker.TryPeekAhead(out var parenthesis) || parenthesis.Text != "(")
                 continue;
 
         } while (Walker.MoveNext());

@@ -11,10 +11,10 @@ internal partial class NodeEnumerationHelper
 
     public NodeWrapper CurrentNode => Nodes[CurrentIndex];
 
-    public string CurrentText => Nodes[CurrentIndex].Text;
+    public string CurrentText => Nodes[CurrentIndex].IsChain ? "Chain" : Nodes[CurrentIndex].Text;
 
     // Current Classification - "CC" in short because it is used very often.
-    public string CC => Nodes[CurrentIndex].ClassificationType;
+    public string CC => Nodes[CurrentIndex].IsChain ? "Chain" : Nodes[CurrentIndex].ClassificationType;
 
     public List<NodeWrapper> Nodes { get; }
 
@@ -28,11 +28,14 @@ internal partial class NodeEnumerationHelper
 
     public void MarkNodeAs(string colour, bool skipIdentifierPostProcess = false)
     {
-        MarkNodeAs(CurrentNode.Node, colour, skipIdentifierPostProcess);
+        MarkNodeAs(CurrentNode, colour, skipIdentifierPostProcess);
     }
 
-    public void MarkNodeAs(Node node, string colour, bool skipIdentifierPostProcess = false)
+    public void MarkNodeAs(NodeWrapper node, string colour, bool skipIdentifierPostProcess = false)
     {
+        if (node.IsChain)
+            throw new Exception("Unexpected chain");
+
         Logger.Info($"Marking '{node.Text}' as '{colour}'");
         var found = Nodes.FirstOrDefault(x => x.Id == node.Id)?.Node;
 
@@ -87,18 +90,18 @@ internal partial class NodeEnumerationHelper
         };
     }
 
-    private void UpdateStats(Node node)
+    private void UpdateStats(NodeWrapper node)
     {
-        if (node.Colour == NodeColors.Class)
+        if (node.Node.Colour == NodeColors.Class)
             Context.FoundClasses.Add(node.Text);
 
-        if (node.Colour == NodeColors.Struct)
+        if (node.Node.Colour == NodeColors.Struct)
             Context.FoundStructs.Add(node.Text);
 
-        if (node.Colour == NodeColors.Interface)
+        if (node.Node.Colour == NodeColors.Interface)
             Context.FoundInterfaces.Add(node.Text);
 
-        if (node.Colour == NodeColors.Namespace)
+        if (node.Node.Colour == NodeColors.Namespace)
             Context.FoundNamespaceParts.Add(node.Text);
     }
 
@@ -161,7 +164,6 @@ internal partial class NodeEnumerationHelper
         return isOk;
     }
 
-    [DebuggerStepThrough]
     public bool TryPeekAhead(out NodeWrapper nodeAfterMove, int jumpSize = 1)
     {
         nodeAfterMove = null!;
