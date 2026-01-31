@@ -108,7 +108,7 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
             var result = validClassification || isType || isGeneric || isOperator;
 
             if (!result)
-                return (true, []);
+                return (true, list);
         }
 
         return (true, list);

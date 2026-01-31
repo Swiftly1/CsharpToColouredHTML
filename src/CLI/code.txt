@@ -1,19 +1,18 @@
-﻿TextSpan? previous = null;
-var skippedClassifications = new List<string> { ClassificationTypeNames.StringEscapeCharacter };
-
-VsShellUtilities.ShowMessageBox
-(
-	this,
-	msg,
-	null,
-	OLEMSGICON.OLEMSGICON_WARNING,
-	OLEMSGBUTTON.OLEMSGBUTTON_OK,
-	OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST
-);
-
-public string ProcessSourceCode(string code, IEmitter emitter)
+﻿if (A)
 {
-    var nodes = GenerateInternalRepresentation(code);
-    emitter.Emit(nodes);
-    return emitter.Text;
+	Console.WriteLine(".");
+	if (B)
+	{
+		if (B2)
+			Console.WriteLine(".");
+		else
+			Result.WriteLine123("..");
+
+		if (C)
+		{
+			if (D)
+				if (E)
+					Result.WriteLine(".");
+		}
+	}
 }
