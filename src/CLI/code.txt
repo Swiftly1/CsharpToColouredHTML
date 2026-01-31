@@ -1,10 +1,28 @@
-﻿
-try
+﻿using MarkdownSharp;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Task = System.Threading.Tasks.Task;
+
+namespace Blog.Controllers;
+
+[Attr(5)]
+[Test(name: "5")]
+public class HomeController : Controller
 {
-    Microsoft.Build.Evaluation.ProjectCollection.GlobalProjectCollection.DisableMarkDirty = true;
-    Microsoft.Build.Evaluation.ProjectCollection.GlobalProjectCollection.SetGlobalProperty("RoslynHive", RoslynHive);
-}
-finally
-{
-    Microsoft.Build.Evaluation.ProjectCollection.GlobalProjectCollection.DisableMarkDirty = false;
+    public HomeController()
+    {
+        var reg = (ILocalRegistry2)await Asd(typeof(SLocalRegistry)).ConfigureAwait(true);
+    }
+
+    public IActionResult Index()
+    {
+        string contents;
+        using (var wc = new System.Net.WebClient())
+            contents = wc.DownloadString("https://raw.githubusercontent.com/asd");
+
+        var test = new Markdown(new MarkdownOptions { });
+        test.Propety = "asd";
+        var html = test.Transform(contents);
+        return View("Index", JsonConvert.SerializeObject(html));
+    }
 }

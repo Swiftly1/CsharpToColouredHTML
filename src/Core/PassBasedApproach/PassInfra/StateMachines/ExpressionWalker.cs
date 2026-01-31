@@ -26,7 +26,7 @@ internal partial class NodeEnumerationHelper
         if (!ExpressionHasValidIdentifier(this.CurrentNode))
             return false;
 
-        var foundColours = new List<(NodeInternalRepresentation Node, string Colour)>();
+        var foundColours = new List<(NodeWrapper Node, string Colour)>();
 
         var previousStates = new List<ExpressionWalkState>();
         var currentState = initialState;
@@ -202,7 +202,7 @@ internal partial class NodeEnumerationHelper
         return foundColours.Any();
     }
 
-    public string ResolveVariable(NodeInternalRepresentation node, bool hint_IsClass = false)
+    public string ResolveVariable(NodeWrapper node, bool hint_IsClass = false)
     {
         var checkResult = IsAlreadyClassifiedExpression(node);
 
@@ -235,7 +235,7 @@ internal partial class NodeEnumerationHelper
         return NodeColors.LocalName;
     }
 
-    private (bool Success, string Value) IsAlreadyClassifiedExpression(NodeInternalRepresentation node)
+    private (bool Success, string Value) IsAlreadyClassifiedExpression(NodeWrapper node)
     {
         if (node.ClassificationType == ClassificationTypeNames.LocalName)
             return (Success: true, Value: NodeColors.LocalName);
@@ -258,7 +258,7 @@ internal partial class NodeEnumerationHelper
         return (Success: false, Value: string.Empty);
     }
 
-    public string FieldOrProperty(NodeInternalRepresentation node)
+    public string FieldOrProperty(NodeWrapper node)
     {
         var result = IsAlreadyClassifiedExpression(node);
 
@@ -280,7 +280,7 @@ internal partial class NodeEnumerationHelper
         ClassificationTypeNames.MethodName,
     ];
 
-    public bool ExpressionHasValidIdentifier(NodeInternalRepresentation node)
+    public bool ExpressionHasValidIdentifier(NodeWrapper node)
     {
         if (_validExpressionNameClassifications.Contains(node.ClassificationType))
             return true;

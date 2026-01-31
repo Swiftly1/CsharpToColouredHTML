@@ -1,5 +1,4 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
-using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using Microsoft.CodeAnalysis.Classification;
 
@@ -11,34 +10,9 @@ internal class AttributesPass(SharedPassContext ctx) : Pass(ctx)
 
     private NodeEnumerationHelper? Walker { get; set; }
 
-    public override PassResult Run(List<NodeInternalRepresentation> input)
+    public override PassResult Run(List<NodeWrapper> input)
     {
         Walker = new NodeEnumerationHelper(input, Context);
-
-        do
-        {
-            if (Walker.CurrentText != "[")
-                continue;
-
-            var invalidClassifications = new[]
-            {
-                ClassificationTypeNames.Identifier,
-                ClassificationTypeNames.LocalName,
-                ClassificationTypeNames.ConstantName,
-                ClassificationTypeNames.FieldName,
-                ClassificationTypeNames.PropertyName,
-                ClassificationTypeNames.ParameterName,
-                ClassificationTypeNames.Operator
-            };
-
-            if (Walker.TryPeekBehind(out var before) && before.ClassificationType.EqualsAnyOf(invalidClassifications))
-                continue;
-
-            if (!Walker.MoveNext())
-                continue;
-
-            Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-        } while (Walker.MoveNext());
 
         return new PassResult();
     }

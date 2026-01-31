@@ -9,18 +9,18 @@ internal partial class NodeEnumerationHelper
 {
     public int CurrentIndex = 0;
 
-    public NodeInternalRepresentation CurrentNode => Nodes[CurrentIndex];
+    public NodeWrapper CurrentNode => Nodes[CurrentIndex];
 
     public string CurrentText => Nodes[CurrentIndex].Text;
 
     // Current Classification - "CC" in short because it is used very often.
     public string CC => Nodes[CurrentIndex].ClassificationType;
 
-    public List<NodeInternalRepresentation> Nodes { get; }
+    public List<NodeWrapper> Nodes { get; }
 
     public SharedPassContext Context { get; }
 
-    public NodeEnumerationHelper(List<NodeInternalRepresentation> nodes, SharedPassContext ctx)
+    public NodeEnumerationHelper(List<NodeWrapper> nodes, SharedPassContext ctx)
     {
         Nodes = nodes;
         Context = ctx;
@@ -31,7 +31,7 @@ internal partial class NodeEnumerationHelper
         MarkNodeAs(CurrentNode, colour, skipIdentifierPostProcess);
     }
 
-    public void MarkNodeAs(NodeInternalRepresentation node, string colour, bool skipIdentifierPostProcess = false)
+    public void MarkNodeAs(NodeWrapper node, string colour, bool skipIdentifierPostProcess = false)
     {
         Logger.Info($"Marking '{node.Text}' as '{colour}'");
         var found = Nodes.FirstOrDefault(x => x.Id == node.Id);
@@ -87,7 +87,7 @@ internal partial class NodeEnumerationHelper
         };
     }
 
-    private void UpdateStats(NodeInternalRepresentation node)
+    private void UpdateStats(NodeWrapper node)
     {
         if (node.Colour == NodeColors.Class)
             Context.FoundClasses.Add(node.Text);
@@ -146,7 +146,7 @@ internal partial class NodeEnumerationHelper
     }
 
     [DebuggerStepThrough]
-    public bool TryPeekAtIndex(out NodeInternalRepresentation nodeAfterMove, int index)
+    public bool TryPeekAtIndex(out NodeWrapper nodeAfterMove, int index)
     {
         nodeAfterMove = null!;
 
@@ -162,7 +162,7 @@ internal partial class NodeEnumerationHelper
     }
 
     [DebuggerStepThrough]
-    public bool TryPeekAhead(out NodeInternalRepresentation nodeAfterMove, int jumpSize = 1)
+    public bool TryPeekAhead(out NodeWrapper nodeAfterMove, int jumpSize = 1)
     {
         nodeAfterMove = null!;
 
@@ -195,7 +195,7 @@ internal partial class NodeEnumerationHelper
     }
 
     [DebuggerStepThrough]
-    public bool TryPeekBehind(out NodeInternalRepresentation nodeAfterMove, int jumpSize = 1)
+    public bool TryPeekBehind(out NodeWrapper nodeAfterMove, int jumpSize = 1)
     {
         nodeAfterMove = null!;
 

@@ -1,5 +1,6 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.PassBasedApproach;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 namespace CsharpToColouredHTML.Core.HeuristicsGeneration;
@@ -48,7 +49,7 @@ internal class HeuristicsGenerator
         return output;
     }
 
-    internal List<NodeAfterProcessing> MapInternalNodesToPublicType(List<NodeInternalRepresentation> input)
+    internal List<NodeAfterProcessing> MapInternalNodesToPublicType(List<NodeWrapper> input)
     {
         return input.ConvertAll(x => new NodeAfterProcessing
         (
@@ -63,7 +64,7 @@ internal class HeuristicsGenerator
         ));
     }
 
-    private void AssignLineNumbers(List<NodeInternalRepresentation> output)
+    private void AssignLineNumbers(List<NodeWrapper> output)
     {
         var currentLineNumber = 0;
 

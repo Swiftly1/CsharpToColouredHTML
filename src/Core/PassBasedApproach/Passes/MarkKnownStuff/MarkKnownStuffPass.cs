@@ -18,7 +18,7 @@ internal class MarkKnownStuffPass : Pass
     {
     }
 
-    public override PassResult Run(List<NodeInternalRepresentation> input)
+    public override PassResult Run(List<NodeWrapper> input)
     {
         Walker = new NodeEnumerationHelper(input, Context);
 

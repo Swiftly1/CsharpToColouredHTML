@@ -1,5 +1,4 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
-using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using Microsoft.CodeAnalysis.Classification;
 
@@ -15,7 +14,7 @@ internal class NewInstancesPass : Pass
     {
     }
 
-    public override PassResult Run(List<NodeInternalRepresentation> input)
+    public override PassResult Run(List<NodeWrapper> input)
     {
         Walker = new NodeEnumerationHelper(input, Context);
 
@@ -27,11 +26,6 @@ internal class NewInstancesPass : Pass
             if (Walker.CurrentText != "new")
                 continue;
 
-            if (Walker.MoveNext())
-            {
-                Walker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-                TrySaveMetadata();
-            }
         } while (Walker.MoveNext());
 
         return new PassResult();

@@ -12,7 +12,6 @@ using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ObjectInitializer;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PropertyAccess;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.TypeDiscoveryFallback;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
@@ -32,6 +31,7 @@ internal class PassManager
 
     public void RunPasses(List<NodeInternalRepresentation> nodes)
     {
+        var chainedNodes = ChainNodes(nodes);
         foreach (var pass in _Passes)
         {
             Logger.PrintFancy("Running Pass: '", pass.Name, "'", ConsoleColor.Green);
@@ -39,6 +39,11 @@ internal class PassManager
 
             PrintFoundStuff();
         }
+    }
+
+    private List<NodeWrapper> ChainNodes(List<NodeInternalRepresentation> nodes)
+    {
+        throw new NotImplementedException();
     }
 
     private void PrintFoundStuff()
@@ -84,8 +89,9 @@ internal class PassManager
         pm.SharedPassContext.Hints = hints;
 
         // Order - unfortunately, matters :(
-        pm.RegisterPass(new PreFlightPass(pm.SharedPassContext));
         pm.RegisterPass(new MarkKnownStuffPass(pm.SharedPassContext));
+        pm.RegisterPass(new PreFlightPass(pm.SharedPassContext));
+
         pm.RegisterPass(new NamespacesPass(pm.SharedPassContext));
         pm.RegisterPass(new AttributesPass(pm.SharedPassContext));
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));
@@ -98,7 +104,6 @@ internal class PassManager
         pm.RegisterPass(new FunctionArgsPass(pm.SharedPassContext));
         pm.RegisterPass(new PropertyAccessPass(pm.SharedPassContext));
         pm.RegisterPass(new ObjectInitializerPass(pm.SharedPassContext));
-        pm.RegisterPass(new TypeDiscoveryFallbackPass(pm.SharedPassContext));
 
         return pm;
     }

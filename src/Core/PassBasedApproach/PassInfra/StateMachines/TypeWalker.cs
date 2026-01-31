@@ -31,7 +31,7 @@ internal partial class NodeEnumerationHelper
         if (!TypeHasValidIdentifier(this.CurrentNode))
             return false;
 
-        var foundColours = new List<(NodeInternalRepresentation Node, string Colour)>();
+        var foundColours = new List<(NodeWrapper Node, string Colour)>();
 
         var previousStates = new List<TypeWalkState>();
         var currentState = initialState;
@@ -253,7 +253,7 @@ internal partial class NodeEnumerationHelper
         return foundColours.Any();
     }
 
-    public string ResolveUnkownName(NodeInternalRepresentation node)
+    public string ResolveUnkownName(NodeWrapper node)
     {
         var result = CheckIfLooksLikeVariable(node);
 
@@ -268,7 +268,7 @@ internal partial class NodeEnumerationHelper
         return ResolveClassOrStructName(node);
     }
 
-    public (bool IsVariable, string Value) CheckIfLooksLikeVariable(NodeInternalRepresentation node)
+    public (bool IsVariable, string Value) CheckIfLooksLikeVariable(NodeWrapper node)
     {
         if (node.Text.StartsWith("_"))
             return (IsVariable: true, Value: ResolveVariable(node));
@@ -279,7 +279,7 @@ internal partial class NodeEnumerationHelper
         return (IsVariable: false, Value: string.Empty);
     }
 
-    public string ResolveClassOrStructName(NodeInternalRepresentation node)
+    public string ResolveClassOrStructName(NodeWrapper node)
     {
         var checkResult = IsAlreadyClassOrStruct(node);
 
@@ -312,7 +312,7 @@ internal partial class NodeEnumerationHelper
         return NodeColors.Class;
     }
 
-    private static (bool Success, string Value) IsAlreadyClassOrStruct(NodeInternalRepresentation node)
+    private static (bool Success, string Value) IsAlreadyClassOrStruct(NodeWrapper node)
     {
         if (node.ClassificationType == ClassificationTypeNames.StructName)
             return (Success: true, Value: NodeColors.Struct);
@@ -344,7 +344,7 @@ internal partial class NodeEnumerationHelper
         ClassificationTypeNames.TypeParameterName
     ];
 
-    public bool TypeHasValidIdentifier(NodeInternalRepresentation node)
+    public bool TypeHasValidIdentifier(NodeWrapper node)
     {
         if (_validTypeNameClassifications.Contains(node.ClassificationType))
             return true;

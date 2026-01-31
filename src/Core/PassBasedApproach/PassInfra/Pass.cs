@@ -1,6 +1,4 @@
-﻿using CsharpToColouredHTML.Core.Nodes;
-
-namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+﻿namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 internal abstract class Pass
 {
@@ -8,7 +6,7 @@ internal abstract class Pass
 
     public SharedPassContext Context { get; set; }
 
-    public abstract PassResult Run(List<NodeInternalRepresentation> input);
+    public abstract PassResult Run(List<NodeWrapper> input);
 
     protected Pass(SharedPassContext ctx)
     {
