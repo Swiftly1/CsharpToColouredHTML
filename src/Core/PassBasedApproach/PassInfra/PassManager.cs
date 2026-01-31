@@ -30,6 +30,20 @@ internal class PassManager
 
     public void RunPasses(List<NodeWrapper> nodes)
     {
+        foreach (NodeWrapper node in nodes)
+        {
+            if (node.IsChain)
+            {
+                foreach (var c in node.Nodes)
+                {
+                    Console.WriteLine("\t" + c);
+                }
+            }
+            else
+            {
+                Console.WriteLine(node.Node);
+            }
+        }
         foreach (var pass in _Passes)
         {
             Logger.PrintFancy("Running Pass: '", pass.Name, "'", ConsoleColor.Green);
