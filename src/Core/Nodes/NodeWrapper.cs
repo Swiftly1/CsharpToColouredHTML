@@ -64,6 +64,9 @@ internal record NodeWrapper
 
     public override string ToString()
     {
-        return $"Text? '{(IsChain ? "Chain" : Text)}' CC '{(IsChain ? "Chain" : ClassificationType)}' Colour '{(IsChain ? "Chain" : Node.Colour)}'";
+        if (IsChain)
+            return $"Chain: {string.Join(" | ", Nodes.Select(x => x.Text))}";
+
+        return Node.ToString();
     }
 }

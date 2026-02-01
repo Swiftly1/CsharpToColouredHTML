@@ -46,7 +46,7 @@ internal class NamespacesPass : Pass
 
     private void HandleNamespaceDeclaration()
     {
-        if (!Walker.TryPeekAhead(out var chain))
+        if (!Walker!.TryPeekAhead(out var chain))
             return;
 
         if (chain.IsChain)
@@ -71,7 +71,7 @@ internal class NamespacesPass : Pass
 
     private void HandleNamespaceAlias()
     {
-        if (!Walker.TryPeekAhead(out var name))
+        if (!Walker!.TryPeekAhead(out var name))
             return;
 
         if (!Walker.TryPeekAhead(out var assignment, 2))
@@ -105,7 +105,7 @@ internal class NamespacesPass : Pass
 
     private void HandleNormalNameSpaces()
     {
-        if (!Walker.TryPeekAhead(out var name))
+        if (!Walker!.TryPeekAhead(out var name))
             return;
 
         if (name.IsChain)

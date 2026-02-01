@@ -30,7 +30,7 @@ internal partial class NodeEnumerationHelper
         return false;
     }
 
-    public string ResolveUnkownName(NodeWrapper node)
+    public string ResolveUnkownName(Node node)
     {
         var result = CheckIfLooksLikeVariable(node);
 
@@ -45,7 +45,7 @@ internal partial class NodeEnumerationHelper
         return ResolveClassOrStructName(node);
     }
 
-    public (bool IsVariable, string Value) CheckIfLooksLikeVariable(NodeWrapper node)
+    public (bool IsVariable, string Value) CheckIfLooksLikeVariable(Node node)
     {
         if (node.Text.StartsWith("_"))
             return (IsVariable: true, Value: ResolveVariable(node));
@@ -56,7 +56,7 @@ internal partial class NodeEnumerationHelper
         return (IsVariable: false, Value: string.Empty);
     }
 
-    public string ResolveClassOrStructName(NodeWrapper node)
+    public string ResolveClassOrStructName(Node node)
     {
         var checkResult = IsAlreadyClassOrStruct(node);
 
@@ -89,7 +89,7 @@ internal partial class NodeEnumerationHelper
         return NodeColors.Class;
     }
 
-    private static (bool Success, string Value) IsAlreadyClassOrStruct(NodeWrapper node)
+    private static (bool Success, string Value) IsAlreadyClassOrStruct(Node node)
     {
         if (node.ClassificationType == ClassificationTypeNames.StructName)
             return (Success: true, Value: NodeColors.Struct);

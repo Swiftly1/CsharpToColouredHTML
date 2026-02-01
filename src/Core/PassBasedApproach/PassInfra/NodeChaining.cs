@@ -30,12 +30,25 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
             var output = new List<NodeWrapper>();
             var chain = new List<Node>();
 
+            var state = 0;
             for (int i = 0; i < nodes.Count; i++)
             {
                 var current = nodes[i];
 
-                var isChain = current.ClassificationType.EqualsAnyOf(validIdentifiers)
-                    || current.Text == ".";
+                var isChain = false;
+
+                if (state == 0)
+                {
+                    isChain = current.ClassificationType.EqualsAnyOf(validIdentifiers);
+
+                    if (isChain)
+                        state = 1;
+                }
+                else
+                {
+                    isChain = current.Text == ".";
+                    state = 0;
+                }
 
                 if (isChain)
                 {
@@ -61,7 +74,7 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
 
         internal static List<NodeWrapper> FlattenNodes(List<NodeWrapper> chained)
         {
-            Logger.Info($"Flattening Nodes, before count: {chained.Count()}");
+            Logger.Info($"Flattening Nodes, before count: {chained.Count}");
 
             var output = new List<NodeWrapper>();
 
@@ -80,7 +93,7 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                 }
             }
 
-            Logger.Info($"Flattening Nodes, after count: {output.Count()}");
+            Logger.Info($"Flattening Nodes, after count: {output.Count}");
             return output;
         }
     }

@@ -25,7 +25,7 @@ internal partial class NodeEnumerationHelper
         return false;
     }
 
-    public string ResolveVariable(NodeWrapper node, bool hint_IsClass = false)
+    public string ResolveVariable(Node node, bool hint_IsClass = false)
     {
         var checkResult = IsAlreadyClassifiedExpression(node);
 
@@ -58,7 +58,7 @@ internal partial class NodeEnumerationHelper
         return NodeColors.LocalName;
     }
 
-    private (bool Success, string Value) IsAlreadyClassifiedExpression(NodeWrapper node)
+    private (bool Success, string Value) IsAlreadyClassifiedExpression(Node node)
     {
         if (node.ClassificationType == ClassificationTypeNames.LocalName)
             return (Success: true, Value: NodeColors.LocalName);
@@ -81,7 +81,7 @@ internal partial class NodeEnumerationHelper
         return (Success: false, Value: string.Empty);
     }
 
-    public string FieldOrProperty(NodeWrapper node)
+    public string FieldOrProperty(Node node)
     {
         var result = IsAlreadyClassifiedExpression(node);
 

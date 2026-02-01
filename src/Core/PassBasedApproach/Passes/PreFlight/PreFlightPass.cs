@@ -21,6 +21,7 @@ internal class PreFlightPass : Pass
     public override PassResult Run(List<NodeWrapper> input)
     {
         Walker = new NodeEnumerationHelper(input, Context);
+
         do
         {
             var isClass  = Walker.CurrentText == "class";

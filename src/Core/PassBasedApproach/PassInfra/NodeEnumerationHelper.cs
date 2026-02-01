@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
-internal partial class NodeEnumerationHelper
+internal partial class NodeEnumerationHelper(List<NodeWrapper> nodes, SharedPassContext ctx)
 {
     public int CurrentIndex = 0;
 
@@ -16,15 +16,9 @@ internal partial class NodeEnumerationHelper
     // Current Classification - "CC" in short because it is used very often.
     public string CC => Nodes[CurrentIndex].IsChain ? "Chain" : Nodes[CurrentIndex].ClassificationType;
 
-    public List<NodeWrapper> Nodes { get; }
+    public List<NodeWrapper> Nodes { get; } = nodes;
 
-    public SharedPassContext Context { get; }
-
-    public NodeEnumerationHelper(List<NodeWrapper> nodes, SharedPassContext ctx)
-    {
-        Nodes = nodes;
-        Context = ctx;
-    }
+    public SharedPassContext Context { get; } = ctx;
 
     public void MarkNodeAs(string colour, bool skipIdentifierPostProcess = false)
     {
@@ -119,6 +113,32 @@ internal partial class NodeEnumerationHelper
             Context.FoundNamespaceParts.Add(text);
     }
 
+    public void MarkLastElementOfChainAsClassOrStruct(NodeWrapper type)
+    {
+        if (type.IsChain)
+        {
+            var last = type.Nodes.Last();
+            MarkNodeAs(last, ResolveClassOrStructName(last));
+
+            foreach (var ns in type.Nodes.SkipLast(1))
+            {
+                if (ns.ClassificationType == ClassificationTypeNames.Operator)
+                {
+                    MarkNodeAs(ns, NodeColors.Operator);
+                }
+                else
+                {
+                    MarkNodeAs(ns, NodeColors.Namespace);
+                }
+            }
+        }
+        else
+        {
+            MarkNodeAs(type, ResolveClassOrStructName(type.Node));
+        }
+    }
+
+
     [DebuggerStepThrough]
     public bool IsValidIndex(int index)
     {
@@ -178,6 +198,7 @@ internal partial class NodeEnumerationHelper
         return isOk;
     }
 
+    [DebuggerStepThrough]
     public bool TryPeekAhead(out NodeWrapper nodeAfterMove, int jumpSize = 1)
     {
         nodeAfterMove = null!;
