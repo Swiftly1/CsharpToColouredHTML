@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
 {
-    internal class NodeChaining
+    internal static class NodeChaining
     {
         public static List<NodeWrapper> ChainNodes(List<Node> nodes)
         {

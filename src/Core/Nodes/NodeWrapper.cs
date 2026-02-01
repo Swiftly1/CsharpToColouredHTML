@@ -11,7 +11,7 @@ internal record NodeWrapper
 
     public NodeWrapper(List<Node> node)
     {
-        // copy content
+        // Copy Content
         Nodes = new List<Node>(node);
     }
 
@@ -23,7 +23,7 @@ internal record NodeWrapper
     {
         get
         {
-            if (Nodes.Count > 1)
+            if (IsChain)
             {
                 throw new Exception("Accessing .Node when there are many nodes is invalid");
             }
@@ -40,7 +40,7 @@ internal record NodeWrapper
     {
         get
         {
-            if (Nodes.Count > 1)
+            if (IsChain)
             {
                 throw new Exception("Accessing .Text when there are many nodes is invalid");
             }
@@ -53,7 +53,7 @@ internal record NodeWrapper
     {
         get
         {
-            if (Nodes.Count > 1)
+            if (IsChain)
             {
                 throw new Exception("Accessing .ClassificationType when there are many nodes is invalid");
             }

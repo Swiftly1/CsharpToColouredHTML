@@ -49,7 +49,21 @@ internal partial class NodeEnumerationHelper
             found.SkipIdentifierPostProcessing = skipIdentifierPostProcess;
         }
 
-        UpdateStats(node);
+        UpdateStats(node.Node.Colour, node.Node.Text);
+    }
+
+    public void MarkNodeAs(Node node, string colour, bool skipIdentifierPostProcess = false)
+    {
+        Logger.Info($"Marking '{node.Text}' as '{colour}'");
+
+        if (!node.SkipIdentifierPostProcessing)
+        {
+            node.Colour = colour;
+            node.ClassificationType = MapColourToClassificationType(colour, node.ClassificationType);
+            node.SkipIdentifierPostProcessing = skipIdentifierPostProcess;
+        }
+
+        UpdateStats(node.Colour, node.Text);
     }
 
     private string MapColourToClassificationType(string colour, string defaultClassification)
@@ -90,19 +104,19 @@ internal partial class NodeEnumerationHelper
         };
     }
 
-    private void UpdateStats(NodeWrapper node)
+    private void UpdateStats(string colour, string text)
     {
-        if (node.Node.Colour == NodeColors.Class)
-            Context.FoundClasses.Add(node.Text);
+        if (colour == NodeColors.Class)
+            Context.FoundClasses.Add(text);
 
-        if (node.Node.Colour == NodeColors.Struct)
-            Context.FoundStructs.Add(node.Text);
+        if (colour == NodeColors.Struct)
+            Context.FoundStructs.Add(text);
 
-        if (node.Node.Colour == NodeColors.Interface)
-            Context.FoundInterfaces.Add(node.Text);
+        if (colour == NodeColors.Interface)
+            Context.FoundInterfaces.Add(text);
 
-        if (node.Node.Colour == NodeColors.Namespace)
-            Context.FoundNamespaceParts.Add(node.Text);
+        if (colour == NodeColors.Namespace)
+            Context.FoundNamespaceParts.Add(text);
     }
 
     [DebuggerStepThrough]

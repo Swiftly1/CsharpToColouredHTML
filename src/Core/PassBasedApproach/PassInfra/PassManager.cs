@@ -9,6 +9,7 @@ using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MarkKnownStuff;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MethodCalls;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ObjectInitializer;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PrintNodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PropertyAccess;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
@@ -30,21 +31,6 @@ internal class PassManager
 
     public void RunPasses(List<NodeWrapper> nodes)
     {
-        foreach (var node in nodes)
-        {
-            if (node.IsChain)
-            {
-                foreach (var c in node.Nodes)
-                {
-                    Console.WriteLine("\t" + c);
-                }
-            }
-            else
-            {
-                Console.WriteLine(node.Node);
-            }
-        }
-
         foreach (var pass in _Passes)
         {
             Logger.PrintFancy("Running Pass: '", pass.Name, "'", ConsoleColor.Green);
@@ -97,9 +83,15 @@ internal class PassManager
         pm.SharedPassContext.Hints = hints;
 
         // Order - unfortunately, matters :(
+
+        // Debug
+        pm.RegisterPass(new PrintNodesPass(pm.SharedPassContext));
+
+        // Fundamental Passes
         pm.RegisterPass(new MarkKnownStuffPass(pm.SharedPassContext));
         pm.RegisterPass(new PreFlightPass(pm.SharedPassContext));
 
+        // Normal Passes
         pm.RegisterPass(new NamespacesPass(pm.SharedPassContext));
         pm.RegisterPass(new AttributesPass(pm.SharedPassContext));
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));

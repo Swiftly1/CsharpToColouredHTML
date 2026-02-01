@@ -43,6 +43,9 @@ internal class PreFlightPass : Pass
                 ClassificationTypeNames.Identifier
             };
 
+            if (identifier.IsChain)
+                continue;
+
             if (!identifier.ClassificationType.EqualsAnyOf(validClassifications))
                 continue;
 
