@@ -14,12 +14,12 @@ internal class PrintNodesPass(SharedPassContext ctx) : Pass(ctx)
         {
             if (node.IsChain)
             {
-                Logger.Info("[", 1);
+                Logger.Info("[");
                 foreach (var c in node.Nodes)
                 {
-                    Logger.Info(c.ToString(), 2);
+                    Logger.Info(c.ToString(), 1);
                 }
-                Logger.Info("]", 1);
+                Logger.Info("]");
             }
             else
             {

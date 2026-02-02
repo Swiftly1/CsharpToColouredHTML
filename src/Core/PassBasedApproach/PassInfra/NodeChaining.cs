@@ -6,7 +6,7 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
 {
     internal static class NodeChaining
     {
-        public static List<NodeWrapper> ChainNodes(List<Node> nodes)
+        public static List<NodeWrapper> ChainNodes(List<Node> nodes, Hints hints)
         {
             var validIdentifiers = new string[]
             {
@@ -41,13 +41,26 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                 {
                     isChain = current.ClassificationType.EqualsAnyOf(validIdentifiers);
 
+                    isChain |= current.Text.EqualsAnyOf(hints.BuiltInTypes.ToArray());
+
                     if (isChain)
                         state = 1;
                 }
                 else
                 {
                     isChain = current.Text == ".";
-                    state = 0;
+
+                    isChain |= current.ClassificationType == ClassificationTypeNames.Punctuation
+                        && current.Text.EqualsAnyOf("<", ">", ",");
+
+                    if (current.ClassificationType == ClassificationTypeNames.Punctuation && current.Text == ">")
+                    {
+                        state = 1;
+                    }
+                    else
+                    {
+                        state = 0;
+                    }
                 }
 
                 if (isChain)

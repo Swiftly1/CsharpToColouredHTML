@@ -18,7 +18,7 @@ internal class HeuristicsGenerator
         if (input == null || input.Count == 0)
             return new List<NodeAfterProcessing>();
 
-        var chained = NodeChaining.ChainNodes(input);
+        var chained = NodeChaining.ChainNodes(input, _Hints);
         var pm = PassManager.CreateDefault(_Hints);
 
         pm.RunPasses(chained);
