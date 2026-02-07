@@ -2,6 +2,8 @@
 using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
 
@@ -11,17 +13,17 @@ internal class FunctionTypePass(SharedPassContext ctx) : Pass(ctx)
 
     private NodeEnumerationHelper? Walker { get; set; }
 
-    public override PassResult Run(List<NodeWrapper> input)
+    public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input, Context);
+        Walker = new NodeEnumerationHelper(input);
 
         do
         {
-            if (Walker.CurrentText.EqualsAnyOf(PassHelpers.CommonKeywordsBeforeTypeName))
+            if (Walker.CurrentText.EqualsAnyOf(Context.NameResolver.CommonKeywordsBeforeTypeName))
             {
                 // get last keyword before method's type
                 if (Walker.TryPeekAhead(out var nextKeyword) && !nextKeyword.IsChain &&
-                    nextKeyword.Text.EqualsAnyOf(PassHelpers.CommonKeywordsBeforeTypeName))
+                    nextKeyword.Text.EqualsAnyOf(Context.NameResolver.CommonKeywordsBeforeTypeName))
                 {
                     continue;
                 }
@@ -43,7 +45,7 @@ internal class FunctionTypePass(SharedPassContext ctx) : Pass(ctx)
                 continue;
 
             if (Walker.TryPeekAhead(out var type))
-                Walker.MarkLastElementOfChainAsClassOrStruct(type);
+                Context.NameResolver.MarkLastElementOfChainAsClassOrStruct(type);
 
         } while (Walker.MoveNext());
         return new PassResult();

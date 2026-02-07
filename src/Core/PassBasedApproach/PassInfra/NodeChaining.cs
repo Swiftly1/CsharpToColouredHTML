@@ -6,7 +6,7 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
 {
     internal static class NodeChaining
     {
-        public static List<NodeWrapper> ChainNodes(List<Node> nodes, Hints hints)
+        public static List<Node> ChainNodes(List<Node> nodes, Hints hints)
         {
             var validIdentifiers = new string[]
             {
@@ -27,7 +27,7 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                 ClassificationTypeNames.TypeParameterName
             };
 
-            var output = new List<NodeWrapper>();
+            var output = new List<Node>();
             var chain = new List<Node>();
 
             var state = 0;
@@ -71,25 +71,25 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                 {
                     if (chain.Count >= 1)
                     {
-                        output.Add(new NodeWrapper(chain));
+                        output.Add(new Node(chain));
                         chain.Clear();
                     }
 
-                    output.Add(new NodeWrapper(current));
+                    output.Add(current);
                 }
             }
 
             if (chain.Any())
-                output.Add(new NodeWrapper(chain));
+                output.Add(new Node(chain));
 
             return output;
         }
 
-        internal static List<NodeWrapper> FlattenNodes(List<NodeWrapper> chained)
+        internal static List<Node> FlattenNodes(List<Node> chained)
         {
             Logger.Info($"Flattening Nodes, before count: {chained.Count}");
 
-            var output = new List<NodeWrapper>();
+            var output = new List<Node>();
 
             foreach (var entry in chained)
             {
@@ -97,12 +97,12 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                 {
                     foreach (var item in entry.Nodes)
                     {
-                        output.Add(new NodeWrapper(item));
+                        output.Add(item);
                     }
                 }
                 else
                 {
-                    output.Add(new NodeWrapper(entry.Node));
+                    output.Add(entry);
                 }
             }
 

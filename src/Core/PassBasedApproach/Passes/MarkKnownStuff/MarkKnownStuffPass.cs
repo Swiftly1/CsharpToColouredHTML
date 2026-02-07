@@ -1,6 +1,7 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.MarkKnownStuff;
@@ -18,21 +19,21 @@ internal class MarkKnownStuffPass : Pass
     {
     }
 
-    public override PassResult Run(List<NodeWrapper> input)
+    public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input, Context);
+        Walker = new NodeEnumerationHelper(input);
 
         do
         {
             if (_SimpleClassificationToColourMapper.TryGetValue(Walker.CC, out var simpleColour))
             {
-                Walker.MarkNodeAs(simpleColour, true);
+                Context.MarkNodeAs(Walker.CurrentNode, simpleColour, true);
                 continue;
             }
 
             if (Context.Hints.BuiltInTypes.Contains(Walker.CurrentText))
             {
-                Walker.MarkNodeAs(NodeColors.Keyword, true);
+                Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Keyword, true);
                 continue;
             }
         } while (Walker.MoveNext());

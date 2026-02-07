@@ -22,115 +22,259 @@ public enum TypeWalkMode
     Default
 }
 
-internal partial class NodeEnumerationHelper
+internal class TypeWalker
 {
-    public bool ConsumeTypeAhead(TypeWalkState initialState, TypeWalkMode mode)
-    {
-        Logger.Info($"ConsumeTypeAhead '{CurrentText}'", 3);
-        return false;
-    }
+    //public bool ConsumeTypeAhead(TypeWalkState initialState, TypeWalkMode mode)
+    //{
+    //    Logger.Info($"ConsumeTypeAhead '{CurrentText}'", 3);
 
-    public string ResolveUnkownName(Node node)
-    {
-        var result = CheckIfLooksLikeVariable(node);
+    //    if (!TypeHasValidIdentifier(this.CurrentNode))
+    //        return false;
 
-        if (result.IsVariable)
-            return result.Value;
+    //    var foundColours = new List<(Node Node, string Colour)>();
 
-        var checkResult = IsAlreadyClassifiedExpression(node);
+    //    var previousStates = new List<TypeWalkState>();
+    //    var currentState = initialState;
 
-        if (checkResult.Success)
-            return checkResult.Value;
+    //    int genericsOpeningCounter = 0;
 
-        return ResolveClassOrStructName(node);
-    }
+    //    if (initialState == TypeWalkState.GenericsName)
+    //        genericsOpeningCounter = 1;
 
-    public (bool IsVariable, string Value) CheckIfLooksLikeVariable(Node node)
-    {
-        if (node.Text.StartsWith("_"))
-            return (IsVariable: true, Value: ResolveVariable(node));
+    //    do
+    //    {
+    //        if (CurrentText == ";")
+    //        {
+    //            foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //            break;
+    //        }
 
-        if (!node.Text.FirstCharIsUpper())
-            return (IsVariable: true, Value: ResolveVariable(node));
+    //        if (initialState == TypeWalkState.GenericsName && genericsOpeningCounter <= 0)
+    //        {
+    //            MoveBehind();
+    //            break;
+    //        }
 
-        return (IsVariable: false, Value: string.Empty);
-    }
+    //        previousStates.Add(currentState);
 
-    public string ResolveClassOrStructName(Node node)
-    {
-        var checkResult = IsAlreadyClassOrStruct(node);
+    //        if (currentState == TypeWalkState.TypeName)
+    //        {
+    //            if (CC.EqualsAnyOf(_validTypeNameClassifications) || CurrentText.EqualsAnyOf(Context.Hints.BuiltInTypes.ToArray()))
+    //            {
+    //                if (TryPeekAhead(out var peekedAhead))
+    //                {
+    //                    if (peekedAhead.Text == ".")
+    //                        foundColours.Add((CurrentNode, NodeColors.Namespace));
+    //                    else
+    //                        foundColours.Add((CurrentNode, ResolveClassOrStructName(CurrentNode)));
+    //                }
+    //                else
+    //                {
+    //                    foundColours.Add((CurrentNode, ResolveClassOrStructName(CurrentNode)));
+    //                }
 
-        if (checkResult.Success)
-            return checkResult.Value;
+    //                currentState = TypeWalkState.TypeNameDotOrEnd;
+    //            }
+    //            else if (CurrentText == "(")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                currentState = TypeWalkState.TupleName;
+    //            }
+    //            else
+    //            {
+    //                break;
+    //            }
+    //        }
+    //        else if (currentState == TypeWalkState.TypeNameDotOrEnd)
+    //        {
+    //            if (CurrentText == ".")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Operator));
+    //                currentState = TypeWalkState.TypeName;
+    //            }
+    //            else if (CurrentText == "<")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                genericsOpeningCounter++;
+    //                currentState = TypeWalkState.GenericsName;
+    //            }
+    //            else if (CurrentText == "?")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                break;
+    //            }
+    //            else if (CurrentText == "(")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                break;
+    //            }
+    //            else
+    //            {
+    //                MoveBehind();
+    //                break;
+    //            }
+    //        }
+    //        else if (currentState == TypeWalkState.TupleName)
+    //        {
+    //            if (CC.EqualsAnyOf(_validTypeNameClassifications) || CurrentText.EqualsAnyOf(Context.Hints.BuiltInTypes.ToArray()))
+    //            {
+    //                if (TryPeekAhead(out var peekedAhead))
+    //                {
+    //                    if (peekedAhead.Text == ".")
+    //                        foundColours.Add((CurrentNode, NodeColors.Namespace));
+    //                    else
+    //                        foundColours.Add((CurrentNode, ResolveClassOrStructName(CurrentNode)));
+    //                }
+    //                else
+    //                {
+    //                    foundColours.Add((CurrentNode, ResolveClassOrStructName(CurrentNode)));
+    //                }
 
-        var text = node.Text;
+    //                currentState = TypeWalkState.TupleDotOrEnd;
+    //            }
+    //            else
+    //            {
+    //                break;
+    //            }
+    //        }
+    //        else if (currentState == TypeWalkState.TupleDotOrEnd)
+    //        {
+    //            if (CurrentText == ",")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                currentState = TypeWalkState.TupleName;
+    //            }
+    //            else if (CurrentText == ")")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                genericsOpeningCounter++;
+    //                if (genericsOpeningCounter > 0)
+    //                {
+    //                    currentState = TypeWalkState.GenericsDotOrEnd;
+    //                }
+    //                else
+    //                {
+    //                    currentState = TypeWalkState.TypeNameDotOrEnd;
+    //                }
+    //            }
+    //            else if (CurrentText == "<")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                genericsOpeningCounter++;
+    //                currentState = TypeWalkState.GenericsName;
+    //            }
+    //            else if (CC == ClassificationTypeNames.Identifier)
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.PropertyName));
+    //                currentState = TypeWalkState.TupleDotOrEnd;
+    //            }
+    //            else
+    //            {
+    //                MoveBehind();
+    //                break;
+    //            }
+    //        }
+    //        else if (currentState == TypeWalkState.GenericsName)
+    //        {
+    //            if (CC.EqualsAnyOf(_validTypeNameClassifications) || CurrentText.EqualsAnyOf(Context.Hints.BuiltInTypes.ToArray()))
+    //            {
+    //                if (TryPeekAhead(out var peekedAhead))
+    //                {
+    //                    if (peekedAhead.Text == ".")
+    //                        foundColours.Add((CurrentNode, NodeColors.Namespace));
+    //                    else
+    //                        foundColours.Add((CurrentNode, ResolveClassOrStructName(CurrentNode)));
+    //                }
+    //                else
+    //                {
+    //                    foundColours.Add((CurrentNode, ResolveClassOrStructName(CurrentNode)));
+    //                }
 
-        if (Context.IsPopularStruct(text))
-            return NodeColors.Struct;
+    //                currentState = TypeWalkState.GenericsDotOrEnd;
+    //            }
+    //            else if (CurrentText == "(")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                currentState = TypeWalkState.TupleName;
+    //            }
+    //            else
+    //            {
+    //                break;
+    //            }
+    //        }
+    //        else if (currentState == TypeWalkState.GenericsDotOrEnd)
+    //        {
+    //            if (CurrentText == ".")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Operator));
+    //                currentState = TypeWalkState.GenericsName;
+    //            }
+    //            else if (CurrentText == ",")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                currentState = TypeWalkState.GenericsName;
+    //            }
+    //            else if (CurrentText == "<")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                genericsOpeningCounter++;
+    //                currentState = TypeWalkState.GenericsName;
+    //            }
+    //            else if (CurrentText == ">")
+    //            {
+    //                foundColours.Add((CurrentNode, NodeColors.Punctuation));
+    //                genericsOpeningCounter--;
+    //                if (genericsOpeningCounter > 0)
+    //                {
+    //                    currentState = TypeWalkState.GenericsDotOrEnd;
+    //                }
+    //                else
+    //                {
+    //                    currentState = TypeWalkState.TypeNameDotOrEnd;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                MoveBehind();
+    //                break;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            throw new NotImplementedException("State is not handled.");
+    //        }
+    //    } while (MoveNext());
 
-        if (Context.IsPopularClass(text))
-            return NodeColors.Class;
+    //    foreach (var entry in foundColours)
+    //    {
+    //        MarkNodeAs(entry.Node, entry.Colour);
+    //    }
 
-        if (Context.IsPopularEnum(text) || text.EndsWith("Enum"))
-            return NodeColors.EnumName;
+    //    return foundColours.Any();
+    //}
 
-        if (Context.FoundClasses.Contains(text))
-            return NodeColors.Class;
+    //private readonly string[] _validTypeNameClassifications =
+    //[
+    //    ClassificationTypeNames.Identifier,
+    //    ClassificationTypeNames.NamespaceName,
+    //    ClassificationTypeNames.ClassName,
+    //    ClassificationTypeNames.StructName,
+    //    ClassificationTypeNames.RecordClassName,
+    //    ClassificationTypeNames.RecordStructName,
+    //    ClassificationTypeNames.InterfaceName,
+    //    ClassificationTypeNames.TypeParameterName
+    //];
 
-        if (Context.FoundStructs.Contains(text))
-            return NodeColors.Struct;
+    //public bool TypeHasValidIdentifier(Node node)
+    //{
+    //    if (_validTypeNameClassifications.Contains(node.ClassificationType))
+    //        return true;
 
-        if (PassHelpers.NameLikeInterface(text))
-            return NodeColors.Interface;
+    //    if (node.ClassificationType == ClassificationTypeNames.Keyword)
+    //    {
+    //        return Context.Hints.BuiltInTypes.Contains(node.Text);
+    //    }
 
-        if (Context.Hints.BuiltInTypes.Contains(text))
-            return NodeColors.Keyword;
-
-        return NodeColors.Class;
-    }
-
-    private static (bool Success, string Value) IsAlreadyClassOrStruct(Node node)
-    {
-        if (node.ClassificationType == ClassificationTypeNames.StructName)
-            return (Success: true, Value: NodeColors.Struct);
-
-        if (node.ClassificationType == ClassificationTypeNames.ClassName)
-            return (Success: true, Value: NodeColors.Class);
-
-        if (node.ClassificationType == ClassificationTypeNames.InterfaceName)
-            return (Success: true, Value: NodeColors.Interface);
-
-        if (node.ClassificationType == ClassificationTypeNames.RecordStructName)
-            return (Success: true, Value: NodeColors.RecordStructName);
-
-        if (node.ClassificationType == ClassificationTypeNames.RecordClassName)
-            return (Success: true, Value: NodeColors.Class);
-
-        return (Success: false, Value: string.Empty);
-    }
-
-    private readonly string[] _validTypeNameClassifications =
-    [
-        ClassificationTypeNames.Identifier,
-        ClassificationTypeNames.NamespaceName,
-        ClassificationTypeNames.ClassName,
-        ClassificationTypeNames.StructName,
-        ClassificationTypeNames.RecordClassName,
-        ClassificationTypeNames.RecordStructName,
-        ClassificationTypeNames.InterfaceName,
-        ClassificationTypeNames.TypeParameterName
-    ];
-
-    public bool TypeHasValidIdentifier(NodeWrapper node)
-    {
-        if (_validTypeNameClassifications.Contains(node.ClassificationType))
-            return true;
-
-        if (node.ClassificationType == ClassificationTypeNames.Keyword)
-        {
-            return Context.Hints.BuiltInTypes.Contains(node.Text);
-        }
-
-        return false;
-    }
+    //    return false;
+    //}
 }

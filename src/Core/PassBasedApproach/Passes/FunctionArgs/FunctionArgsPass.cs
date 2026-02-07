@@ -1,6 +1,7 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
 
@@ -10,9 +11,9 @@ internal class FunctionArgsPass(SharedPassContext ctx) : Pass(ctx)
 
     private NodeEnumerationHelper? Walker { get; set; }
 
-    public override PassResult Run(List<NodeWrapper> input)
+    public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input, Context);
+        Walker = new NodeEnumerationHelper(input);
 
         foreach (var function in Context.FunctionDeclarationLocations)
         {

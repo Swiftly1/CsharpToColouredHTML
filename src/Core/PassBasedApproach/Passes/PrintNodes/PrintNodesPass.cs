@@ -8,7 +8,7 @@ internal class PrintNodesPass(SharedPassContext ctx) : Pass(ctx)
 {
     public override string Name { get => "PrintNodes"; }
 
-    public override PassResult Run(List<NodeWrapper> input)
+    public override PassResult Run(List<Node> input)
     {
         foreach (var node in input)
         {
@@ -23,7 +23,7 @@ internal class PrintNodesPass(SharedPassContext ctx) : Pass(ctx)
             }
             else
             {
-                Logger.Info(node.Node.ToString());
+                Logger.Info(node.ToString());
             }
         }
 

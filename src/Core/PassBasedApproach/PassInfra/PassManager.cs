@@ -29,7 +29,7 @@ internal class PassManager
         _Passes.Add(pass);
     }
 
-    public void RunPasses(List<NodeWrapper> nodes)
+    public void RunPasses(List<Node> nodes)
     {
         foreach (var pass in _Passes)
         {

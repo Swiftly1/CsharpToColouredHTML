@@ -2,57 +2,217 @@
 
 internal record Node
 {
-    public Node(string currentClassificationType, string text, string trivia)
+    private string _Colour = NodeColors.DefaultColour;
+    private string _Text = string.Empty;
+    private string _Trivia = string.Empty;
+    private string _ClassificationType = string.Empty;
+    private bool _HasNewLine = false;
+    private bool _UsesMostCommonColour = false;
+    private bool _SkipIdentifierPostProcessing = false;
+    private int _LineNumber = 0;
+
+    private Node()
     {
-        ClassificationType = currentClassificationType;
-        Text = text;
-        Trivia = trivia;
-        HasNewLine = (trivia + text).Contains(Environment.NewLine);
     }
 
-    public Node(string currentClassificationType, string text, string trivia, bool hasNewLine)
+    public Node(List<Node> nodes)
     {
-        ClassificationType = currentClassificationType;
-        Text = text;
-        Trivia = trivia;
-        HasNewLine = hasNewLine;
+        if (nodes == null || nodes.Count == 0)
+            throw new ArgumentNullException(nameof(nodes));
+
+        if (nodes.Count > 1)
+        {
+            // Copy Content
+            Nodes = new List<Node>(nodes);
+        }
+        else
+        {
+            this.Colour = nodes[0]._Colour;
+            this.Text = nodes[0].Text;
+            this.Trivia = nodes[0].Trivia;
+            this.ClassificationType = nodes[0].ClassificationType;
+            this.HasNewLine = nodes[0].HasNewLine;
+            this.UsesMostCommonColour = nodes[0].UsesMostCommonColour;
+            this.SkipIdentifierPostProcessing = nodes[0].SkipIdentifierPostProcessing;
+            this.LineNumber = nodes[0].LineNumber;
+        }
     }
 
-    public Node(
-        string colour,
-        string text,
-        string trivia,
-        bool hasNewLine,
-        string classificationType,
-        bool skipIdentifierPostProcessing
-        )
+    public Guid Id = Guid.NewGuid();
+
+    public List<Node> Nodes { get; set; } = new();
+
+    public bool IsChain => Nodes.Count > 1;
+
+    public string ClassificationType
     {
-        Colour = colour;
-        Text = text;
-        Trivia = trivia;
-        HasNewLine = hasNewLine;
-        ClassificationType = classificationType;
-        SkipIdentifierPostProcessing = skipIdentifierPostProcessing;
+        get
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(ClassificationType)} when there are many nodes is invalid");
+
+            return _ClassificationType;
+        }
+        set
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(ClassificationType)} when there are many nodes is invalid");
+
+            _ClassificationType = value;
+        }
     }
 
-    public string Colour { get; set; } = NodeColors.DefaultColour;
+    public int LineNumber
+    {
+        get
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(LineNumber)} when there are many nodes is invalid");
 
-    public string Text { get; init; }
+            return _LineNumber;
+        }
+        set
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(LineNumber)} when there are many nodes is invalid");
 
-    public string Trivia { get; init; }
+            _LineNumber = value;
+        }
+    }
 
-    public bool HasNewLine { get; init; }
+    public bool SkipIdentifierPostProcessing
+    {
+        get
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(SkipIdentifierPostProcessing)} when there are many nodes is invalid");
 
-    public string ClassificationType { get; set; }
+            return _SkipIdentifierPostProcessing;
+        }
+        set
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(SkipIdentifierPostProcessing)} when there are many nodes is invalid");
 
-    public bool UsesMostCommonColour { get; set; }
+            _SkipIdentifierPostProcessing = value;
+        }
+    }
 
-    public bool SkipIdentifierPostProcessing { get; set; }
+    public bool UsesMostCommonColour
+    {
+        get
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(UsesMostCommonColour)} when there are many nodes is invalid");
 
-    public int LineNumber { get; set; }
+            return _UsesMostCommonColour;
+        }
+        set
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(UsesMostCommonColour)} when there are many nodes is invalid");
+
+            _UsesMostCommonColour = value;
+        }
+    }
+
+    public bool HasNewLine
+    {
+        get
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(HasNewLine)} when there are many nodes is invalid");
+
+            return _HasNewLine;
+        }
+        set
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(HasNewLine)} when there are many nodes is invalid");
+
+            _HasNewLine = value;
+        }
+    }
+
+    public string Trivia
+    {
+        get
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(Trivia)} when there are many nodes is invalid");
+
+            return _Trivia;
+        }
+        set
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(Trivia)} when there are many nodes is invalid");
+
+            _Trivia = value;
+        }
+    }
+
+    public string Text
+    {
+        get
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(Text)} when there are many nodes is invalid");
+
+            return _Text;
+        }
+        set
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(Text)} when there are many nodes is invalid");
+
+            _Text = value;
+        }
+    }
+
+    public string Colour
+    {
+        get
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(Colour)} when there are many nodes is invalid");
+
+            return _Colour;
+        }
+        set
+        {
+            if (IsChain)
+                throw new Exception($"Accessing {nameof(Colour)} when there are many nodes is invalid");
+
+            _Colour = value;
+        }
+    }
+
+    public static Node CreateNode(string currentClassificationType, string text, string trivia)
+    {
+        var node = new Node();
+        node._ClassificationType = currentClassificationType;
+        node._Text = text;
+        node._Trivia = trivia;
+        node._HasNewLine = (trivia + text).Contains(Environment.NewLine);
+        return node;
+    }
+
+    public static Node CreateNode(string currentClassificationType, string text, string trivia, bool hasNewLine)
+    {
+        var node = new Node();
+        node._ClassificationType = currentClassificationType;
+        node._Text = text;
+        node._Trivia = trivia;
+        node._HasNewLine = hasNewLine;
+        return node;
+    }
 
     public override string ToString()
     {
-        return $"'{Text}' is {ClassificationType}";
+        if (IsChain)
+            return $"Chain: {string.Join(" | ", Nodes.Select(x => x.Text))}";
+
+        return $"'{_Text}' is {_ClassificationType}";
     }
 }

@@ -1,6 +1,7 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Inheritance;
@@ -15,9 +16,9 @@ internal class InheritancePass : Pass
     {
     }
 
-    public override PassResult Run(List<NodeWrapper> input)
+    public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input, Context);
+        Walker = new NodeEnumerationHelper(input);
 
         do
         {
@@ -63,7 +64,7 @@ internal class InheritancePass : Pass
             {
                 if (currentState == IDENTIFIER)
                 {
-                    Walker.MarkLastElementOfChainAsClassOrStruct(Walker.CurrentNode);
+                    Context.NameResolver.MarkLastElementOfChainAsClassOrStruct(Walker.CurrentNode);
 
                     currentState = COMMA;
                 }

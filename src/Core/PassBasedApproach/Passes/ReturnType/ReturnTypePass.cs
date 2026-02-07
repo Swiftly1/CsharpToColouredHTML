@@ -1,5 +1,6 @@
 ﻿using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
@@ -10,9 +11,9 @@ internal class ReturnTypePass(SharedPassContext ctx) : Pass(ctx)
 
     private NodeEnumerationHelper? Walker { get; set; }
 
-    public override PassResult Run(List<NodeWrapper> input)
+    public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input, Context);
+        Walker = new NodeEnumerationHelper(input);
 
         do
         {
@@ -24,7 +25,7 @@ internal class ReturnTypePass(SharedPassContext ctx) : Pass(ctx)
 
             if (Walker.MoveNext())
             {
-                Walker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                //Context.NameResolver.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
             }
         } while (Walker.MoveNext());
 

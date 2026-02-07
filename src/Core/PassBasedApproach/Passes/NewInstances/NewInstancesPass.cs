@@ -1,6 +1,6 @@
-﻿using CsharpToColouredHTML.Core.Miscs;
-using CsharpToColouredHTML.Core.Nodes;
+﻿using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
@@ -15,9 +15,9 @@ internal class NewInstancesPass : Pass
     {
     }
 
-    public override PassResult Run(List<NodeWrapper> input)
+    public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input, Context);
+        Walker = new NodeEnumerationHelper(input);
 
         do
         {
@@ -26,6 +26,8 @@ internal class NewInstancesPass : Pass
 
             if (Walker.CurrentText != "new")
                 continue;
+
+            //Context.ConsumeTypeAhead(TypeWalkState.);
 
         } while (Walker.MoveNext());
 

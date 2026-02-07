@@ -28,34 +28,34 @@ internal class HeuristicsGenerator
         return MapInternalNodesToPublicType(chained);
     }
 
-    private List<NodeAfterProcessing> MapInternalNodesToPublicType(List<NodeWrapper> input)
+    private List<NodeAfterProcessing> MapInternalNodesToPublicType(List<Node> input)
     {
         return input.ConvertAll(x => new NodeAfterProcessing
         (
             x.Id,
-            x.Node.Colour,
+            x.Colour,
             x.Text,
-            x.Node.Trivia,
+            x.Trivia,
             x.ClassificationType,
-            x.Node.UsesMostCommonColour,
-            x.Node.LineNumber,
+            x.UsesMostCommonColour,
+            x.LineNumber,
             useHighlighting: false // it may be defined later by postprocessor
         ));
     }
 
-    private void AssignLineNumbers(List<NodeWrapper> output)
+    private void AssignLineNumbers(List<Node> output)
     {
         var currentLineNumber = 0;
 
         foreach (var node in output)
         {
-            if (node.Node.HasNewLine)
+            if (node.HasNewLine)
             {
-                var newLinesCount = StringHelper.AllIndicesOf(node.Node.Trivia, Environment.NewLine).Count;
+                var newLinesCount = StringHelper.AllIndicesOf(node.Trivia, Environment.NewLine).Count;
                 currentLineNumber += newLinesCount;
             }
 
-            node.Node.LineNumber = currentLineNumber;
+            node.LineNumber = currentLineNumber;
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using CsharpToColouredHTML.Core.Miscs;
+﻿using System;
+using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
@@ -22,22 +25,42 @@ internal class SharedPassContext
 
     public HashSet<(int StartIndex, int EndIndex)> FoundObjectInitializersRanges = [];
 
-    public bool IsPopularEnum(string text)
+    public NameResolver NameResolver;
+
+    public SharedPassContext()
     {
-        return Hints.ReallyPopularEnums.Any(x => string.Equals(x, text));
+        NameResolver = new NameResolver(this);
     }
 
-    public bool IsPopularClass(string text)
+    public void MarkNodeAs(Node node, string colour, bool skipIdentifierPostProcess = false)
     {
-        return Hints.ReallyPopularClasses.Any(x => string.Equals(x, text))
-            ||
-            Hints.ReallyPopularClassSubstrings.Any(x => text.Contains(x));
+        if (node.IsChain)
+            throw new Exception("Unexpected chain");
+
+        Logger.Info($"Marking '{node.Text}' as '{colour}'");
+
+        if (!node.SkipIdentifierPostProcessing)
+        {
+            node.Colour = colour;
+            node.ClassificationType = NameResolver.MapColourToClassificationType(colour, node.ClassificationType);
+            node.SkipIdentifierPostProcessing = skipIdentifierPostProcess;
+        }
+
+        UpdateStats(node.Colour, node.Text);
     }
 
-    public bool IsPopularStruct(string text)
+    public void UpdateStats(string colour, string text)
     {
-        return Hints.ReallyPopularStructs.Any(x => string.Equals(x, text))
-            ||
-            Hints.ReallyPopularStructsSubstrings.Any(x => text.Contains(x));
+        if (colour == NodeColors.Class)
+            FoundClasses.Add(text);
+
+        if (colour == NodeColors.Struct)
+            FoundStructs.Add(text);
+
+        if (colour == NodeColors.Interface)
+            FoundInterfaces.Add(text);
+
+        if (colour == NodeColors.Namespace)
+            FoundNamespaceParts.Add(text);
     }
 }

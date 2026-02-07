@@ -1,5 +1,6 @@
 ﻿using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
@@ -14,15 +15,15 @@ internal class NamespacesPass : Pass
     {
     }
 
-    public override PassResult Run(List<NodeWrapper> input)
+    public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input, Context);
+        Walker = new NodeEnumerationHelper(input);
 
         do
         {
             if (Walker.CurrentText == "using")
             {
-                Walker.MarkNodeAs(NodeColors.Keyword);
+                Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Keyword);
 
                 if (Walker.TryPeekAhead(out var assignment, 2) && assignment.Text == "=")
                 {
@@ -35,7 +36,7 @@ internal class NamespacesPass : Pass
             }
             else if (Walker.CurrentText == "namespace")
             {
-                Walker.MarkNodeAs(NodeColors.Keyword);
+                Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Keyword);
 
                 HandleNamespaceDeclaration();
             }
@@ -55,17 +56,17 @@ internal class NamespacesPass : Pass
             {
                 if (ns.ClassificationType == ClassificationTypeNames.Operator)
                 {
-                    Walker.MarkNodeAs(ns, NodeColors.Operator);
+                    Context.MarkNodeAs(ns, NodeColors.Operator);
                 }
                 else
                 {
-                    Walker.MarkNodeAs(ns, NodeColors.Namespace);
+                    Context.MarkNodeAs(ns, NodeColors.Namespace);
                 }
             }
         }
         else
         {
-            Walker.MarkNodeAs(chain, NodeColors.Namespace);
+            Context.MarkNodeAs(chain, NodeColors.Namespace);
         }
     }
 
@@ -80,8 +81,8 @@ internal class NamespacesPass : Pass
         if (!Walker.TryPeekAhead(out var chain, 3))
             return;
 
-        Walker.MarkNodeAs(name.Node, NodeColors.Class);
-        Walker.MarkNodeAs(assignment.Node, NodeColors.Punctuation);
+        Context.MarkNodeAs(name, NodeColors.Class);
+        Context.MarkNodeAs(assignment, NodeColors.Punctuation);
 
         if (chain.IsChain)
         {
@@ -89,17 +90,17 @@ internal class NamespacesPass : Pass
             {
                 if (ns.ClassificationType == ClassificationTypeNames.Operator)
                 {
-                    Walker.MarkNodeAs(ns, NodeColors.Operator);
+                    Context.MarkNodeAs(ns, NodeColors.Operator);
                 }
                 else
                 {
-                    Walker.MarkNodeAs(ns, NodeColors.Namespace);
+                    Context.MarkNodeAs(ns, NodeColors.Namespace);
                 }
             }
         }
         else
         {
-            Walker.MarkNodeAs(name.Node, NodeColors.Namespace);
+            Context.MarkNodeAs(name, NodeColors.Namespace);
         }
     }
 
@@ -114,17 +115,17 @@ internal class NamespacesPass : Pass
             {
                 if (ns.ClassificationType == ClassificationTypeNames.Operator)
                 {
-                    Walker.MarkNodeAs(ns, NodeColors.Operator);
+                    Context.MarkNodeAs(ns, NodeColors.Operator);
                 }
                 else
                 {
-                    Walker.MarkNodeAs(ns, NodeColors.Namespace);
+                    Context.MarkNodeAs(ns, NodeColors.Namespace);
                 }
             }
         }
         else
         {
-            Walker.MarkNodeAs(name, NodeColors.Namespace);
+            Context.MarkNodeAs(name, NodeColors.Namespace);
         }
     }
 }
