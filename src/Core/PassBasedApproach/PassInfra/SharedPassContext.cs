@@ -1,5 +1,4 @@
-﻿using System;
-using CsharpToColouredHTML.Core.Miscs;
+﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 

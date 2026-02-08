@@ -34,8 +34,10 @@ internal static class Logger
         if (!LogsEnabled)
             return;
 
+        Console.ForegroundColor = ConsoleColor.Yellow;
         var tabs = new string('\t', tabsDepth);
         Console.WriteLine($"[WARN] {tabs}{s}");
+        Console.ResetColor();
     }
 
     public static void Error(string s, int tabsDepth = 0)
@@ -44,7 +46,9 @@ internal static class Logger
             return;
 
         var tabs = new string('\t', tabsDepth);
+        Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine($"[ERROR] {tabs}{s}");
+        Console.ResetColor();
     }
 
     public static void PrintFancy(string part1, string part2, string part3, ConsoleColor colour, bool addInfo = true, int tabsDepth = 0)

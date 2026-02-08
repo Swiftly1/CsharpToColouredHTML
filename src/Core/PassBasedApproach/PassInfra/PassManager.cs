@@ -34,7 +34,14 @@ internal class PassManager
         foreach (var pass in _Passes)
         {
             Logger.PrintFancy("Running Pass: '", pass.Name, "'", ConsoleColor.Green);
-            pass.Run(nodes);
+
+            var result = pass.Run(nodes);
+
+            if (!result.Success)
+            {
+                Logger.Error($"Failed at '{pass.Name}' pass. Quiting.");
+                return;
+            }
 
             PrintFoundStuff();
         }
