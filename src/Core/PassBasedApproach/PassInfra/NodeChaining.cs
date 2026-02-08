@@ -51,7 +51,7 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                     isChain = current.Text == ".";
 
                     isChain |= current.ClassificationType == ClassificationTypeNames.Punctuation
-                        && current.Text.EqualsAnyOf("<", ">", ",");
+                        && current.Text.EqualsAnyOf("<", ">", ",", "(");
 
                     if (current.ClassificationType == ClassificationTypeNames.Punctuation && current.Text == ">")
                     {

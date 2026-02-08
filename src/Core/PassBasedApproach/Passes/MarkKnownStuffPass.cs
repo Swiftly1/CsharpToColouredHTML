@@ -21,7 +21,8 @@ internal class MarkKnownStuffPass : Pass
 
     public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input);
+        var flatten = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flatten);
 
         do
         {

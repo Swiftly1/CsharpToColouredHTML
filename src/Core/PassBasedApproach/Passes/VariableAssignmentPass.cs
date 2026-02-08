@@ -27,8 +27,12 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
             if (Walker.CurrentText.EqualsAnyOf("new"))
                 continue;
 
-            Console.WriteLine(Walker.CurrentNode.IsChain);
-            Console.WriteLine();
+            if (Walker.CurrentNode.IsChain)
+            {
+                var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
+                var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
+                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+            }
         } while (Walker.MoveNext());
         return new PassResult();
     }

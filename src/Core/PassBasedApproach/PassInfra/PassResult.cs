@@ -2,5 +2,5 @@
 
 internal class PassResult
 {
-    public bool Success { get; set; }
+    public bool Success { get; set; } = true;
 }
