@@ -16,6 +16,20 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
     {
         Walker = new NodeEnumerationHelper(input);
 
+        do
+        {
+            if (!Walker.CurrentText.EqualsAnyOf("="))
+                continue;
+
+            if (!Walker.MoveNext())
+                continue;
+
+            if (Walker.CurrentText.EqualsAnyOf("new"))
+                continue;
+
+            Console.WriteLine(Walker.CurrentNode.IsChain);
+            Console.WriteLine();
+        } while (Walker.MoveNext());
         return new PassResult();
     }
 }

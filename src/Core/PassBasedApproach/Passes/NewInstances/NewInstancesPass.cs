@@ -27,7 +27,24 @@ internal class NewInstancesPass : Pass
             if (Walker.CurrentText != "new")
                 continue;
 
-            //Context.ConsumeTypeAhead(TypeWalkState.);
+            Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Keyword, true);
+
+            if (!Walker.MoveNext())
+                continue;
+
+            var isChain = Walker.CurrentNode.IsChain;
+            var justType = isChain ?
+                new NodeEnumerationHelper(Walker.CurrentNode.Nodes) :
+                Walker;
+
+            var typeWalker = new TypeWalker(justType, Context);
+            if (typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType))
+            {
+                if (isChain)
+                    Walker.MoveNext();
+
+                TrySaveMetadata();
+            }
 
         } while (Walker.MoveNext());
 
