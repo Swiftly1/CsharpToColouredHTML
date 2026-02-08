@@ -31,7 +31,6 @@ internal class ExpressionWalker
         Context = context;
     }
 
-
     public bool ConsumeExpressionAhead(ExpressionWalkState initialState, ExpressionWalkMode mode, bool markIt = true)
     {
         Logger.Info($"ConsumeExpressionAhead '{Walker.CurrentText}'", 3);
