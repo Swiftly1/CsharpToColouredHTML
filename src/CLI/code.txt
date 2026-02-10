@@ -1,33 +1,9 @@
-﻿using System.Text;
-using System.Web;
-using Microsoft.CodeAnalysis.Classification;
+﻿using CsharpToColouredHTML.Core;
 
-namespace CsharpToColouredHTML.Core;
+var code = File.ReadAllText("code.txt");
 
-public class HTMLEmitter : IEmitter
-{
-    private readonly StringBuilder _sb = new StringBuilder();
+var html = new CsharpColourer().ProcessSourceCode(code, new HTMLEmitter());
 
-    public List<string> BuiltInTypes { get; } = new List<string>
-    {
-        "bool",
-        "byte",
-        "sbyte",
-        "char",
-        "decimal",
-        "double",
-        "float",
-        "int",
-        "uint",
-        "nint",
-        "nuint",
-        "long",
-        "ulong",
-        "short",
-        "ushort",
-        "object",
-        "string",
-        "dynamic",
-    };
+Console.WriteLine(html);
 
-}
+new CsharpColourer().ProcessSourceCode(code, new ConsoleEmitter());

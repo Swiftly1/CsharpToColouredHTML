@@ -1,6 +1,7 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Attributes;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.CasualExpressions;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
@@ -111,6 +112,7 @@ internal class PassManager
         pm.RegisterPass(new FunctionArgsPass(pm.SharedPassContext));
         pm.RegisterPass(new PropertyAccessPass(pm.SharedPassContext));
         pm.RegisterPass(new ObjectInitializerPass(pm.SharedPassContext));
+        pm.RegisterPass(new CasualExpressionsPass(pm.SharedPassContext));
 
         return pm;
     }
