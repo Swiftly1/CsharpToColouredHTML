@@ -1,9 +1,10 @@
-﻿using CsharpToColouredHTML.Core.Miscs;
+﻿using System.Runtime.InteropServices.JavaScript;
+using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
-using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
-using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
+using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
 
@@ -45,7 +46,18 @@ internal class FunctionTypePass(SharedPassContext ctx) : Pass(ctx)
                 continue;
 
             if (Walker.TryPeekAhead(out var type))
-                Context.NameResolver.MarkLastElementOfChainAsClassOrStruct(type);
+            {
+                if (type.IsChain)
+                {
+                    var enumeration = new NodeEnumerationHelper(type.Nodes);
+                    var typeWalker = new TypeWalker(enumeration, Context);
+                    typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                }
+                else
+                {
+                    Context.NameResolver.MarkLastElementOfChainAsClassOrStruct(type);
+                }
+            }
 
         } while (Walker.MoveNext());
         return new PassResult();

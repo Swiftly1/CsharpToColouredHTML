@@ -57,12 +57,16 @@ internal class NewInstancesPass : Pass
         var offset = 2;
         var bracketsCounter = 1;
 
-        while (Walker.TryPeekAhead(out var current, offset))
+        while (Walker.TryPeekAhead(out var current, offset++))
         {
+            if (current.IsChain)
+                continue;
+
             if (current.Text == ";")
             {
                 var endIndex = Walker.CurrentIndex + offset;
                 Context.FoundObjectInitializersRanges.Add((startIndex, endIndex));
+                break;
             }
 
             if (current.Text == "{")
@@ -83,8 +87,6 @@ internal class NewInstancesPass : Pass
 
             if (bracketsCounter <= 0)
                 return;
-
-            offset++;
         }
     }
 }

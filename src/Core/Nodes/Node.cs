@@ -213,6 +213,6 @@ internal record Node
         if (IsChain)
             return $"Chain: {string.Join(" | ", Nodes.Select(x => x.Text))}";
 
-        return $"'{_Text}' is {_ClassificationType}";
+        return $"\"{_Text}\" is {_ClassificationType}";
     }
 }
