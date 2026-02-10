@@ -43,6 +43,7 @@ internal class ExpressionWalker
         var previousStates = new List<ExpressionWalkState>();
         var currentState = initialState;
         var isRootFound = false;
+        var parenthesisCounter = 0;
 
         do
         {
@@ -52,6 +53,14 @@ internal class ExpressionWalker
                 break;
             }
 
+            if (Walker.CurrentText == "(")
+                parenthesisCounter++;
+
+            if (Walker.CurrentText == ")")
+                parenthesisCounter--;
+
+            var insideFunctionCall = parenthesisCounter > 0;
+
             previousStates.Add(currentState);
 
             if (currentState == ExpressionWalkState.Chain)
@@ -60,63 +69,74 @@ internal class ExpressionWalker
                 {
                     if (Walker.CC == ClassificationTypeNames.LocalName)
                     {
-                        Context.MarkNodeAs(Walker.CurrentNode, NodeColors.LocalName);
+                        foundColours.Add((Walker.CurrentNode, NodeColors.LocalName));
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
                     else if (Walker.CC == ClassificationTypeNames.FieldName)
                     {
-                        Context.MarkNodeAs(Walker.CurrentNode, NodeColors.FieldName);
+                        foundColours.Add((Walker.CurrentNode, NodeColors.FieldName));
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
                     else if (Walker.CC == ClassificationTypeNames.PropertyName)
                     {
-                        Context.MarkNodeAs(Walker.CurrentNode, NodeColors.PropertyName);
+                        foundColours.Add((Walker.CurrentNode, NodeColors.PropertyName));
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
                     else if (Walker.CC == ClassificationTypeNames.ParameterName)
                     {
-                        Context.MarkNodeAs(Walker.CurrentNode, NodeColors.ParameterName);
+                        foundColours.Add((Walker.CurrentNode, NodeColors.PropertyName));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = true;
+                    }
+                    else if (Walker.CC == ClassificationTypeNames.StringLiteral)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.String));
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
                     else if (Walker.CC == ClassificationTypeNames.Identifier)
                     {
+                        isRootFound = true;
+                        currentState = ExpressionWalkState.DotOrEnd;
                         if (Walker.TryPeekAhead(out var next))
                         {
                             if (next.Text == "(")
                             {
-                                Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Method);
-                                Context.MarkNodeAs(next, NodeColors.Punctuation);
+                                foundColours.Add((Walker.CurrentNode, NodeColors.Method));
+                                currentState = ExpressionWalkState.DotOrEnd;
                             }
                             else if (next.Text == ".")
                             {
-                                Context.MarkNodeAs(Walker.CurrentNode, NodeColors.PropertyName);
-                                Context.MarkNodeAs(next, NodeColors.Operator);
+                                foundColours.Add((Walker.CurrentNode, Context.NameResolver.ResolveUnkownName(Walker.CurrentNode)));
+                                currentState = ExpressionWalkState.DotOrEnd;
+                            }
+                            else
+                            {
+                                foundColours.Add((Walker.CurrentNode, Context.NameResolver.ResolveUnkownName(Walker.CurrentNode)));
+                                currentState = ExpressionWalkState.DotOrEnd;
                             }
                         }
                         else
                         {
-                            Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                            foundColours.Add((Walker.CurrentNode, Context.NameResolver.ResolveVariable(Walker.CurrentNode)));
+                            currentState = ExpressionWalkState.Chain;
                         }
-                        isRootFound = true;
-                        currentState = ExpressionWalkState.DotOrEnd;
                     }
-                    continue;
                 }
                 else
                 {
                     if (Walker.CC == ClassificationTypeNames.FieldName)
                     {
-                        Context.MarkNodeAs(Walker.CurrentNode, NodeColors.FieldName);
+                        foundColours.Add((Walker.CurrentNode, NodeColors.FieldName));
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
                     else if (Walker.CC == ClassificationTypeNames.PropertyName)
                     {
-                        Context.MarkNodeAs(Walker.CurrentNode, NodeColors.PropertyName);
+                        foundColours.Add((Walker.CurrentNode, NodeColors.PropertyName));
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
@@ -126,13 +146,17 @@ internal class ExpressionWalker
                         {
                             if (next.Text == "(")
                             {
-                                Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Method);
-                                Context.MarkNodeAs(next, NodeColors.Punctuation);
+                                foundColours.Add((Walker.CurrentNode, NodeColors.Method));
+                                currentState = ExpressionWalkState.DotOrEnd;
+                            }
+                            else
+                            {
+                                foundColours.Add((Walker.CurrentNode, Context.NameResolver.ResolveUnkownName(Walker.CurrentNode)));
                             }
                         }
                         else
                         {
-                            Context.MarkNodeAs(Walker.CurrentNode, NodeColors.PropertyName);
+                            foundColours.Add((Walker.CurrentNode, NodeColors.PropertyName));
                         }
                         currentState = ExpressionWalkState.DotOrEnd;
                     }
@@ -144,6 +168,18 @@ internal class ExpressionWalker
                 {
                     foundColours.Add((Walker.CurrentNode, NodeColors.Operator));
                     currentState = ExpressionWalkState.Chain;
+                }
+                else if (Walker.CurrentText == "," && insideFunctionCall)
+                {
+                    foundColours.Add((Walker.CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.Chain;
+                    isRootFound = false;
+                }
+                else if (Walker.CurrentText == "(")
+                {
+                    foundColours.Add((Walker.CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.Chain;
+                    isRootFound = false;
                 }
                 else
                 {
@@ -164,7 +200,6 @@ internal class ExpressionWalker
 
         return foundColours.Any();
     }
-
 
     private readonly string[] _validExpressionNameClassifications =
     [

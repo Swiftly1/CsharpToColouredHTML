@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
 {
-    internal static class NodeChaining
+    internal class NodeChaining
     {
         public static List<Node> ChainNodes(List<Node> nodes, Hints hints)
         {
@@ -24,7 +24,8 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                 ClassificationTypeNames.RecordClassName,
                 ClassificationTypeNames.RecordStructName,
                 ClassificationTypeNames.InterfaceName,
-                ClassificationTypeNames.TypeParameterName
+                ClassificationTypeNames.TypeParameterName,
+                ClassificationTypeNames.StringLiteral,
             };
 
             var output = new List<Node>();
@@ -52,6 +53,9 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
 
                     isChain |= current.ClassificationType == ClassificationTypeNames.Punctuation
                         && current.Text.EqualsAnyOf("<", ">", ",", "(");
+
+                    if (current.ClassificationType == ClassificationTypeNames.Keyword)
+                        isChain |= current.Text.EqualsAnyOf(hints.BuiltInTypes.ToArray());
 
                     if (current.ClassificationType == ClassificationTypeNames.Punctuation && current.Text == ">")
                     {

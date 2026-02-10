@@ -33,6 +33,11 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
                 var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
                 expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
             }
+            else
+            {
+                var expressionWalker = new ExpressionWalker(Walker, Context);
+                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+            }
         } while (Walker.MoveNext());
         return new PassResult();
     }

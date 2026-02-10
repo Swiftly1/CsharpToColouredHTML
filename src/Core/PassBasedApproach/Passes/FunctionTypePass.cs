@@ -19,11 +19,11 @@ internal class FunctionTypePass(SharedPassContext ctx) : Pass(ctx)
 
         do
         {
-            if (Walker.CurrentText.EqualsAnyOf(Context.NameResolver.CommonKeywordsBeforeTypeName))
+            if (Walker.CurrentText.EqualsAnyOf(NameResolver.CommonKeywordsBeforeTypeName))
             {
                 // get last keyword before method's type
                 if (Walker.TryPeekAhead(out var nextKeyword) && !nextKeyword.IsChain &&
-                    nextKeyword.Text.EqualsAnyOf(Context.NameResolver.CommonKeywordsBeforeTypeName))
+                    nextKeyword.Text.EqualsAnyOf(NameResolver.CommonKeywordsBeforeTypeName))
                 {
                     continue;
                 }

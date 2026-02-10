@@ -40,9 +40,6 @@ internal class NewInstancesPass : Pass
             var typeWalker = new TypeWalker(justType, Context);
             if (typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType))
             {
-                if (isChain)
-                    Walker.MoveNext();
-
                 TrySaveMetadata();
             }
 

@@ -38,6 +38,9 @@ internal class SharedPassContext
 
         Logger.Info($"Marking '{node.Text}' as '{colour}'");
 
+        if (node.Colour != NodeColors.DefaultColour)
+            Logger.Warning("Already non default");
+
         if (!node.SkipIdentifierPostProcessing)
         {
             node.Colour = colour;

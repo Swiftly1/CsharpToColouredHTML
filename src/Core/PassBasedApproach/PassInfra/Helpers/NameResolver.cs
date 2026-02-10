@@ -32,12 +32,12 @@ internal class NameResolver
             Context.Hints.ReallyPopularStructsSubstrings.Any(x => text.Contains(x));
     }
 
-    public bool NameLikeInterface(string text)
+    public static bool NameLikeInterface(string text)
     {
         return text.StartsWith("I") && text.Length > 1 && char.IsUpper(text[1]);
     }
 
-    public bool IsValidClassOrStructName(string text, bool ignoreCase = false)
+    public static bool IsValidClassOrStructName(string text, bool ignoreCase = false)
     {
         if (string.IsNullOrWhiteSpace(text))
             return false;
@@ -48,25 +48,25 @@ internal class NameResolver
         return text.Skip(1).All(x => char.IsLetter(x) || char.IsNumber(x) || x == '_');
     }
 
-    public readonly string[] CommonKeywordsBeforeTypeName =
+    public static readonly string[] CommonKeywordsBeforeTypeName =
     [
         "public", "private", "internal", "sealed", "protected", "readonly", "static", "override", "event", "required",
         "virtual", "unsafe", "partial", "delegate", "async"
     ];
 
-    public readonly List<string> AccessibilityModifiers = new List<string>
+    public static readonly List<string> AccessibilityModifiers = new List<string>
     {
         "public", "private", "protected", "internal", "protected internal", "private protected"
     };
 
-    public readonly List<string> Operators = new List<string>
+    public static readonly List<string> Operators = new List<string>
     {
         "+", "-", "/", "*", "=", "==", "+=", "-=", "*=", "/=", "!=", "&",
         "^", "|", "&&", "||", "??", "%=", "|=", "^=", "<<=", ">>=", "??=",
         ">>>", ">>>=", "<", ">", "is", "as", ">="
     };
 
-    public bool SoundsLikeEventOrHandler(string name)
+    public static bool SoundsLikeEventOrHandler(string name)
     {
         return name.StartsWith("On") || name.EndsWith("Event") || name.EndsWith("Handler") || name.EndsWith("Changed");
     }
