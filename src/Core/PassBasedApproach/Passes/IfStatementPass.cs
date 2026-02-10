@@ -29,7 +29,17 @@ internal class IfStatementPass : Pass
 
             if (Walker.MoveNext(2))
             {
-                //Walker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                if (Walker.CurrentNode.IsChain)
+                {
+                    var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
+                    var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
+                    expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                }
+                else
+                {
+                    var expressionWalker = new ExpressionWalker(Walker, Context);
+                    expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                }
             }
         } while (Walker.MoveNext());
 
