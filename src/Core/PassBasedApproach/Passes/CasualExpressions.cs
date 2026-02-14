@@ -14,15 +14,21 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
 
     public override PassResult Run(List<Node> input)
     {
+        Logger.Info($" - {nameof(StandaloneFunctionCalls)}");
         StandaloneFunctionCalls(input);
+
+        Logger.Info($" - {nameof(ExpressionsInTheMiddleOfOtherExpression)}");
         ExpressionsInTheMiddleOfOtherExpression(input);
+
+        Logger.Info($" - {nameof(OperatorBeforeExpression)}");
         OperatorBeforeExpression(input);
         return new PassResult();
     }
 
     private void OperatorBeforeExpression(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input);
+        var flattenNodes = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flattenNodes);
 
         do
         {
@@ -62,7 +68,8 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
 
     private void ExpressionsInTheMiddleOfOtherExpression(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input);
+        var flattenNodes = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flattenNodes);
 
         do
         {
@@ -77,12 +84,12 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
                     continue;
             }
 
-            if (Walker.TryPeekBehind(out var semicolon))
+            if (Walker.TryPeekBehind(out var dot))
             {
-                if (semicolon.IsChain)
+                if (dot.IsChain)
                     continue;
 
-                if (semicolon.Text != ".")
+                if (dot.Text != ".")
                     continue;
             }
 
@@ -90,19 +97,20 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
             {
                 var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
                 var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
-                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.FromTheMiddle);
             }
             else
             {
                 var expressionWalker = new ExpressionWalker(Walker, Context);
-                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.FromTheMiddle);
             }
         } while (Walker.MoveNext());
     }
 
     private void StandaloneFunctionCalls(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input);
+        var flattenNodes = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flattenNodes);
 
         do
         {

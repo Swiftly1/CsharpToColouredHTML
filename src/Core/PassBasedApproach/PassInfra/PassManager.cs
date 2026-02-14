@@ -50,6 +50,16 @@ internal class PassManager
 
     private void PrintFoundStuff()
     {
+        if (SharedPassContext.FunctionDeclarationLocations.Any())
+        {
+            Logger.Info("Found Methods:");
+
+            foreach (var entry in SharedPassContext.FunctionDeclarationLocations)
+            {
+                Logger.Info(entry.FunctionName, 2);
+            }
+        }
+
         if (SharedPassContext.FoundClasses.Any())
         {
             Logger.Info("Found Classes:");
@@ -103,7 +113,7 @@ internal class PassManager
         pm.RegisterPass(new NamespacesPass(pm.SharedPassContext));
         pm.RegisterPass(new AttributesPass(pm.SharedPassContext));
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));
-        pm.RegisterPass(new FunctionTypePass(pm.SharedPassContext));
+        pm.RegisterPass(new ClassMemberTypePass(pm.SharedPassContext));
         pm.RegisterPass(new NewInstancesPass(pm.SharedPassContext));
         pm.RegisterPass(new ReturnTypePass(pm.SharedPassContext));
         pm.RegisterPass(new MethodCallsPass(pm.SharedPassContext));

@@ -5,10 +5,10 @@ using System.Linq;
 namespace Tests;
 public class FilesTestData : IEnumerable<object[]>
 {
-    const int TESTS_COUNT = 83;
+    const int TESTS_COUNT = 84;
     public IEnumerator<object[]> GetEnumerator()
     {
-        var disabledTests = new List<int> { 59 };
+        var disabledTests = new List<int> { };
         foreach (var item in Enumerable.Range(1, TESTS_COUNT))
         {
             if (disabledTests.Contains(item))

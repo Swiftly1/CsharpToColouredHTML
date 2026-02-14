@@ -91,8 +91,6 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
 
         internal static List<Node> FlattenNodes(List<Node> chained)
         {
-            Logger.Info($"Flattening Nodes, before count: {chained.Count}");
-
             var output = new List<Node>();
 
             foreach (var entry in chained)
@@ -110,7 +108,6 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                 }
             }
 
-            Logger.Info($"Flattening Nodes, after count: {output.Count}");
             return output;
         }
     }

@@ -16,7 +16,8 @@ public enum ExpressionWalkState
 
 public enum ExpressionWalkMode
 {
-    Default
+    Default,
+    FromTheMiddle
 }
 
 internal class ExpressionWalker
@@ -97,6 +98,12 @@ internal class ExpressionWalker
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
+                    else if (Walker.CC == ClassificationTypeNames.Keyword)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.Keyword));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = false;
+                    }
                     else if (Walker.CC == ClassificationTypeNames.Identifier)
                     {
                         isRootFound = true;
@@ -110,12 +117,34 @@ internal class ExpressionWalker
                             }
                             else if (next.Text == ".")
                             {
-                                foundColours.Add((Walker.CurrentNode, Context.NameResolver.ResolveUnkownName(Walker.CurrentNode)));
+                                var colour = string.Empty;
+
+                                if (mode == ExpressionWalkMode.Default)
+                                {
+                                    colour = Context.NameResolver.ResolveUnkownName(Walker.CurrentNode);
+                                }
+                                else
+                                {
+                                    colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                                }
+
+                                foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
                             }
                             else
                             {
-                                foundColours.Add((Walker.CurrentNode, Context.NameResolver.ResolveUnkownName(Walker.CurrentNode)));
+                                var colour = string.Empty;
+
+                                if (mode == ExpressionWalkMode.Default)
+                                {
+                                    colour = Context.NameResolver.ResolveUnkownName(Walker.CurrentNode);
+                                }
+                                else
+                                {
+                                    colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                                }
+
+                                foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
                             }
                         }
@@ -151,7 +180,11 @@ internal class ExpressionWalker
                             }
                             else
                             {
-                                foundColours.Add((Walker.CurrentNode, Context.NameResolver.ResolveUnkownName(Walker.CurrentNode)));
+                                var colour = string.Empty;
+
+                                colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+
+                                foundColours.Add((Walker.CurrentNode, colour));
                             }
                         }
                         else

@@ -14,14 +14,15 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
 
     public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input);
+        var flattenNodes = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flattenNodes);
 
         do
         {
             var validClassifications = new string[]
             {
                 ClassificationTypeNames.Identifier,
-                ClassificationTypeNames.MethodName,
+                ClassificationTypeNames.MethodName
             };
 
             if (!Walker.CC.EqualsAnyOf(validClassifications))
@@ -29,6 +30,8 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
 
             if (!Walker.TryPeekAhead(out var parenthesis) || parenthesis.Text != "(")
                 continue;
+
+            Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Method, true);
 
         } while (Walker.MoveNext());
 

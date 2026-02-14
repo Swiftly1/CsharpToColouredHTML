@@ -1,0 +1,9 @@
+﻿public class ConsoleEmitter : IEmitter
+{
+    private readonly StringBuilder _sb = new StringBuilder();
+    
+    public void EmitNode(Node node, int a, int b, List<string> c)
+    {
+        _sb.Append(node.TextWithTrivia, node.Text.Length);
+    }
+}
