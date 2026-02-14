@@ -48,14 +48,14 @@ internal class FunctionArgsPass(SharedPassContext ctx) : Pass(ctx)
                     var success = false;
                     if (Walker.CurrentNode.IsChain)
                     {
-                        var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
-                        var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
-                        success = expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                        var enumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
+                        var typeWalker = new TypeWalker(enumeration, Context);
+                        success = typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
                     }
                     else
                     {
-                        var expressionWalker = new ExpressionWalker(Walker, Context);
-                        success = expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                        var typeWalker = new TypeWalker(Walker, Context);
+                        success = typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
                     }
 
                     if (!success)
