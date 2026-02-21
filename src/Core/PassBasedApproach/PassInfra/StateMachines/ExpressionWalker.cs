@@ -131,6 +131,14 @@ internal class ExpressionWalker
                                 foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
                             }
+                            else if (next.Text == ",")
+                            {
+                                var colour = string.Empty;
+                                colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+
+                                foundColours.Add((Walker.CurrentNode, colour));
+                                currentState = ExpressionWalkState.DotOrEnd;
+                            }
                             else
                             {
                                 var colour = string.Empty;
@@ -213,6 +221,16 @@ internal class ExpressionWalker
                     foundColours.Add((Walker.CurrentNode, NodeColors.Punctuation));
                     currentState = ExpressionWalkState.Chain;
                     isRootFound = false;
+                }
+                else if (Walker.CurrentText == "<")
+                {
+                    foundColours.Add((Walker.CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.Chain;
+                }
+                else if (Walker.CurrentText == ">")
+                {
+                    foundColours.Add((Walker.CurrentNode, NodeColors.Punctuation));
+                    currentState = ExpressionWalkState.DotOrEnd;
                 }
                 else
                 {

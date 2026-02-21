@@ -1,99 +1,41 @@
-﻿using System.Text;
-using Microsoft.CodeAnalysis.Classification;
-
-namespace CsharpToColouredHTML.Core;
-
-public class ConsoleEmitter : IEmitter
+﻿public readonly record class DailyTemperature(double HighTemp, double LowTemp)
 {
-    public ConsoleEmitter(bool addDiagnosticInfo = false)
+    public double Mean => (HighTemp + LowTemp) / 2.0;
+}
+
+public readonly record struct DailyTemperature(double HighTemp, double LowTemp)
+{
+    public double Mean => (HighTemp + LowTemp) / 2.0;
+}
+
+
+goto Label;
+
+Console.WriteLine("123");
+
+Label:
+return 5;
+
+
+struct R1 : IEquatable<R1>
+{
+    public T1 P1 { get; set; }
+    public T2 P2 { get; set; }
+    public override bool Equals(object? obj) => obj is R1 temp && Equals(temp);
+    public bool Equals(R1 other)
     {
-        this.addDiagnosticInfo = addDiagnosticInfo;
+        return
+            EqualityComparer<T1>.Default.Equals(P1, other.P1) &&
+            EqualityComparer<T2>.Default.Equals(P2, other.P2);
     }
-
-    private readonly StringBuilder _sb = new StringBuilder();
-
-    private readonly bool addDiagnosticInfo;
-
-    public string Text { get; private set; }
-
-    public void Emit(List<Node> nodes)
+    public static bool operator==(R1 r1, R1 r2)
+        => r1.Equals(r2);
+    public static bool operator!=(R1 r1, R1 r2)
+        => !(r1 == r2);    
+    public override int GetHashCode()
     {
-        Console.ResetColor();
-        Text = "";
-        _sb.Clear();
-
-        foreach (var node in nodes)
-        {
-            EmitNode(node);
-        }
-
-        Text = _sb.ToString();
-    }
-
-    public void EmitNode(Node node)
-    {
-        if (node.ClassificationType == ClassificationTypeNames.ClassName)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.NamespaceName)
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Keyword)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
-        {
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.LocalName)
-        {
-            Console.ForegroundColor = ConsoleColor.Blue;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.MethodName)
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Punctuation)
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.Operator)
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ControlKeyword)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.VerbatimStringLiteral)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.StringLiteral)
-        {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-        }
-        else if (node.ClassificationType == ClassificationTypeNames.ParameterName)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-        }
-        else
-        {
-            Console.ResetColor();
-        }
-
-        _sb.Append(node.TextWithTrivia);
-        Console.Write($"{node.TextWithTrivia}");
-
-        if (addDiagnosticInfo)
-        {
-            _sb.Append($"({node.ClassificationType})");
-            Console.Write($"({node.ClassificationType})");
-        }
-
-        Console.ResetColor();
+        return Combine(
+            EqualityComparer<T1>.Default.GetHashCode(P1),
+            EqualityComparer<T2>.Default.GetHashCode(P2));
     }
 }

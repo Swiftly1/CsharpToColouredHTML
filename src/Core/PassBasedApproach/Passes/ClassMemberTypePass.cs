@@ -42,7 +42,7 @@ internal class ClassMemberTypePass(SharedPassContext ctx) : Pass(ctx)
             //   \/            \/
             // public void EmitNode(Node node)
             var funcNameIndex = Walker.CurrentIndex + 2;
-            if (!(Walker.TryPeekAhead(out var methodName, 2) && methodName.ClassificationType.EqualsAnyOf(validClassifications)))
+            if (!(Walker.TryPeekAhead(out var methodName, 2) && !methodName.IsChain && methodName.ClassificationType.EqualsAnyOf(validClassifications)))
                 continue;
 
             var isFuncCall = Walker.TryPeekAhead(out var parenthesis, 3) && parenthesis.Text == "(";
