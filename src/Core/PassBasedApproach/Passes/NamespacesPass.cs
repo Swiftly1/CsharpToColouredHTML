@@ -21,11 +21,14 @@ internal class NamespacesPass : Pass
 
         do
         {
+            if (Walker.CurrentNode.IsChain)
+                continue;
+
             if (Walker.CurrentText == "using")
             {
                 Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Keyword);
 
-                if (Walker.TryPeekAhead(out var assignment, 2) && assignment.Text == "=")
+                if (Walker.TryPeekAhead(out var assignment, 2) && !assignment.IsChain && assignment.Text == "=")
                 {
                     HandleNamespaceAlias();
                 }

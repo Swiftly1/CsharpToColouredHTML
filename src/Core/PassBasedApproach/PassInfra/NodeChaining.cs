@@ -1,4 +1,5 @@
-﻿using CsharpToColouredHTML.Core.Miscs;
+﻿using System.Diagnostics.Metrics;
+using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 
@@ -32,11 +33,13 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
             var chain = new List<Node>();
 
             var state = 0;
+            var genericsCounter = 0;
             for (int i = 0; i < nodes.Count; i++)
             {
                 var current = nodes[i];
 
                 var isChain = false;
+                var chainMustStop = false;
 
                 if (state == 0)
                 {
@@ -50,14 +53,36 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                 else
                 {
                     isChain = current.Text == ".";
+                    var isPunc = current.ClassificationType == ClassificationTypeNames.Punctuation;
 
-                    isChain |= current.ClassificationType == ClassificationTypeNames.Punctuation
-                        && current.Text.EqualsAnyOf("<", ">", ",", "(");
+                    if (isPunc)
+                    {
+                        isChain |= current.Text.EqualsAnyOf("(", "[", "]");
+
+                        if (current.Text.Equals("<"))
+                        {
+                            genericsCounter++;
+                            isChain = true;
+                        }
+                        else if (current.Text.Equals(">"))
+                        {
+                            genericsCounter--;
+                            isChain = true;
+                        }
+
+                        if (genericsCounter > 0 && current.Text.Equals(","))
+                        {
+                            isChain = true;
+                        }
+                    }
 
                     if (current.ClassificationType == ClassificationTypeNames.Keyword)
                         isChain |= current.Text.EqualsAnyOf(hints.BuiltInTypes.ToArray());
 
-                    if (current.ClassificationType == ClassificationTypeNames.Punctuation && current.Text == ">")
+                    if (current.Text.EqualsAnyOf("]"))
+                        chainMustStop = true;
+
+                    if (current.ClassificationType == ClassificationTypeNames.Punctuation && current.Text.EqualsAnyOf(">", "["))
                     {
                         state = 1;
                     }
@@ -80,6 +105,14 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra
                     }
 
                     output.Add(current);
+                }
+
+                if (chainMustStop)
+                {
+                    output.Add(new Node(chain));
+                    chain.Clear();
+                    state = 0;
+                    continue;
                 }
             }
 
