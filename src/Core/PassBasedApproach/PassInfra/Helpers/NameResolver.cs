@@ -1,6 +1,7 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 
@@ -151,6 +152,12 @@ internal class NameResolver
 
     public (bool IsVariable, string Value) CheckIfLooksLikeVariable(Node node)
     {
+        if (Context.FoundProperties.Contains(node.Text))
+            return (IsVariable: true, Value: ResolveVariable(node));
+
+        if (Context.FoundFields.Contains(node.Text))
+            return (IsVariable: true, Value: ResolveVariable(node));
+
         if (node.Text.StartsWith("_"))
             return (IsVariable: true, Value: ResolveVariable(node));
 

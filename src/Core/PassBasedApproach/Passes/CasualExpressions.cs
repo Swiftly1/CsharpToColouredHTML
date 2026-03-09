@@ -173,7 +173,7 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
                 if (semicolon.IsChain)
                     continue;
 
-                if (!semicolon.Text.EqualsAnyOf(";", "{", "}"))
+                if (!semicolon.Text.EqualsAnyOf(";", "{", "}", ")"))
                     continue;
             }
 

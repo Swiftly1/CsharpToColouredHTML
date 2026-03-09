@@ -59,6 +59,12 @@ internal class SharedPassContext
         if (colour == NodeColors.Struct)
             FoundStructs.Add(text);
 
+        if (colour == NodeColors.PropertyName)
+            FoundProperties.Add(text);
+
+        if (colour == NodeColors.FieldName)
+            FoundFields.Add(text);
+
         if (colour == NodeColors.Interface)
             FoundInterfaces.Add(text);
 
