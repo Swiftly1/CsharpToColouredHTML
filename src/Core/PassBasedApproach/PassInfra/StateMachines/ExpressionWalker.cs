@@ -133,8 +133,14 @@ internal class ExpressionWalker
                             }
                             else if (next.Text == ",")
                             {
-                                var colour = string.Empty;
-                                colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                                var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+
+                                foundColours.Add((Walker.CurrentNode, colour));
+                                currentState = ExpressionWalkState.DotOrEnd;
+                            }
+                            else if (next.Text == ";")
+                            {
+                                var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
 
                                 foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
