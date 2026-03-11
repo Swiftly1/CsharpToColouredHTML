@@ -14,6 +14,9 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
 
     public override PassResult Run(List<Node> input)
     {
+        Logger.Info($" - {nameof(EventsRegistration)}");
+        EventsRegistration(input);
+
         Logger.Info($" - {nameof(StandaloneFunctionCalls)}");
         StandaloneFunctionCalls(input);
 
@@ -54,6 +57,8 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
                 if (semicolon.ClassificationType != ClassificationTypeNames.Operator)
                     continue;
             }
+            else
+                continue;
 
             if (Walker.CurrentNode.IsChain)
             {
@@ -65,6 +70,52 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
             {
                 var expressionWalker = new ExpressionWalker(Walker, Context);
                 expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+            }
+        } while (Walker.MoveNext());
+    }
+
+    private void EventsRegistration(List<Node> input)
+    {
+        var flattenNodes = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flattenNodes);
+
+        do
+        {
+            if (Walker.CurrentNode.IsChain)
+            {
+                if (Walker.CurrentNode.Nodes[0].Colour != NodeColors.DefaultColour)
+                    continue;
+            }
+            else
+            {
+                if (Walker.CurrentNode.Colour != NodeColors.DefaultColour)
+                    continue;
+            }
+
+            if (Walker.TryPeekBehind(out var op))
+            {
+                if (op.IsChain)
+                    continue;
+
+                if (op.ClassificationType != ClassificationTypeNames.Operator)
+                    continue;
+
+                if (!op.Text.EqualsAnyOf("+=", "-="))
+                    continue;
+            }
+            else
+                continue;
+
+            if (Walker.CurrentNode.IsChain)
+            {
+                var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
+                var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
+                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.DelegateRegistrationUnregistration);
+            }
+            else
+            {
+                var expressionWalker = new ExpressionWalker(Walker, Context);
+                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.DelegateRegistrationUnregistration);
             }
         } while (Walker.MoveNext());
     }
@@ -95,6 +146,8 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
                 if (dot.Text != ".")
                     continue;
             }
+            else
+                continue;
 
             if (Walker.CurrentNode.IsChain)
             {
@@ -135,6 +188,8 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
                 if (dot.Text != ",")
                     continue;
             }
+            else
+                continue;
 
             if (Walker.CurrentNode.IsChain)
             {

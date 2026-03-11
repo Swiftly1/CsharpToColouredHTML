@@ -2,6 +2,7 @@
 using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
@@ -17,7 +18,8 @@ public enum ExpressionWalkState
 public enum ExpressionWalkMode
 {
     Default,
-    FromTheMiddle
+    FromTheMiddle,
+    DelegateRegistrationUnregistration
 }
 
 internal class ExpressionWalker
@@ -141,6 +143,14 @@ internal class ExpressionWalker
                             else if (next.Text == ";")
                             {
                                 var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+
+                                if (mode == ExpressionWalkMode.DelegateRegistrationUnregistration && foundColours.Count == 0)
+                                {
+                                    if (NameResolver.SoundsLikeEventOrHandler(Walker.CurrentText))
+                                    {
+                                        colour = NodeColors.Method;
+                                    }
+                                }
 
                                 foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
