@@ -12,7 +12,7 @@ public enum ExpressionWalkState
     Chain,
     DotOrEnd,
     Operator,
-    GenericsOpening,
+    Generics,
 }
 
 public enum ExpressionWalkMode
@@ -140,6 +140,13 @@ internal class ExpressionWalker
                                 foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
                             }
+                            else if (next.Text == "<" && next.ClassificationType == ClassificationTypeNames.Punctuation)
+                            {
+                                var colour = Context.NameResolver.ResolveClassOrStructName(Walker.CurrentNode);
+
+                                foundColours.Add((Walker.CurrentNode, colour));
+                                currentState = ExpressionWalkState.Generics;
+                            }
                             else if (next.Text == ";")
                             {
                                 var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
@@ -260,6 +267,14 @@ internal class ExpressionWalker
                     Walker.MoveBehind();
                     break;
                 }
+            }
+            else if (currentState == ExpressionWalkState.Generics)
+            {
+                if (Walker.CurrentText == "<")
+                    Walker.MoveNext();
+                var typeWalker = new TypeWalker(Walker, Context);
+                typeWalker.ConsumeTypeAhead(TypeWalkState.GenericsName, TypeWalkMode.MustBeType);
+                currentState = ExpressionWalkState.DotOrEnd;
             }
             else
             {
