@@ -121,13 +121,39 @@ internal class ExpressionWalker
                             {
                                 var colour = string.Empty;
 
-                                if (mode == ExpressionWalkMode.Default)
+                                if (Walker.TryPeekAhead(out var next2, 2))
                                 {
-                                    colour = Context.NameResolver.ResolveUnkownName(Walker.CurrentNode);
+                                    if (next2.ClassificationType == ClassificationTypeNames.MethodName)
+                                    {
+                                        colour = Context.NameResolver.ResolveUnkownName(Walker.CurrentNode);
+                                    }
+                                    else if (next2.ClassificationType.EqualsAnyOf(
+                                        ClassificationTypeNames.ClassName,
+                                        ClassificationTypeNames.RecordClassName,
+                                        ClassificationTypeNames.RecordStructName,
+                                        ClassificationTypeNames.StructName))
+                                    {
+                                        colour = NodeColors.Namespace;
+                                    }
+                                    else if (mode == ExpressionWalkMode.Default)
+                                    {
+                                        colour = Context.NameResolver.ResolveUnkownName(Walker.CurrentNode);
+                                    }
+                                    else
+                                    {
+                                        colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                                    }
                                 }
                                 else
                                 {
-                                    colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                                    if (mode == ExpressionWalkMode.Default)
+                                    {
+                                        colour = Context.NameResolver.ResolveUnkownName(Walker.CurrentNode);
+                                    }
+                                    else
+                                    {
+                                        colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                                    }
                                 }
 
                                 foundColours.Add((Walker.CurrentNode, colour));

@@ -115,6 +115,7 @@ internal class PassManager
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));
         pm.RegisterPass(new ClassMemberTypePass(pm.SharedPassContext));
         pm.RegisterPass(new NewInstancesPass(pm.SharedPassContext));
+        pm.RegisterPass(new GenericsMarkerPass(pm.SharedPassContext));
         pm.RegisterPass(new ReturnTypePass(pm.SharedPassContext));
         pm.RegisterPass(new MethodCallsPass(pm.SharedPassContext));
         pm.RegisterPass(new IfStatementPass(pm.SharedPassContext));

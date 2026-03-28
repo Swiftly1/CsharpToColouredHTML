@@ -1,5 +1,4 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
-using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
