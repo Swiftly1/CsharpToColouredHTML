@@ -17,7 +17,8 @@ internal class NewInstancesPass : Pass
 
     public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input);
+        var flattenNodes = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flattenNodes);
 
         do
         {
@@ -32,12 +33,7 @@ internal class NewInstancesPass : Pass
             if (!Walker.MoveNext())
                 continue;
 
-            var isChain = Walker.CurrentNode.IsChain;
-            var justType = isChain ?
-                new NodeEnumerationHelper(Walker.CurrentNode.Nodes) :
-                Walker;
-
-            var typeWalker = new TypeWalker(justType, Context);
+            var typeWalker = new TypeWalker(Walker, Context);
             if (typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType))
             {
                 TrySaveMetadata();

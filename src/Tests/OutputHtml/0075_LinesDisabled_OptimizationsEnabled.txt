@@ -1,0 +1,16 @@
+
+<pre class="background">
+<span class="keyword">var</span> <span class="localName">ns</span> = <span class="keyword">new</span> Some.Name.Space.And.<span class="class">Class</span>();
+
+<span class="keyword">var</span> <span class="localName">a</span> = <span class="keyword">new</span> <span class="class">A</span>();
+<span class="keyword">var</span> <span class="localName">b</span> = <span class="keyword">new</span> <span class="class">B</span>&lt;<span class="class">W</span>&gt;();
+<span class="keyword">var</span> <span class="localName">c</span> = <span class="keyword">new</span> <span class="class">C</span>&lt;<span class="class">W</span>, <span class="class">W</span>&gt;();
+<span class="keyword">var</span> <span class="localName">d</span> = <span class="keyword">new</span> <span class="class">D</span>&lt;(<span class="class">W</span>, <span class="class">R</span>)&gt;();
+<span class="keyword">var</span> <span class="localName">e</span> = <span class="keyword">new</span> <span class="class">E</span>&lt;(<span class="class">W</span>, <span class="class">Q</span>&lt;<span class="class">R</span>, <span class="class">R</span>)&gt;&gt;();
+<span class="keyword">var</span> <span class="localName">f</span> = <span class="keyword">new</span> <span class="class">F</span>&lt;(<span class="class">W</span>, <span class="class">Y</span>&lt;(<span class="class">R</span>, <span class="class">R</span>)&gt;)&gt;();
+
+<span class="struct">TextSpan</span>? <span class="localName">previous</span> = <span class="keyword">null</span>;
+
+<span class="keyword">private</span> <span class="class">SomeClass</span>&lt;<span class="class">Node</span>&gt; <span class="method">GenerateInternalRepresentation</span>(<span class="keyword">string</span> <span class="parameter">code</span>)
+{
+}</pre>

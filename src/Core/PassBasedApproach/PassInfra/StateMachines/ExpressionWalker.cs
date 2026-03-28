@@ -53,6 +53,7 @@ internal class ExpressionWalker
             if (Walker.CurrentText == ";")
             {
                 foundColours.Add((Walker.CurrentNode, NodeColors.Punctuation));
+                Walker.MoveBehind();
                 break;
             }
 

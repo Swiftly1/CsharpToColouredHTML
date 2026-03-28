@@ -15,11 +15,16 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
     {
         Walker = new NodeEnumerationHelper(input);
 
+        int? anchorIndex = null;
         do
         {
+            if (Walker.CurrentText.EqualsAnyOf("{", ";"))
+                anchorIndex = Walker.CurrentIndex;
+
             if (!Walker.CurrentText.EqualsAnyOf("="))
                 continue;
 
+            var assignmentIndex = Walker.CurrentIndex;
             if (!Walker.MoveNext())
                 continue;
 
@@ -37,6 +42,20 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
                 var expressionWalker = new ExpressionWalker(Walker, Context);
                 expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
             }
+
+            var afterIndex = Walker.CurrentIndex;
+            // int a = 5>>;<< anchor index
+            // int test >>=<< assignment index
+            // if the gap is > 2, then there's type before variable's name 
+            var diff = assignmentIndex - (anchorIndex.HasValue ? anchorIndex + 1 : 0);
+            if (diff > 2)
+            {
+                Walker.CurrentIndex = anchorIndex is null ? 0 : anchorIndex.Value + 1;
+                var typeWalker = new TypeWalker(Walker, Context);
+                typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                Walker.CurrentIndex = afterIndex;
+            }
+
         } while (Walker.MoveNext());
         return new PassResult();
     }

@@ -51,7 +51,6 @@ internal class FunctionArgsPass(SharedPassContext ctx) : Pass(ctx)
 
                     var typeWalker = new TypeWalker(Walker, Context);
                     success = typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-                    
 
                     if (!success)
                         Logger.Warning("Couldnt handle type correctly for some reason.");
