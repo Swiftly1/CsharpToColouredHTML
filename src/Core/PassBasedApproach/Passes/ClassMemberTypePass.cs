@@ -15,19 +15,19 @@ internal class ClassMemberTypePass(SharedPassContext ctx) : Pass(ctx)
 
     public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input);
+        var flattenNodes = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flattenNodes);
 
         do
         {
-            if (Walker.CurrentNode.IsChain)
-            {
-                continue;
-            }
-            else
-            {
-                var isValid = Walker.CurrentText.EqualsAnyOf(NameResolver.CommonKeywordsBeforeTypeName);
+            var isValid = Walker.CurrentText.EqualsAnyOf(NameResolver.CommonKeywordsBeforeTypeName);
 
-                if (!isValid)
+            if (!isValid)
+                continue;
+
+            if (Walker.TryPeekAhead(out var next_keyword))
+            {
+                if (next_keyword.Text.EqualsAnyOf(NameResolver.CommonKeywordsBeforeTypeName))
                     continue;
             }
 
@@ -39,30 +39,42 @@ internal class ClassMemberTypePass(SharedPassContext ctx) : Pass(ctx)
                 ClassificationTypeNames.DelegateName
             };
 
-            //   \/            \/
-            // public void EmitNode(Node node)
             var funcNameIndex = Walker.CurrentIndex + 2;
-            if (!(Walker.TryPeekAhead(out var methodName, 2) && !methodName.IsChain && methodName.ClassificationType.EqualsAnyOf(validClassifications)))
-                continue;
+            var originalIndex = Walker.CurrentIndex;
+            Node methodName = null;
 
-            var isFuncCall = Walker.TryPeekAhead(out var parenthesis, 3) && parenthesis.Text == "(";
+            // public Abc<int, (float, double)> Index2()
+            do
+            {
+                if (Walker.CC.EqualsAnyOf(validClassifications))
+                {
+                    funcNameIndex = Walker.CurrentIndex;
+                    methodName = Walker.CurrentNode;
+                    break;
+                }
+
+                if (Walker.CurrentText.EqualsAnyOf(";", "{"))
+                {
+                    Walker.CurrentIndex = originalIndex;
+                    break;
+                }
+            } while (Walker.MoveNext());
+
+            if (methodName == null)
+                continue;
+            else
+                Walker.CurrentIndex = originalIndex;
+
+
+            var isFuncCall = Walker.TryPeekAtIndex(out var parenthesis, funcNameIndex + 1) && parenthesis.Text == "(";
 
             if (Walker.TryPeekAhead(out var type))
             {
                 var success = false;
 
-                if (type.IsChain)
-                {
-                    var enumeration = new NodeEnumerationHelper(type.Nodes);
-                    var typeWalker = new TypeWalker(enumeration, Context);
-                    success = typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-                }
-                else
-                {
-                    Walker.MoveNext();
-                    var typeWalker = new TypeWalker(Walker, Context);
-                    success =typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-                }
+                Walker.MoveNext();
+                var typeWalker = new TypeWalker(Walker, Context);
+                success = typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
 
                 if (success && isFuncCall)
                 {

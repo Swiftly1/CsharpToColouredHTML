@@ -14,7 +14,9 @@ internal class FunctionArgsPass(SharedPassContext ctx) : Pass(ctx)
 
     public override PassResult Run(List<Node> input)
     {
-        Walker = new NodeEnumerationHelper(input);
+        var flattenNodes = NodeChaining.FlattenNodes(input);
+        Walker = new NodeEnumerationHelper(flattenNodes);
+
 
         foreach (var function in Context.FunctionDeclarationLocations)
         {
@@ -46,17 +48,10 @@ internal class FunctionArgsPass(SharedPassContext ctx) : Pass(ctx)
                 if (currentState == FunctionArgsState.Type)
                 {
                     var success = false;
-                    if (Walker.CurrentNode.IsChain)
-                    {
-                        var enumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
-                        var typeWalker = new TypeWalker(enumeration, Context);
-                        success = typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-                    }
-                    else
-                    {
-                        var typeWalker = new TypeWalker(Walker, Context);
-                        success = typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-                    }
+
+                    var typeWalker = new TypeWalker(Walker, Context);
+                    success = typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                    
 
                     if (!success)
                         Logger.Warning("Couldnt handle type correctly for some reason.");
