@@ -46,15 +46,35 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
             var afterIndex = Walker.CurrentIndex;
             // int a = 5>>;<< anchor index
             // int test >>=<< assignment index
-            // if the gap is > 2, then there's type before variable's name 
-            var diff = assignmentIndex - (anchorIndex.HasValue ? anchorIndex + 1 : 0);
-            if (diff > 2)
+            // if the gap is >= 2, then there's type before variable's name 
+            var anchorIndexReCalc = (anchorIndex.HasValue ? anchorIndex + 1 : 0);
+            var diff = assignmentIndex - anchorIndexReCalc;
+            if (diff >= 2)
             {
                 Walker.CurrentIndex = anchorIndex is null ? 0 : anchorIndex.Value + 1;
-                var typeWalker = new TypeWalker(Walker, Context);
-                typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
-                Walker.CurrentIndex = afterIndex;
+
+                if (Walker.CurrentNode.IsChain)
+                {
+                    var typeEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
+                    var typeWalker = new TypeWalker(typeEnumeration, Context);
+                    typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                }
+                else
+                {
+                    var typeWalker = new TypeWalker(Walker, Context);
+                    typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                }
             }
+            else if (diff == 1 && assignmentIndex > 1)
+            {
+                Walker.CurrentIndex = assignmentIndex - 1;
+                if (!Walker.CurrentNode.IsChain)
+                {
+                    Context.MarkNodeAs(Walker.CurrentNode, Context.NameResolver.ResolveVariable(Walker.CurrentNode));
+                }
+            }
+
+            Walker.CurrentIndex = afterIndex;
 
         } while (Walker.MoveNext());
         return new PassResult();

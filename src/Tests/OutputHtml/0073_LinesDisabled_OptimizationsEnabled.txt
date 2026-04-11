@@ -2,4 +2,4 @@
 <pre class="background">
 <span class="keyword">var</span> <span class="localName">result</span> = <span class="localName">list</span>.<span class="method">Where</span>(<span class="parameter">type</span> =&gt; <span class="parameter">type</span> <span class="keyword">is</span> { IsClass: <span class="keyword">true</span>, IsAbstract: <span class="keyword">false</span> }).<span class="method">ToList</span>();
 
-<span class="method">test</span>(Id: GLOBAL_ID, <span class="localName">value</span>: <span class="numericLiteral">5</span>)</pre>
+<span class="method">test</span>(<span class="parameter">Id</span>: GLOBAL_ID, <span class="parameter">value</span>: <span class="numericLiteral">5</span>)</pre>
