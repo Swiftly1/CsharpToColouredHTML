@@ -273,7 +273,8 @@ internal class TypeWalker
         ClassificationTypeNames.RecordClassName,
         ClassificationTypeNames.RecordStructName,
         ClassificationTypeNames.InterfaceName,
-        ClassificationTypeNames.TypeParameterName
+        ClassificationTypeNames.TypeParameterName,
+        ClassificationTypeNames.LocalName,
     ];
 
     public bool TypeHasValidIdentifier(Node node)

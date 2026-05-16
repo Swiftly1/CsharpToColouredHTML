@@ -124,6 +124,7 @@ internal class PassManager
         pm.RegisterPass(new PropertyAccessPass(pm.SharedPassContext));
         pm.RegisterPass(new ObjectInitializerPass(pm.SharedPassContext));
         pm.RegisterPass(new CasualExpressionsPass(pm.SharedPassContext));
+        pm.RegisterPass(new FixDoubleLocalNamePass(pm.SharedPassContext));
 
         return pm;
     }

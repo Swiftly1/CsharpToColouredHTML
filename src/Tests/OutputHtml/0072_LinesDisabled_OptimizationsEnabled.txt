@@ -1,3 +1,3 @@
 
 <pre class="background">
-<span class="localName">menuAdministrativo menuAdministrativo</span> = <span class="keyword">new</span> <span class="class">menuAdministrativo</span>();</pre>
+<span class="localName">menuAdministrativo</span> <span class="localName">menuAdministrativo</span> = <span class="keyword">new</span> <span class="class">menuAdministrativo</span>();</pre>

@@ -1,6 +1,7 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
+using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
@@ -31,7 +32,7 @@ internal class SharedPassContext
         NameResolver = new NameResolver(this);
     }
 
-    public void MarkNodeAs(Node node, string colour, bool skipIdentifierPostProcess = false)
+    public void MarkNodeAs(Node node, string colour, bool skipIdentifierPostProcess = false, bool overwrite = false)
     {
         if (node.IsChain)
             throw new Exception("Unexpected chain");
@@ -41,7 +42,7 @@ internal class SharedPassContext
         //if (node.Colour != NodeColors.DefaultColour)
         //    Logger.Warning("Already non default");
 
-        if (!node.SkipIdentifierPostProcessing)
+        if (!node.SkipIdentifierPostProcessing || overwrite)
         {
             node.Colour = colour;
             node.ClassificationType = NameResolver.MapColourToClassificationType(colour, node.ClassificationType);
