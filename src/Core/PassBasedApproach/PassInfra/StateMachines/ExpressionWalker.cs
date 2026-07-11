@@ -167,6 +167,13 @@ internal class ExpressionWalker
                                 foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
                             }
+                            else if (next.Text == "}")
+                            {
+                                var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+
+                                foundColours.Add((Walker.CurrentNode, colour));
+                                currentState = ExpressionWalkState.DotOrEnd;
+                            }
                             else if (next.Text == "<" && next.ClassificationType == ClassificationTypeNames.Punctuation)
                             {
                                 var colour = Context.NameResolver.ResolveClassOrStructName(Walker.CurrentNode);
