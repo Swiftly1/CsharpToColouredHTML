@@ -234,6 +234,12 @@ internal class ExpressionWalker
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
+                    else if (Walker.CC == ClassificationTypeNames.MethodName)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.Method));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = true;
+                    }
                     if (Walker.CC == ClassificationTypeNames.Identifier)
                     {
                         if (Walker.TryPeekAhead(out var next))

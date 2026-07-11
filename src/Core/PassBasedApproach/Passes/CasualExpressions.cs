@@ -3,6 +3,7 @@ using CsharpToColouredHTML.Core.Miscs;
 using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.CasualExpressions;
 
@@ -144,27 +145,34 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
                     continue;
             }
 
+            var isDot = false;
+            var isOperator = false;
+
             if (Walker.TryPeekBehind(out var dot))
             {
                 if (dot.IsChain)
                     continue;
 
-                if (dot.Text != ".")
+                isDot = dot.Text == ".";
+                isOperator = NameResolver.Operators.Contains(dot.Text);
+
+                if (!isDot && !isOperator)
                     continue;
             }
             else
                 continue;
 
+            var walkMode = isOperator ? ExpressionWalkMode.Default : ExpressionWalkMode.FromTheMiddle;
             if (Walker.CurrentNode.IsChain)
             {
                 var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
                 var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
-                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.FromTheMiddle);
+                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, walkMode);
             }
             else
             {
                 var expressionWalker = new ExpressionWalker(Walker, Context);
-                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.FromTheMiddle);
+                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, walkMode);
             }
         } while (Walker.MoveNext());
     }

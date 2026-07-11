@@ -1,7 +1,6 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 
