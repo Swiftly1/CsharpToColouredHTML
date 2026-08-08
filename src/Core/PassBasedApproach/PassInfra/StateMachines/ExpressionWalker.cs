@@ -77,6 +77,12 @@ internal class ExpressionWalker
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
+                    else if (Walker.CC == ClassificationTypeNames.ConstantName)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.ConstantName));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = true;
+                    }
                     else if (Walker.CC == ClassificationTypeNames.FieldName)
                     {
                         foundColours.Add((Walker.CurrentNode, NodeColors.FieldName));
@@ -260,7 +266,22 @@ internal class ExpressionWalker
                             {
                                 var colour = string.Empty;
 
-                                colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                                //     const int R = 5;
+                                // using (R.r.ProfilerMarkers())
+                                // ---------^
+                                if (Walker.TryPeekBehind(out var previous) && previous.Text == ".")
+                                {
+                                    colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+
+                                    if (!new[] { NodeColors.PropertyName, NodeColors.FieldName, NodeColors.ConstantName }.Contains(colour))
+                                    {
+                                        colour = NodeColors.PropertyName;
+                                    }
+                                }
+                                else
+                                {
+                                    colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+                                }
 
                                 foundColours.Add((Walker.CurrentNode, colour));
                             }

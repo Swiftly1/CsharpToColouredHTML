@@ -1,15 +1,19 @@
 ﻿using CsharpToColouredHTML.Core.Nodes;
-using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
+using Microsoft.CodeAnalysis.Classification;
 
-namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
+namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
 
-internal class ReturnTypePass(SharedPassContext ctx) : Pass(ctx)
+internal class UsingInstructionPass : Pass
 {
-    public override string Name { get => "ReturnType"; }
+    public override string Name { get => "UsingInstruction"; }
 
     private NodeEnumerationHelper? Walker { get; set; }
+
+    public UsingInstructionPass(SharedPassContext ctx) : base(ctx)
+    {
+    }
 
     public override PassResult Run(List<Node> input)
     {
@@ -17,13 +21,13 @@ internal class ReturnTypePass(SharedPassContext ctx) : Pass(ctx)
 
         do
         {
-            if (Walker.CC != ClassificationTypeNames.ControlKeyword)
+            if (Walker.CC != ClassificationTypeNames.Keyword)
                 continue;
 
-            if (Walker.CurrentText != "return")
+            if (Walker.CurrentText != "using")
                 continue;
 
-            if (Walker.MoveNext())
+            if (Walker.MoveNext(2))
             {
                 if (Walker.CurrentNode.IsChain)
                 {
