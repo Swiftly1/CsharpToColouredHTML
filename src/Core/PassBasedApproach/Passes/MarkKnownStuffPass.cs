@@ -27,15 +27,18 @@ internal class MarkKnownStuffPass : Pass
         {
             if (_SimpleClassificationToColourMapper.TryGetValue(Walker.CC, out var simpleColour))
             {
-                var skipPostProcessing = true;
+                var alreadyMarked = true;
 
                 // in cases like:
                 // a a = new a();
                 // every "a" is known as localName which is invalid, so we skip marking it as something certain.
                 if (Walker.CC == ClassificationTypeNames.LocalName)
-                    skipPostProcessing = false;
+                    alreadyMarked = false;
 
-                Context.MarkNodeAs(Walker.CurrentNode, simpleColour, skipPostProcessing);
+                if (Walker.CC == ClassificationTypeNames.PropertyName)
+                    alreadyMarked = false;
+
+                Context.MarkNodeAs(Walker.CurrentNode, simpleColour, alreadyMarked);
                 continue;
             }
 

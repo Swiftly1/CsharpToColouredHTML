@@ -41,11 +41,11 @@ internal class SharedPassContext
         //if (node.Colour != NodeColors.DefaultColour)
         //    Logger.Warning("Already non default");
 
-        if (!node.SkipIdentifierPostProcessing || overwrite)
+        if (!node.AlreadyMarked || overwrite)
         {
             node.Colour = colour;
             node.ClassificationType = NameResolver.MapColourToClassificationType(colour, node.ClassificationType);
-            node.SkipIdentifierPostProcessing = skipIdentifierPostProcess;
+            node.AlreadyMarked = skipIdentifierPostProcess;
         }
 
         UpdateStats(node.Colour, node.Text);

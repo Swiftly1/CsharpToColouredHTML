@@ -33,6 +33,20 @@ internal class NewInstancesPass : Pass
             if (!Walker.MoveNext())
                 continue;
 
+            if (Walker.CC ==  ClassificationTypeNames.PropertyName)
+            {
+                // Workaround
+                // Property has the same name as class e.g
+
+                // public Drone Drone { get; private set; }
+                // Drone = new Drone();
+
+                // So we reset it
+
+                Walker.CurrentNode.ClassificationType = ClassificationTypeNames.Identifier;
+                Walker.CurrentNode.AlreadyMarked = false;
+            }
+
             var typeWalker = new TypeWalker(Walker, Context);
             if (typeWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType))
             {

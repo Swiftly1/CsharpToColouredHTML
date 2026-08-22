@@ -8,7 +8,7 @@ internal record Node
     private string _ClassificationType = string.Empty;
     private bool _HasNewLine = false;
     private bool _UsesMostCommonColour = false;
-    private bool _SkipIdentifierPostProcessing = false;
+    private bool _AlreadyMarked = false;
     private int _LineNumber = 0;
 
     private Node()
@@ -33,7 +33,7 @@ internal record Node
             this.ClassificationType = nodes[0].ClassificationType;
             this.HasNewLine = nodes[0].HasNewLine;
             this.UsesMostCommonColour = nodes[0].UsesMostCommonColour;
-            this.SkipIdentifierPostProcessing = nodes[0].SkipIdentifierPostProcessing;
+            this.AlreadyMarked = nodes[0].AlreadyMarked;
             this.LineNumber = nodes[0].LineNumber;
         }
     }
@@ -80,21 +80,21 @@ internal record Node
         }
     }
 
-    public bool SkipIdentifierPostProcessing
+    public bool AlreadyMarked
     {
         get
         {
             if (IsChain)
-                throw new Exception($"Accessing {nameof(SkipIdentifierPostProcessing)} when there are many nodes is invalid");
+                throw new Exception($"Accessing {nameof(AlreadyMarked)} when there are many nodes is invalid");
 
-            return _SkipIdentifierPostProcessing;
+            return _AlreadyMarked;
         }
         set
         {
             if (IsChain)
-                throw new Exception($"Accessing {nameof(SkipIdentifierPostProcessing)} when there are many nodes is invalid");
+                throw new Exception($"Accessing {nameof(AlreadyMarked)} when there are many nodes is invalid");
 
-            _SkipIdentifierPostProcessing = value;
+            _AlreadyMarked = value;
         }
     }
 
