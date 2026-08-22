@@ -121,4 +121,9 @@ internal class EnumerationHelper<T>(List<T> nodes) where T : class
 
         return isOk;
     }
+
+    public void Reset()
+    {
+        CurrentIndex = 0;
+    }
 }

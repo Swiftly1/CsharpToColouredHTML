@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 
-namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
+namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.ForEach;
 
 internal class ForeachPass : Pass
 {

@@ -2,6 +2,7 @@
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Attributes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.CasualExpressions;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ForEach;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
@@ -12,7 +13,9 @@ using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ObjectInitializer;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PrintNodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PropertyAccess;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.RecordsArgs;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.UsingInstruction;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
@@ -123,6 +126,7 @@ internal class PassManager
         pm.RegisterPass(new ForeachPass(pm.SharedPassContext));
         pm.RegisterPass(new VariableAssignmentPass(pm.SharedPassContext));
         pm.RegisterPass(new FunctionArgsPass(pm.SharedPassContext));
+        pm.RegisterPass(new RecordsArgsPass(pm.SharedPassContext));
         pm.RegisterPass(new PropertyAccessPass(pm.SharedPassContext));
         pm.RegisterPass(new ObjectInitializerPass(pm.SharedPassContext));
         pm.RegisterPass(new CasualExpressionsPass(pm.SharedPassContext));
