@@ -2,4 +2,12 @@
 <pre class="background">
 <span class="keyword">public record</span> <span class="class">X</span>(<span class="class">Test</span>? <span class="parameter">test</span>)
 {
+}
+
+<span class="keyword">public record class</span> <span class="class">X1</span>(<span class="class">Test</span>? <span class="parameter">test</span>)
+{
+}
+
+<span class="keyword">public record struct</span> <span class="recordStruct">X1</span>(<span class="class">Test</span>? <span class="parameter">test</span>)
+{
 }</pre>

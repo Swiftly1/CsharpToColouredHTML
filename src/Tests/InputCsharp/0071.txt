@@ -1,3 +1,11 @@
 ﻿public record X(Test? test)
 {
 }
+
+public record class X1(Test? test)
+{
+}
+
+public record struct X1(Test? test)
+{
+}
