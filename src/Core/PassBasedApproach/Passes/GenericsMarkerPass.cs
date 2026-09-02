@@ -1,9 +1,8 @@
-﻿using System.Diagnostics.Metrics;
-using CsharpToColouredHTML.Core.Miscs;
-using CsharpToColouredHTML.Core.Nodes;
+﻿using CsharpToColouredHTML.Core.Nodes;
+using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
-using Microsoft.CodeAnalysis.Classification;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
 
@@ -32,8 +31,19 @@ internal class GenericsMarkerPass(SharedPassContext ctx) : Pass(ctx)
                 Walker.CurrentText == "<" &&
                 Walker.CurrentNode.ClassificationType == ClassificationTypeNames.Punctuation)
             {
+                var isNew = false;
+                var currentNodeIndexInChainedList = NodeFinder.FindNodeInChainedList(Walker.CurrentNode.Id, input);
+
+                if (currentNodeIndexInChainedList > 0)
+                {
+                    var probablyNew = input[currentNodeIndexInChainedList - 1];
+                    if (!probablyNew.IsChain && probablyNew.Text == "new")
+                        isNew = true;
+                }
+
                 var genericsCounter = 0;
                 var found = false;
+                var foundNodes = new List<Node>();
                 do
                 {
                     if (Walker.CurrentNode.ClassificationType == ClassificationTypeNames.Punctuation)
@@ -41,6 +51,9 @@ internal class GenericsMarkerPass(SharedPassContext ctx) : Pass(ctx)
                         if (Walker.CurrentText == "<") genericsCounter++;
                         if (Walker.CurrentText == ">") genericsCounter--;
                     }
+
+                    if (genericsCounter >= 1 && Walker.CurrentText != "<")
+                        foundNodes.Add(Walker.CurrentNode);
 
                     if (genericsCounter == 0)
                     {
@@ -64,7 +77,21 @@ internal class GenericsMarkerPass(SharedPassContext ctx) : Pass(ctx)
                     }
                     else if (afterGenerics.Text == "(")
                     {
-                        Context.MarkNodeAs(identifier, NodeColors.Method, true);
+                        if (isNew)
+                        {
+                            var colour = Context.NameResolver.ResolveClassOrStructName(identifier);
+                            Context.MarkNodeAs(identifier, colour, true);
+                        }
+                        else
+                        {
+                            Context.MarkNodeAs(identifier, NodeColors.Method, true);
+                        }
+                    }
+
+                    if (foundNodes.Any())
+                    {
+                        var typeWalker = new TypeWalker(new NodeEnumerationHelper(foundNodes), Context);
+                        typeWalker.ConsumeTypeAhead(TypeWalkState.GenericsName, TypeWalkMode.MustBeType);
                     }
                 }
             }

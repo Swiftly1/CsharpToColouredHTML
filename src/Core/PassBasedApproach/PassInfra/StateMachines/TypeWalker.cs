@@ -192,7 +192,18 @@ internal class TypeWalker
                     if (Walker.TryPeekAhead(out var peekedAhead))
                     {
                         if (peekedAhead.Text == ".")
-                            foundColours.Add((Walker.CurrentNode, NodeColors.Namespace));
+                        {
+                            var tryFind = Context.NameResolver.IsAlreadyFound(Walker.CurrentText);
+
+                            if (tryFind.Success)
+                            {
+                                foundColours.Add((Walker.CurrentNode, tryFind.Colour));
+                            }
+                            else
+                            {
+                                foundColours.Add((Walker.CurrentNode, NodeColors.Namespace));
+                            }
+                        }
                         else
                             foundColours.Add((Walker.CurrentNode, Context.NameResolver.ResolveClassOrStructName(Walker.CurrentNode)));
                     }

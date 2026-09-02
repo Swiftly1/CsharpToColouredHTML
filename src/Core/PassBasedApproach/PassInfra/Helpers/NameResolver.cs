@@ -275,6 +275,26 @@ internal class NameResolver
         return (Success: false, Value: string.Empty);
     }
 
+    public (bool Success, string Colour) IsAlreadyFound(string text)
+    {
+        if (Context.FoundClasses.Contains(text))
+        {
+            return (true, NodeColors.Class);
+        }
+
+        if (Context.FoundStructs.Contains(text))
+        {
+            return (true, NodeColors.Struct);
+        }
+
+        if (Context.FoundInterfaces.Contains(text))
+        {
+            return (true, NodeColors.Interface);
+        }
+
+        return (false, string.Empty);
+    }
+
     public string FieldOrProperty(Node node)
     {
         var result = IsAlreadyClassifiedExpression(node);
