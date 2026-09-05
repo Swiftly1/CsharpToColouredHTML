@@ -107,6 +107,24 @@ internal class ExpressionWalker
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }
+                    else if (Walker.CC == ClassificationTypeNames.MethodName)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.Method));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = true;
+                    }
+                    else if (Walker.CC == ClassificationTypeNames.ClassName)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.Class));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = true;
+                    }
+                    else if (Walker.CC == ClassificationTypeNames.StructName)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.Struct));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = true;
+                    }
                     else if (Walker.CC == ClassificationTypeNames.Keyword)
                     {
                         foundColours.Add((Walker.CurrentNode, NodeColors.Keyword));
@@ -250,6 +268,18 @@ internal class ExpressionWalker
                     else if (Walker.CC == ClassificationTypeNames.MethodName)
                     {
                         foundColours.Add((Walker.CurrentNode, NodeColors.Method));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = true;
+                    }
+                    else if (Walker.CC == ClassificationTypeNames.ClassName)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.Class));
+                        currentState = ExpressionWalkState.DotOrEnd;
+                        isRootFound = true;
+                    }
+                    else if (Walker.CC == ClassificationTypeNames.StructName)
+                    {
+                        foundColours.Add((Walker.CurrentNode, NodeColors.Struct));
                         currentState = ExpressionWalkState.DotOrEnd;
                         isRootFound = true;
                     }

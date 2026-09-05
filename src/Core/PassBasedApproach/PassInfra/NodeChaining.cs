@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-using CsharpToColouredHTML.Core.Miscs;
+﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 
