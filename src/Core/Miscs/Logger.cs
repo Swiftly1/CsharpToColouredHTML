@@ -4,9 +4,9 @@
 internal static class Logger
 {
 #if DEBUG
-    public const bool LogsEnabled = true;
+    public static bool LogsEnabled = true;
 #else
-    public const bool LogsEnabled = false;
+    public static bool LogsEnabled = false;
 #endif
 
     public static void Success(string s, int tabsDepth = 0)

@@ -2,7 +2,6 @@
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 
-
 internal class NodeEnumerationHelper : EnumerationHelper<Node>
 {
     public NodeEnumerationHelper(List<Node> nodes) : base(nodes)
@@ -14,4 +13,11 @@ internal class NodeEnumerationHelper : EnumerationHelper<Node>
 
     // Current Classification - "CC" in short because it is used very often.
     public string CC => Nodes[CurrentIndex].IsChain ? "Chain" : Nodes[CurrentIndex].ClassificationType;
+
+#if DEBUG
+    public override string ToString()
+    {
+        return string.Join(" | ", Nodes.Select(x => x.ToString()));
+    }
+#endif
 }

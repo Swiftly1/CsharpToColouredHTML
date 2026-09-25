@@ -45,7 +45,7 @@ internal class ExpressionWalker
 
         var previousStates = new List<ExpressionWalkState>();
         var currentState = initialState;
-        var isRootFound = false;
+        var isRootFound = mode == ExpressionWalkMode.FromTheMiddle;
         var parenthesisCounter = 0;
 
         do

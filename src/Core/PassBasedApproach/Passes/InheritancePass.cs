@@ -1,8 +1,8 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
+using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
-using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Inheritance;
 
@@ -18,8 +18,7 @@ internal class InheritancePass : Pass
 
     public override PassResult Run(List<Node> input)
     {
-        var flattenNodes = NodeChaining.FlattenNodes(input);
-        Walker = new NodeEnumerationHelper(flattenNodes);
+        Walker = new NodeEnumerationHelper(input);
 
         do
         {
@@ -49,7 +48,9 @@ internal class InheritancePass : Pass
                 ClassificationTypeNames.Identifier,
             };
 
-            if (!identifier.ClassificationType.EqualsAnyOf(validClassifications))
+            var identifierNode = identifier.IsChain ? identifier.Nodes.First() : identifier;
+
+            if (!identifierNode.ClassificationType.EqualsAnyOf(validClassifications))
                 continue;
 
             if (!Walker.TryPeekAhead(out var inheritance, 2) || inheritance.Text != ":")
@@ -65,8 +66,17 @@ internal class InheritancePass : Pass
             {
                 if (currentState == IDENTIFIER)
                 {
-                    Context.NameResolver.MarkLastElementOfChainAsClassOrStruct(Walker.CurrentNode);
-
+                    if (Walker.CurrentNode.IsChain)
+                    {
+                        var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
+                        var expressionWalker = new TypeWalker(exprEnumeration, Context);
+                        expressionWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                    }
+                    else
+                    {
+                        var expressionWalker = new TypeWalker(Walker, Context);
+                        expressionWalker.ConsumeTypeAhead(TypeWalkState.TypeName, TypeWalkMode.MustBeType);
+                    }
                     currentState = COMMA;
                 }
                 else
