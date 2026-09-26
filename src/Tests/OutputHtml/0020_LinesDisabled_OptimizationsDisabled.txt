@@ -3,4 +3,5 @@
 <span class="keyword">public</span> <span class="keyword">void</span> <span class="method">Form1_Load</span><span class="punctuation">(</span><span class="keyword">object</span> <span class="parameter">sender</span><span class="punctuation">,</span> <span class="class">EventArgs</span> <span class="parameter">e</span><span class="punctuation">)</span>
 <span class="punctuation">{</span>
     <span class="class">Test</span><span class="operator">.</span><span class="propertyName">Tick</span> <span class="operator">+=</span> <span class="keyword">new</span> <span class="class">EventHandler</span><span class="punctuation">(</span><span class="propertyName">Temp</span><span class="punctuation">)</span><span class="punctuation">;</span>
+    <span class="method">Asdf</span><span class="punctuation">(</span><span class="propertyName">B</span><span class="operator">+</span><span class="propertyName">C</span><span class="punctuation">)</span><span class="punctuation">;</span>
 <span class="punctuation">}</span></pre>
