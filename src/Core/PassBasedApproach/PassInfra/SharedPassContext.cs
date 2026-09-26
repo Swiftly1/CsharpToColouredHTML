@@ -31,7 +31,7 @@ internal class SharedPassContext
         NameResolver = new NameResolver(this);
     }
 
-    public void MarkNodeAs(Node node, string colour, bool skipIdentifierPostProcess = false, bool overwrite = false)
+    public void MarkNodeAs(Node node, string colour, bool alreadyMarked = false, bool overwrite = false)
     {
         if (node.IsChain)
             throw new Exception("Unexpected chain");
@@ -45,7 +45,7 @@ internal class SharedPassContext
         {
             node.Colour = colour;
             node.ClassificationType = NameResolver.MapColourToClassificationType(colour, node.ClassificationType);
-            node.AlreadyMarked = skipIdentifierPostProcess;
+            node.AlreadyMarked = alreadyMarked;
         }
 
         UpdateStats(node.Colour, node.Text);

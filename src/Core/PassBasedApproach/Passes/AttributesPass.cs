@@ -25,7 +25,6 @@ internal class AttributesPass(SharedPassContext ctx) : Pass(ctx)
             var isValidPredcesor = canWalkBehind && previous.Text.EqualsAnyOf("}", "]");
             if (!canWalkBehind || isValidPredcesor)
             {
-                Logger.Info($"AttributesPass '{Walker.CurrentText}'", 3);
                 if (!Walker.MoveNext())
                     continue;
 

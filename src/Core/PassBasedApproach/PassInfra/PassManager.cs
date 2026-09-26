@@ -1,5 +1,6 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ArrayAccess;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Attributes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.CasualExpressions;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ForEach;
@@ -59,7 +60,7 @@ internal class PassManager
 
             foreach (var entry in SharedPassContext.FunctionDeclarationLocations)
             {
-                Logger.Info(entry.FunctionName, 2);
+                Logger.Info($"{entry.FunctionName} at {entry.Index}", 2);
             }
         }
 
@@ -115,6 +116,7 @@ internal class PassManager
         // Normal Passes
         pm.RegisterPass(new NamespacesPass(pm.SharedPassContext));
         pm.RegisterPass(new AttributesPass(pm.SharedPassContext));
+        pm.RegisterPass(new ArrayAccessPass(pm.SharedPassContext));
         pm.RegisterPass(new InheritancePass(pm.SharedPassContext));
         pm.RegisterPass(new ClassMemberTypePass(pm.SharedPassContext));
         pm.RegisterPass(new GenericsMarkerPass(pm.SharedPassContext));
