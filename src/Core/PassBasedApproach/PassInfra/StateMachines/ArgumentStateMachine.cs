@@ -1,7 +1,7 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
-using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 using Microsoft.CodeAnalysis.Classification;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.StateMachines
 {
@@ -84,16 +84,15 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.StateMachines
                 {
                     if (Walker.CurrentNode.IsChain)
                         throw new Exception("Chain shouldn't be on comma position");
-                    else
-                    {
-                        if (Walker.CurrentText.EqualsAnyOf(",", ")"))
-                            currentState = ArgsState.Type;
-                    }
+
+                    if (Walker.CurrentText.EqualsAnyOf(",", ")"))
+                        currentState = ArgsState.Type;
                 }
             } while (Walker.MoveNext());
 
             return anyChanged;
         }
+
         private enum ArgsState
         {
             Type,

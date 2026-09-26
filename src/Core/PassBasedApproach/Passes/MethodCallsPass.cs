@@ -1,9 +1,10 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
-using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
-using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.StateMachines;
+using Microsoft.CodeAnalysis.Classification;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.MethodCalls;
 
@@ -42,6 +43,16 @@ internal class MethodCallsPass(SharedPassContext ctx) : Pass(ctx)
             else
             {
                 Context.MarkNodeAs(Walker.CurrentNode, NodeColors.Method, true);
+
+                // If this is function declaration, not a call then skip
+                if (Context.FunctionDeclarationLocations.Any(x => x.Index == Walker.CurrentIndex))
+                    continue;
+
+                if (!Walker.MoveNext() || Walker.CurrentText != "(")
+                    continue;
+
+                var stateMachine = new CallParametersStateMachine(Walker, Context);
+                var result = stateMachine.WalkOverParams();
             }
 
         } while (Walker.MoveNext());

@@ -191,6 +191,13 @@ internal class ExpressionWalker
                                 foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
                             }
+                            else if (next.Text == ")")
+                            {
+                                var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
+
+                                foundColours.Add((Walker.CurrentNode, colour));
+                                currentState = ExpressionWalkState.DotOrEnd;
+                            }
                             else if (next.Text == "}")
                             {
                                 var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
@@ -225,7 +232,7 @@ internal class ExpressionWalker
                                 var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
 
                                 foundColours.Add((Walker.CurrentNode, colour));
-                                currentState = ExpressionWalkState.DotOrEnd;
+                                currentState = ExpressionWalkState.Operator;
                             }
                             else
                             {
@@ -363,9 +370,18 @@ internal class ExpressionWalker
             {
                 if (Walker.CurrentText == "<")
                     Walker.MoveNext();
+
                 var typeWalker = new TypeWalker(Walker, Context);
                 typeWalker.ConsumeTypeAhead(TypeWalkState.GenericsName, TypeWalkMode.MustBeType);
                 currentState = ExpressionWalkState.DotOrEnd;
+            }
+            else if (currentState == ExpressionWalkState.Operator)
+            {
+                if (!Walker.CurrentText.EqualsAnyOf(NameResolver.Operators.ToArray()))
+                    throw new NotImplementedException($"Expected operator, but got '{Walker.CurrentText}'.");
+
+                foundColours.Add((Walker.CurrentNode, NodeColors.Operator));
+                currentState = ExpressionWalkState.Chain;
             }
             else
             {
