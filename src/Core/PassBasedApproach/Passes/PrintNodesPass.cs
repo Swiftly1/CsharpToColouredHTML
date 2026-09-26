@@ -1,6 +1,6 @@
-﻿using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
-using CsharpToColouredHTML.Core.Nodes;
+﻿using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.Miscs;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.PrintNodes;
 

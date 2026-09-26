@@ -288,7 +288,7 @@ internal class TypeWalker
         ClassificationTypeNames.LocalName,
     ];
 
-    public bool TypeHasValidIdentifier(Node node)
+    private bool TypeHasValidIdentifier(Node node)
     {
         if (_validTypeNameClassifications.Contains(node.ClassificationType))
             return true;

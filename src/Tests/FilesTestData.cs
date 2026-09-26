@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Tests;
 public class FilesTestData : IEnumerable<object[]>

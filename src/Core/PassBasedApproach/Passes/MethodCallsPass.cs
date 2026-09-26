@@ -2,8 +2,8 @@
 using CsharpToColouredHTML.Core.Nodes;
 using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
-using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.MethodCalls;
 
