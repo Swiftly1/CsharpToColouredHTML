@@ -407,6 +407,7 @@ internal class ExpressionWalker
         ClassificationTypeNames.ConstantName,
         ClassificationTypeNames.ParameterName,
         ClassificationTypeNames.MethodName,
+        ClassificationTypeNames.StringLiteral,
     ];
 
     public bool ExpressionHasValidIdentifier(Node node)

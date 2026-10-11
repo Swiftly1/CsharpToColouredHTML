@@ -291,7 +291,7 @@ internal class CasualExpressionsPass(SharedPassContext ctx) : Pass(ctx)
                 if (separator.IsChain)
                     continue;
 
-                if (!separator.Text.EqualsAnyOf(";", "{", "}", ")"))
+                if (!separator.Text.EqualsAnyOf(";", "{", "}", ")", "else"))
                     continue;
             }
 
