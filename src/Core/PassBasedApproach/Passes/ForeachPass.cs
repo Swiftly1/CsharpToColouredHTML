@@ -30,11 +30,11 @@ internal class ForeachPass : Pass
 
             if (Walker.MoveNext(2))
             {
-                if (Walker.CurrentNode.Text == "var")
-                    continue;
-
                 var expressionWalker = new ExpressionWalker(Walker, Context);
-                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                if (Walker.CurrentNode.Text != "var")
+                {
+                    expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                }
 
                 if (!Walker.MoveNext())
                     continue;
