@@ -48,6 +48,13 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.StateMachines
 
                 if (currentState == ArgsState.Type)
                 {
+                    if (Walker.CurrentText == "[")
+                    {
+                        currentState = ArgsState.Attribute;
+                        Walker.MoveBehind();
+                        continue;
+                    }
+
                     var success = false;
 
                     var typeWalker = new TypeWalker(Walker, Context);
@@ -80,6 +87,27 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.StateMachines
 
                     currentState = ArgsState.CommaOrEnd;
                 }
+                else if (currentState == ArgsState.Attribute)
+                {
+                    var attrOpeningCounter = 1;
+
+                    while (Walker.MoveNext())
+                    {
+                        if (Walker.CurrentText == "[")
+                            attrOpeningCounter++;
+
+                        if (Walker.CurrentText == "]")
+                            attrOpeningCounter--;
+
+                        if (Walker.CurrentText == ";")
+                            break;
+
+                        if (attrOpeningCounter <= 0)
+                            break;
+                    }
+
+                    currentState = ArgsState.Type;
+                }
                 else if (currentState == ArgsState.CommaOrEnd)
                 {
                     if (Walker.CurrentNode.IsChain)
@@ -97,6 +125,7 @@ namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.StateMachines
         {
             Type,
             Identifier,
+            Attribute,
             CommaOrEnd
         }
     }

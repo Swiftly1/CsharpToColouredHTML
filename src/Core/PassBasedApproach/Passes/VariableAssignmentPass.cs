@@ -28,19 +28,24 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
             if (!Walker.MoveNext())
                 continue;
 
-            if (Walker.CurrentText.EqualsAnyOf("new"))
-                continue;
+            var isNew = Walker.CurrentText.EqualsAnyOf("new");
 
-            if (Walker.CurrentNode.IsChain)
+            // Test test = new Test();
+            // Perform marking if this ISNT "new" instance, because "new" instances should
+            // be already marked in NewInstancesPass
+            if (!isNew)
             {
-                var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
-                var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
-                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
-            }
-            else
-            {
-                var expressionWalker = new ExpressionWalker(Walker, Context);
-                expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                if (Walker.CurrentNode.IsChain)
+                {
+                    var exprEnumeration = new NodeEnumerationHelper(Walker.CurrentNode.Nodes);
+                    var expressionWalker = new ExpressionWalker(exprEnumeration, Context);
+                    expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                }
+                else
+                {
+                    var expressionWalker = new ExpressionWalker(Walker, Context);
+                    expressionWalker.ConsumeExpressionAhead(ExpressionWalkState.Chain, ExpressionWalkMode.Default);
+                }
             }
 
             var afterIndex = Walker.CurrentIndex;
