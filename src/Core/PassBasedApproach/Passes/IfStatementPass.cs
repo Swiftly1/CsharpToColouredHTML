@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.Classification;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
+using CsharpToColouredHTML.Core.Miscs;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
 
@@ -21,7 +22,9 @@ internal class IfStatementPass : Pass
 
         do
         {
-            if (Walker.CC != ClassificationTypeNames.ControlKeyword)
+            // if (TEST)
+            // #if (TEST)
+            if (!Walker.CC.EqualsAnyOf(ClassificationTypeNames.ControlKeyword, ClassificationTypeNames.PreprocessorKeyword))
                 continue;
 
             if (Walker.CurrentText != "if")
