@@ -41,7 +41,7 @@ internal class ClassMemberTypePass(SharedPassContext ctx) : Pass(ctx)
 
             var funcNameIndex = Walker.CurrentIndex + 2;
             var originalIndex = Walker.CurrentIndex;
-            Node methodName = null;
+            Node? methodName = null;
 
             // public Abc<int, (float, double)> Index2()
             do

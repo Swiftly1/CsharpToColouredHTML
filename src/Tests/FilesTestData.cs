@@ -1,21 +1,22 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Tests;
 public class FilesTestData : IEnumerable<object[]>
 {
-    const int TESTS_COUNT = 84;
     public IEnumerator<object[]> GetEnumerator()
     {
-        var disabledTests = new List<int> { };
-        foreach (var item in Enumerable.Range(1, TESTS_COUNT))
-        {
-            if (disabledTests.Contains(item))
-                continue;
+        var disabledTests = new List<string> { };
+        var enabledTests = new DirectoryInfo(E2E.InputDir)
+                           .GetFiles()
+                           .Select(x => x.Name)
+                           .Where(x => !disabledTests.Contains(x))
+                           .ToList();
 
-            yield return new object[] { $"{item:0000}.txt" };
-        }
+        foreach (var item in enabledTests)
+            yield return new object[] { item };
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

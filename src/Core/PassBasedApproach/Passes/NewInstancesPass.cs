@@ -70,7 +70,7 @@ internal class NewInstancesPass : Pass
 
     private void TrySaveMetadata()
     {
-        if (!Walker.TryPeekAhead(out var bracket) || bracket.Text != "{")
+        if (!Walker!.TryPeekAhead(out var bracket) || bracket.Text != "{")
             return;
 
         var startIndex = Walker.CurrentIndex + 1;

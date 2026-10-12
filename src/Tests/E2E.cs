@@ -11,8 +11,9 @@ namespace Tests
 {
     public class E2E
     {
-        private const string InputDir = $"InputCsharp";
-        private const string OutputDir = $"OutputHtml";
+        public const string InputDir = $"InputCsharp";
+
+        public const string OutputDir = $"OutputHtml";
 
         [Theory]
         [ClassData(typeof(FilesTestData))]

@@ -1,0 +1,5 @@
+
+<pre class="background">
+<span class="keyword">public</span> <span class="interface">IActionResult</span> <span class="method">Post</span>([<span class="class">FromBody</span>] <span class="class">TestRequestModel</span> <span class="parameter">request</span>, [<span class="class">FromBody</span>] <span class="class">TestQQ</span> <span class="parameter">t</span>, <span class="keyword">string</span> <span class="parameter">template</span>)
+{
+}</pre>

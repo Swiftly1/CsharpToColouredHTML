@@ -22,7 +22,7 @@ internal class AttributesPass(SharedPassContext ctx) : Pass(ctx)
                 continue;
 
             var canWalkBehind = Walker.TryPeekBehind(out var previous);
-            var isValidPredcesor = canWalkBehind && previous.Text.EqualsAnyOf("}", "]");
+            var isValidPredcesor = canWalkBehind && previous.Text.EqualsAnyOf("}", "]", "(", ",");
             if (!canWalkBehind || isValidPredcesor)
             {
                 if (!Walker.MoveNext())
