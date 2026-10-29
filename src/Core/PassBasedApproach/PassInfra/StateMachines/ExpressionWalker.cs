@@ -181,6 +181,9 @@ internal class ExpressionWalker
                                     }
                                 }
 
+                                if (colour == NodeColors.Namespace)
+                                    isRootFound = false;
+
                                 foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
                             }
@@ -303,7 +306,7 @@ internal class ExpressionWalker
                             {
                                 var colour = string.Empty;
 
-                                //     const int R = 5;
+                                // const int R = 5;
                                 // using (R.r.ProfilerMarkers())
                                 // ---------^
                                 if (Walker.TryPeekBehind(out var previous) && previous.Text == ".")

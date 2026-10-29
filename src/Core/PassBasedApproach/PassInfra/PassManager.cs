@@ -2,6 +2,7 @@
 using CsharpToColouredHTML.Core.Nodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ArrayAccess;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Attributes;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.CastDetection;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.CasualExpressions;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ForEach;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
@@ -16,6 +17,7 @@ using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PrintNodes;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PropertyAccess;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.RecordsArgs;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.TypeOf;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.UsingInstruction;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
 
@@ -38,7 +40,16 @@ internal class PassManager
     {
         foreach (var pass in _Passes)
         {
+#if DEBUG
+            Logger.LogsEnabled = true;
+#endif
+
             Logger.PrintFancy("Running Pass: '", pass.Name, "'", ConsoleColor.Green);
+
+#if DEBUG
+            if (pass.Name.EqualsAnyOf("PrintNodes", "MarkKnownStuff"))
+                Logger.LogsEnabled = false;
+#endif
 
             var result = pass.Run(nodes);
 
@@ -131,6 +142,9 @@ internal class PassManager
         pm.RegisterPass(new RecordsArgsPass(pm.SharedPassContext));
         pm.RegisterPass(new PropertyAccessPass(pm.SharedPassContext));
         pm.RegisterPass(new ObjectInitializerPass(pm.SharedPassContext));
+        pm.RegisterPass(new TypeOfPass(pm.SharedPassContext));
+        pm.RegisterPass(new CastDetectionPass(pm.SharedPassContext));
+
         pm.RegisterPass(new CasualExpressionsPass(pm.SharedPassContext));
         pm.RegisterPass(new FixDoubleLocalNamePass(pm.SharedPassContext));
 

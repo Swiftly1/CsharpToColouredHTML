@@ -114,7 +114,7 @@ internal class TypeWalker
                     foundColours.Add((Walker.CurrentNode, NodeColors.Punctuation));
                     break;
                 }
-                else if (Walker.CurrentText == "(")
+                else if (Walker.CurrentText.EqualsAnyOf("(", ")"))
                 {
                     foundColours.Add((Walker.CurrentNode, NodeColors.Punctuation));
                     break;

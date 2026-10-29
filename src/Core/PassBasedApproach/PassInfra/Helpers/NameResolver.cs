@@ -146,6 +146,10 @@ internal class NameResolver
         if (checkResult.Success)
             return checkResult.Value;
 
+        if (Context.FoundNamespaces.Contains(node.Text) ||
+            Context.FoundNamespaceParts.Contains(node.Text))
+            return NodeColors.Namespace;
+
         return ResolveClassOrStructName(node);
     }
 
