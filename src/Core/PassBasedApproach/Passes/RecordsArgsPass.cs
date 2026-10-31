@@ -59,6 +59,7 @@ internal class RecordsArgsPass(SharedPassContext ctx) : Pass(ctx)
                 indices.Add(walker.CurrentIndex);
             }
         } while (walker.MoveNext());
+
         return indices;
     }
 }
