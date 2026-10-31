@@ -1,25 +1,32 @@
 ﻿using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ArrayAccess;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Attributes;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.CastDetection;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.CasualExpressions;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ForEach;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Inheritance;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MarkKnownStuff;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MethodCalls;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ObjectInitializer;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PrintNodes;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PropertyAccess;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.RecordsArgs;
-using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.TypeOf;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ForEach;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Functions;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PreFlight;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Attributes;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PrintNodes;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ReturnType;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ArrayAccess;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.Inheritance;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MethodCalls;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.RecordsArgs;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionArgs;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionType;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.CastDetection;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.MarkKnownStuff;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.PropertyAccess;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.UsingInstruction;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ObjectInitializer;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.EventsRegistration;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ExpressionFallback;
 using CsharpToColouredHTML.Core.PassBasedApproach.Passes.VariableAssignment;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.StandaloneNamedArgs;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.StringInterpolation;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.FunctionCallExpressions;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.StandaloneFunctionCalls;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.OperatorBeforeExpression;
+using CsharpToColouredHTML.Core.PassBasedApproach.Passes.ExpressionsInTheMiddleOfOtherExpression;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
@@ -145,7 +152,17 @@ internal class PassManager
         pm.RegisterPass(new TypeOfPass(pm.SharedPassContext));
         pm.RegisterPass(new CastDetectionPass(pm.SharedPassContext));
 
-        pm.RegisterPass(new CasualExpressionsPass(pm.SharedPassContext));
+        // Casual Expressions
+        pm.RegisterPass(new EventsRegistrationPass(pm.SharedPassContext));
+        pm.RegisterPass(new StandaloneFunctionCallsPass(pm.SharedPassContext));
+        pm.RegisterPass(new ExpressionsInTheMiddleOfOtherExpressionPass(pm.SharedPassContext));
+        pm.RegisterPass(new OperatorBeforeExpressionPass(pm.SharedPassContext));
+        pm.RegisterPass(new FunctionCallExpressionsPass(pm.SharedPassContext));
+        pm.RegisterPass(new StandaloneNamedArgsPass(pm.SharedPassContext));
+        pm.RegisterPass(new StringInterpolationPass(pm.SharedPassContext));
+        pm.RegisterPass(new ExpressionFallbackPass(pm.SharedPassContext));
+        //
+
         pm.RegisterPass(new FixDoubleLocalNamePass(pm.SharedPassContext));
 
         return pm;
