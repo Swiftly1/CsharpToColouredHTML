@@ -1,9 +1,9 @@
 ﻿using System;
 using CsharpToColouredHTML.Core.Miscs;
 using CsharpToColouredHTML.Core.Nodes;
-using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
-using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
 using Microsoft.CodeAnalysis.Classification;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Helpers;
+using CsharpToColouredHTML.Core.PassBasedApproach.PassInfra.Enumeration;
 
 namespace CsharpToColouredHTML.Core.PassBasedApproach.PassInfra;
 
@@ -227,6 +227,12 @@ internal class ExpressionWalker
                                     }
                                 }
 
+                                foundColours.Add((Walker.CurrentNode, colour));
+                                currentState = ExpressionWalkState.DotOrEnd;
+                            }
+                            else if (next.Text == "[")
+                            {
+                                var colour = Context.NameResolver.ResolveVariable(Walker.CurrentNode);
                                 foundColours.Add((Walker.CurrentNode, colour));
                                 currentState = ExpressionWalkState.DotOrEnd;
                             }
