@@ -33,6 +33,12 @@ internal class CastDetectionPass : Pass
                 ClassificationTypeNames.MethodName
             );
 
+            // ((type)(expr)).Call()
+            // e.g 
+            // ((System.ComponentModel.ISupportInitialize)(this.btnRestaurar.Val1)).BeginInit();
+            if (!Walker.CurrentNode.IsChain && Walker.CurrentText == "(")
+                isValid = true;
+
             if (!isValid)
                 continue;
 
