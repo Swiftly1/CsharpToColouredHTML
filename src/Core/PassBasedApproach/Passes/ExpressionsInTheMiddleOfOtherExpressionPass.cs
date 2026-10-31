@@ -37,6 +37,20 @@ internal class ExpressionsInTheMiddleOfOtherExpressionPass(SharedPassContext ctx
                 if (dot.IsChain)
                     continue;
 
+                var counter_behind = 2;
+                while (dot.Text.Equals("("))
+                {
+                    if (Walker.TryPeekBehind(out var behind, counter_behind))
+                    {
+                        dot = behind;
+                        counter_behind++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
                 isDot = dot.Text == ".";
                 isOperator = NameResolver.Operators.Contains(dot.Text);
 
