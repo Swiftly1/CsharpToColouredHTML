@@ -82,6 +82,7 @@ internal class VariableAssignmentPass(SharedPassContext ctx) : Pass(ctx)
             Walker.CurrentIndex = afterIndex;
 
         } while (Walker.MoveNext());
+
         return new PassResult();
     }
 }
